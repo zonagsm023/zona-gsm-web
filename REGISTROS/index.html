@@ -15,6 +15,9 @@
   <meta property="og:image" content="logo.png" />
   <meta property="og:site_name" content="Zona GSM" />
 
+  <!-- Librería para escanear códigos QR / códigos de barras con cámara o imagen -->
+  <script src="https://unpkg.com/html5-qrcode@2.3.8/html5-qrcode.min.js"></script>
+
   <style>
     * { box-sizing: border-box; margin: 0; padding: 0; font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif; }
     body { min-height: 100vh; background: linear-gradient(180deg, #eef3f8 0%, #e4ebf2 100%); display: flex; justify-content: center; align-items: flex-start; padding: 0 0 48px; color: #111827; overflow-x: hidden; }
@@ -23,7 +26,7 @@
     .preloader.hidden { opacity: 0; visibility: hidden; pointer-events: none; }
     .loader-circle-wrap { position: relative; width: 124px; height: 124px; display: flex; align-items: center; justify-content: center; animation: loaderPopIn 0.5s cubic-bezier(0.22, 1, 0.36, 1) forwards; }
     @keyframes loaderPopIn { 0% { transform: scale(0.85); opacity: 0; } 100% { transform: scale(1); opacity: 1; } }
-    
+
     .loader-ring { position: absolute; inset: 0; border-radius: 50%; border: 2px solid rgba(200, 29, 78, 0.35); background: rgba(200, 29, 78, 0.05); animation: loaderPulse 1.4s ease-in-out infinite; }
     .loader-ring-2 { position: absolute; inset: 0; border-radius: 50%; border: 1.5px solid rgba(200, 29, 78, 0.2); animation: loaderPulse 1.4s ease-in-out 0.35s infinite; }
     @keyframes loaderPulse { 0% { transform: scale(0.98); opacity: 0.9; } 70%, 100% { transform: scale(1.24); opacity: 0; } }
@@ -92,9 +95,9 @@
 
     .op-service-row { display: flex; align-items: center; gap: 6px; margin-top: 2px; flex-wrap: wrap; }
     .op-service { font-size: 12.5px; font-weight: 600; color: #475569; }
-    
+
     .country-tag { font-size: 10px; font-weight: 800; letter-spacing: 0.5px; color: #8a0f33; background: #fce7ef; border: 1px solid #fbcfe1; padding: 1px 6px; border-radius: 4px; line-height: 1.2; }
-    
+
     .op-hint { font-size: 11px; color: #64748b; margin-top: 2px; }
 
     .wa-btn { width: 40px; height: 40px; border-radius: 50%; background: #25D366; color: #ffffff; flex-shrink: 0; display: flex; align-items: center; justify-content: center; transition: background 0.2s ease, transform 0.1s ease; }
@@ -115,10 +118,28 @@
     .imei-time-tag { font-size: 11px; font-weight: 700; color: #334155; background: #f1f5f9; border: 1px solid #cbd5e1; padding: 2px 8px; border-radius: 999px; }
     .imei-close { width: 28px; height: 28px; border-radius: 50%; border: none; background: #f1f5f9; color: #334155; font-size: 16px; font-weight: 700; cursor: pointer; flex-shrink: 0; display: flex; align-items: center; justify-content: center; }
     .imei-row { display: flex; align-items: center; gap: 8px; }
-    .imei-input { flex: 1; min-width: 0; padding: 11px 13px; border-radius: 12px; border: 1.5px solid #cbd5e1; font-size: 14px; font-weight: 600; color: #0f172a; outline: none; }
-    .imei-input:focus { border-color: #c81d4e; }
+
+    /* Campo combinado: texto "Introduce IMEI" / dígitos + recuadro del último número a la derecha */
+    .imei-combined-field { flex: 1; min-width: 0; display: flex; align-items: center; justify-content: space-between; gap: 8px; padding: 6px 6px 6px 12px; border-radius: 12px; border: 1.5px solid #cbd5e1; background: #ffffff; transition: border-color 0.15s ease; }
+    .imei-combined-field:focus-within { border-color: #c81d4e; }
+    .imei-input { flex: 1; min-width: 0; border: none; background: transparent; font-size: 13.5px; font-weight: 700; letter-spacing: 0.4px; color: #0f172a; outline: none; padding: 4px 0; }
+    .imei-last-square { width: 32px; height: 32px; border-radius: 8px; border: 2px solid #cbd5e1; background: #f8fafc; color: #94a3b8; font-size: 14px; font-weight: 900; display: inline-flex; align-items: center; justify-content: center; flex-shrink: 0; transition: all 0.15s ease; }
+    .imei-last-square.active { border-color: #c81d4e; background: #fce7ef; color: #8a0f33; }
+
+    .imei-qr-btn { width: 42px; height: 42px; border-radius: 12px; border: 1.5px solid #cbd5e1; background: #f8fafc; color: #0f172a; cursor: pointer; flex-shrink: 0; display: inline-flex; align-items: center; justify-content: center; transition: all 0.15s ease; }
+    .imei-qr-btn:hover { border-color: #c81d4e; background: #fce7ef; color: #8a0f33; }
+    .imei-qr-btn.active { border-color: #c81d4e; background: #c81d4e; color: #ffffff; }
+
     .imei-send-btn { padding: 11px 16px; border: none; border-radius: 12px; background: #25D366; color: #ffffff; font-size: 14px; font-weight: 800; cursor: pointer; flex-shrink: 0; transition: background 0.15s ease; }
     .imei-send-btn:hover { background: #1ebe5d; }
+
+    /* Panel lector QR debajo del campo IMEI */
+    .qr-reader-panel { margin-top: 12px; padding: 10px; border-radius: 14px; background: #f8fafc; border: 1.5px dashed #cbd5e1; display: none; }
+    .qr-reader-panel.open { display: block; }
+    .qr-reader-top { display: flex; align-items: center; justify-content: space-between; margin-bottom: 8px; font-size: 11.5px; font-weight: 700; color: #334155; }
+    .qr-file-label { font-size: 11px; font-weight: 700; color: #8a0f33; background: #fce7ef; padding: 4px 9px; border-radius: 8px; cursor: pointer; border: 1px solid #fbcfe1; }
+    #qrCameraBox { width: 100%; border-radius: 10px; overflow: hidden; background: #0f172a; min-height: 160px; }
+    .qr-status-msg { margin-top: 6px; font-size: 11px; color: #64748b; text-align: center; }
 
     .toast { position: fixed; bottom: 24px; left: 50%; transform: translateX(-50%) translateY(20px); background: #0f172a; color: #ffffff; padding: 10px 18px; border-radius: 999px; font-size: 13px; font-weight: 600; opacity: 0; pointer-events: none; transition: opacity 0.25s ease, transform 0.25s ease; box-shadow: 0 8px 20px rgba(0, 0, 0, 0.2); z-index: 10002; }
     .toast.show { opacity: 1; transform: translateX(-50%) translateY(0); }
@@ -132,6 +153,7 @@
     <symbol id="icon-vip" viewBox="0 0 24 24"><path fill="#075e54" d="M16.67 13.13C16.42 13 15.19 12.4 14.97 12.32C14.74 12.24 14.6 12.2 14.41 12.44C14.25 12.69 13.77 13.25 13.63 13.41C13.48 13.58 13.34 13.6 13.1 13.48C12.84 13.35 12.04 13.09 11.1 12.25C10.36 11.59 9.87 10.78 9.72 10.53C9.6 10.29 9.71 10.14 9.83 10.03C9.94 9.92 10.1 9.74 10.2 9.59C10.33 9.45 10.37 9.34 10.45 9.18C10.53 9.01 10.49 8.87 10.43 8.75C10.37 8.64 9.87 7.4 9.66 6.91C9.46 6.43 9.26 6.49 9.1 6.48C8.96 6.48 8.8 6.47 8.63 6.47C8.47 6.47 8.2 6.53 7.97 6.78C7.75 7.03 7.1 7.64 7.1 8.85C7.1 10.07 7.99 11.24 8.1 11.41C8.24 11.58 9.86 14.08 12.35 15.14C12.94 15.41 13.4 15.56 13.76 15.67C14.35 15.86 14.89 15.83 15.32 15.77C15.8 15.7 16.78 15.17 16.99 14.59C17.2 14.01 17.2 13.52 17.14 13.41C17.07 13.31 16.91 13.25 16.67 13.13M12.04 2C6.58 2 2.13 6.45 2.13 11.91C2.13 13.66 2.59 15.36 3.45 16.86L2.05 22L7.3 20.62C8.75 21.41 10.38 21.83 12.04 21.83C17.5 21.83 21.95 17.38 21.95 11.92C21.95 9.27 20.92 6.78 19.05 4.91C17.18 3.03 14.69 2 12.04 2M12.05 3.67C14.25 3.67 16.31 4.53 17.87 6.09C19.42 7.65 20.28 9.72 20.28 11.92C20.28 16.46 16.58 20.15 12.04 20.15C10.56 20.15 9.11 19.76 7.85 19L7.55 18.83L4.43 19.65L5.26 16.61L5.06 16.29C4.24 15 3.8 13.47 3.8 11.91C3.81 7.37 7.5 3.67 12.05 3.67Z"/></symbol>
     <symbol id="icon-tg" viewBox="0 0 24 24"><path fill="#229ED9" d="M11.944 0A12 12 0 0 0 0 12a12 12 0 0 0 12 12 12 12 0 0 0 12-12A12 12 0 0 0 12 0a12 12 0 0 0-.056 0zm4.962 7.224c.1-.002.321.023.465.14a.506.506 0 0 1 .171.325c.016.093.036.306.02.472-.18 1.898-.962 6.502-1.36 8.627-.168.9-.499 1.201-.82 1.23-.696.065-1.225-.46-1.9-.902-1.056-.693-1.653-1.124-2.678-1.8-1.185-.78-.417-1.21.258-1.91.177-.184 3.247-2.977 3.307-3.23.007-.032.014-.15-.056-.212s-.174-.041-.249-.024c-.106.024-1.793 1.14-5.061 3.345-.48.33-.913.49-1.302.48-.428-.008-1.252-.241-1.865-.44-.752-.245-1.349-.374-1.297-.789.027-.216.325-.437.893-.663 3.498-1.524 5.83-2.529 6.998-3.014 3.332-1.386 4.025-1.627 4.476-1.635z"/></symbol>
     <symbol id="icon-share" viewBox="0 0 24 24"><g fill="none" stroke="#0f172a" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><circle cx="18" cy="5" r="3"/><circle cx="6" cy="12" r="3"/><circle cx="18" cy="19" r="3"/><line x1="8.59" y1="13.51" x2="15.42" y2="17.49"/><line x1="15.41" y1="6.51" x2="8.59" y2="10.49"/></g></symbol>
+    <symbol id="icon-qr" viewBox="0 0 24 24"><g fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="3" width="7" height="7" rx="1"/><rect x="14" y="3" width="7" height="7" rx="1"/><rect x="3" y="14" width="7" height="7" rx="1"/><line x1="14" y1="14" x2="17" y2="14"/><line x1="21" y1="14" x2="21" y2="17"/><line x1="14" y1="21" x2="17" y2="21"/><line x1="17" y1="17" x2="21" y2="21"/></g></symbol>
   </svg>
 
   <div id="preloader" class="preloader">
@@ -191,7 +213,6 @@
       <div class="cards">
         <button class="card" type="button" onclick="openImeiBox('TIGO', 'TIGO.jpg', 'TIGO', 'icon-tigo', '$25.000', '6 hrs')">
           <div class="card-left">
-            <!-- CAMBIO: TIGO.jpg -->
             <div class="op-icon icon-tigo"><img src="TIGO.jpg" alt="Tigo" onerror="handleOpError(this, 'TIGO', 'icon-tigo')" /></div>
             <div class="card-info">
               <div class="op-header-row"><span class="op-name">NO REGISTRO TIGO</span><span class="online-pill"><span class="online-dot"></span>Online</span></div>
@@ -204,7 +225,6 @@
 
         <button class="card" type="button" onclick="openImeiBox('CLARO', 'CLARO.jpg', 'CLARO', 'icon-claro', '$15.000', '6 hrs')">
           <div class="card-left">
-            <!-- CAMBIO: CLARO.jpg -->
             <div class="op-icon icon-claro"><img src="CLARO.jpg" alt="Claro" onerror="handleOpError(this, 'CLARO', 'icon-claro')" /></div>
             <div class="card-info">
               <div class="op-header-row"><span class="op-name">NO REGISTRO CLARO</span><span class="online-pill"><span class="online-dot"></span>Online</span></div>
@@ -217,7 +237,6 @@
 
         <button class="card" type="button" onclick="openImeiBox('VIRGIN', 'VIRGIN.png', 'VIRGIN', 'icon-virgin', '$30.000', '6 hrs')">
           <div class="card-left">
-            <!-- CAMBIO: VIRGIN.png -->
             <div class="op-icon icon-virgin"><img src="VIRGIN.png" alt="Virgin Mobile" onerror="handleOpError(this, 'VIRGIN', 'icon-virgin')" /></div>
             <div class="card-info">
               <div class="op-header-row"><span class="op-name">NO REGISTRO VIRGIN</span><span class="online-pill"><span class="online-dot"></span>Online</span></div>
@@ -230,7 +249,6 @@
 
         <button class="card" type="button" onclick="openImeiBox('WOM', 'WOM_logo.png', 'WOM', 'icon-wom', '$45.000', '48 hrs')">
           <div class="card-left">
-            <!-- CAMBIO: WOM_logo.png -->
             <div class="op-icon icon-wom"><img src="WOM_logo.png" alt="WOM" onerror="handleOpError(this, 'WOM', 'icon-wom')" /></div>
             <div class="card-info">
               <div class="op-header-row"><span class="op-name">NO REGISTRO WOM</span><span class="online-pill"><span class="online-dot"></span>Online</span></div>
@@ -243,7 +261,6 @@
 
         <button class="card" type="button" onclick="openImeiBox('MOVISTAR', 'movistar.png', 'MOVISTAR', 'icon-movistar', '$15.000', '6 hrs')">
           <div class="card-left">
-            <!-- CAMBIO: movistar.png (Este sí estaba bien en minúsculas) -->
             <div class="op-icon icon-movistar"><img src="movistar.png" alt="Movistar" onerror="handleOpError(this, 'MOVISTAR', 'icon-movistar')" /></div>
             <div class="card-info">
               <div class="op-header-row"><span class="op-name">NO REGISTRO MOVISTAR</span><span class="online-pill"><span class="online-dot"></span>Online</span></div>
@@ -256,7 +273,6 @@
 
         <button class="card" type="button" onclick="openImeiBox('MÓVIL ÉXITO', 'EXITO.png', 'ÉXITO', 'icon-exito', '$35.000', '24 hrs')">
           <div class="card-left">
-            <!-- CAMBIO: EXITO.png -->
             <div class="op-icon icon-exito"><img src="EXITO.png" alt="Móvil Éxito" onerror="handleOpError(this, 'ÉXITO', 'icon-exito')" /></div>
             <div class="card-info">
               <div class="op-header-row"><span class="op-name">NO REGISTRO MÓVIL ÉXITO</span><span class="online-pill"><span class="online-dot"></span>Online</span></div>
@@ -286,9 +302,29 @@
         </div>
         <button type="button" class="imei-close" onclick="closeImeiBox()" aria-label="Cerrar">&times;</button>
       </div>
-      <form class="imei-row" onsubmit="sendImeiWa(event)">
-        <input id="imeiField" class="imei-input" type="text" inputmode="numeric" placeholder="Escribe el IMEI" required />
-        <button type="submit" class="imei-send-btn">Enviar</button>
+      <form onsubmit="sendImeiWa(event)">
+        <div class="imei-row">
+          <div class="imei-combined-field">
+            <input id="imeiField" class="imei-input" type="text" inputmode="numeric" maxlength="15" placeholder="Introduce IMEI" oninput="handleImeiInput(this)" required />
+            <span id="imeiLastSquare" class="imei-last-square" title="Último dígito calculado">-</span>
+          </div>
+          <button id="qrToggleBtn" type="button" class="imei-qr-btn" onclick="toggleQrReader()" title="Escanear QR / Código" aria-label="Escanear QR o código">
+            <svg width="20" height="20"><use href="#icon-qr"/></svg>
+          </button>
+          <button type="submit" class="imei-send-btn">Enviar</button>
+        </div>
+
+        <div id="qrReaderPanel" class="qr-reader-panel">
+          <div class="qr-reader-top">
+            <span>Lector QR / Código</span>
+            <label class="qr-file-label">
+              Subir imagen
+              <input id="qrFileInput" type="file" accept="image/*" style="display:none" onchange="scanQrFile(this)" />
+            </label>
+          </div>
+          <div id="qrCameraBox"></div>
+          <div id="qrStatusMsg" class="qr-status-msg">Apunta la cámara al QR o sube una imagen</div>
+        </div>
       </form>
     </div>
   </div>
@@ -299,6 +335,9 @@
     let currentOperator = '';
     let currentPrice = '';
     let currentTime = '';
+    let lastAutoCompleted14 = '';
+    let qrScannerInstance = null;
+    let qrIsRunning = false;
 
     window.addEventListener('DOMContentLoaded', () => {
       setTimeout(() => {
@@ -307,10 +346,160 @@
       }, 1400);
     });
 
+    // Cálculo oficial del dígito verificador Luhn (dígito 15 del IMEI)
+    function computeImeiCheckDigit(first14) {
+      let sum = 0;
+      for (let i = 0; i < 14; i++) {
+        let digit = parseInt(first14.charAt(i), 10);
+        if (i % 2 === 1) {
+          digit *= 2;
+          if (digit > 9) digit -= 9;
+        }
+        sum += digit;
+      }
+      return (10 - (sum % 10)) % 10;
+    }
+
+    function updateLastSquare(digits) {
+      const square = document.getElementById('imeiLastSquare');
+      if (digits.length >= 14) {
+        const base14 = digits.slice(0, 14);
+        const calcDigit = computeImeiCheckDigit(base14);
+        square.textContent = String(calcDigit);
+        square.classList.add('active');
+      } else {
+        square.textContent = '-';
+        square.classList.remove('active');
+      }
+    }
+
+    function applyScannedImei(rawValue) {
+      const match = String(rawValue || '').match(/\d{14,15}/);
+      const digitsOnly = match ? match[0] : String(rawValue || '').replace(/\D/g, '').slice(0, 15);
+      if (!digitsOnly) {
+        showToast('No se detectó un IMEI válido');
+        return false;
+      }
+      const input = document.getElementById('imeiField');
+      input.value = digitsOnly;
+      handleImeiInput(input);
+      showToast('IMEI detectado');
+      return true;
+    }
+
+    async function stopQrReader() {
+      const panel = document.getElementById('qrReaderPanel');
+      const btn = document.getElementById('qrToggleBtn');
+      panel.classList.remove('open');
+      btn.classList.remove('active');
+
+      if (qrScannerInstance && qrIsRunning) {
+        try {
+          await qrScannerInstance.stop();
+        } catch (err) {}
+        qrIsRunning = false;
+      }
+    }
+
+    async function toggleQrReader() {
+      const panel = document.getElementById('qrReaderPanel');
+      const btn = document.getElementById('qrToggleBtn');
+      const statusMsg = document.getElementById('qrStatusMsg');
+
+      if (panel.classList.contains('open')) {
+        await stopQrReader();
+        return;
+      }
+
+      panel.classList.add('open');
+      btn.classList.add('active');
+      statusMsg.textContent = 'Iniciando cámara...';
+
+      if (typeof Html5Qrcode === 'undefined') {
+        statusMsg.textContent = 'Usa "Subir imagen" para leer el código QR.';
+        return;
+      }
+
+      if (!qrScannerInstance) {
+        qrScannerInstance = new Html5Qrcode('qrCameraBox');
+      }
+
+      try {
+        await qrScannerInstance.start(
+          { facingMode: 'environment' },
+          { fps: 10, qrbox: { width: 180, height: 180 } },
+          async (decodedText) => {
+            if (applyScannedImei(decodedText)) {
+              await stopQrReader();
+            }
+          },
+          () => {}
+        );
+        qrIsRunning = true;
+        statusMsg.textContent = 'Apunta al QR o sube una imagen';
+      } catch (err) {
+        qrIsRunning = false;
+        statusMsg.textContent = 'Cámara no disponible aquí. Puedes usar "Subir imagen".';
+      }
+    }
+
+    async function scanQrFile(fileInput) {
+      const file = fileInput.files && fileInput.files[0];
+      if (!file) return;
+      const statusMsg = document.getElementById('qrStatusMsg');
+
+      if (typeof Html5Qrcode === 'undefined') {
+        showToast('Lector no disponible');
+        return;
+      }
+
+      if (!qrScannerInstance) {
+        qrScannerInstance = new Html5Qrcode('qrCameraBox');
+      }
+
+      try {
+        statusMsg.textContent = 'Leyendo imagen...';
+        const decodedText = await qrScannerInstance.scanFile(file, true);
+        applyScannedImei(decodedText);
+        await stopQrReader();
+      } catch (err) {
+        statusMsg.textContent = 'No se pudo leer un QR en esa imagen';
+        showToast('No se leyó el QR');
+      } finally {
+        fileInput.value = '';
+      }
+    }
+
+    function handleImeiInput(input) {
+      let digits = input.value.replace(/\D/g, '').slice(0, 15);
+
+      if (digits.length < 14) {
+        lastAutoCompleted14 = '';
+      } else if (digits.length === 14) {
+        if (lastAutoCompleted14 === digits) {
+          digits = digits.slice(0, 13);
+          lastAutoCompleted14 = '';
+        } else {
+          const checkDigit = computeImeiCheckDigit(digits);
+          lastAutoCompleted14 = digits;
+          digits = digits + checkDigit;
+        }
+      } else if (digits.length === 15) {
+        const base14 = digits.slice(0, 14);
+        const checkDigit = computeImeiCheckDigit(base14);
+        lastAutoCompleted14 = base14;
+        digits = base14 + checkDigit;
+      }
+
+      input.value = digits;
+      updateLastSquare(digits);
+    }
+
     function openImeiBox(operatorName, logoSrc, fallbackText, bgClass, price, waitTime) {
       currentOperator = operatorName.toUpperCase();
       currentPrice = price;
       currentTime = waitTime;
+      lastAutoCompleted14 = '';
 
       const logoWrap = document.getElementById('imeiLogoWrap');
       logoWrap.className = 'imei-op-logo ' + bgClass;
@@ -329,34 +518,50 @@
 
       const input = document.getElementById('imeiField');
       input.value = '';
+      updateLastSquare('');
+      document.getElementById('qrReaderPanel').classList.remove('open');
+      document.getElementById('qrToggleBtn').classList.remove('active');
       document.getElementById('imeiOverlay').classList.add('open');
       setTimeout(() => input.focus(), 50);
     }
 
-    function closeImeiBox() {
+    async function closeImeiBox() {
+      await stopQrReader();
       document.getElementById('imeiOverlay').classList.remove('open');
     }
 
-    function closeImeiOutside(e) {
+    async function closeImeiOutside(e) {
       if (e.target.id === 'imeiOverlay') {
-        closeImeiBox();
+        await closeImeiBox();
       }
     }
 
-    function sendImeiWa(e) {
+    async function sendImeiWa(e) {
       e.preventDefault();
-      const imei = document.getElementById('imeiField').value.trim();
-      if (!imei) {
-        showToast('Ingresa el IMEI');
+      const input = document.getElementById('imeiField');
+      let imei = input.value.replace(/\D/g, '');
+
+      if (imei.length === 14) {
+        imei = imei + computeImeiCheckDigit(imei);
+        input.value = imei;
+        updateLastSquare(imei);
+      }
+
+      if (imei.length !== 15) {
+        showToast('Introduce IMEI');
+        input.focus();
         return;
       }
+
       const text =
-        '*NO REGISTRO ' + currentOperator + '*\n' +
-        '*VALOR PROMO : ' + currentPrice + '*\n' +
-        '*TIEMPO: ' + currentTime + '*\n' +
+        '*ZonaGSM.site*\n\n' +
+        '*No Registro ' + currentOperator + '*\n\n' +
+        '*Valor Promo : ' + currentPrice + '*\n\n' +
+        '*Tiempo: ' + currentTime + '*\n\n' +
         '*IMEI: ' + imei + '*';
+
       const url = 'https://wa.me/573104141805?text=' + encodeURIComponent(text);
-      closeImeiBox();
+      await closeImeiBox();
       window.open(url, '_blank', 'noopener,noreferrer');
     }
 
