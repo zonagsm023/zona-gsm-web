@@ -68,7 +68,7 @@
     .section-title { font-size: 12px; font-weight: 700; letter-spacing: 1px; color: #64748b; text-transform: uppercase; margin-bottom: 16px; }
     .cards { display: flex; flex-direction: column; gap: 14px; padding: 0 4px; }
 
-    .card { background: #ffffff; border-radius: 50px; padding: 12px 16px; display: flex; align-items: center; justify-content: space-between; gap: 10px; box-shadow: 0 4px 14px rgba(15, 23, 42, 0.05); border: 1px solid #eef2f6; text-align: left; text-decoration: none; color: inherit; transition: transform 0.15s ease; }
+    .card { background: #ffffff; border-radius: 50px; padding: 12px 16px; display: flex; align-items: center; justify-content: space-between; gap: 10px; box-shadow: 0 4px 14px rgba(15, 23, 42, 0.05); border: 1px solid #eef2f6; text-align: left; text-decoration: none; color: inherit; width: 100%; cursor: pointer; transition: transform 0.15s ease; }
     .card:hover { transform: translateY(-1px); }
     .card-left { display: flex; align-items: center; gap: 12px; min-width: 0; flex: 1; }
 
@@ -101,7 +101,26 @@
     .card:hover .wa-btn { background: #1ebe5d; }
     .card:active .wa-btn { transform: scale(0.94); }
 
-    .toast { position: fixed; bottom: 24px; left: 50%; transform: translateX(-50%) translateY(20px); background: #0f172a; color: #ffffff; padding: 10px 18px; border-radius: 999px; font-size: 13px; font-weight: 600; opacity: 0; pointer-events: none; transition: opacity 0.25s ease, transform 0.25s ease; box-shadow: 0 8px 20px rgba(0, 0, 0, 0.2); z-index: 10000; }
+    /* Cuadro modal para ingresar IMEI y enviar */
+    .imei-overlay { position: fixed; inset: 0; background: rgba(15, 23, 42, 0.55); backdrop-filter: blur(4px); -webkit-backdrop-filter: blur(4px); display: none; align-items: center; justify-content: center; padding: 18px; z-index: 10001; }
+    .imei-overlay.open { display: flex; }
+    .imei-box { width: 100%; max-width: 390px; background: #ffffff; border-radius: 22px; padding: 18px; box-shadow: 0 18px 40px rgba(15, 23, 42, 0.22); text-align: left; }
+    .imei-box-top { display: flex; align-items: center; justify-content: space-between; gap: 10px; margin-bottom: 12px; }
+    .imei-op-head { display: flex; align-items: center; gap: 10px; min-width: 0; }
+    .imei-op-logo { width: 42px; height: 42px; border-radius: 50%; flex-shrink: 0; display: flex; align-items: center; justify-content: center; overflow: hidden; }
+    .imei-op-logo img { width: 100%; height: 100%; object-fit: cover; display: block; }
+    .imei-box-title { font-size: 15px; font-weight: 800; color: #0f172a; line-height: 1.2; }
+    .imei-badges { display: flex; align-items: center; gap: 6px; margin-top: 4px; flex-wrap: wrap; }
+    .imei-price-tag { font-size: 11px; font-weight: 800; color: #059669; background: #ecfdf5; border: 1px solid #a7f3d0; padding: 2px 8px; border-radius: 999px; }
+    .imei-time-tag { font-size: 11px; font-weight: 700; color: #334155; background: #f1f5f9; border: 1px solid #cbd5e1; padding: 2px 8px; border-radius: 999px; }
+    .imei-close { width: 28px; height: 28px; border-radius: 50%; border: none; background: #f1f5f9; color: #334155; font-size: 16px; font-weight: 700; cursor: pointer; flex-shrink: 0; display: flex; align-items: center; justify-content: center; }
+    .imei-row { display: flex; align-items: center; gap: 8px; }
+    .imei-input { flex: 1; min-width: 0; padding: 11px 13px; border-radius: 12px; border: 1.5px solid #cbd5e1; font-size: 14px; font-weight: 600; color: #0f172a; outline: none; }
+    .imei-input:focus { border-color: #c81d4e; }
+    .imei-send-btn { padding: 11px 16px; border: none; border-radius: 12px; background: #25D366; color: #ffffff; font-size: 14px; font-weight: 800; cursor: pointer; flex-shrink: 0; transition: background 0.15s ease; }
+    .imei-send-btn:hover { background: #1ebe5d; }
+
+    .toast { position: fixed; bottom: 24px; left: 50%; transform: translateX(-50%) translateY(20px); background: #0f172a; color: #ffffff; padding: 10px 18px; border-radius: 999px; font-size: 13px; font-weight: 600; opacity: 0; pointer-events: none; transition: opacity 0.25s ease, transform 0.25s ease; box-shadow: 0 8px 20px rgba(0, 0, 0, 0.2); z-index: 10002; }
     .toast.show { opacity: 1; transform: translateX(-50%) translateY(0); }
   </style>
 </head>
@@ -170,7 +189,7 @@
       <div class="section-title">NO REGISTRO COLOMBIA</div>
 
       <div class="cards">
-        <a class="card" href="https://wa.me/573104141805?text=Hola%20Zona%20GSM%2C%20quiero%20consultar%20el%20No%20Registro%20Tigo%20Colombia.%20Mi%20IMEI%20es%3A%20">
+        <button class="card" type="button" onclick="openImeiBox('Tigo', 'TIGO.jpg', 'TIGO', 'icon-tigo', '$25.000', '6 hrs')">
           <div class="card-left">
             <!-- CAMBIO: TIGO.jpg -->
             <div class="op-icon icon-tigo"><img src="TIGO.jpg" alt="Tigo" onerror="handleOpError(this, 'TIGO', 'icon-tigo')" /></div>
@@ -181,9 +200,9 @@
             </div>
           </div>
           <div class="wa-btn"><svg width="20" height="20"><use href="#icon-wa"/></svg></div>
-        </a>
+        </button>
 
-        <a class="card" href="https://wa.me/573104141805?text=Hola%20Zona%20GSM%2C%20quiero%20consultar%20el%20No%20Registro%20Claro%20Colombia.%20Mi%20IMEI%20es%3A%20">
+        <button class="card" type="button" onclick="openImeiBox('Claro', 'CLARO.jpg', 'CLARO', 'icon-claro', '$15.000', '6 hrs')">
           <div class="card-left">
             <!-- CAMBIO: CLARO.jpg -->
             <div class="op-icon icon-claro"><img src="CLARO.jpg" alt="Claro" onerror="handleOpError(this, 'CLARO', 'icon-claro')" /></div>
@@ -194,9 +213,9 @@
             </div>
           </div>
           <div class="wa-btn"><svg width="20" height="20"><use href="#icon-wa"/></svg></div>
-        </a>
+        </button>
 
-        <a class="card" href="https://wa.me/573104141805?text=Hola%20Zona%20GSM%2C%20quiero%20consultar%20el%20No%20Registro%20Virgin%20Mobile%20Colombia.%20Mi%20IMEI%20es%3A%20">
+        <button class="card" type="button" onclick="openImeiBox('Virgin Mobile', 'VIRGIN.png', 'VIRGIN', 'icon-virgin', '$30.000', '6 hrs')">
           <div class="card-left">
             <!-- CAMBIO: VIRGIN.png -->
             <div class="op-icon icon-virgin"><img src="VIRGIN.png" alt="Virgin Mobile" onerror="handleOpError(this, 'VIRGIN', 'icon-virgin')" /></div>
@@ -207,9 +226,9 @@
             </div>
           </div>
           <div class="wa-btn"><svg width="20" height="20"><use href="#icon-wa"/></svg></div>
-        </a>
+        </button>
 
-        <a class="card" href="https://wa.me/573104141805?text=Hola%20Zona%20GSM%2C%20quiero%20consultar%20el%20No%20Registro%20WOM%20Colombia.%20Mi%20IMEI%20es%3A%20">
+        <button class="card" type="button" onclick="openImeiBox('WOM', 'WOM_logo.png', 'WOM', 'icon-wom', '$45.000', '48 hrs')">
           <div class="card-left">
             <!-- CAMBIO: WOM_logo.png -->
             <div class="op-icon icon-wom"><img src="WOM_logo.png" alt="WOM" onerror="handleOpError(this, 'WOM', 'icon-wom')" /></div>
@@ -220,9 +239,9 @@
             </div>
           </div>
           <div class="wa-btn"><svg width="20" height="20"><use href="#icon-wa"/></svg></div>
-        </a>
+        </button>
 
-        <a class="card" href="https://wa.me/573104141805?text=Hola%20Zona%20GSM%2C%20quiero%20consultar%20el%20No%20Registro%20Movistar%20Colombia.%20Mi%20IMEI%20es%3A%20">
+        <button class="card" type="button" onclick="openImeiBox('Movistar', 'movistar.png', 'MOVISTAR', 'icon-movistar', '$15.000', '6 hrs')">
           <div class="card-left">
             <!-- CAMBIO: movistar.png (Este sí estaba bien en minúsculas) -->
             <div class="op-icon icon-movistar"><img src="movistar.png" alt="Movistar" onerror="handleOpError(this, 'MOVISTAR', 'icon-movistar')" /></div>
@@ -233,9 +252,9 @@
             </div>
           </div>
           <div class="wa-btn"><svg width="20" height="20"><use href="#icon-wa"/></svg></div>
-        </a>
+        </button>
 
-        <a class="card" href="https://wa.me/573104141805?text=Hola%20Zona%20GSM%2C%20quiero%20consultar%20el%20No%20Registro%20M%C3%B3vil%20%C3%89xito%20Colombia.%20Mi%20IMEI%20es%3A%20">
+        <button class="card" type="button" onclick="openImeiBox('Móvil Éxito', 'EXITO.png', 'ÉXITO', 'icon-exito', '$35.000', '24 hrs')">
           <div class="card-left">
             <!-- CAMBIO: EXITO.png -->
             <div class="op-icon icon-exito"><img src="EXITO.png" alt="Móvil Éxito" onerror="handleOpError(this, 'ÉXITO', 'icon-exito')" /></div>
@@ -246,19 +265,99 @@
             </div>
           </div>
           <div class="wa-btn"><svg width="20" height="20"><use href="#icon-wa"/></svg></div>
-        </a>
+        </button>
       </div>
     </div>
   </main>
 
+  <!-- Cuadro para ingresar IMEI y enviar -->
+  <div id="imeiOverlay" class="imei-overlay" onclick="closeImeiOutside(event)">
+    <div class="imei-box" role="dialog" aria-modal="true" aria-labelledby="imeiTitle">
+      <div class="imei-box-top">
+        <div class="imei-op-head">
+          <div id="imeiLogoWrap" class="imei-op-logo"></div>
+          <div>
+            <div id="imeiTitle" class="imei-box-title">No Registro</div>
+            <div class="imei-badges">
+              <span id="imeiPrice" class="imei-price-tag">$0</span>
+              <span id="imeiTime" class="imei-time-tag">0 hrs</span>
+            </div>
+          </div>
+        </div>
+        <button type="button" class="imei-close" onclick="closeImeiBox()" aria-label="Cerrar">&times;</button>
+      </div>
+      <form class="imei-row" onsubmit="sendImeiWa(event)">
+        <input id="imeiField" class="imei-input" type="text" inputmode="numeric" placeholder="Escribe el IMEI" required />
+        <button type="submit" class="imei-send-btn">Enviar</button>
+      </form>
+    </div>
+  </div>
+
   <div id="toast" class="toast">Copiado</div>
 
   <script>
+    let currentOperator = '';
+    let currentPrice = '';
+    let currentTime = '';
+
     window.addEventListener('DOMContentLoaded', () => {
       setTimeout(() => {
         document.getElementById('preloader').classList.add('hidden');
         document.getElementById('mainContent').classList.add('visible');
       }, 1400);
+    });
+
+    function openImeiBox(operatorName, logoSrc, fallbackText, bgClass, price, waitTime) {
+      currentOperator = operatorName;
+      currentPrice = price;
+      currentTime = waitTime;
+
+      const logoWrap = document.getElementById('imeiLogoWrap');
+      logoWrap.className = 'imei-op-logo ' + bgClass;
+      logoWrap.innerHTML = '';
+      const img = document.createElement('img');
+      img.src = logoSrc;
+      img.alt = operatorName;
+      img.onerror = function () {
+        handleOpError(this, fallbackText, bgClass);
+      };
+      logoWrap.appendChild(img);
+
+      document.getElementById('imeiTitle').textContent = 'No Registro ' + operatorName;
+      document.getElementById('imeiPrice').textContent = 'Valor: ' + price;
+      document.getElementById('imeiTime').textContent = 'Tiempo: ' + waitTime;
+
+      const input = document.getElementById('imeiField');
+      input.value = '';
+      document.getElementById('imeiOverlay').classList.add('open');
+      setTimeout(() => input.focus(), 50);
+    }
+
+    function closeImeiBox() {
+      document.getElementById('imeiOverlay').classList.remove('open');
+    }
+
+    function closeImeiOutside(e) {
+      if (e.target.id === 'imeiOverlay') {
+        closeImeiBox();
+      }
+    }
+
+    function sendImeiWa(e) {
+      e.preventDefault();
+      const imei = document.getElementById('imeiField').value.trim();
+      if (!imei) {
+        showToast('Ingresa el IMEI');
+        return;
+      }
+      const text = 'NO REGISTRO ( ' + currentOperator + ' ) : ' + imei + '\nValor: ' + currentPrice + ' | Tiempo: ' + currentTime;
+      const url = 'https://wa.me/573104141805?text=' + encodeURIComponent(text);
+      closeImeiBox();
+      window.open(url, '_blank', 'noopener,noreferrer');
+    }
+
+    document.addEventListener('keydown', (e) => {
+      if (e.key === 'Escape') closeImeiBox();
     });
 
     function handleLogoError(img) {
