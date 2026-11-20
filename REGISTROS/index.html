@@ -4,7 +4,7 @@
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <title>Zona GSM — No Registro Colombia</title>
-  <meta name="description" content="Solución de No Registro por IMEI en Colombia para Tigo, Claro, Virgin, WOM, Movistar y Móvil Éxito. Proceso rápido y garantizado." />
+  <meta name="description" content="Solución de No Registro por IMEI en Colombia para Tigo, Claro, Virgin, WOM, Movistar, Móvil Éxito y ETB. Proceso rápido y garantizado." />
   <link rel="canonical" href="https://registros.zonagsm.site/" />
   <link rel="icon" type="image/png" href="logo.png" />
 
@@ -85,6 +85,7 @@
     .icon-movistar { background: #ffffff; border: 1px solid #e2e8f0; }
     .icon-exito { background: #ffe800; }
     .icon-exito .op-fallback { color: #0f0f0f; }
+    .icon-etb { background: #ffffff; border: 1px solid #e2e8f0; }
 
     .card-info { display: flex; flex-direction: column; min-width: 0; }
     .op-header-row { display: flex; align-items: center; gap: 6px; flex-wrap: wrap; }
@@ -92,6 +93,10 @@
     .online-pill { display: inline-flex; align-items: center; gap: 4px; padding: 2px 7px; border-radius: 999px; background: #ecfdf5; border: 1px solid #a7f3d0; font-size: 10px; font-weight: 700; color: #059669; line-height: 1; }
     .online-dot { width: 6px; height: 6px; border-radius: 50%; background: #10b981; animation: breatheOnline 1.8s ease-in-out infinite; }
     @keyframes breatheOnline { 0%, 100% { transform: scale(0.9); box-shadow: 0 0 0 0 rgba(16, 185, 129, 0.65); opacity: 0.85; } 50% { transform: scale(1.2); box-shadow: 0 0 0 4px rgba(16, 185, 129, 0); opacity: 1; } }
+
+    .offline-pill { display: inline-flex; align-items: center; gap: 4px; padding: 2px 7px; border-radius: 999px; background: #fef2f2; border: 1px solid #fecaca; font-size: 10px; font-weight: 700; color: #dc2626; line-height: 1; }
+    .offline-dot { width: 6px; height: 6px; border-radius: 50%; background: #ef4444; animation: breatheOffline 1.8s ease-in-out infinite; }
+    @keyframes breatheOffline { 0%, 100% { transform: scale(0.9); box-shadow: 0 0 0 0 rgba(239, 68, 68, 0.65); opacity: 0.85; } 50% { transform: scale(1.2); box-shadow: 0 0 0 4px rgba(239, 68, 68, 0); opacity: 1; } }
 
     .op-service-row { display: flex; align-items: center; gap: 6px; margin-top: 2px; flex-wrap: wrap; }
     .op-service { font-size: 12.5px; font-weight: 600; color: #475569; }
@@ -103,6 +108,8 @@
     .wa-btn { width: 40px; height: 40px; border-radius: 50%; background: #25D366; color: #ffffff; flex-shrink: 0; display: flex; align-items: center; justify-content: center; transition: background 0.2s ease, transform 0.1s ease; }
     .card:hover .wa-btn { background: #1ebe5d; }
     .card:active .wa-btn { transform: scale(0.94); }
+    .wa-btn.offline-wa { background: #ef4444; color: #ffffff; }
+    .card:hover .wa-btn.offline-wa { background: #dc2626; }
 
     /* Cuadro modal para ingresar IMEI y enviar */
     .imei-overlay { position: fixed; inset: 0; background: rgba(15, 23, 42, 0.55); backdrop-filter: blur(4px); -webkit-backdrop-filter: blur(4px); display: none; align-items: center; justify-content: center; padding: 18px; z-index: 10001; }
@@ -214,7 +221,7 @@
       <div class="section-title">NO REGISTRO COLOMBIA</div>
 
       <div class="cards">
-        <button class="card" type="button" onclick="openImeiBox('TIGO', 'TIGO.jpg', 'TIGO', 'icon-tigo', '$25.000', '6 hrs')">
+        <button class="card" type="button" onclick="openImeiBox('TIGO', 'TIGO.jpg', 'TIGO', 'icon-tigo', '$25.000', '6 hrs', true)">
           <div class="card-left">
             <div class="op-icon icon-tigo"><img src="TIGO.jpg" alt="Tigo" onerror="handleOpError(this, 'TIGO', 'icon-tigo')" /></div>
             <div class="card-info">
@@ -226,7 +233,7 @@
           <div class="wa-btn"><svg width="20" height="20"><use href="#icon-wa"/></svg></div>
         </button>
 
-        <button class="card" type="button" onclick="openImeiBox('CLARO', 'CLARO.jpg', 'CLARO', 'icon-claro', '$15.000', '6 hrs')">
+        <button class="card" type="button" onclick="openImeiBox('CLARO', 'CLARO.jpg', 'CLARO', 'icon-claro', '$15.000', '6 hrs', true)">
           <div class="card-left">
             <div class="op-icon icon-claro"><img src="CLARO.jpg" alt="Claro" onerror="handleOpError(this, 'CLARO', 'icon-claro')" /></div>
             <div class="card-info">
@@ -238,7 +245,7 @@
           <div class="wa-btn"><svg width="20" height="20"><use href="#icon-wa"/></svg></div>
         </button>
 
-        <button class="card" type="button" onclick="openImeiBox('VIRGIN', 'VIRGIN.png', 'VIRGIN', 'icon-virgin', '$30.000', '6 hrs')">
+        <button class="card" type="button" onclick="openImeiBox('VIRGIN', 'VIRGIN.png', 'VIRGIN', 'icon-virgin', '$30.000', '6 hrs', true)">
           <div class="card-left">
             <div class="op-icon icon-virgin"><img src="VIRGIN.png" alt="Virgin Mobile" onerror="handleOpError(this, 'VIRGIN', 'icon-virgin')" /></div>
             <div class="card-info">
@@ -250,7 +257,7 @@
           <div class="wa-btn"><svg width="20" height="20"><use href="#icon-wa"/></svg></div>
         </button>
 
-        <button class="card" type="button" onclick="openImeiBox('WOM', 'WOM_logo.png', 'WOM', 'icon-wom', '$45.000', '48 hrs')">
+        <button class="card" type="button" onclick="openImeiBox('WOM', 'WOM_logo.png', 'WOM', 'icon-wom', '$45.000', '48 hrs', true)">
           <div class="card-left">
             <div class="op-icon icon-wom"><img src="WOM_logo.png" alt="WOM" onerror="handleOpError(this, 'WOM', 'icon-wom')" /></div>
             <div class="card-info">
@@ -262,7 +269,7 @@
           <div class="wa-btn"><svg width="20" height="20"><use href="#icon-wa"/></svg></div>
         </button>
 
-        <button class="card" type="button" onclick="openImeiBox('MOVISTAR', 'movistar.png', 'MOVISTAR', 'icon-movistar', '$15.000', '6 hrs')">
+        <button class="card" type="button" onclick="openImeiBox('MOVISTAR', 'movistar.png', 'MOVISTAR', 'icon-movistar', '$15.000', '6 hrs', true)">
           <div class="card-left">
             <div class="op-icon icon-movistar"><img src="movistar.png" alt="Movistar" onerror="handleOpError(this, 'MOVISTAR', 'icon-movistar')" /></div>
             <div class="card-info">
@@ -274,7 +281,7 @@
           <div class="wa-btn"><svg width="20" height="20"><use href="#icon-wa"/></svg></div>
         </button>
 
-        <button class="card" type="button" onclick="openImeiBox('MÓVIL ÉXITO', 'EXITO.png', 'ÉXITO', 'icon-exito', '$35.000', '24 hrs')">
+        <button class="card" type="button" onclick="openImeiBox('MÓVIL ÉXITO', 'EXITO.png', 'ÉXITO', 'icon-exito', '$35.000', '24 hrs', true)">
           <div class="card-left">
             <div class="op-icon icon-exito"><img src="EXITO.png" alt="Móvil Éxito" onerror="handleOpError(this, 'ÉXITO', 'icon-exito')" /></div>
             <div class="card-info">
@@ -284,6 +291,18 @@
             </div>
           </div>
           <div class="wa-btn"><svg width="20" height="20"><use href="#icon-wa"/></svg></div>
+        </button>
+
+        <button class="card is-offline" type="button" onclick="openImeiBox('ETB', 'ETB.png', 'ETB', 'icon-etb', '', '', false)">
+          <div class="card-left">
+            <div class="op-icon icon-etb"><img src="ETB.png" alt="ETB" onerror="handleOpError(this, 'ETB', 'icon-etb')" /></div>
+            <div class="card-info">
+              <div class="op-header-row"><span class="op-name">NO REGISTRO ETB</span><span class="offline-pill"><span class="offline-dot"></span>Offline</span></div>
+              <div class="op-service-row"><span class="op-service">Registro IMEI</span><span class="country-tag">COLOMBIA</span></div>
+              <span class="op-hint">Servicio temporalmente offline</span>
+            </div>
+          </div>
+          <div class="wa-btn offline-wa"><svg width="20" height="20"><use href="#icon-wa"/></svg></div>
         </button>
       </div>
     </div>
@@ -528,7 +547,12 @@
       updateImeiVisualState(digits);
     }
 
-    function openImeiBox(operatorName, logoSrc, fallbackText, bgClass, price, waitTime) {
+    function openImeiBox(operatorName, logoSrc, fallbackText, bgClass, price, waitTime, isOnline) {
+      if (!isOnline) {
+        showToast('NO REGISTRO ' + operatorName + ' está OFFLINE');
+        return;
+      }
+
       currentOperator = operatorName.toUpperCase();
       currentPrice = price;
       currentTime = waitTime;
