@@ -189,7 +189,7 @@
       <div class="section-title">NO REGISTRO COLOMBIA</div>
 
       <div class="cards">
-        <button class="card" type="button" onclick="openImeiBox('Tigo', 'TIGO.jpg', 'TIGO', 'icon-tigo', '$25.000', '6 hrs')">
+        <button class="card" type="button" onclick="openImeiBox('TIGO', 'TIGO.jpg', 'TIGO', 'icon-tigo', '$25.000', '6 hrs')">
           <div class="card-left">
             <!-- CAMBIO: TIGO.jpg -->
             <div class="op-icon icon-tigo"><img src="TIGO.jpg" alt="Tigo" onerror="handleOpError(this, 'TIGO', 'icon-tigo')" /></div>
@@ -202,7 +202,7 @@
           <div class="wa-btn"><svg width="20" height="20"><use href="#icon-wa"/></svg></div>
         </button>
 
-        <button class="card" type="button" onclick="openImeiBox('Claro', 'CLARO.jpg', 'CLARO', 'icon-claro', '$15.000', '6 hrs')">
+        <button class="card" type="button" onclick="openImeiBox('CLARO', 'CLARO.jpg', 'CLARO', 'icon-claro', '$15.000', '6 hrs')">
           <div class="card-left">
             <!-- CAMBIO: CLARO.jpg -->
             <div class="op-icon icon-claro"><img src="CLARO.jpg" alt="Claro" onerror="handleOpError(this, 'CLARO', 'icon-claro')" /></div>
@@ -215,7 +215,7 @@
           <div class="wa-btn"><svg width="20" height="20"><use href="#icon-wa"/></svg></div>
         </button>
 
-        <button class="card" type="button" onclick="openImeiBox('Virgin Mobile', 'VIRGIN.png', 'VIRGIN', 'icon-virgin', '$30.000', '6 hrs')">
+        <button class="card" type="button" onclick="openImeiBox('VIRGIN', 'VIRGIN.png', 'VIRGIN', 'icon-virgin', '$30.000', '6 hrs')">
           <div class="card-left">
             <!-- CAMBIO: VIRGIN.png -->
             <div class="op-icon icon-virgin"><img src="VIRGIN.png" alt="Virgin Mobile" onerror="handleOpError(this, 'VIRGIN', 'icon-virgin')" /></div>
@@ -241,7 +241,7 @@
           <div class="wa-btn"><svg width="20" height="20"><use href="#icon-wa"/></svg></div>
         </button>
 
-        <button class="card" type="button" onclick="openImeiBox('Movistar', 'movistar.png', 'MOVISTAR', 'icon-movistar', '$15.000', '6 hrs')">
+        <button class="card" type="button" onclick="openImeiBox('MOVISTAR', 'movistar.png', 'MOVISTAR', 'icon-movistar', '$15.000', '6 hrs')">
           <div class="card-left">
             <!-- CAMBIO: movistar.png (Este sí estaba bien en minúsculas) -->
             <div class="op-icon icon-movistar"><img src="movistar.png" alt="Movistar" onerror="handleOpError(this, 'MOVISTAR', 'icon-movistar')" /></div>
@@ -254,7 +254,7 @@
           <div class="wa-btn"><svg width="20" height="20"><use href="#icon-wa"/></svg></div>
         </button>
 
-        <button class="card" type="button" onclick="openImeiBox('Móvil Éxito', 'EXITO.png', 'ÉXITO', 'icon-exito', '$35.000', '24 hrs')">
+        <button class="card" type="button" onclick="openImeiBox('MÓVIL ÉXITO', 'EXITO.png', 'ÉXITO', 'icon-exito', '$35.000', '24 hrs')">
           <div class="card-left">
             <!-- CAMBIO: EXITO.png -->
             <div class="op-icon icon-exito"><img src="EXITO.png" alt="Móvil Éxito" onerror="handleOpError(this, 'ÉXITO', 'icon-exito')" /></div>
@@ -308,7 +308,7 @@
     });
 
     function openImeiBox(operatorName, logoSrc, fallbackText, bgClass, price, waitTime) {
-      currentOperator = operatorName;
+      currentOperator = operatorName.toUpperCase();
       currentPrice = price;
       currentTime = waitTime;
 
@@ -350,7 +350,11 @@
         showToast('Ingresa el IMEI');
         return;
       }
-      const text = 'NO REGISTRO ( ' + currentOperator + ' ) : ' + imei + '\nValor: ' + currentPrice + ' | Tiempo: ' + currentTime;
+      const text =
+        '*NO REGISTRO ' + currentOperator + '*\n' +
+        '*VALOR PROMO : ' + currentPrice + '*\n' +
+        '*TIEMPO: ' + currentTime + '*\n' +
+        '*IMEI: ' + imei + '*';
       const url = 'https://wa.me/573104141805?text=' + encodeURIComponent(text);
       closeImeiBox();
       window.open(url, '_blank', 'noopener,noreferrer');
