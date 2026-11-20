@@ -21,12 +21,15 @@
     .preloader-overlay { position: fixed; inset: 0; background: linear-gradient(180deg, #eef3f8 0%, #e4ebf2 100%); z-index: 999; opacity: 1; visibility: visible; transition: opacity 0.65s ease, visibility 0.65s ease; pointer-events: none; }
     .preloader-overlay.fade-out { opacity: 0; visibility: hidden; }
     .container { width: 100%; max-width: 460px; background: #f4f7fa; border-radius: 0 0 28px 28px; padding: 0 0 36px; box-shadow: 0 12px 35px rgba(15, 23, 42, 0.08); border: 1px solid rgba(255, 255, 255, 0.85); border-top: none; text-align: center; overflow: hidden; position: relative; z-index: 10; }
-    .cover-area { height: 155px; background: linear-gradient(135deg, #0b2948 0%, #12487a 55%, #1862a3 100%); position: relative; opacity: 0; transform: translateY(-10px); transition: opacity 0.75s cubic-bezier(0.16, 1, 0.3, 1), transform 0.75s cubic-bezier(0.16, 1, 0.3, 1); }
+    
+    /* CAMBIO 1: Fondo superior cambiado a tonos rojos del logo */
+    .cover-area { height: 155px; background: linear-gradient(135deg, #8a0f33 0%, #c81d4e 55%, #e62e62 100%); position: relative; opacity: 0; transform: translateY(-10px); transition: opacity 0.75s cubic-bezier(0.16, 1, 0.3, 1), transform 0.75s cubic-bezier(0.16, 1, 0.3, 1); }
+    
     .cover-area.revealed { opacity: 1; transform: translateY(0); }
     .top-nav { position: absolute; top: 14px; left: 0; right: 0; display: flex; justify-content: center; gap: 6px; padding: 0 10px; z-index: 10; flex-wrap: wrap; }
     .nav-pill { padding: 6px 11px; border-radius: 999px; font-size: 11px; font-weight: 700; text-decoration: none; color: rgba(255, 255, 255, 0.92); background: rgba(255, 255, 255, 0.14); backdrop-filter: blur(8px); -webkit-backdrop-filter: blur(8px); border: 1px solid rgba(255, 255, 255, 0.25); transition: all 0.2s ease; }
     .nav-pill:hover { background: rgba(255, 255, 255, 0.26); transform: translateY(-1px); }
-    .nav-pill.active { background: #ffffff; color: #0b2948; border-color: #ffffff; box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15); }
+    .nav-pill.active { background: #ffffff; color: #8a0f33; border-color: #ffffff; box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15); }
     .mountain-divider { position: absolute; bottom: -1px; left: 0; width: 100%; height: 36px; fill: #f4f7fa; display: block; }
     .avatar-wrapper { position: relative; width: 118px; height: 118px; margin: -68px auto 18px; z-index: 1000; display: flex; align-items: center; justify-content: center; }
     .avatar { width: 114px; height: 114px; border-radius: 50%; background: #ffffff; display: flex; align-items: center; justify-content: center; box-shadow: 0 8px 24px rgba(15, 23, 42, 0.12); position: relative; z-index: 3; overflow: hidden; }
@@ -35,9 +38,9 @@
     .logo-badge { display: inline-flex; align-items: center; font-weight: 800; font-size: 16px; letter-spacing: -0.3px; }
     .logo-zona { background: #c81d4e; color: #ffffff; padding: 3px 6px; border-radius: 4px; margin-right: 4px; }
     .logo-gsm { color: #0f0f0f; }
-    .pulse-ring { position: absolute; top: 0; left: 0; width: 100%; height: 100%; border-radius: 50%; border: 1.5px solid rgba(24, 98, 163, 0.32); background: rgba(24, 98, 163, 0.05); pointer-events: none; z-index: 1; }
+    .pulse-ring { position: absolute; top: 0; left: 0; width: 100%; height: 100%; border-radius: 50%; border: 1.5px solid rgba(200, 29, 78, 0.32); background: rgba(200, 29, 78, 0.05); pointer-events: none; z-index: 1; }
     .ring-1 { animation: breatheRing1 4.2s ease-in-out infinite; }
-    .ring-2 { border-color: rgba(24, 98, 163, 0.2); background: rgba(24, 98, 163, 0.03); animation: breatheRing2 4.2s ease-in-out infinite; }
+    .ring-2 { border-color: rgba(200, 29, 78, 0.2); background: rgba(200, 29, 78, 0.03); animation: breatheRing2 4.2s ease-in-out infinite; }
     @keyframes breatheRing1 { 0%, 100% { transform: scale(1.03); opacity: 0.85; } 50% { transform: scale(1.12); opacity: 0.45; } }
     @keyframes breatheRing2 { 0%, 100% { transform: scale(1.06); opacity: 0.65; } 50% { transform: scale(1.22); opacity: 0.2; } }
     .content-box { padding: 0 18px; opacity: 0; transform: translateY(18px); transition: opacity 0.75s cubic-bezier(0.16, 1, 0.3, 1) 0.1s, transform 0.75s cubic-bezier(0.16, 1, 0.3, 1) 0.1s; }
@@ -65,8 +68,11 @@
     .card-info { display: flex; flex-direction: column; min-width: 0; }
     .card-title { font-size: 15px; font-weight: 800; color: #0f172a; letter-spacing: -0.1px; }
     .card-subtitle { font-size: 12.5px; font-weight: 600; color: #475569; margin-top: 1px; }
+    
+    /* CAMBIO 2: El hover de la flecha ahora es rojo */
     .card-arrow { width: 34px; height: 34px; border-radius: 50%; background: #f1f5f9; display: flex; align-items: center; justify-content: center; color: #334155; flex-shrink: 0; transition: background 0.2s ease, transform 0.2s ease, color 0.2s ease; }
-    .card:hover .card-arrow { background: #0b2948; color: #ffffff; transform: translateX(2px); }
+    .card:hover .card-arrow { background: #c81d4e; color: #ffffff; transform: translateX(2px); }
+    
     .toast { position: fixed; bottom: 24px; left: 50%; transform: translateX(-50%) translateY(20px); background: #0f172a; color: #ffffff; padding: 10px 18px; border-radius: 999px; font-size: 13px; font-weight: 600; opacity: 0; pointer-events: none; transition: opacity 0.25s ease, transform 0.25s ease; box-shadow: 0 8px 20px rgba(0, 0, 0, 0.2); z-index: 10000; }
     .toast.show { opacity: 1; transform: translateX(-50%) translateY(0); }
   </style>
