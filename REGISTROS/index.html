@@ -120,11 +120,14 @@
     .imei-row { display: flex; align-items: center; gap: 8px; }
 
     /* Campo combinado: texto "Introduce IMEI" / dígitos + recuadro del último número a la derecha */
-    .imei-combined-field { flex: 1; min-width: 0; display: flex; align-items: center; justify-content: space-between; gap: 8px; padding: 6px 6px 6px 12px; border-radius: 12px; border: 1.5px solid #cbd5e1; background: #ffffff; transition: border-color 0.15s ease; }
+    .imei-combined-field { flex: 1; min-width: 0; display: flex; align-items: center; justify-content: space-between; gap: 8px; padding: 6px 6px 6px 12px; border-radius: 12px; border: 2px solid #cbd5e1; background: #ffffff; transition: border-color 0.15s ease, box-shadow 0.15s ease, background-color 0.15s ease; }
     .imei-combined-field:focus-within { border-color: #c81d4e; }
+    .imei-combined-field.imei-valid { border-color: #10b981; background: #ecfdf5; box-shadow: 0 0 0 3px rgba(16, 185, 129, 0.22); }
+    .imei-combined-field.imei-valid:focus-within { border-color: #059669; box-shadow: 0 0 0 3px rgba(16, 185, 129, 0.28); }
     .imei-input { flex: 1; min-width: 0; border: none; background: transparent; font-size: 13.5px; font-weight: 700; letter-spacing: 0.4px; color: #0f172a; outline: none; padding: 4px 0; }
     .imei-last-square { width: 32px; height: 32px; border-radius: 8px; border: 2px solid #cbd5e1; background: #f8fafc; color: #94a3b8; font-size: 14px; font-weight: 900; display: inline-flex; align-items: center; justify-content: center; flex-shrink: 0; transition: all 0.15s ease; }
     .imei-last-square.active { border-color: #c81d4e; background: #fce7ef; color: #8a0f33; }
+    .imei-combined-field.imei-valid .imei-last-square.active { border-color: #10b981; background: #d1fae5; color: #065f46; }
 
     .imei-qr-btn { width: 42px; height: 42px; border-radius: 12px; border: 1.5px solid #cbd5e1; background: #f8fafc; color: #0f172a; cursor: pointer; flex-shrink: 0; display: inline-flex; align-items: center; justify-content: center; transition: all 0.15s ease; }
     .imei-qr-btn:hover { border-color: #c81d4e; background: #fce7ef; color: #8a0f33; }
@@ -133,12 +136,12 @@
     .imei-send-btn { padding: 11px 16px; border: none; border-radius: 12px; background: #25D366; color: #ffffff; font-size: 14px; font-weight: 800; cursor: pointer; flex-shrink: 0; transition: background 0.15s ease; }
     .imei-send-btn:hover { background: #1ebe5d; }
 
-    /* Panel lector QR debajo del campo IMEI */
+    /* Panel lector de código de barras / QR debajo del campo IMEI */
     .qr-reader-panel { margin-top: 12px; padding: 10px; border-radius: 14px; background: #f8fafc; border: 1.5px dashed #cbd5e1; display: none; }
     .qr-reader-panel.open { display: block; }
     .qr-reader-top { display: flex; align-items: center; justify-content: space-between; margin-bottom: 8px; font-size: 11.5px; font-weight: 700; color: #334155; }
     .qr-file-label { font-size: 11px; font-weight: 700; color: #8a0f33; background: #fce7ef; padding: 4px 9px; border-radius: 8px; cursor: pointer; border: 1px solid #fbcfe1; }
-    #qrCameraBox { width: 100%; border-radius: 10px; overflow: hidden; background: #0f172a; min-height: 160px; }
+    #qrCameraBox { width: 100%; border-radius: 10px; overflow: hidden; background: #0f172a; min-height: 140px; }
     .qr-status-msg { margin-top: 6px; font-size: 11px; color: #64748b; text-align: center; }
 
     .toast { position: fixed; bottom: 24px; left: 50%; transform: translateX(-50%) translateY(20px); background: #0f172a; color: #ffffff; padding: 10px 18px; border-radius: 999px; font-size: 13px; font-weight: 600; opacity: 0; pointer-events: none; transition: opacity 0.25s ease, transform 0.25s ease; box-shadow: 0 8px 20px rgba(0, 0, 0, 0.2); z-index: 10002; }
@@ -304,11 +307,11 @@
       </div>
       <form onsubmit="sendImeiWa(event)">
         <div class="imei-row">
-          <div class="imei-combined-field">
+          <div id="imeiCombinedField" class="imei-combined-field">
             <input id="imeiField" class="imei-input" type="text" inputmode="numeric" maxlength="15" placeholder="Introduce IMEI" oninput="handleImeiInput(this)" required />
             <span id="imeiLastSquare" class="imei-last-square" title="Último dígito calculado">-</span>
           </div>
-          <button id="qrToggleBtn" type="button" class="imei-qr-btn" onclick="toggleQrReader()" title="Escanear QR / Código" aria-label="Escanear QR o código">
+          <button id="qrToggleBtn" type="button" class="imei-qr-btn" onclick="toggleQrReader()" title="Escanear código de barras / QR" aria-label="Escanear código de barras o QR">
             <svg width="20" height="20"><use href="#icon-qr"/></svg>
           </button>
           <button type="submit" class="imei-send-btn">Enviar</button>
@@ -316,14 +319,14 @@
 
         <div id="qrReaderPanel" class="qr-reader-panel">
           <div class="qr-reader-top">
-            <span>Lector QR / Código</span>
+            <span>Lector Código de Barras / QR</span>
             <label class="qr-file-label">
               Subir imagen
               <input id="qrFileInput" type="file" accept="image/*" style="display:none" onchange="scanQrFile(this)" />
             </label>
           </div>
           <div id="qrCameraBox"></div>
-          <div id="qrStatusMsg" class="qr-status-msg">Apunta la cámara al QR o sube una imagen</div>
+          <div id="qrStatusMsg" class="qr-status-msg">Alinea el código de barras en el recuadro rectangular</div>
         </div>
       </form>
     </div>
@@ -360,8 +363,17 @@
       return (10 - (sum % 10)) % 10;
     }
 
-    function updateLastSquare(digits) {
+    function isValidImei15(digits) {
+      if (!/^\d{15}$/.test(digits)) return false;
+      const base14 = digits.slice(0, 14);
+      const expectedCheck = String(computeImeiCheckDigit(base14));
+      return digits.charAt(14) === expectedCheck;
+    }
+
+    function updateImeiVisualState(digits) {
       const square = document.getElementById('imeiLastSquare');
+      const combinedField = document.getElementById('imeiCombinedField');
+
       if (digits.length >= 14) {
         const base14 = digits.slice(0, 14);
         const calcDigit = computeImeiCheckDigit(base14);
@@ -370,6 +382,12 @@
       } else {
         square.textContent = '-';
         square.classList.remove('active');
+      }
+
+      if (isValidImei15(digits)) {
+        combinedField.classList.add('imei-valid');
+      } else {
+        combinedField.classList.remove('imei-valid');
       }
     }
 
@@ -416,7 +434,7 @@
       statusMsg.textContent = 'Iniciando cámara...';
 
       if (typeof Html5Qrcode === 'undefined') {
-        statusMsg.textContent = 'Usa "Subir imagen" para leer el código QR.';
+        statusMsg.textContent = 'Usa "Subir imagen" para leer el código.';
         return;
       }
 
@@ -424,10 +442,25 @@
         qrScannerInstance = new Html5Qrcode('qrCameraBox');
       }
 
+      const supportedFormats = typeof Html5QrcodeSupportedFormats !== 'undefined'
+        ? [
+            Html5QrcodeSupportedFormats.CODE_128,
+            Html5QrcodeSupportedFormats.CODE_39,
+            Html5QrcodeSupportedFormats.CODE_93,
+            Html5QrcodeSupportedFormats.ITF,
+            Html5QrcodeSupportedFormats.EAN_13,
+            Html5QrcodeSupportedFormats.QR_CODE
+          ]
+        : undefined;
+
       try {
         await qrScannerInstance.start(
           { facingMode: 'environment' },
-          { fps: 10, qrbox: { width: 180, height: 180 } },
+          {
+            fps: 12,
+            qrbox: { width: 260, height: 105 },
+            formatsToSupport: supportedFormats
+          },
           async (decodedText) => {
             if (applyScannedImei(decodedText)) {
               await stopQrReader();
@@ -436,7 +469,7 @@
           () => {}
         );
         qrIsRunning = true;
-        statusMsg.textContent = 'Apunta al QR o sube una imagen';
+        statusMsg.textContent = 'Alinea el código de barras en el recuadro rectangular';
       } catch (err) {
         qrIsRunning = false;
         statusMsg.textContent = 'Cámara no disponible aquí. Puedes usar "Subir imagen".';
@@ -463,8 +496,8 @@
         applyScannedImei(decodedText);
         await stopQrReader();
       } catch (err) {
-        statusMsg.textContent = 'No se pudo leer un QR en esa imagen';
-        showToast('No se leyó el QR');
+        statusMsg.textContent = 'No se pudo leer un código en esa imagen';
+        showToast('No se leyó el código');
       } finally {
         fileInput.value = '';
       }
@@ -492,7 +525,7 @@
       }
 
       input.value = digits;
-      updateLastSquare(digits);
+      updateImeiVisualState(digits);
     }
 
     function openImeiBox(operatorName, logoSrc, fallbackText, bgClass, price, waitTime) {
@@ -518,7 +551,7 @@
 
       const input = document.getElementById('imeiField');
       input.value = '';
-      updateLastSquare('');
+      updateImeiVisualState('');
       document.getElementById('qrReaderPanel').classList.remove('open');
       document.getElementById('qrToggleBtn').classList.remove('active');
       document.getElementById('imeiOverlay').classList.add('open');
@@ -544,10 +577,10 @@
       if (imei.length === 14) {
         imei = imei + computeImeiCheckDigit(imei);
         input.value = imei;
-        updateLastSquare(imei);
+        updateImeiVisualState(imei);
       }
 
-      if (imei.length !== 15) {
+      if (!isValidImei15(imei)) {
         showToast('Introduce IMEI');
         input.focus();
         return;
