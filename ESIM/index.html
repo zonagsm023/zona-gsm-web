@@ -4,13 +4,13 @@
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <title>Zona GSM — E-SIM Colombia</title>
-  <meta name="description" content="E-SIM Claro, Tigo y WOM en Colombia. Activación y entrega inmediata. Proceso 100% digital por WhatsApp." />
+  <meta name="description" content="E-SIM Claro, Tigo, WOM y Movistar en Colombia. Activación y entrega inmediata. Proceso 100% digital por WhatsApp." />
   <link rel="canonical" href="https://esim.zonagsm.site/" />
   <link rel="icon" type="image/png" href="logo.png" />
 
   <meta property="og:type" content="website" />
   <meta property="og:title" content="Zona GSM — E-SIM Colombia" />
-  <meta property="og:description" content="E-SIM Claro, Tigo y WOM. Activación inmediata por WhatsApp." />
+  <meta property="og:description" content="E-SIM Claro, Tigo, WOM y Movistar. Activación inmediata por WhatsApp." />
   <meta property="og:url" content="https://esim.zonagsm.site/" />
   <meta property="og:image" content="logo.png" />
   <meta property="og:site_name" content="Zona GSM" />
@@ -23,8 +23,7 @@
     .preloader.hidden { opacity: 0; visibility: hidden; pointer-events: none; }
     .loader-circle-wrap { position: relative; width: 124px; height: 124px; display: flex; align-items: center; justify-content: center; animation: loaderPopIn 0.5s cubic-bezier(0.22, 1, 0.36, 1) forwards; }
     @keyframes loaderPopIn { 0% { transform: scale(0.85); opacity: 0; } 100% { transform: scale(1); opacity: 1; } }
-    
-    /* CAMBIO: Anillos del preloader en tonos rojos */
+
     .loader-ring { position: absolute; inset: 0; border-radius: 50%; border: 2px solid rgba(200, 29, 78, 0.35); background: rgba(200, 29, 78, 0.05); animation: loaderPulse 1.4s ease-in-out infinite; }
     .loader-ring-2 { position: absolute; inset: 0; border-radius: 50%; border: 1.5px solid rgba(200, 29, 78, 0.2); animation: loaderPulse 1.4s ease-in-out 0.35s infinite; }
     @keyframes loaderPulse { 0% { transform: scale(0.98); opacity: 0.9; } 70%, 100% { transform: scale(1.24); opacity: 0; } }
@@ -32,13 +31,10 @@
     .container { width: 100%; max-width: 460px; background: #f4f7fa; border-radius: 0 0 28px 28px; padding: 0 0 32px; box-shadow: 0 12px 35px rgba(15, 23, 42, 0.08); border: 1px solid rgba(255, 255, 255, 0.85); border-top: none; text-align: center; overflow: hidden; position: relative; opacity: 0; transform: translateY(14px); transition: opacity 0.75s cubic-bezier(0.22, 1, 0.36, 1), transform 0.75s cubic-bezier(0.22, 1, 0.36, 1); }
     .container.visible { opacity: 1; transform: translateY(0); }
 
-    /* CAMBIO: Fondo superior cambiado a tonos rojos del logo */
     .cover-area { height: 155px; background: linear-gradient(135deg, #8a0f33 0%, #c81d4e 55%, #e62e62 100%); position: relative; }
     .top-nav { position: absolute; top: 14px; left: 0; right: 0; display: flex; justify-content: center; gap: 6px; padding: 0 10px; z-index: 10; flex-wrap: wrap; }
     .nav-pill { padding: 6px 11px; border-radius: 999px; font-size: 11px; font-weight: 700; text-decoration: none; color: rgba(255, 255, 255, 0.92); background: rgba(255, 255, 255, 0.14); backdrop-filter: blur(8px); -webkit-backdrop-filter: blur(8px); border: 1px solid rgba(255, 255, 255, 0.25); transition: all 0.2s ease; }
     .nav-pill:hover { background: rgba(255, 255, 255, 0.26); transform: translateY(-1px); }
-    
-    /* CAMBIO: Color del texto del botón activo */
     .nav-pill.active { background: #ffffff; color: #8a0f33; border-color: #ffffff; box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15); }
     .mountain-divider { position: absolute; bottom: -1px; left: 0; width: 100%; height: 36px; fill: #f4f7fa; display: block; }
 
@@ -47,10 +43,9 @@
     .avatar-img { width: 100%; height: 100%; object-fit: cover; mix-blend-mode: multiply; filter: contrast(1.08) brightness(1.04); display: block; }
     .avatar-fallback { width: 100%; height: 100%; display: flex; align-items: center; justify-content: center; background: #ffffff; }
     .logo-badge { display: inline-flex; align-items: center; font-weight: 800; font-size: 16px; letter-spacing: -0.3px; }
-    .logo-zona { background: #c81d4e; color: #ffffff; padding: 3px 6px; border-radius: 4px; margin-right: 4px; }
+    .logo-zona { background: #c81d4e; color: #ffffff; padding: 3px 6px; border-radius: 2px; margin-right: 4px; }
     .logo-gsm { color: #0f0f0f; }
 
-    /* CAMBIO: Anillos de pulso del avatar en tonos rojos */
     .pulse-ring { position: absolute; top: 0; left: 0; width: 100%; height: 100%; border-radius: 50%; border: 1.5px solid rgba(200, 29, 78, 0.32); background: rgba(200, 29, 78, 0.05); pointer-events: none; z-index: 1; }
     .ring-1 { animation: breatheRing1 4.2s ease-in-out infinite; }
     .ring-2 { border-color: rgba(200, 29, 78, 0.2); background: rgba(200, 29, 78, 0.03); animation: breatheRing2 4.2s ease-in-out infinite; }
@@ -73,27 +68,63 @@
     .section-title { font-size: 12px; font-weight: 700; letter-spacing: 1px; color: #64748b; text-transform: uppercase; margin-bottom: 16px; }
     .cards { display: flex; flex-direction: column; gap: 14px; padding: 0 4px; }
 
-    .card { background: #ffffff; border-radius: 50px; padding: 12px 16px; display: flex; align-items: center; justify-content: space-between; box-shadow: 0 4px 14px rgba(15, 23, 42, 0.05); border: 1px solid #eef2f6; text-align: left; transition: transform 0.15s ease, box-shadow 0.15s ease; }
+    .card { background: #ffffff; border-radius: 50px; padding: 12px 16px; display: flex; align-items: center; justify-content: space-between; gap: 10px; box-shadow: 0 4px 14px rgba(15, 23, 42, 0.05); border: 1px solid #eef2f6; text-align: left; text-decoration: none; color: inherit; width: 100%; cursor: pointer; transition: transform 0.15s ease, box-shadow 0.15s ease; }
     .card:hover { transform: translateY(-1px); box-shadow: 0 6px 18px rgba(15, 23, 42, 0.09); }
-    .card-left { display: flex; align-items: center; gap: 14px; min-width: 0; }
+    .card.is-offline { opacity: 0.8; }
+    .card-left { display: flex; align-items: center; gap: 12px; min-width: 0; flex: 1; }
+
     .operator-icon { width: 46px; height: 46px; border-radius: 50%; flex-shrink: 0; overflow: hidden; background: #ffffff; display: flex; align-items: center; justify-content: center; box-shadow: 0 2px 6px rgba(15, 23, 42, 0.08); position: relative; }
     .operator-icon img { width: 100%; height: 100%; object-fit: cover; display: block; }
-    .operator-badge-fallback { width: 100%; height: 100%; display: flex; align-items: center; justify-content: center; font-weight: 900; font-size: 12px; color: #ffffff; text-align: center; }
-    .bg-claro { background: linear-gradient(135deg, #e11d48, #be123c); }
-    .bg-tigo { background: linear-gradient(135deg, #0284c7, #0369a1); }
-    .bg-wom { background: linear-gradient(135deg, #7e22ce, #6b21a8); }
+    .operator-badge-fallback { width: 100%; height: 100%; display: flex; align-items: center; justify-content: center; font-weight: 900; font-size: 10px; color: #ffffff; text-align: center; padding: 2px; }
+    .bg-claro { background: #da291c; }
+    .bg-tigo { background: #00377b; }
+    .bg-wom { background: #3d1152; }
+    .bg-movistar { background: #ffffff; border: 1px solid #e2e8f0; }
+    .bg-movistar .operator-badge-fallback { color: #019df4; }
 
-    .card-info { display: flex; flex-direction: column; min-width: 0; }
-    .operator-name { font-size: 14px; font-weight: 800; color: #0f172a; letter-spacing: 0.2px; }
-    .service-detail { font-size: 13px; font-weight: 600; color: #475569; margin-top: 1px; }
-    .service-note { font-size: 11.5px; color: #64748b; margin-top: 1px; }
-    .price-note { font-size: 11px; font-weight: 700; color: #10b981; margin-top: 3px; }
+    .card-info { display: flex; flex-direction: column; min-width: 0; flex: 1; }
+    .op-header-row { display: flex; align-items: center; gap: 6px; flex-wrap: nowrap; min-width: 0; }
+    .operator-name { font-size: 13px; font-weight: 800; color: #0f172a; letter-spacing: 0.15px; white-space: nowrap; }
 
-    .action-btn { width: 40px; height: 40px; border-radius: 50%; border: none; background: #25D366; color: #ffffff; text-decoration: none; cursor: pointer; flex-shrink: 0; display: flex; align-items: center; justify-content: center; transition: background 0.2s ease, transform 0.1s ease; }
-    .action-btn:hover { background: #1ebe5d; }
-    .action-btn:active { transform: scale(0.94); }
+    .online-pill { display: inline-flex; align-items: center; gap: 4px; padding: 2px 7px; border-radius: 999px; background: #ecfdf5; border: 1px solid #a7f3d0; font-size: 10px; font-weight: 700; color: #059669; line-height: 1; flex-shrink: 0; }
+    .online-dot { width: 6px; height: 6px; border-radius: 50%; background: #10b981; animation: breatheOnline 1.8s ease-in-out infinite; }
+    @keyframes breatheOnline { 0%, 100% { transform: scale(0.9); box-shadow: 0 0 0 0 rgba(16, 185, 129, 0.65); opacity: 0.85; } 50% { transform: scale(1.2); box-shadow: 0 0 0 4px rgba(16, 185, 129, 0); opacity: 1; } }
 
-    .toast { position: fixed; bottom: 24px; left: 50%; transform: translateX(-50%) translateY(20px); background: #0f172a; color: #ffffff; padding: 10px 18px; border-radius: 999px; font-size: 13px; font-weight: 600; opacity: 0; pointer-events: none; transition: opacity 0.25s ease, transform 0.25s ease; box-shadow: 0 8px 20px rgba(0, 0, 0, 0.2); z-index: 10000; }
+    .offline-pill { display: inline-flex; align-items: center; gap: 4px; padding: 2px 7px; border-radius: 999px; background: #fef2f2; border: 1px solid #fecaca; font-size: 10px; font-weight: 700; color: #dc2626; line-height: 1; flex-shrink: 0; }
+    .offline-dot { width: 6px; height: 6px; border-radius: 50%; background: #ef4444; animation: breatheOffline 1.8s ease-in-out infinite; }
+    @keyframes breatheOffline { 0%, 100% { transform: scale(0.9); box-shadow: 0 0 0 0 rgba(239, 68, 68, 0.65); opacity: 0.85; } 50% { transform: scale(1.2); box-shadow: 0 0 0 4px rgba(239, 68, 68, 0); opacity: 1; } }
+
+    .service-detail { font-size: 12.5px; font-weight: 600; color: #475569; margin-top: 2px; }
+    .service-note { font-size: 11px; color: #64748b; margin-top: 2px; }
+    .price-note { font-size: 11.5px; font-weight: 800; color: #059669; margin-top: 3px; }
+    .price-note.offline-price { color: #dc2626; }
+
+    .action-btn { width: 40px; height: 40px; border-radius: 50%; border: none; background: #25D366; color: #ffffff; flex-shrink: 0; display: flex; align-items: center; justify-content: center; transition: background 0.2s ease, transform 0.1s ease; }
+    .card:hover .action-btn { background: #1ebe5d; }
+    .card:active .action-btn { transform: scale(0.94); }
+    .action-btn.offline-wa { background: #ef4444; color: #ffffff; }
+    .card:hover .action-btn.offline-wa { background: #dc2626; }
+
+    /* Cuadro modal de cantidad y precio */
+    .esim-overlay { position: fixed; inset: 0; background: rgba(15, 23, 42, 0.55); backdrop-filter: blur(4px); -webkit-backdrop-filter: blur(4px); display: none; align-items: center; justify-content: center; padding: 18px; z-index: 10001; }
+    .esim-overlay.open { display: flex; }
+    .esim-box { width: 100%; max-width: 390px; background: #ffffff; border-radius: 22px; padding: 18px; box-shadow: 0 18px 40px rgba(15, 23, 42, 0.22); text-align: left; }
+    .esim-box-top { display: flex; align-items: center; justify-content: space-between; gap: 10px; margin-bottom: 14px; }
+    .esim-op-head { display: flex; align-items: center; gap: 10px; min-width: 0; }
+    .esim-op-logo { width: 42px; height: 42px; border-radius: 50%; flex-shrink: 0; display: flex; align-items: center; justify-content: center; overflow: hidden; background: #ffffff; }
+    .esim-op-logo img { width: 100%; height: 100%; object-fit: cover; display: block; }
+    .esim-box-title { font-size: 15px; font-weight: 800; color: #0f172a; line-height: 1.2; }
+    .esim-price-pill { display: inline-block; margin-top: 4px; font-size: 11.5px; font-weight: 800; color: #059669; background: #ecfdf5; border: 1px solid #a7f3d0; padding: 2px 9px; border-radius: 999px; }
+    .esim-close { width: 28px; height: 28px; border-radius: 50%; border: none; background: #f1f5f9; color: #334155; font-size: 16px; font-weight: 700; cursor: pointer; flex-shrink: 0; display: flex; align-items: center; justify-content: center; }
+
+    .esim-qty-label { font-size: 12px; font-weight: 700; color: #475569; margin-bottom: 8px; }
+    .esim-row { display: flex; align-items: center; gap: 8px; }
+    .esim-qty-input { width: 92px; padding: 11px 12px; border-radius: 12px; border: 1.5px solid #cbd5e1; font-size: 15px; font-weight: 800; color: #0f172a; text-align: center; outline: none; }
+    .esim-qty-input:focus { border-color: #c81d4e; }
+    .esim-send-btn { flex: 1; padding: 11px 16px; border: none; border-radius: 12px; background: #25D366; color: #ffffff; font-size: 14px; font-weight: 800; cursor: pointer; transition: background 0.15s ease; }
+    .esim-send-btn:hover { background: #1ebe5d; }
+
+    .toast { position: fixed; bottom: 24px; left: 50%; transform: translateX(-50%) translateY(20px); background: #0f172a; color: #ffffff; padding: 10px 18px; border-radius: 999px; font-size: 13px; font-weight: 600; opacity: 0; pointer-events: none; transition: opacity 0.25s ease, transform 0.25s ease; box-shadow: 0 8px 20px rgba(0, 0, 0, 0.2); z-index: 10002; }
     .toast.show { opacity: 1; transform: translateX(-50%) translateY(0); }
   </style>
 </head>
@@ -134,7 +165,7 @@
 
     <div class="content-box">
       <h1>Zona GSM</h1>
-      <p class="bio">Activación y entrega inmediata de E-SIM para operadores en Colombia. Proceso 100% digital.</p>
+      <p class="bio">Activación y entrega inmediata de E-SIM para operadores en Colombia. Líneas nuevas 100% digitales.</p>
 
       <div class="socials">
         <a class="social-item" href="https://wa.me/573104141805" target="_blank" rel="noopener noreferrer" aria-label="Soporte 1 por WhatsApp">
@@ -162,56 +193,174 @@
       <div class="section-title">OPERADORES E-SIM DISPONIBLES</div>
 
       <div class="cards">
-        <div class="card">
+        <button class="card" type="button" onclick="openEsimBox('E-SIM CLARO', 'CLARO.jpg', 'CLARO', 'bg-claro', '$28.000', true)">
           <div class="card-left">
-            <div class="operator-icon"><img src="claro.png" alt="Claro Colombia" onerror="handleImgError(this, 'CLARO', 'bg-claro')" /></div>
+            <div class="operator-icon"><img src="CLARO.jpg" alt="Claro Colombia" onerror="handleImgError(this, 'CLARO', 'bg-claro')" /></div>
             <div class="card-info">
-              <span class="operator-name">CLARO E-SIM</span>
-              <span class="service-detail">Código QR Digital · Activación Rápida</span>
-              <span class="service-note">Línea nueva o conversión de SIM física</span>
-              <span class="price-note">Consultar precio por WhatsApp</span>
+              <div class="op-header-row">
+                <span class="operator-name">E-SIM CLARO</span>
+                <span class="online-pill"><span class="online-dot"></span>Online</span>
+              </div>
+              <span class="service-detail">Líneas nuevas · Código QR Digital</span>
+              <span class="service-note">Activación y entrega inmediata</span>
+              <span class="price-note">$28.000</span>
             </div>
           </div>
-          <a class="action-btn" href="https://wa.me/573104141805?text=Hola%20Zona%20GSM%2C%20quiero%20solicitar%20una%20E-SIM%20de%20Claro" target="_blank" rel="noopener noreferrer" title="Solicitar E-SIM Claro" aria-label="Solicitar E-SIM Claro"><svg width="19" height="19"><use href="#icon-wa"/></svg></a>
-        </div>
+          <div class="action-btn" aria-hidden="true"><svg width="19" height="19"><use href="#icon-wa"/></svg></div>
+        </button>
 
-        <div class="card">
+        <button class="card" type="button" onclick="openEsimBox('E-SIM TIGO', 'TIGO.jpg', 'TIGO', 'bg-tigo', '$30.000', true)">
           <div class="card-left">
-            <div class="operator-icon"><img src="tigo.png" alt="Tigo Colombia" onerror="handleImgError(this, 'TIGO', 'bg-tigo')" /></div>
+            <div class="operator-icon"><img src="TIGO.jpg" alt="Tigo Colombia" onerror="handleImgError(this, 'TIGO', 'bg-tigo')" /></div>
             <div class="card-info">
-              <span class="operator-name">TIGO E-SIM</span>
-              <span class="service-detail">Código QR Digital · Activación Rápida</span>
-              <span class="service-note">Línea nueva o conversión de SIM física</span>
-              <span class="price-note">Consultar precio por WhatsApp</span>
+              <div class="op-header-row">
+                <span class="operator-name">E-SIM TIGO</span>
+                <span class="online-pill"><span class="online-dot"></span>Online</span>
+              </div>
+              <span class="service-detail">Líneas nuevas · Código QR Digital</span>
+              <span class="service-note">Activación y entrega inmediata</span>
+              <span class="price-note">$30.000</span>
             </div>
           </div>
-          <a class="action-btn" href="https://wa.me/573104141805?text=Hola%20Zona%20GSM%2C%20quiero%20solicitar%20una%20E-SIM%20de%20Tigo" target="_blank" rel="noopener noreferrer" title="Solicitar E-SIM Tigo" aria-label="Solicitar E-SIM Tigo"><svg width="19" height="19"><use href="#icon-wa"/></svg></a>
-        </div>
+          <div class="action-btn" aria-hidden="true"><svg width="19" height="19"><use href="#icon-wa"/></svg></div>
+        </button>
 
-        <div class="card">
+        <button class="card" type="button" onclick="openEsimBox('E-SIM WOM', 'WOM_logo.png', 'WOM', 'bg-wom', '$35.000', true)">
           <div class="card-left">
-            <div class="operator-icon"><img src="wom.png" alt="WOM Colombia" onerror="handleImgError(this, 'WOM', 'bg-wom')" /></div>
+            <div class="operator-icon"><img src="WOM_logo.png" alt="WOM Colombia" onerror="handleImgError(this, 'WOM', 'bg-wom')" /></div>
             <div class="card-info">
-              <span class="operator-name">WOM E-SIM</span>
-              <span class="service-detail">Código QR Digital · Activación Rápida</span>
-              <span class="service-note">Línea nueva o conversión de SIM física</span>
-              <span class="price-note">Consultar precio por WhatsApp</span>
+              <div class="op-header-row">
+                <span class="operator-name">E-SIM WOM</span>
+                <span class="online-pill"><span class="online-dot"></span>Online</span>
+              </div>
+              <span class="service-detail">Líneas nuevas · Código QR Digital</span>
+              <span class="service-note">Activación y entrega inmediata</span>
+              <span class="price-note">$35.000</span>
             </div>
           </div>
-          <a class="action-btn" href="https://wa.me/573104141805?text=Hola%20Zona%20GSM%2C%20quiero%20solicitar%20una%20E-SIM%20de%20WOM" target="_blank" rel="noopener noreferrer" title="Solicitar E-SIM WOM" aria-label="Solicitar E-SIM WOM"><svg width="19" height="19"><use href="#icon-wa"/></svg></a>
-        </div>
+          <div class="action-btn" aria-hidden="true"><svg width="19" height="19"><use href="#icon-wa"/></svg></div>
+        </button>
+
+        <button class="card is-offline" type="button" onclick="openEsimBox('E-SIM MOVISTAR', 'movistar.png', 'MOVISTAR', 'bg-movistar', '', false)">
+          <div class="card-left">
+            <div class="operator-icon"><img src="movistar.png" alt="Movistar Colombia" onerror="handleImgError(this, 'MOVISTAR', 'bg-movistar')" /></div>
+            <div class="card-info">
+              <div class="op-header-row">
+                <span class="operator-name">E-SIM MOVISTAR</span>
+                <span class="offline-pill"><span class="offline-dot"></span>Offline</span>
+              </div>
+              <span class="service-detail">Líneas nuevas · Código QR Digital</span>
+              <span class="service-note">Servicio temporalmente offline</span>
+              <span class="price-note offline-price">Offline</span>
+            </div>
+          </div>
+          <div class="action-btn offline-wa" aria-hidden="true"><svg width="19" height="19"><use href="#icon-wa"/></svg></div>
+        </button>
       </div>
     </div>
   </main>
 
+  <!-- Cuadro modal para elegir cantidad y enviar pedido -->
+  <div id="esimOverlay" class="esim-overlay" onclick="closeEsimOutside(event)">
+    <div class="esim-box" role="dialog" aria-modal="true" aria-labelledby="esimModalTitle">
+      <div class="esim-box-top">
+        <div class="esim-op-head">
+          <div id="esimModalLogo" class="esim-op-logo"></div>
+          <div>
+            <div id="esimModalTitle" class="esim-box-title">E-SIM</div>
+            <span id="esimModalPrice" class="esim-price-pill">Precio: $0</span>
+          </div>
+        </div>
+        <button type="button" class="esim-close" onclick="closeEsimBox()" aria-label="Cerrar">&times;</button>
+      </div>
+      <form onsubmit="sendEsimWa(event)">
+        <div class="esim-qty-label">Cantidad (líneas nuevas)</div>
+        <div class="esim-row">
+          <input id="esimQtyField" class="esim-qty-input" type="number" min="1" step="1" value="1" required />
+          <button type="submit" class="esim-send-btn">Enviar</button>
+        </div>
+      </form>
+    </div>
+  </div>
+
   <div id="toast" class="toast">Copiado</div>
 
   <script>
+    let currentEsimName = '';
+    let currentEsimPrice = '';
+
     window.addEventListener('DOMContentLoaded', () => {
       setTimeout(() => {
         document.getElementById('preloader').classList.add('hidden');
         document.getElementById('mainContent').classList.add('visible');
       }, 1400);
+    });
+
+    function openEsimBox(opName, logoSrc, fallbackText, bgClass, price, isOnline) {
+      if (!isOnline) {
+        showToast(opName + ' está OFFLINE');
+        return;
+      }
+
+      currentEsimName = opName.toUpperCase();
+      currentEsimPrice = price;
+
+      const logoWrap = document.getElementById('esimModalLogo');
+      logoWrap.className = 'esim-op-logo ' + bgClass;
+      logoWrap.innerHTML = '';
+      const img = document.createElement('img');
+      img.src = logoSrc;
+      img.alt = opName;
+      img.onerror = function () {
+        handleImgError(this, fallbackText, bgClass);
+      };
+      logoWrap.appendChild(img);
+
+      document.getElementById('esimModalTitle').textContent = currentEsimName;
+      document.getElementById('esimModalPrice').textContent = 'Precio: ' + price;
+
+      const qtyInput = document.getElementById('esimQtyField');
+      qtyInput.value = '1';
+      document.getElementById('esimOverlay').classList.add('open');
+      setTimeout(() => {
+        qtyInput.focus();
+        qtyInput.select();
+      }, 50);
+    }
+
+    function closeEsimBox() {
+      document.getElementById('esimOverlay').classList.remove('open');
+    }
+
+    function closeEsimOutside(e) {
+      if (e.target.id === 'esimOverlay') {
+        closeEsimBox();
+      }
+    }
+
+    function sendEsimWa(e) {
+      e.preventDefault();
+      const qtyInput = document.getElementById('esimQtyField');
+      const qty = parseInt(qtyInput.value, 10);
+
+      if (!qty || qty < 1) {
+        showToast('Ingresa una cantidad válida');
+        qtyInput.focus();
+        return;
+      }
+
+      const text =
+        '*' + currentEsimName + '*\n' +
+        '*CANTIDAD : ' + qty + '*\n' +
+        '*PRECIO: ' + currentEsimPrice + '*';
+
+      const url = 'https://wa.me/573104141805?text=' + encodeURIComponent(text);
+      closeEsimBox();
+      window.open(url, '_blank', 'noopener,noreferrer');
+    }
+
+    document.addEventListener('keydown', (e) => {
+      if (e.key === 'Escape') closeEsimBox();
     });
 
     function handleLogoError(img) {
