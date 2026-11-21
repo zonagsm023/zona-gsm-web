@@ -57,7 +57,7 @@
 
     .section-title { font-size: 12px; font-weight: 700; letter-spacing: 1px; color: #64748b; text-transform: uppercase; margin-bottom: 16px; }
     .cards { display: flex; flex-direction: column; gap: 14px; padding: 0 4px; }
-    .card { background: #ffffff; border-radius: 50px; padding: 12px 16px; display: flex; align-items: center; justify-content: space-between; gap: 10px; box-shadow: 0 4px 14px rgba(15, 23, 42, 0.05); border: 1px solid #eef2f6; text-align: left; text-decoration: none; color: inherit; width: 100%; cursor: pointer; transition: transform 0.15s ease; }
+    .card { background: #ffffff; border-radius: 36px; padding: 12px 16px; display: flex; align-items: center; justify-content: space-between; gap: 10px; box-shadow: 0 4px 14px rgba(15, 23, 42, 0.05); border: 1px solid #eef2f6; text-align: left; text-decoration: none; color: inherit; width: 100%; cursor: pointer; transition: transform 0.15s ease; }
     .card:hover { transform: translateY(-1px); }
     .card.is-offline { opacity: 0.72; }
     .card-left { display: flex; align-items: center; gap: 12px; min-width: 0; flex: 1; }
@@ -84,7 +84,10 @@
     .op-service-row { display: flex; align-items: center; gap: 6px; margin-top: 2px; flex-wrap: wrap; }
     .op-service { font-size: 12.5px; font-weight: 600; color: #475569; }
     .country-tag { font-size: 10px; font-weight: 800; letter-spacing: 0.5px; color: #8a0f33; background: #fce7ef; border: 1px solid #fbcfe1; padding: 1px 6px; border-radius: 4px; line-height: 1.2; }
-    .op-hint { font-size: 11px; color: #64748b; margin-top: 2px; }
+    .op-price-sub { display: inline-flex; align-items: center; gap: 6px; margin-top: 4px; font-size: 12px; font-weight: 800; color: #059669; }
+    .op-price-sub.is-offline-price { color: #dc2626; font-weight: 700; font-size: 11px; }
+    .op-time-sub { font-size: 11px; font-weight: 700; color: #475569; background: #f1f5f9; padding: 1px 7px; border-radius: 999px; }
+    .op-hint { font-size: 11px; color: #64748b; margin-top: 3px; }
     .wa-btn { width: 40px; height: 40px; border-radius: 50%; background: #25D366; color: #ffffff; flex-shrink: 0; display: flex; align-items: center; justify-content: center; transition: background 0.2s ease, transform 0.1s ease; }
     .card:hover .wa-btn { background: #1ebe5d; }
     .card:active .wa-btn { transform: scale(0.94); }
@@ -229,6 +232,7 @@
             <div class="card-info">
               <div class="op-header-row"><span class="op-name">NO REGISTRO TIGO</span><span class="online-pill"><span class="online-dot"></span>Online</span></div>
               <div class="op-service-row"><span class="op-service">Registro IMEI</span><span class="country-tag">COLOMBIA</span></div>
+              <div class="op-price-sub"><span>$25.000</span><span class="op-time-sub">6 hrs</span></div>
               <span class="op-hint">Toca para enviar IMEI y consultar</span>
             </div>
           </div>
@@ -241,6 +245,7 @@
             <div class="card-info">
               <div class="op-header-row"><span class="op-name">NO REGISTRO CLARO</span><span class="online-pill"><span class="online-dot"></span>Online</span></div>
               <div class="op-service-row"><span class="op-service">Registro IMEI</span><span class="country-tag">COLOMBIA</span></div>
+              <div class="op-price-sub"><span>$15.000 / $45.000</span><span class="op-time-sub">6 hrs / 3 días</span></div>
               <span class="op-hint">Toca para enviar IMEI y consultar</span>
             </div>
           </div>
@@ -253,6 +258,7 @@
             <div class="card-info">
               <div class="op-header-row"><span class="op-name">NO REGISTRO VIRGIN</span><span class="online-pill"><span class="online-dot"></span>Online</span></div>
               <div class="op-service-row"><span class="op-service">Registro IMEI</span><span class="country-tag">COLOMBIA</span></div>
+              <div class="op-price-sub"><span>$30.000</span><span class="op-time-sub">6 hrs</span></div>
               <span class="op-hint">Toca para enviar IMEI y consultar</span>
             </div>
           </div>
@@ -265,6 +271,7 @@
             <div class="card-info">
               <div class="op-header-row"><span class="op-name">NO REGISTRO WOM</span><span class="online-pill"><span class="online-dot"></span>Online</span></div>
               <div class="op-service-row"><span class="op-service">Registro IMEI</span><span class="country-tag">COLOMBIA</span></div>
+              <div class="op-price-sub"><span>$45.000</span><span class="op-time-sub">48 hrs</span></div>
               <span class="op-hint">Toca para enviar IMEI y consultar</span>
             </div>
           </div>
@@ -277,6 +284,7 @@
             <div class="card-info">
               <div class="op-header-row"><span class="op-name">NO REGISTRO MOVISTAR</span><span class="online-pill"><span class="online-dot"></span>Online</span></div>
               <div class="op-service-row"><span class="op-service">Registro IMEI</span><span class="country-tag">COLOMBIA</span></div>
+              <div class="op-price-sub"><span>$15.000</span><span class="op-time-sub">6 hrs</span></div>
               <span class="op-hint">Toca para enviar IMEI y consultar</span>
             </div>
           </div>
@@ -289,18 +297,20 @@
             <div class="card-info">
               <div class="op-header-row"><span class="op-name">NO REGISTRO MÓVIL ÉXITO</span><span class="online-pill"><span class="online-dot"></span>Online</span></div>
               <div class="op-service-row"><span class="op-service">Registro IMEI</span><span class="country-tag">COLOMBIA</span></div>
+              <div class="op-price-sub"><span>$35.000</span><span class="op-time-sub">24 hrs</span></div>
               <span class="op-hint">Toca para enviar IMEI y consultar</span>
             </div>
           </div>
           <div class="wa-btn"><svg width="20" height="20"><use href="#icon-wa"/></svg></div>
         </button>
 
-        <button class="card is-offline" type="button" onclick="openImeiBox('ETB', 'ETB.png', 'ETB', 'icon-etb', '', '', false)">
+        <button class="card is-offline" type="button" onclick="openImeiBox('ETB', 'ETB.png', 'ETB', 'icon-etb', 'No disponible', 'Offline', false)">
           <div class="card-left">
             <div class="op-icon icon-etb"><img src="ETB.png" alt="ETB" onerror="handleOpError(this, 'ETB', 'icon-etb')" /></div>
             <div class="card-info">
               <div class="op-header-row"><span class="op-name">NO REGISTRO ETB</span><span class="offline-pill"><span class="offline-dot"></span>Offline</span></div>
               <div class="op-service-row"><span class="op-service">Registro IMEI</span><span class="country-tag">COLOMBIA</span></div>
+              <div class="op-price-sub is-offline-price"><span>Temporalmente offline</span></div>
               <span class="op-hint">Servicio temporalmente offline</span>
             </div>
           </div>
@@ -397,7 +407,7 @@
         <input id="newPinInput" class="pin-input" type="text" maxlength="4" inputmode="numeric" placeholder="••••" oninput="checkNewPin(this.value)">
         <div id="newPinMsg" class="pin-msg"></div>
       </div>
-      
+
       <div class="input-group" style="text-align: left;">
         <label>Nombre o Nombre de tu Negocio</label>
         <input id="newNameInput" type="text" placeholder="Ej: Juan Pérez" style="width: 100%; padding: 12px; border-radius: 12px; border: 2px solid #cbd5e1; font-size: 14px; font-weight: 700; outline: none;">
@@ -466,12 +476,11 @@
           input.classList.remove('error');
           msg.textContent = '✓ PIN correcto. Confirma tu número.';
           msg.className = 'pin-msg success';
-          input.blur(); // Cierra teclado del PIN
+          input.blur();
           
-          // Muestra el campo de verificación de número
           verifyGroup.style.display = 'flex';
           verifyInput.value = '';
-          currentCelular = ''; // Resetea la validación
+          currentCelular = '';
         } else {
           input.classList.add('error');
           input.classList.remove('success');
@@ -486,7 +495,7 @@
         input.classList.remove('success', 'error');
         msg.textContent = '';
         msg.className = 'pin-msg';
-        verifyGroup.style.display = 'none'; // Oculta verificación si borra el PIN
+        verifyGroup.style.display = 'none';
       }
     }
 
@@ -504,7 +513,7 @@
           msg.textContent = '✓ Identidad verificada';
           msg.className = 'pin-msg success';
           currentCelular = num;
-          input.blur(); // Cierra teclado al completar
+          input.blur();
         } else {
           input.classList.add('error');
           input.classList.remove('success');
@@ -549,7 +558,7 @@
           input.classList.remove('error');
           msg.textContent = '✓ ¡PIN disponible!';
           msg.className = 'pin-msg success';
-          input.blur(); // Cierra teclado al completar
+          input.blur();
         }
       } else {
         input.classList.remove('success', 'error');
@@ -559,8 +568,8 @@
     }
 
     function registerNewPin() {
-      const pin = document.getElementById('newPinInput').value.replace(/\\D/g, '');
-      const cel = document.getElementById('newPhoneInput').value.replace(/\\D/g, '');
+      const pin = document.getElementById('newPinInput').value.replace(/\D/g, '');
+      const cel = document.getElementById('newPhoneInput').value.replace(/\D/g, '');
       const nombre = document.getElementById('newNameInput').value.trim();
 
       if (pin.length !== 4) { showToast('El PIN debe tener 4 dígitos'); return; }
@@ -771,7 +780,7 @@
       updateImeiVisualState(digits);
       
       if (digits.length === 15) {
-        input.blur(); // Cierra teclado al completar IMEI
+        input.blur();
       }
     }
 
@@ -793,7 +802,6 @@
       img.onerror = function () { handleOpError(this, fallbackText, bgClass); };
       logoWrap.appendChild(img);
 
-      // Resetear UI
       document.getElementById('mainPinInput').value = '';
       document.getElementById('pinMessage').textContent = '';
       document.getElementById('mainPinInput').classList.remove('error', 'success');
@@ -875,7 +883,6 @@
         return;
       }
 
-      // CONEXIÓN CON EL CLOUDFLARE WORKER
       const WORKER_URL = "https://telegram-zonagsm.zonagsm023.workers.dev"; 
       
       const datosParaEnviar = {
