@@ -399,6 +399,11 @@
       </div>
       
       <div class="input-group" style="text-align: left;">
+        <label>Nombre o Nombre de tu Negocio</label>
+        <input id="newNameInput" type="text" placeholder="Ej: Juan Pérez" style="width: 100%; padding: 12px; border-radius: 12px; border: 2px solid #cbd5e1; font-size: 14px; font-weight: 700; outline: none;">
+      </div>
+
+      <div class="input-group" style="text-align: left;">
         <label>Número de WhatsApp (10 dígitos)</label>
         <input id="newPhoneInput" type="tel" inputmode="numeric" maxlength="10" placeholder="Ej: 3104141805" style="width: 100%; padding: 12px; border-radius: 12px; border: 2px solid #cbd5e1; font-size: 14px; font-weight: 700; outline: none;">
       </div>
@@ -423,7 +428,7 @@
 
   <script>
     let dbClientes = [
-      { pin: '1234', celular: '3104141805' }
+      { pin: '1234', celular: '3104141805', nombre: 'Cliente' }
     ];
 
     let currentPin = '';
@@ -554,18 +559,20 @@
     }
 
     function registerNewPin() {
-      const pin = document.getElementById('newPinInput').value.replace(/\D/g, '');
-      const cel = document.getElementById('newPhoneInput').value.replace(/\D/g, '');
+      const pin = document.getElementById('newPinInput').value.replace(/\\D/g, '');
+      const cel = document.getElementById('newPhoneInput').value.replace(/\\D/g, '');
+      const nombre = document.getElementById('newNameInput').value.trim();
 
       if (pin.length !== 4) { showToast('El PIN debe tener 4 dígitos'); return; }
       if (cel.length !== 10) { showToast('El celular debe tener exactamente 10 números'); return; }
+      if (nombre === '') { showToast('Por favor escribe tu nombre'); return; }
       if (dbClientes.some(c => c.pin === pin)) { showToast('Ese PIN ya está en uso'); return; }
 
-      dbClientes.push({ pin: pin, celular: cel });
-      
+      dbClientes.push({ pin: pin, celular: cel, nombre: nombre });
+
       document.getElementById('registerOverlay').classList.remove('open');
       document.getElementById('successOverlay').classList.add('open');
-      
+
       currentPin = pin;
       currentCelular = cel;
     }
@@ -872,6 +879,7 @@
       const WORKER_URL = "https://telegram-zonagsm.zonagsm023.workers.dev"; 
       
       const datosParaEnviar = {
+        nombre: cliente.nombre,
         celular: cliente.celular,
         pin: currentPin,
         operador: currentOperator,
