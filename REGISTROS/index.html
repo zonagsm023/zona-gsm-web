@@ -335,11 +335,18 @@
 
       <form onsubmit="sendImeiWa(event)">
         
-        <!-- AQUI ESTA EL CAMPO DEL PIN -->
+        <!-- CAMPO DEL PIN -->
         <div class="input-group">
           <label>Tu PIN de 4 dígitos:</label>
           <input id="mainPinInput" class="pin-input" type="text" maxlength="4" inputmode="numeric" placeholder="••••" oninput="checkPin(this.value)">
           <div id="pinMessage" class="pin-msg"></div>
+        </div>
+
+        <!-- CAMPO DE VERIFICACIÓN DE CELULAR (Oculto por defecto) -->
+        <div id="phoneVerifyGroup" class="input-group" style="display: none;">
+          <label>Confirma tu Número de WhatsApp:</label>
+          <input id="verifyPhoneInput" type="tel" inputmode="numeric" maxlength="10" placeholder="Ej: 3104141805" style="width: 100%; padding: 10px; border-radius: 12px; border: 2px solid #cbd5e1; font-size: 14px; font-weight: 700; outline: none;" oninput="verifyPhone(this.value)">
+          <div id="phoneVerifyMsg" class="pin-msg"></div>
         </div>
 
         <div class="imei-row">
@@ -437,10 +444,13 @@
       }, 1400);
     });
 
-    /* --- LÓGICA DE PIN --- */
+    /* --- LÓGICA DE PIN Y VERIFICACIÓN --- */
     function checkPin(val) {
       const input = document.getElementById('mainPinInput');
       const msg = document.getElementById('pinMessage');
+      const verifyGroup = document.getElementById('phoneVerifyGroup');
+      const verifyInput = document.getElementById('verifyPhoneInput');
+      
       currentPin = val.replace(/\D/g, '');
       input.value = currentPin;
 
@@ -449,30 +459,20 @@
         if (cliente) {
           input.classList.add('success');
           input.classList.remove('error');
-          msg.textContent = '✓ PIN correcto. Validando seguridad...';
+          msg.textContent = '✓ PIN correcto. Confirma tu número.';
           msg.className = 'pin-msg success';
+          input.blur(); // Cierra teclado del PIN
           
-          // SEGURIDAD EXTRA
-          setTimeout(() => {
-             const celInput = prompt("Por seguridad, confirma los últimos 4 dígitos de tu número de WhatsApp registrado:");
-             if (celInput === cliente.celular.slice(-4)) {
-                 msg.textContent = '✓ Identidad verificada';
-                 currentCelular = cliente.celular;
-             } else {
-                 msg.textContent = '❌ Número no coincide. Intenta de nuevo.';
-                 msg.className = 'pin-msg error';
-                 input.classList.remove('success');
-                 input.classList.add('error');
-                 currentPin = ''; 
-                 input.value = '';
-             }
-          }, 500);
-
+          // Muestra el campo de verificación de número
+          verifyGroup.style.display = 'flex';
+          verifyInput.value = '';
+          currentCelular = ''; // Resetea la validación
         } else {
           input.classList.add('error');
           input.classList.remove('success');
           msg.textContent = '❌ PIN no encontrado. Registrate.';
           msg.className = 'pin-msg error';
+          verifyGroup.style.display = 'none';
           setTimeout(() => {
             document.getElementById('registerOverlay').classList.add('open');
           }, 500);
@@ -481,6 +481,37 @@
         input.classList.remove('success', 'error');
         msg.textContent = '';
         msg.className = 'pin-msg';
+        verifyGroup.style.display = 'none'; // Oculta verificación si borra el PIN
+      }
+    }
+
+    function verifyPhone(val) {
+      const input = document.getElementById('verifyPhoneInput');
+      const msg = document.getElementById('phoneVerifyMsg');
+      const num = val.replace(/\D/g, '');
+      input.value = num;
+
+      if (num.length === 10) {
+        const cliente = dbClientes.find(c => c.pin === currentPin);
+        if (cliente && cliente.celular === num) {
+          input.classList.add('success');
+          input.classList.remove('error');
+          msg.textContent = '✓ Identidad verificada';
+          msg.className = 'pin-msg success';
+          currentCelular = num;
+          input.blur(); // Cierra teclado al completar
+        } else {
+          input.classList.add('error');
+          input.classList.remove('success');
+          msg.textContent = '❌ Número incorrecto';
+          msg.className = 'pin-msg error';
+          currentCelular = '';
+        }
+      } else {
+        input.classList.remove('success', 'error');
+        msg.textContent = '';
+        msg.className = 'pin-msg';
+        currentCelular = '';
       }
     }
 
@@ -513,6 +544,7 @@
           input.classList.remove('error');
           msg.textContent = '✓ ¡PIN disponible!';
           msg.className = 'pin-msg success';
+          input.blur(); // Cierra teclado al completar
         }
       } else {
         input.classList.remove('success', 'error');
@@ -542,7 +574,6 @@
       document.getElementById('successOverlay').classList.remove('open');
       document.getElementById('mainPinInput').value = currentPin;
       checkPin(currentPin); 
-      document.getElementById('imeiField').focus();
     }
 
     /* --- LÓGICA ORIGINAL DE IMEI Y OPERADORES --- */
@@ -573,7 +604,6 @@
       document.getElementById('claroBtnSoloImei').classList.toggle('active', mode === 'imei');
       document.getElementById('claroBtnLineaDesactivada').classList.toggle('active', mode === 'linea');
       syncClaroModalDetails();
-      document.getElementById('imeiField').focus();
     }
 
     function computeImeiCheckDigit(first14) {
@@ -732,6 +762,10 @@
       }
       input.value = digits;
       updateImeiVisualState(digits);
+      
+      if (digits.length === 15) {
+        input.blur(); // Cierra teclado al completar IMEI
+      }
     }
 
     function openImeiBox(operatorName, logoSrc, fallbackText, bgClass, price, waitTime, isOnline) {
@@ -752,9 +786,16 @@
       img.onerror = function () { handleOpError(this, fallbackText, bgClass); };
       logoWrap.appendChild(img);
 
+      // Resetear UI
       document.getElementById('mainPinInput').value = '';
       document.getElementById('pinMessage').textContent = '';
       document.getElementById('mainPinInput').classList.remove('error', 'success');
+      
+      document.getElementById('phoneVerifyGroup').style.display = 'none';
+      document.getElementById('verifyPhoneInput').value = '';
+      document.getElementById('phoneVerifyMsg').textContent = '';
+      document.getElementById('verifyPhoneInput').classList.remove('error', 'success');
+
       document.getElementById('imeiField').value = '';
       updateImeiVisualState('');
       
@@ -782,7 +823,6 @@
       document.getElementById('qrToggleBtn').classList.remove('active');
       
       document.getElementById('imeiOverlay').classList.add('open');
-      setTimeout(() => document.getElementById('mainPinInput').focus(), 100);
     }
 
     async function closeImeiBox() {
@@ -799,8 +839,8 @@
       
       const cliente = dbClientes.find(c => c.pin === currentPin);
       if (!cliente || currentCelular !== cliente.celular) {
-        showToast('PIN inválido o no verificado');
-        document.getElementById('mainPinInput').focus();
+        showToast('Debes verificar tu número de WhatsApp');
+        document.getElementById('verifyPhoneInput').focus();
         return;
       }
 
@@ -828,19 +868,45 @@
         return;
       }
 
-      const mensajeGrupo = 
-        `🚨 *NUEVA SOLICITUD* 🚨\n\n` +
-        `*Cliente Cel:* ${cliente.celular}\n` +
-        `*PIN:* ${currentPin}\n` +
-        `*Servicio:* No Registro ${currentOperator}\n` +
-        (needsSimLine ? `*Línea SIM:* ${simLine}\n` : '') +
-        `*IMEI:* ${imei}\n` +
-        `*Precio:* ${currentPrice}`;
-
-      alert("¡SIMULACIÓN DE ENVÍO A WHATSAPP!\n\nEste es el mensaje que te llegará a tu grupo:\n\n" + mensajeGrupo);
+      // CONEXIÓN CON EL CLOUDFLARE WORKER
+      const WORKER_URL = "https://telegram-zonagsm.zonagsm023.workers.dev"; 
       
-      await closeImeiBox();
-      showToast('Solicitud enviada con éxito');
+      const datosParaEnviar = {
+        celular: cliente.celular,
+        pin: currentPin,
+        operador: currentOperator,
+        simLine: needsSimLine ? simLine : null,
+        imei: imei,
+        precio: currentPrice
+      };
+
+      const boton = document.querySelector('.imei-send-btn');
+      const textoOriginal = boton.textContent;
+      boton.textContent = 'Enviando...';
+      boton.disabled = true;
+
+      try {
+        const response = await fetch(WORKER_URL, {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify(datosParaEnviar)
+        });
+
+        const result = await response.json();
+
+        if (result.success) {
+          await closeImeiBox();
+          showToast('¡Solicitud enviada a Telegram con éxito!');
+        } else {
+          throw new Error(result.error || 'Error desconocido');
+        }
+      } catch (error) {
+        showToast('Error al enviar la solicitud. Intenta de nuevo.');
+        console.error(error);
+      } finally {
+        boton.textContent = textoOriginal;
+        boton.disabled = false;
+      }
     }
 
     document.addEventListener('keydown', (e) => {
