@@ -1,0 +1,622 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Zona GSM — Comprobante de Servicio</title>
+  <meta name="description" content="Generador de comprobante de servicio de No Registro y E-SIM para Zona GSM." />
+  <link rel="icon" type="image/png" href="logo.png" />
+
+  <!-- Librerías para generar imagen del comprobante y escanear IMEI -->
+  <script src="https://unpkg.com/html2canvas@1.4.1/dist/html2canvas.min.js"></script>
+  <script src="https://unpkg.com/html5-qrcode@2.3.8/html5-qrcode.min.js"></script>
+
+  <style>
+    * { box-sizing: border-box; margin: 0; padding: 0; font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif; }
+    body { min-height: 100vh; background: linear-gradient(180deg, #eef3f8 0%, #e4ebf2 100%); display: flex; justify-content: center; align-items: flex-start; padding: 0 0 48px; color: #111827; overflow-x: hidden; }
+
+    .container { width: 100%; max-width: 460px; background: #f4f7fa; border-radius: 0 0 28px 28px; padding: 0 0 32px; box-shadow: 0 12px 35px rgba(15, 23, 42, 0.08); border: 1px solid rgba(255, 255, 255, 0.85); border-top: none; text-align: center; overflow: hidden; position: relative; }
+
+    .cover-area { height: 145px; background: linear-gradient(135deg, #8a0f33 0%, #c81d4e 55%, #e62e62 100%); position: relative; }
+    .top-nav { position: absolute; top: 14px; left: 0; right: 0; display: flex; justify-content: center; gap: 6px; padding: 0 10px; z-index: 10; flex-wrap: wrap; }
+    .nav-pill { padding: 6px 11px; border-radius: 999px; font-size: 11px; font-weight: 700; text-decoration: none; color: rgba(255, 255, 255, 0.92); background: rgba(255, 255, 255, 0.14); backdrop-filter: blur(8px); -webkit-backdrop-filter: blur(8px); border: 1px solid rgba(255, 255, 255, 0.25); transition: all 0.2s ease; }
+    .nav-pill:hover { background: rgba(255, 255, 255, 0.26); transform: translateY(-1px); }
+    .nav-pill.active { background: #ffffff; color: #8a0f33; border-color: #ffffff; box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15); }
+    .mountain-divider { position: absolute; bottom: -1px; left: 0; width: 100%; height: 34px; fill: #f4f7fa; display: block; }
+
+    .avatar-wrapper { position: relative; width: 104px; height: 104px; margin: -60px auto 12px; z-index: 2; display: flex; align-items: center; justify-content: center; }
+    .avatar { width: 100px; height: 100px; border-radius: 50%; background: #ffffff; display: flex; align-items: center; justify-content: center; box-shadow: 0 6px 20px rgba(15, 23, 42, 0.1); overflow: hidden; }
+    .avatar-img { width: 100%; height: 100%; object-fit: cover; mix-blend-mode: multiply; filter: contrast(1.08) brightness(1.04); display: block; }
+
+    .content-box { padding: 0 16px; text-align: left; }
+    .page-head { text-align: center; margin-bottom: 18px; }
+    h1 { font-size: 22px; font-weight: 800; color: #0f172a; margin-bottom: 4px; }
+    .bio { font-size: 13px; color: #475569; }
+
+    .form-card { background: #ffffff; border-radius: 20px; padding: 16px; box-shadow: 0 4px 14px rgba(15, 23, 42, 0.05); border: 1px solid #eef2f6; margin-bottom: 18px; }
+    .field-group { margin-bottom: 12px; }
+    .field-group:last-child { margin-bottom: 0; }
+    .field-label { display: block; font-size: 11.5px; font-weight: 800; color: #334155; margin-bottom: 6px; text-transform: uppercase; letter-spacing: 0.4px; }
+
+    .segmented-row { display: flex; gap: 6px; background: #f1f5f9; padding: 4px; border-radius: 12px; }
+    .seg-btn { flex: 1; padding: 8px 10px; border: none; border-radius: 9px; background: transparent; color: #475569; font-size: 12px; font-weight: 800; cursor: pointer; transition: all 0.15s ease; }
+    .seg-btn.active { background: #c81d4e; color: #ffffff; box-shadow: 0 2px 8px rgba(200, 29, 78, 0.25); }
+    .seg-btn.paid-active { background: #059669; color: #ffffff; box-shadow: 0 2px 8px rgba(5, 150, 105, 0.25); }
+    .seg-btn.unpaid-active { background: #dc2626; color: #ffffff; box-shadow: 0 2px 8px rgba(220, 38, 38, 0.25); }
+    .seg-btn.success-active { background: #059669; color: #ffffff; box-shadow: 0 2px 8px rgba(5, 150, 105, 0.25); }
+    .seg-btn.process-active { background: #d97706; color: #ffffff; box-shadow: 0 2px 8px rgba(217, 119, 6, 0.25); }
+
+    .grid-2 { display: grid; grid-template-columns: 1fr 1fr; gap: 10px; }
+    .text-input, .select-input { width: 100%; padding: 10px 12px; border-radius: 12px; border: 1.5px solid #cbd5e1; background: #ffffff; font-size: 13.5px; font-weight: 700; color: #0f172a; outline: none; transition: border-color 0.15s ease; }
+    .text-input:focus, .select-input:focus { border-color: #c81d4e; }
+
+    .imei-row { display: flex; align-items: center; gap: 8px; }
+    .imei-combined-field { flex: 1; min-width: 0; display: flex; align-items: center; justify-content: space-between; gap: 8px; padding: 6px 6px 6px 12px; border-radius: 12px; border: 2px solid #cbd5e1; background: #ffffff; transition: all 0.15s ease; }
+    .imei-combined-field:focus-within { border-color: #c81d4e; }
+    .imei-combined-field.imei-valid { border-color: #10b981; background: #ecfdf5; }
+    .imei-input { flex: 1; min-width: 0; border: none; background: transparent; font-size: 13.5px; font-weight: 700; letter-spacing: 0.4px; color: #0f172a; outline: none; padding: 4px 0; }
+    .imei-last-square { width: 30px; height: 30px; border-radius: 8px; border: 2px solid #cbd5e1; background: #f8fafc; color: #94a3b8; font-size: 13px; font-weight: 900; display: inline-flex; align-items: center; justify-content: center; flex-shrink: 0; }
+    .imei-last-square.active { border-color: #c81d4e; background: #fce7ef; color: #8a0f33; }
+    .imei-combined-field.imei-valid .imei-last-square.active { border-color: #10b981; background: #d1fae5; color: #065f46; }
+
+    .qr-btn { width: 42px; height: 42px; border-radius: 12px; border: 1.5px solid #cbd5e1; background: #f8fafc; color: #0f172a; cursor: pointer; flex-shrink: 0; display: inline-flex; align-items: center; justify-content: center; }
+    .qr-btn.active { border-color: #c81d4e; background: #c81d4e; color: #ffffff; }
+
+    .qr-panel { margin-top: 10px; padding: 10px; border-radius: 12px; background: #f8fafc; border: 1.5px dashed #cbd5e1; display: none; }
+    .qr-panel.open { display: block; }
+    .qr-panel-top { display: flex; justify-content: space-between; align-items: center; margin-bottom: 8px; font-size: 11.5px; font-weight: 700; color: #334155; }
+    .qr-upload-lbl { font-size: 11px; font-weight: 700; color: #8a0f33; background: #fce7ef; padding: 4px 9px; border-radius: 8px; cursor: pointer; border: 1px solid #fbcfe1; }
+    #qrBox { width: 100%; border-radius: 10px; overflow: hidden; background: #0f172a; min-height: 130px; }
+    .qr-hint { margin-top: 6px; font-size: 11px; color: #64748b; text-align: center; }
+
+    .section-subtitle { font-size: 11.5px; font-weight: 800; letter-spacing: 0.8px; color: #64748b; text-transform: uppercase; text-align: center; margin-bottom: 10px; }
+
+    /* Tarjeta comprobante que se convierte en imagen */
+    .receipt-capture { background: #ffffff; border-radius: 22px; overflow: hidden; box-shadow: 0 10px 28px rgba(15, 23, 42, 0.1); border: 1px solid #e2e8f0; }
+    .receipt-header { background: linear-gradient(135deg, #8a0f33 0%, #c81d4e 60%, #e62e62 100%); color: #ffffff; padding: 16px; display: flex; align-items: center; gap: 12px; }
+    .receipt-logo-circle { width: 48px; height: 48px; border-radius: 50%; background: #ffffff; overflow: hidden; flex-shrink: 0; display: flex; align-items: center; justify-content: center; }
+    .receipt-logo-circle img { width: 100%; height: 100%; object-fit: cover; }
+    .receipt-brand-title { font-size: 17px; font-weight: 900; line-height: 1.15; }
+    .receipt-brand-sub { font-size: 11.5px; opacity: 0.92; margin-top: 2px; }
+
+    .receipt-body { padding: 16px; }
+    .receipt-meta { display: flex; justify-content: space-between; font-size: 11.5px; font-weight: 700; color: #64748b; padding-bottom: 10px; border-bottom: 1px dashed #cbd5e1; margin-bottom: 12px; }
+
+    .receipt-badges { display: flex; gap: 8px; margin-bottom: 14px; flex-wrap: wrap; }
+    .r-badge { padding: 5px 11px; border-radius: 999px; font-size: 11px; font-weight: 800; letter-spacing: 0.3px; display: inline-flex; align-items: center; gap: 5px; }
+    .r-badge.paid { background: #ecfdf5; color: #059669; border: 1px solid #a7f3d0; }
+    .r-badge.unpaid { background: #fef2f2; color: #dc2626; border: 1px solid #fecaca; }
+    .r-badge.success { background: #ecfdf5; color: #059669; border: 1px solid #a7f3d0; }
+    .r-badge.process { background: #fffbeb; color: #d97706; border: 1px solid #fde68a; }
+
+    .receipt-row { margin-bottom: 10px; }
+    .receipt-row-lbl { font-size: 10.5px; font-weight: 800; color: #64748b; text-transform: uppercase; letter-spacing: 0.4px; }
+    .receipt-row-val { font-size: 13.5px; font-weight: 800; color: #0f172a; margin-top: 2px; word-break: break-word; }
+
+    .imei-box-inline { display: inline-flex; align-items: center; gap: 3px; font-size: 13.5px; font-weight: 800; color: #0f172a; }
+    .imei-box-digit { display: inline-flex; align-items: center; justify-content: center; min-width: 22px; height: 24px; padding: 0 5px; border-radius: 6px; border: 2px solid #059669; background: #ecfdf5; color: #065f46; font-weight: 900; }
+
+    .receipt-total-box { margin-top: 14px; padding-top: 12px; border-top: 1.5px solid #e2e8f0; display: flex; justify-content: space-between; align-items: center; }
+    .receipt-total-lbl { font-size: 12px; font-weight: 800; color: #475569; }
+    .receipt-total-val { font-size: 19px; font-weight: 900; color: #8a0f33; }
+
+    .receipt-footer { margin-top: 14px; padding-top: 10px; border-top: 1px dashed #cbd5e1; font-size: 11px; color: #64748b; text-align: center; }
+
+    .actions-bar { display: flex; gap: 8px; margin-top: 14px; flex-wrap: wrap; }
+    .btn-share-img { flex: 1; min-width: 150px; padding: 12px 14px; border: none; border-radius: 14px; background: #25D366; color: #ffffff; font-size: 13.5px; font-weight: 800; cursor: pointer; transition: background 0.15s ease; }
+    .btn-share-img:hover { background: #1ebe5d; }
+    .btn-dl-img { padding: 12px 14px; border-radius: 14px; border: 1.5px solid #cbd5e1; background: #ffffff; color: #0f172a; font-size: 13px; font-weight: 800; cursor: pointer; }
+    .btn-dl-img:hover { background: #f8fafc; }
+
+    .toast { position: fixed; bottom: 24px; left: 50%; transform: translateX(-50%) translateY(20px); background: #0f172a; color: #ffffff; padding: 10px 18px; border-radius: 999px; font-size: 13px; font-weight: 600; opacity: 0; pointer-events: none; transition: opacity 0.25s ease, transform 0.25s ease; box-shadow: 0 8px 20px rgba(0, 0, 0, 0.2); z-index: 10002; }
+    .toast.show { opacity: 1; transform: translateX(-50%) translateY(0); }
+  </style>
+</head>
+<body>
+
+  <svg width="0" height="0" style="position:absolute" aria-hidden="true">
+    <symbol id="icon-qr" viewBox="0 0 24 24"><g fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="3" width="7" height="7" rx="1"/><rect x="14" y="3" width="7" height="7" rx="1"/><rect x="3" y="14" width="7" height="7" rx="1"/><line x1="14" y1="14" x2="17" y2="14"/><line x1="21" y1="14" x2="21" y2="17"/><line x1="14" y1="21" x2="17" y2="21"/><line x1="17" y1="17" x2="21" y2="21"/></g></symbol>
+  </svg>
+
+  <main class="container">
+    <div class="cover-area">
+      <nav class="top-nav">
+        <a class="nav-pill" href="index.html">Inicio</a>
+        <a class="nav-pill" href="https://registros.zonagsm.site/">No Registros</a>
+        <a class="nav-pill" href="https://esim.zonagsm.site/">E-SIM</a>
+        <a class="nav-pill active" href="factura.html">Comprobante</a>
+      </nav>
+      <svg class="mountain-divider" viewBox="0 0 1440 120" preserveAspectRatio="none"><path d="M0,75 Q720,0 1440,75 L1440,120 L0,120 Z"></path></svg>
+    </div>
+
+    <div class="avatar-wrapper">
+      <div class="avatar"><img src="logo.png" alt="Zona GSM" class="avatar-img" onerror="this.style.display='none'" /></div>
+    </div>
+
+    <div class="content-box">
+      <div class="page-head">
+        <h1>Comprobante de Servicio</h1>
+        <p class="bio">Crea y envía la imagen del detalle para No Registros y E-SIM.</p>
+      </div>
+
+      <div class="form-card">
+        <div class="field-group">
+          <span class="field-label">Tipo de Servicio</span>
+          <div class="segmented-row">
+            <button id="btnTypeRegistro" type="button" class="seg-btn active" onclick="setServiceType('registro')">No Registro</button>
+            <button id="btnTypeEsim" type="button" class="seg-btn" onclick="setServiceType('esim')">E-SIM</button>
+          </div>
+        </div>
+
+        <div class="field-group">
+          <label class="field-label" for="operatorSelect">Operador / Modalidad</label>
+          <select id="operatorSelect" class="select-input" onchange="onOperatorChange()"></select>
+        </div>
+
+        <div class="grid-2 field-group">
+          <div>
+            <label class="field-label" for="clientNameInput">Cliente</label>
+            <input id="clientNameInput" class="text-input" type="text" placeholder="Nombre del cliente" oninput="updatePreview()" />
+          </div>
+          <div>
+            <label class="field-label" for="clientPhoneInput">WhatsApp Cliente</label>
+            <input id="clientPhoneInput" class="text-input" type="tel" inputmode="numeric" placeholder="Ej. 3104141805" oninput="this.value=this.value.replace(/\D/g,'');updatePreview()" />
+          </div>
+        </div>
+
+        <!-- Bloque para No Registro -->
+        <div id="registroFields" class="field-group">
+          <label class="field-label" for="imeiInput">IMEI (dígito 15 automático)</label>
+          <div class="imei-row">
+            <div id="imeiCombined" class="imei-combined-field">
+              <input id="imeiInput" class="imei-input" type="text" inputmode="numeric" maxlength="15" placeholder="Introduce IMEI" oninput="handleImeiInput(this)" />
+              <span id="imeiCheckBox" class="imei-last-square">-</span>
+            </div>
+            <button id="qrToggleBtn" type="button" class="qr-btn" onclick="toggleQrScanner()" title="Escanear código de barras / QR">
+              <svg width="20" height="20"><use href="#icon-qr"/></svg>
+            </button>
+          </div>
+
+          <div id="qrPanel" class="qr-panel">
+            <div class="qr-panel-top">
+              <span>Lector Código de Barras / QR</span>
+              <label class="qr-upload-lbl">
+                Subir imagen
+                <input type="file" accept="image/*" style="display:none" onchange="scanQrImage(this)" />
+              </label>
+            </div>
+            <div id="qrBox"></div>
+            <div id="qrHint" class="qr-hint">Alinea el código de barras en el recuadro</div>
+          </div>
+
+          <div class="field-group" style="margin-top:10px;">
+            <label class="field-label" for="simLineInput">Línea SIM (opcional)</label>
+            <input id="simLineInput" class="text-input" type="tel" inputmode="numeric" maxlength="15" placeholder="Número de línea SIM" oninput="this.value=this.value.replace(/\D/g,'');updatePreview()" />
+          </div>
+        </div>
+
+        <!-- Bloque para E-SIM -->
+        <div id="esimFields" class="field-group" style="display:none;">
+          <label class="field-label" for="esimQtyInput">Cantidad de E-SIM</label>
+          <input id="esimQtyInput" class="text-input" type="number" min="1" step="1" value="1" oninput="updatePreview()" />
+        </div>
+
+        <div class="grid-2 field-group">
+          <div>
+            <label class="field-label" for="priceInput">Valor</label>
+            <input id="priceInput" class="text-input" type="text" value="$15.000" oninput="updatePreview()" />
+          </div>
+          <div>
+            <label class="field-label" for="timeInput">Tiempo Est.</label>
+            <input id="timeInput" class="text-input" type="text" value="6 hrs" oninput="updatePreview()" />
+          </div>
+        </div>
+
+        <div class="field-group">
+          <span class="field-label">Estado de Pago</span>
+          <div class="segmented-row">
+            <button id="btnPaid" type="button" class="seg-btn paid-active" onclick="setPayStatus('PAGADO')">PAGADO</button>
+            <button id="btnUnpaid" type="button" class="seg-btn" onclick="setPayStatus('NO PAGADO')">NO PAGADO</button>
+          </div>
+        </div>
+
+        <div class="field-group">
+          <span class="field-label">Estado del Trámite</span>
+          <div class="segmented-row">
+            <button id="btnProcess" type="button" class="seg-btn process-active" onclick="setWorkStatus('EN PROCESO')">EN PROCESO</button>
+            <button id="btnSuccess" type="button" class="seg-btn" onclick="setWorkStatus('EXITOSO')">EXITOSO</button>
+          </div>
+        </div>
+      </div>
+
+      <div class="section-subtitle">Vista Previa del Comprobante</div>
+
+      <div id="receiptCard" class="receipt-capture">
+        <div class="receipt-header">
+          <div class="receipt-logo-circle"><img src="logo.png" alt="Zona GSM" onerror="this.style.display='none'" /></div>
+          <div>
+            <div class="receipt-brand-title">Zona GSM</div>
+            <div class="receipt-brand-sub">Comprobante de Servicio · Colombia</div>
+          </div>
+        </div>
+
+        <div class="receipt-body">
+          <div class="receipt-meta">
+            <span id="rOrderCode">ORDEN #ZG-001</span>
+            <span id="rDateNow">--/--/----</span>
+          </div>
+
+          <div class="receipt-badges">
+            <span id="rPayBadge" class="r-badge paid">PAGADO</span>
+            <span id="rWorkBadge" class="r-badge process">EN PROCESO</span>
+          </div>
+
+          <div class="receipt-row">
+            <div class="receipt-row-lbl">Cliente</div>
+            <div id="rClientVal" class="receipt-row-val">Cliente General</div>
+          </div>
+
+          <div class="receipt-row">
+            <div class="receipt-row-lbl">Servicio</div>
+            <div id="rServiceVal" class="receipt-row-val">No Registro CLARO (IMEI + Línea)</div>
+          </div>
+
+          <div id="rImeiBlock" class="receipt-row">
+            <div class="receipt-row-lbl">IMEI</div>
+            <div id="rImeiVal" class="receipt-row-val">Pendiente</div>
+          </div>
+
+          <div id="rExtraBlock" class="receipt-row">
+            <div id="rExtraLbl" class="receipt-row-lbl">Línea / Tiempo</div>
+            <div id="rExtraVal" class="receipt-row-val">Tiempo est.: 6 hrs</div>
+          </div>
+
+          <div class="receipt-total-box">
+            <span class="receipt-total-lbl">VALOR</span>
+            <span id="rPriceVal" class="receipt-total-val">$15.000</span>
+          </div>
+
+          <div class="receipt-footer">
+            Soporte Zona GSM · WhatsApp +57 310 414 1805
+          </div>
+        </div>
+      </div>
+
+      <div class="actions-bar">
+        <button type="button" class="btn-share-img" onclick="shareReceiptImage()">Compartir Imagen (WhatsApp)</button>
+        <button type="button" class="btn-dl-img" onclick="downloadReceiptImage()">Descargar PNG</button>
+      </div>
+    </div>
+  </main>
+
+  <div id="toast" class="toast">Listo</div>
+
+  <script>
+    const REGISTRO_OPTIONS = [
+      { label: 'NO REGISTRO CLARO (IMEI + Línea)', price: '$15.000', time: '6 hrs' },
+      { label: 'NO REGISTRO CLARO (Línea desactivada)', price: '$45.000', time: '3 días' },
+      { label: 'NO REGISTRO TIGO', price: '$25.000', time: '6 hrs' },
+      { label: 'NO REGISTRO VIRGIN', price: '$30.000', time: '6 hrs' },
+      { label: 'NO REGISTRO WOM', price: '$45.000', time: '48 hrs' },
+      { label: 'NO REGISTRO MOVISTAR', price: '$15.000', time: '6 hrs' },
+      { label: 'NO REGISTRO MÓVIL ÉXITO', price: '$35.000', time: '24 hrs' }
+    ];
+
+    const ESIM_OPTIONS = [
+      { label: 'E-SIM CLARO (Línea nueva)', price: '$28.000', time: 'Inmediato' },
+      { label: 'E-SIM TIGO (Línea nueva)', price: '$30.000', time: 'Inmediato' },
+      { label: 'E-SIM WOM (Línea nueva)', price: '$35.000', time: 'Inmediato' }
+    ];
+
+    let serviceType = 'registro';
+    let payStatus = 'PAGADO';
+    let workStatus = 'EN PROCESO';
+    let lastAutoCompleted14 = '';
+    let qrScanner = null;
+    let qrRunning = false;
+
+    window.addEventListener('DOMContentLoaded', () => {
+      const now = new Date();
+      const d = String(now.getDate()).padStart(2, '0');
+      const m = String(now.getMonth() + 1).padStart(2, '0');
+      const y = now.getFullYear();
+      const hh = String(now.getHours()).padStart(2, '0');
+      const mm = String(now.getMinutes()).padStart(2, '0');
+      document.getElementById('rDateNow').textContent = `${d}/${m}/${y} ${hh}:${mm}`;
+      document.getElementById('rOrderCode').textContent = `ORDEN #ZG-${String(now.getTime()).slice(-4)}`;
+
+      populateOperatorSelect();
+      updatePreview();
+    });
+
+    function populateOperatorSelect() {
+      const sel = document.getElementById('operatorSelect');
+      const list = serviceType === 'registro' ? REGISTRO_OPTIONS : ESIM_OPTIONS;
+      sel.innerHTML = '';
+      list.forEach((item, idx) => {
+        const opt = document.createElement('option');
+        opt.value = String(idx);
+        opt.textContent = `${item.label} — ${item.price}`;
+        sel.appendChild(opt);
+      });
+      onOperatorChange();
+    }
+
+    function onOperatorChange() {
+      const sel = document.getElementById('operatorSelect');
+      const list = serviceType === 'registro' ? REGISTRO_OPTIONS : ESIM_OPTIONS;
+      const chosen = list[parseInt(sel.value, 10) || 0];
+      document.getElementById('priceInput').value = chosen.price;
+      document.getElementById('timeInput').value = chosen.time;
+      updatePreview();
+    }
+
+    async function setServiceType(type) {
+      serviceType = type;
+      document.getElementById('btnTypeRegistro').classList.toggle('active', type === 'registro');
+      document.getElementById('btnTypeEsim').classList.toggle('active', type === 'esim');
+      document.getElementById('registroFields').style.display = type === 'registro' ? 'block' : 'none';
+      document.getElementById('esimFields').style.display = type === 'esim' ? 'block' : 'none';
+      if (type === 'esim') {
+        await stopQrScanner();
+      }
+      populateOperatorSelect();
+    }
+
+    function setPayStatus(status) {
+      payStatus = status;
+      const bPaid = document.getElementById('btnPaid');
+      const bUnpaid = document.getElementById('btnUnpaid');
+      bPaid.className = 'seg-btn' + (status === 'PAGADO' ? ' paid-active' : '');
+      bUnpaid.className = 'seg-btn' + (status === 'NO PAGADO' ? ' unpaid-active' : '');
+      updatePreview();
+    }
+
+    function setWorkStatus(status) {
+      workStatus = status;
+      const bProc = document.getElementById('btnProcess');
+      const bSucc = document.getElementById('btnSuccess');
+      bProc.className = 'seg-btn' + (status === 'EN PROCESO' ? ' process-active' : '');
+      bSucc.className = 'seg-btn' + (status === 'EXITOSO' ? ' success-active' : '');
+      updatePreview();
+    }
+
+    function computeImeiCheckDigit(first14) {
+      let sum = 0;
+      for (let i = 0; i < 14; i++) {
+        let digit = parseInt(first14.charAt(i), 10);
+        if (i % 2 === 1) {
+          digit *= 2;
+          if (digit > 9) digit -= 9;
+        }
+        sum += digit;
+      }
+      return (10 - (sum % 10)) % 10;
+    }
+
+    function handleImeiInput(input) {
+      let digits = input.value.replace(/\D/g, '').slice(0, 15);
+      if (digits.length < 14) {
+        lastAutoCompleted14 = '';
+      } else if (digits.length === 14) {
+        if (lastAutoCompleted14 === digits) {
+          digits = digits.slice(0, 13);
+          lastAutoCompleted14 = '';
+        } else {
+          const check = computeImeiCheckDigit(digits);
+          lastAutoCompleted14 = digits;
+          digits = digits + check;
+        }
+      } else if (digits.length === 15) {
+        const base14 = digits.slice(0, 14);
+        const check = computeImeiCheckDigit(base14);
+        lastAutoCompleted14 = base14;
+        digits = base14 + check;
+      }
+      input.value = digits;
+
+      const box = document.getElementById('imeiCheckBox');
+      const comb = document.getElementById('imeiCombined');
+      if (digits.length >= 14) {
+        box.textContent = String(computeImeiCheckDigit(digits.slice(0, 14)));
+        box.classList.add('active');
+      } else {
+        box.textContent = '-';
+        box.classList.remove('active');
+      }
+      comb.classList.toggle('imei-valid', digits.length === 15);
+      updatePreview();
+    }
+
+    async function stopQrScanner() {
+      document.getElementById('qrPanel').classList.remove('open');
+      document.getElementById('qrToggleBtn').classList.remove('active');
+      if (qrScanner && qrRunning) {
+        try { await qrScanner.stop(); } catch (e) {}
+        qrRunning = false;
+      }
+    }
+
+    async function toggleQrScanner() {
+      const panel = document.getElementById('qrPanel');
+      const btn = document.getElementById('qrToggleBtn');
+      const hint = document.getElementById('qrHint');
+      if (panel.classList.contains('open')) {
+        await stopQrScanner();
+        return;
+      }
+      panel.classList.add('open');
+      btn.classList.add('active');
+      hint.textContent = 'Iniciando cámara...';
+
+      if (typeof Html5Qrcode === 'undefined') {
+        hint.textContent = 'Usa "Subir imagen" para escanear.';
+        return;
+      }
+      if (!qrScanner) qrScanner = new Html5Qrcode('qrBox');
+
+      try {
+        await qrScanner.start(
+          { facingMode: 'environment' },
+          { fps: 12, qrbox: { width: 250, height: 100 } },
+          async (text) => {
+            const match = String(text || '').match(/\d{14,15}/);
+            const digits = match ? match[0] : String(text || '').replace(/\D/g, '').slice(0, 15);
+            if (digits) {
+              const inp = document.getElementById('imeiInput');
+              inp.value = digits;
+              handleImeiInput(inp);
+              showToast('IMEI escaneado');
+              await stopQrScanner();
+            }
+          },
+          () => {}
+        );
+        qrRunning = true;
+        hint.textContent = 'Alinea el código de barras en el recuadro';
+      } catch (e) {
+        qrRunning = false;
+        hint.textContent = 'Cámara no disponible. Puedes usar "Subir imagen".';
+      }
+    }
+
+    async function scanQrImage(fileInput) {
+      const file = fileInput.files && fileInput.files[0];
+      if (!file || typeof Html5Qrcode === 'undefined') return;
+      if (!qrScanner) qrScanner = new Html5Qrcode('qrBox');
+      try {
+        const text = await qrScanner.scanFile(file, true);
+        const match = String(text || '').match(/\d{14,15}/);
+        const digits = match ? match[0] : String(text || '').replace(/\D/g, '').slice(0, 15);
+        if (digits) {
+          const inp = document.getElementById('imeiInput');
+          inp.value = digits;
+          handleImeiInput(inp);
+          showToast('IMEI detectado');
+          await stopQrScanner();
+        }
+      } catch (e) {
+        showToast('No se detectó código en la imagen');
+      } finally {
+        fileInput.value = '';
+      }
+    }
+
+    function updatePreview() {
+      const name = document.getElementById('clientNameInput').value.trim();
+      const phone = document.getElementById('clientPhoneInput').value.trim();
+      const sel = document.getElementById('operatorSelect');
+      const list = serviceType === 'registro' ? REGISTRO_OPTIONS : ESIM_OPTIONS;
+      const chosen = list[parseInt(sel.value, 10) || 0];
+      const price = document.getElementById('priceInput').value.trim() || chosen.price;
+      const time = document.getElementById('timeInput').value.trim() || chosen.time;
+
+      const payBadge = document.getElementById('rPayBadge');
+      payBadge.textContent = payStatus;
+      payBadge.className = 'r-badge ' + (payStatus === 'PAGADO' ? 'paid' : 'unpaid');
+
+      const workBadge = document.getElementById('rWorkBadge');
+      workBadge.textContent = workStatus;
+      workBadge.className = 'r-badge ' + (workStatus === 'EXITOSO' ? 'success' : 'process');
+
+      document.getElementById('rClientVal').textContent = phone
+        ? `${name || 'Cliente'} · ${phone}`
+        : (name || 'Cliente');
+
+      document.getElementById('rServiceVal').textContent = chosen.label;
+      document.getElementById('rPriceVal').textContent = price;
+
+      const imeiBlock = document.getElementById('rImeiBlock');
+      const extraLbl = document.getElementById('rExtraLbl');
+      const extraVal = document.getElementById('rExtraVal');
+
+      if (serviceType === 'registro') {
+        imeiBlock.style.display = 'block';
+        const imei = document.getElementById('imeiInput').value.replace(/\D/g, '');
+        const rImeiVal = document.getElementById('rImeiVal');
+        if (imei.length === 15) {
+          const first14 = imei.slice(0, 14);
+          const last1 = imei.slice(14, 15);
+          rImeiVal.innerHTML = `<span class="imei-box-inline"><span>${first14}</span><span class="imei-box-digit">${last1}</span></span>`;
+        } else {
+          rImeiVal.textContent = imei || 'Pendiente';
+        }
+
+        const simLine = document.getElementById('simLineInput').value.trim();
+        extraLbl.textContent = 'Línea / Tiempo Estimado';
+        extraVal.textContent = simLine
+          ? `Línea: ${simLine} · Tiempo est.: ${time}`
+          : `Tiempo est.: ${time}`;
+      } else {
+        imeiBlock.style.display = 'none';
+        const qty = parseInt(document.getElementById('esimQtyInput').value, 10) || 1;
+        extraLbl.textContent = 'Cantidad / Entrega';
+        extraVal.textContent = `Cantidad: ${qty} · Entrega: ${time}`;
+      }
+    }
+
+    async function renderReceiptCanvas() {
+      if (typeof html2canvas === 'undefined') {
+        showToast('No se pudo cargar el generador de imagen');
+        return null;
+      }
+      const el = document.getElementById('receiptCard');
+      return await html2canvas(el, { scale: 2, backgroundColor: '#ffffff', useCORS: true });
+    }
+
+    async function shareReceiptImage() {
+      const canvas = await renderReceiptCanvas();
+      if (!canvas) return;
+
+      canvas.toBlob(async (blob) => {
+        if (!blob) {
+          showToast('Error al crear la imagen');
+          return;
+        }
+        const file = new File([blob], 'comprobante-zonagsm.png', { type: 'image/png' });
+        const phone = document.getElementById('clientPhoneInput').value.trim();
+
+        if (navigator.canShare && navigator.canShare({ files: [file] })) {
+          try {
+            await navigator.share({
+              title: 'Comprobante Zona GSM',
+              files: [file]
+            });
+            return;
+          } catch (e) {}
+        }
+
+        const url = URL.createObjectURL(blob);
+        const a = document.createElement('a');
+        a.href = url;
+        a.download = 'comprobante-zonagsm.png';
+        a.click();
+        setTimeout(() => URL.revokeObjectURL(url), 1500);
+        showToast('Imagen descargada. Ábrela y envíala en WhatsApp');
+
+        if (phone) {
+          const cleanPhone = phone.length === 10 ? '57' + phone : phone;
+          window.open(`https://wa.me/${cleanPhone}`, '_blank', 'noopener,noreferrer');
+        }
+      }, 'image/png');
+    }
+
+    async function downloadReceiptImage() {
+      const canvas = await renderReceiptCanvas();
+      if (!canvas) return;
+      const link = document.createElement('a');
+      link.download = 'comprobante-zonagsm.png';
+      link.href = canvas.toDataURL('image/png');
+      link.click();
+      showToast('PNG descargado');
+    }
+
+    function showToast(msg) {
+      const t = document.getElementById('toast');
+      t.textContent = msg;
+      t.classList.add('show');
+      setTimeout(() => t.classList.remove('show'), 2400);
+    }
+  </script>
+</body>
+</html>
