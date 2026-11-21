@@ -5,7 +5,7 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <title>Zona GSM — Comprobante de Servicio</title>
   <meta name="description" content="Generador de comprobante de servicio de No Registro y E-SIM para Zona GSM." />
-  <link rel="icon" type="image/png" href="logo.png" />
+  <link rel="icon" type="image/jpeg" href="logo1.jpg" />
 
   <!-- Librerías para generar imagen del comprobante y escanear IMEI -->
   <script src="https://unpkg.com/html2canvas@1.4.1/dist/html2canvas.min.js"></script>
@@ -26,7 +26,7 @@
 
     .avatar-wrapper { position: relative; width: 104px; height: 104px; margin: -60px auto 12px; z-index: 2; display: flex; align-items: center; justify-content: center; }
     .avatar { width: 100px; height: 100px; border-radius: 50%; background: #ffffff; display: flex; align-items: center; justify-content: center; box-shadow: 0 6px 20px rgba(15, 23, 42, 0.1); overflow: hidden; }
-    .avatar-img { width: 100%; height: 100%; object-fit: cover; mix-blend-mode: multiply; filter: contrast(1.08) brightness(1.04); display: block; }
+    .avatar-img { width: 100%; height: 100%; object-fit: cover; display: block; }
 
     .content-box { padding: 0 16px; text-align: left; }
     .page-head { text-align: center; margin-bottom: 18px; }
@@ -75,7 +75,7 @@
     .receipt-capture { background: #ffffff; border-radius: 22px; overflow: hidden; box-shadow: 0 10px 28px rgba(15, 23, 42, 0.1); border: 1px solid #e2e8f0; }
     .receipt-header { background: linear-gradient(135deg, #8a0f33 0%, #c81d4e 60%, #e62e62 100%); color: #ffffff; padding: 16px; display: flex; align-items: center; gap: 12px; }
     .receipt-logo-circle { width: 48px; height: 48px; border-radius: 50%; background: #ffffff; overflow: hidden; flex-shrink: 0; display: flex; align-items: center; justify-content: center; }
-    .receipt-logo-circle img { width: 100%; height: 100%; object-fit: cover; }
+    .receipt-logo-circle img { width: 100%; height: 100%; object-fit: cover; display: block; }
     .receipt-brand-title { font-size: 17px; font-weight: 900; line-height: 1.15; }
     .receipt-brand-sub { font-size: 11.5px; opacity: 0.92; margin-top: 2px; }
 
@@ -130,7 +130,7 @@
     </div>
 
     <div class="avatar-wrapper">
-      <div class="avatar"><img src="logo.png" alt="Zona GSM" class="avatar-img" onerror="this.style.display='none'" /></div>
+      <div class="avatar"><img src="logo1.jpg" alt="Zona GSM" class="avatar-img" onerror="this.style.display='none'" /></div>
     </div>
 
     <div class="content-box">
@@ -233,7 +233,7 @@
 
       <div id="receiptCard" class="receipt-capture">
         <div class="receipt-header">
-          <div class="receipt-logo-circle"><img src="logo.png" alt="Zona GSM" onerror="this.style.display='none'" /></div>
+          <div class="receipt-logo-circle"><img src="logo1.jpg" alt="Zona GSM" onerror="this.style.display='none'" /></div>
           <div>
             <div class="receipt-brand-title">Zona GSM</div>
             <div class="receipt-brand-sub">Comprobante de Servicio · Colombia</div>
