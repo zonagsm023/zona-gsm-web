@@ -8,31 +8,21 @@
   <link rel="canonical" href="https://registros.zonagsm.site/" />
   <link rel="icon" type="image/png" href="logo.png" />
 
-  <meta property="og:type" content="website" />
-  <meta property="og:title" content="Zona GSM — No Registro Colombia" />
-  <meta property="og:description" content="Solución de No Registro por IMEI en Colombia. Proceso rápido y garantizado." />
-  <meta property="og:url" content="https://registros.zonagsm.site/" />
-  <meta property="og:image" content="logo.png" />
-  <meta property="og:site_name" content="Zona GSM" />
-
   <script src="https://unpkg.com/html5-qrcode@2.3.8/html5-qrcode.min.js"></script>
 
   <style>
     * { box-sizing: border-box; margin: 0; padding: 0; font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif; }
     body { min-height: 100vh; background: linear-gradient(180deg, #eef3f8 0%, #e4ebf2 100%); display: flex; justify-content: center; align-items: flex-start; padding: 0 0 48px; color: #111827; overflow-x: hidden; }
-
     .preloader { position: fixed; inset: 0; background: linear-gradient(180deg, #eef3f8 0%, #e4ebf2 100%); display: flex; flex-direction: column; align-items: center; justify-content: center; z-index: 9999; transition: opacity 0.65s ease, visibility 0.65s ease; }
     .preloader.hidden { opacity: 0; visibility: hidden; pointer-events: none; }
     .loader-circle-wrap { position: relative; width: 124px; height: 124px; display: flex; align-items: center; justify-content: center; animation: loaderPopIn 0.5s cubic-bezier(0.22, 1, 0.36, 1) forwards; }
     @keyframes loaderPopIn { 0% { transform: scale(0.85); opacity: 0; } 100% { transform: scale(1); opacity: 1; } }
-
     .loader-ring { position: absolute; inset: 0; border-radius: 50%; border: 2px solid rgba(200, 29, 78, 0.35); background: rgba(200, 29, 78, 0.05); animation: loaderPulse 1.4s ease-in-out infinite; }
     .loader-ring-2 { position: absolute; inset: 0; border-radius: 50%; border: 1.5px solid rgba(200, 29, 78, 0.2); animation: loaderPulse 1.4s ease-in-out 0.35s infinite; }
     @keyframes loaderPulse { 0% { transform: scale(0.98); opacity: 0.9; } 70%, 100% { transform: scale(1.24); opacity: 0; } }
 
     .container { width: 100%; max-width: 460px; background: #f4f7fa; border-radius: 0 0 28px 28px; padding: 0 0 32px; box-shadow: 0 12px 35px rgba(15, 23, 42, 0.08); border: 1px solid rgba(255, 255, 255, 0.85); border-top: none; text-align: center; overflow: hidden; position: relative; opacity: 0; transform: translateY(14px); transition: opacity 0.75s cubic-bezier(0.22, 1, 0.36, 1), transform 0.75s cubic-bezier(0.22, 1, 0.36, 1); }
     .container.visible { opacity: 1; transform: translateY(0); }
-
     .cover-area { height: 155px; background: linear-gradient(135deg, #8a0f33 0%, #c81d4e 55%, #e62e62 100%); position: relative; }
     .top-nav { position: absolute; top: 14px; left: 0; right: 0; display: flex; justify-content: center; gap: 6px; padding: 0 10px; z-index: 10; flex-wrap: wrap; }
     .nav-pill { padding: 6px 11px; border-radius: 999px; font-size: 11px; font-weight: 700; text-decoration: none; color: rgba(255, 255, 255, 0.92); background: rgba(255, 255, 255, 0.14); backdrop-filter: blur(8px); -webkit-backdrop-filter: blur(8px); border: 1px solid rgba(255, 255, 255, 0.25); transition: all 0.2s ease; }
@@ -47,7 +37,6 @@
     .logo-badge { display: inline-flex; align-items: center; font-weight: 800; font-size: 16px; letter-spacing: -0.3px; }
     .logo-zona { background: #c81d4e; color: #ffffff; padding: 3px 6px; border-radius: 2px; margin-right: 4px; }
     .logo-gsm { color: #0f0f0f; }
-
     .pulse-ring { position: absolute; top: 0; left: 0; width: 100%; height: 100%; border-radius: 50%; border: 1.5px solid rgba(200, 29, 78, 0.32); background: rgba(200, 29, 78, 0.05); pointer-events: none; z-index: 1; }
     .ring-1 { animation: breatheRing1 4.2s ease-in-out infinite; }
     .ring-2 { border-color: rgba(200, 29, 78, 0.2); background: rgba(200, 29, 78, 0.03); animation: breatheRing2 4.2s ease-in-out infinite; }
@@ -57,7 +46,6 @@
     .content-box { padding: 0 18px; }
     h1 { font-size: 24px; font-weight: 800; color: #0f172a; margin-bottom: 8px; }
     .bio { font-size: 14px; line-height: 1.45; color: #334155; max-width: 340px; margin: 0 auto 22px; }
-
     @keyframes subtleHop { 0%, 78%, 100% { transform: translateY(0); } 84% { transform: translateY(-5px); } 90% { transform: translateY(0); } 94% { transform: translateY(-2px); } }
     .socials { display: flex; justify-content: center; align-items: flex-start; gap: 10px; margin-bottom: 26px; }
     .social-item { display: flex; flex-direction: column; align-items: center; text-decoration: none; background: none; border: none; cursor: pointer; width: 64px; animation: subtleHop 5s ease-in-out infinite; }
@@ -69,12 +57,10 @@
 
     .section-title { font-size: 12px; font-weight: 700; letter-spacing: 1px; color: #64748b; text-transform: uppercase; margin-bottom: 16px; }
     .cards { display: flex; flex-direction: column; gap: 14px; padding: 0 4px; }
-
     .card { background: #ffffff; border-radius: 50px; padding: 12px 16px; display: flex; align-items: center; justify-content: space-between; gap: 10px; box-shadow: 0 4px 14px rgba(15, 23, 42, 0.05); border: 1px solid #eef2f6; text-align: left; text-decoration: none; color: inherit; width: 100%; cursor: pointer; transition: transform 0.15s ease; }
     .card:hover { transform: translateY(-1px); }
     .card.is-offline { opacity: 0.72; }
     .card-left { display: flex; align-items: center; gap: 12px; min-width: 0; flex: 1; }
-
     .op-icon { width: 46px; height: 46px; border-radius: 50%; flex-shrink: 0; display: flex; align-items: center; justify-content: center; overflow: hidden; }
     .op-icon img { width: 100%; height: 100%; object-fit: cover; display: block; }
     .op-fallback { width: 100%; height: 100%; display: flex; align-items: center; justify-content: center; font-weight: 900; font-size: 10px; color: #ffffff; text-align: center; padding: 2px; }
@@ -86,23 +72,19 @@
     .icon-exito { background: #ffe800; }
     .icon-exito .op-fallback { color: #0f0f0f; }
     .icon-etb { background: #ffffff; border: 1px solid #e2e8f0; }
-
     .card-info { display: flex; flex-direction: column; min-width: 0; flex: 1; }
     .op-header-row { display: flex; align-items: center; gap: 6px; flex-wrap: nowrap; min-width: 0; }
     .op-name { font-size: 12.5px; font-weight: 800; color: #0f172a; letter-spacing: 0.1px; white-space: nowrap; }
     .online-pill { display: inline-flex; align-items: center; gap: 4px; padding: 2px 7px; border-radius: 999px; background: #ecfdf5; border: 1px solid #a7f3d0; font-size: 10px; font-weight: 700; color: #059669; line-height: 1; flex-shrink: 0; }
     .online-dot { width: 6px; height: 6px; border-radius: 50%; background: #10b981; animation: breatheOnline 1.8s ease-in-out infinite; }
     @keyframes breatheOnline { 0%, 100% { transform: scale(0.9); box-shadow: 0 0 0 0 rgba(16, 185, 129, 0.65); opacity: 0.85; } 50% { transform: scale(1.2); box-shadow: 0 0 0 4px rgba(16, 185, 129, 0); opacity: 1; } }
-
     .offline-pill { display: inline-flex; align-items: center; gap: 4px; padding: 2px 7px; border-radius: 999px; background: #fef2f2; border: 1px solid #fecaca; font-size: 10px; font-weight: 700; color: #dc2626; line-height: 1; flex-shrink: 0; }
     .offline-dot { width: 6px; height: 6px; border-radius: 50%; background: #ef4444; animation: breatheOffline 1.8s ease-in-out infinite; }
     @keyframes breatheOffline { 0%, 100% { transform: scale(0.9); box-shadow: 0 0 0 0 rgba(239, 68, 68, 0.65); opacity: 0.85; } 50% { transform: scale(1.2); box-shadow: 0 0 0 4px rgba(239, 68, 68, 0); opacity: 1; } }
-
     .op-service-row { display: flex; align-items: center; gap: 6px; margin-top: 2px; flex-wrap: wrap; }
     .op-service { font-size: 12.5px; font-weight: 600; color: #475569; }
     .country-tag { font-size: 10px; font-weight: 800; letter-spacing: 0.5px; color: #8a0f33; background: #fce7ef; border: 1px solid #fbcfe1; padding: 1px 6px; border-radius: 4px; line-height: 1.2; }
     .op-hint { font-size: 11px; color: #64748b; margin-top: 2px; }
-
     .wa-btn { width: 40px; height: 40px; border-radius: 50%; background: #25D366; color: #ffffff; flex-shrink: 0; display: flex; align-items: center; justify-content: center; transition: background 0.2s ease, transform 0.1s ease; }
     .card:hover .wa-btn { background: #1ebe5d; }
     .card:active .wa-btn { transform: scale(0.94); }
@@ -120,6 +102,10 @@
     .imei-op-logo img { width: 100%; height: 100%; object-fit: cover; display: block; }
     .imei-box-title { font-size: 15px; font-weight: 800; color: #0f172a; line-height: 1.2; }
     
+    .imei-badges { display: flex; align-items: center; gap: 6px; margin-top: 4px; flex-wrap: wrap; }
+    .imei-price-tag { font-size: 11px; font-weight: 800; color: #059669; background: #ecfdf5; border: 1px solid #a7f3d0; padding: 2px 8px; border-radius: 999px; }
+    .imei-time-tag { font-size: 11px; font-weight: 700; color: #334155; background: #f1f5f9; border: 1px solid #cbd5e1; padding: 2px 8px; border-radius: 999px; }
+
     .imei-close { width: 28px; height: 28px; border-radius: 50%; border: none; background: #f1f5f9; color: #334155; font-size: 16px; font-weight: 700; cursor: pointer; flex-shrink: 0; display: flex; align-items: center; justify-content: center; }
 
     .claro-mode-switch { display: none; gap: 6px; margin-bottom: 12px; background: #f1f5f9; padding: 4px; border-radius: 12px; }
@@ -156,10 +142,10 @@
     #qrCameraBox { width: 100%; border-radius: 10px; overflow: hidden; background: #0f172a; min-height: 140px; }
     .qr-status-msg { margin-top: 6px; font-size: 11px; color: #64748b; text-align: center; }
 
-    /* Estilos de PIN */
+    /* Estilos de PIN dentro del modal principal */
     .input-group { display: flex; flex-direction: column; gap: 6px; margin-bottom: 12px; }
     .input-group label { font-size: 12px; font-weight: 700; color: #334155; }
-    .pin-input { width: 100%; padding: 12px; border-radius: 12px; border: 2px solid #cbd5e1; font-size: 18px; text-align: center; letter-spacing: 8px; font-weight: 900; color: #0f172a; outline: none; transition: all 0.15s ease; }
+    .pin-input { width: 100%; padding: 10px; border-radius: 12px; border: 2px solid #cbd5e1; font-size: 16px; text-align: center; letter-spacing: 6px; font-weight: 900; color: #0f172a; outline: none; transition: all 0.15s ease; }
     .pin-input:focus { border-color: #c81d4e; }
     .pin-input.error { border-color: #ef4444; background: #fef2f2; color: #dc2626; }
     .pin-input.success { border-color: #10b981; background: #ecfdf5; color: #059669; }
@@ -324,88 +310,78 @@
     </div>
   </main>
 
-  <!-- MODAL PRINCIPAL: AUTENTICACIÓN Y FORMULARIO -->
+  <!-- MODAL PRINCIPAL: TODO EN UNA SOLA VENTANA -->
   <div id="imeiOverlay" class="imei-overlay" onclick="closeImeiOutside(event)">
     <div class="imei-box" role="dialog" aria-modal="true" aria-labelledby="imeiTitle">
       
-      <!-- PASO 1: AUTENTICACIÓN -->
-      <div id="authStep">
-        <div class="imei-box-top">
-          <div class="imei-op-head">
-            <div id="imeiLogoWrap" class="imei-op-logo"></div>
-            <div>
-              <div id="imeiTitle" class="imei-box-title">No Registro</div>
-              <div class="imei-badges">
-                <span id="imeiPrice" class="imei-price-tag">$0</span>
-                <span id="imeiTime" class="imei-time-tag">0 hrs</span>
-              </div>
+      <div class="imei-box-top">
+        <div class="imei-op-head">
+          <div id="imeiLogoWrap" class="imei-op-logo"></div>
+          <div>
+            <div id="imeiTitle" class="imei-box-title">No Registro</div>
+            <div class="imei-badges">
+              <span id="imeiPrice" class="imei-price-tag">$0</span>
+              <span id="imeiTime" class="imei-time-tag">0 hrs</span>
             </div>
           </div>
-          <button type="button" class="imei-close" onclick="closeImeiBox()" aria-label="Cerrar">&times;</button>
         </div>
+        <button type="button" class="imei-close" onclick="closeImeiBox()" aria-label="Cerrar">&times;</button>
+      </div>
+
+      <div id="claroModeSwitch" class="claro-mode-switch">
+        <button id="claroBtnSoloImei" type="button" class="claro-mode-btn active" onclick="setClaroMode('imei')">IMEI + Línea ($15.000)</button>
+        <button id="claroBtnLineaDesactivada" type="button" class="claro-mode-btn" onclick="setClaroMode('linea')">Línea desactivada ($45.000)</button>
+      </div>
+
+      <form onsubmit="sendImeiWa(event)">
         
-        <div class="input-group" style="margin-top: 15px;">
-          <label>Ingresa tu PIN de 4 dígitos:</label>
+        <!-- AQUI ESTA EL CAMPO DEL PIN -->
+        <div class="input-group">
+          <label>Tu PIN de 4 dígitos:</label>
           <input id="mainPinInput" class="pin-input" type="text" maxlength="4" inputmode="numeric" placeholder="••••" oninput="checkPin(this.value)">
           <div id="pinMessage" class="pin-msg"></div>
         </div>
-        <button id="btnGoToForm" class="imei-send-btn" onclick="verifyAndGoToForm()">Continuar</button>
-      </div>
 
-      <!-- PASO 2: FORMULARIO DEL SERVICIO -->
-      <div id="serviceStep" style="display: none;">
-        <div class="imei-box-top">
-          <div class="imei-op-head">
-            <div id="imeiLogoWrap2" class="imei-op-logo"></div>
-            <div>
-              <div id="imeiTitle2" class="imei-box-title">No Registro</div>
-            </div>
+        <div class="imei-row">
+          <div id="imeiCombinedField" class="imei-combined-field">
+            <input id="imeiField" class="imei-input" type="text" inputmode="numeric" maxlength="15" placeholder="Introduce IMEI" oninput="handleImeiInput(this)" required />
+            <span id="imeiLastSquare" class="imei-last-square" title="Último dígito calculado">-</span>
           </div>
-          <button type="button" class="imei-close" onclick="closeImeiBox()" aria-label="Cerrar">&times;</button>
+          <button id="qrToggleBtn" type="button" class="imei-qr-btn" onclick="toggleQrReader()">
+            <svg width="20" height="20"><use href="#icon-qr"/></svg>
+          </button>
         </div>
 
-        <div id="claroModeSwitch" class="claro-mode-switch">
-          <button id="claroBtnSoloImei" type="button" class="claro-mode-btn active" onclick="setClaroMode('imei')">IMEI + Línea ($15.000)</button>
-          <button id="claroBtnLineaDesactivada" type="button" class="claro-mode-btn" onclick="setClaroMode('linea')">Línea desactivada ($45.000)</button>
+        <div id="simLineWrap" class="sim-line-wrap">
+          <input id="simLineField" class="sim-line-input" type="tel" inputmode="numeric" maxlength="15" placeholder="Número de línea SIM" oninput="this.value = this.value.replace(/\D/g, '')" />
         </div>
 
-        <form onsubmit="sendImeiWa(event)">
-          <div class="imei-row">
-            <div id="imeiCombinedField" class="imei-combined-field">
-              <input id="imeiField" class="imei-input" type="text" inputmode="numeric" maxlength="15" placeholder="Introduce IMEI" oninput="handleImeiInput(this)" required />
-              <span id="imeiLastSquare" class="imei-last-square" title="Último dígito calculado">-</span>
-            </div>
-            <button id="qrToggleBtn" type="button" class="imei-qr-btn" onclick="toggleQrReader()">
-              <svg width="20" height="20"><use href="#icon-qr"/></svg>
-            </button>
+        <div id="qrReaderPanel" class="qr-reader-panel">
+          <div class="qr-reader-top">
+            <span>Lector Código de Barras / QR</span>
+            <label class="qr-file-label">
+              Subir imagen
+              <input id="qrFileInput" type="file" accept="image/*" style="display:none" onchange="scanQrFile(this)" />
+            </label>
           </div>
-
-          <div id="simLineWrap" class="sim-line-wrap">
-            <input id="simLineField" class="sim-line-input" type="tel" inputmode="numeric" maxlength="15" placeholder="Número de línea SIM" oninput="this.value = this.value.replace(/\D/g, '')" />
-          </div>
-
-          <div id="qrReaderPanel" class="qr-reader-panel">
-            <div class="qr-reader-top">
-              <span>Lector Código de Barras / QR</span>
-              <label class="qr-file-label">
-                Subir imagen
-                <input id="qrFileInput" type="file" accept="image/*" style="display:none" onchange="scanQrFile(this)" />
-              </label>
-            </div>
-            <div id="qrCameraBox"></div>
-            <div id="qrStatusMsg" class="qr-status-msg">Alinea el código de barras en el recuadro rectangular</div>
-          </div>
-          
-          <button type="submit" class="imei-send-btn">Enviar Solicitud</button>
-        </form>
-      </div>
+          <div id="qrCameraBox"></div>
+          <div id="qrStatusMsg" class="qr-status-msg">Alinea el código de barras en el recuadro rectangular</div>
+        </div>
+        
+        <button type="submit" class="imei-send-btn">Enviar Solicitud</button>
+      </form>
 
     </div>
   </div>
 
   <!-- MODAL: REGISTRO DE NUEVO PIN -->
-  <div id="registerOverlay" class="imei-overlay">
+  <div id="registerOverlay" class="imei-overlay" onclick="closeRegisterOutside(event)">
     <div class="imei-box" style="max-width: 340px; text-align: center;">
+      
+      <div style="display: flex; justify-content: flex-end; margin-bottom: -10px;">
+        <button type="button" class="imei-close" onclick="closeRegisterBox()" aria-label="Cerrar">&times;</button>
+      </div>
+
       <h2 style="font-size: 18px; margin-bottom: 10px; color: #0f172a;">Registra tu PIN</h2>
       <p style="font-size: 13px; color: #475569; margin-bottom: 15px;">El PIN ingresado no existe. Crea uno nuevo y registra tu número de WhatsApp.</p>
       
@@ -416,8 +392,8 @@
       </div>
       
       <div class="input-group" style="text-align: left;">
-        <label>Número de WhatsApp (ej. 57300...)</label>
-        <input id="newPhoneInput" type="tel" inputmode="numeric" placeholder="573001234567" style="width: 100%; padding: 12px; border-radius: 12px; border: 2px solid #cbd5e1; font-size: 14px; font-weight: 700; outline: none;">
+        <label>Número de WhatsApp (10 dígitos)</label>
+        <input id="newPhoneInput" type="tel" inputmode="numeric" maxlength="10" placeholder="Ej: 3104141805" style="width: 100%; padding: 12px; border-radius: 12px; border: 2px solid #cbd5e1; font-size: 14px; font-weight: 700; outline: none;">
       </div>
 
       <button class="imei-send-btn" onclick="registerNewPin()">Confirmar Registro</button>
@@ -439,11 +415,8 @@
   <div id="toast" class="toast">Copiado</div>
 
   <script>
-    /* =========================================================
-       BASE DE DATOS SIMULADA (Para probar la lógica del PIN)
-    ========================================================= */
     let dbClientes = [
-      { pin: '1234', celular: '573001234567' } // Cliente de prueba
+      { pin: '1234', celular: '3104141805' }
     ];
 
     let currentPin = '';
@@ -464,7 +437,7 @@
       }, 1400);
     });
 
-    /* --- LÓGICA DE PIN Y REGISTRO --- */
+    /* --- LÓGICA DE PIN --- */
     function checkPin(val) {
       const input = document.getElementById('mainPinInput');
       const msg = document.getElementById('pinMessage');
@@ -476,13 +449,33 @@
         if (cliente) {
           input.classList.add('success');
           input.classList.remove('error');
-          msg.textContent = '✓ PIN reconocido. ¡Bienvenido de nuevo!';
+          msg.textContent = '✓ PIN correcto. Validando seguridad...';
           msg.className = 'pin-msg success';
+          
+          // SEGURIDAD EXTRA
+          setTimeout(() => {
+             const celInput = prompt("Por seguridad, confirma los últimos 4 dígitos de tu número de WhatsApp registrado:");
+             if (celInput === cliente.celular.slice(-4)) {
+                 msg.textContent = '✓ Identidad verificada';
+                 currentCelular = cliente.celular;
+             } else {
+                 msg.textContent = '❌ Número no coincide. Intenta de nuevo.';
+                 msg.className = 'pin-msg error';
+                 input.classList.remove('success');
+                 input.classList.add('error');
+                 currentPin = ''; 
+                 input.value = '';
+             }
+          }, 500);
+
         } else {
           input.classList.add('error');
           input.classList.remove('success');
-          msg.textContent = '❌ PIN no encontrado. Debes registrarte.';
+          msg.textContent = '❌ PIN no encontrado. Registrate.';
           msg.className = 'pin-msg error';
+          setTimeout(() => {
+            document.getElementById('registerOverlay').classList.add('open');
+          }, 500);
         }
       } else {
         input.classList.remove('success', 'error');
@@ -491,23 +484,14 @@
       }
     }
 
-    function verifyAndGoToForm() {
-      if (currentPin.length !== 4) {
-        showToast('El PIN debe tener 4 dígitos');
-        return;
-      }
-      const cliente = dbClientes.find(c => c.pin === currentPin);
-      if (cliente) {
-        currentCelular = cliente.celular;
-        document.getElementById('authStep').style.display = 'none';
-        document.getElementById('serviceStep').style.display = 'block';
-        document.getElementById('imeiField').focus();
-        
-        // Sincronizar el logo en el paso 2
-        document.getElementById('imeiLogoWrap2').innerHTML = document.getElementById('imeiLogoWrap').innerHTML;
-        document.getElementById('imeiTitle2').textContent = 'No Registro ' + currentOperator;
-      } else {
-        document.getElementById('registerOverlay').classList.add('open');
+    function closeRegisterBox() {
+      document.getElementById('registerOverlay').classList.remove('open');
+      document.getElementById('mainPinInput').focus();
+    }
+
+    function closeRegisterOutside(e) {
+      if (e.target.id === 'registerOverlay') {
+        closeRegisterBox();
       }
     }
 
@@ -542,7 +526,7 @@
       const cel = document.getElementById('newPhoneInput').value.replace(/\D/g, '');
 
       if (pin.length !== 4) { showToast('El PIN debe tener 4 dígitos'); return; }
-      if (cel.length < 10) { showToast('Escribe un número de WhatsApp válido'); return; }
+      if (cel.length !== 10) { showToast('El celular debe tener exactamente 10 números'); return; }
       if (dbClientes.some(c => c.pin === pin)) { showToast('Ese PIN ya está en uso'); return; }
 
       dbClientes.push({ pin: pin, celular: cel });
@@ -557,14 +541,8 @@
     function closeSuccessAndGoToForm() {
       document.getElementById('successOverlay').classList.remove('open');
       document.getElementById('mainPinInput').value = currentPin;
-      checkPin(currentPin);
-      document.getElementById('authStep').style.display = 'none';
-      document.getElementById('serviceStep').style.display = 'block';
+      checkPin(currentPin); 
       document.getElementById('imeiField').focus();
-      
-      // Sincronizar el logo en el paso 2
-      document.getElementById('imeiLogoWrap2').innerHTML = document.getElementById('imeiLogoWrap').innerHTML;
-      document.getElementById('imeiTitle2').textContent = 'No Registro ' + currentOperator;
     }
 
     /* --- LÓGICA ORIGINAL DE IMEI Y OPERADORES --- */
@@ -576,16 +554,18 @@
       if (claroMode === 'linea') {
         currentPrice = '$45.000';
         currentTime = '3 días';
-        document.getElementById('imeiTitle2').textContent = 'No Registro CLARO (Línea desactivada)';
+        document.getElementById('imeiTitle').textContent = 'No Registro CLARO (Línea desactivada)';
         simWrap.classList.remove('visible');
         simInput.required = false;
       } else {
         currentPrice = '$15.000';
         currentTime = '6 hrs';
-        document.getElementById('imeiTitle2').textContent = 'No Registro CLARO (IMEI + Línea)';
+        document.getElementById('imeiTitle').textContent = 'No Registro CLARO (IMEI + Línea)';
         simWrap.classList.add('visible');
         simInput.required = true;
       }
+      document.getElementById('imeiPrice').textContent = 'Valor: ' + currentPrice;
+      document.getElementById('imeiTime').textContent = 'Tiempo: ' + currentTime;
     }
 
     function setClaroMode(mode) {
@@ -763,7 +743,6 @@
       claroMode = 'imei';
       lastAutoCompleted14 = '';
 
-      // Configurar el logo
       const logoWrap = document.getElementById('imeiLogoWrap');
       logoWrap.className = 'imei-op-logo ' + bgClass;
       logoWrap.innerHTML = '';
@@ -773,19 +752,16 @@
       img.onerror = function () { handleOpError(this, fallbackText, bgClass); };
       logoWrap.appendChild(img);
 
-      // Resetear UI
-      document.getElementById('authStep').style.display = 'block';
-      document.getElementById('serviceStep').style.display = 'none';
       document.getElementById('mainPinInput').value = '';
       document.getElementById('pinMessage').textContent = '';
       document.getElementById('mainPinInput').classList.remove('error', 'success');
-
-      // Configurar cabecera
+      document.getElementById('imeiField').value = '';
+      updateImeiVisualState('');
+      
       document.getElementById('imeiTitle').textContent = 'No Registro ' + operatorName;
       document.getElementById('imeiPrice').textContent = 'Valor: ' + price;
       document.getElementById('imeiTime').textContent = 'Tiempo: ' + waitTime;
       
-      // Configurar Claro
       const claroSwitch = document.getElementById('claroModeSwitch');
       const simWrap = document.getElementById('simLineWrap');
       const simInput = document.getElementById('simLineField');
@@ -802,9 +778,6 @@
         simInput.required = false;
       }
 
-      const input = document.getElementById('imeiField');
-      input.value = '';
-      updateImeiVisualState('');
       document.getElementById('qrReaderPanel').classList.remove('open');
       document.getElementById('qrToggleBtn').classList.remove('active');
       
@@ -823,6 +796,14 @@
 
     async function sendImeiWa(e) {
       e.preventDefault();
+      
+      const cliente = dbClientes.find(c => c.pin === currentPin);
+      if (!cliente || currentCelular !== cliente.celular) {
+        showToast('PIN inválido o no verificado');
+        document.getElementById('mainPinInput').focus();
+        return;
+      }
+
       const input = document.getElementById('imeiField');
       const simInput = document.getElementById('simLineField');
       const needsSimLine = isClaroSelected && claroMode === 'imei';
@@ -847,10 +828,9 @@
         return;
       }
 
-      // SIMULACIÓN DE ENVÍO A WHATSAPP
       const mensajeGrupo = 
         `🚨 *NUEVA SOLICITUD* 🚨\n\n` +
-        `*Cliente Cel:* ${currentCelular}\n` +
+        `*Cliente Cel:* ${cliente.celular}\n` +
         `*PIN:* ${currentPin}\n` +
         `*Servicio:* No Registro ${currentOperator}\n` +
         (needsSimLine ? `*Línea SIM:* ${simLine}\n` : '') +
@@ -864,7 +844,10 @@
     }
 
     document.addEventListener('keydown', (e) => {
-      if (e.key === 'Escape') closeImeiBox();
+      if (e.key === 'Escape') {
+        closeImeiBox();
+        closeRegisterBox();
+      }
     });
 
     function handleLogoError(img) {
