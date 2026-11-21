@@ -1,0 +1,171 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Panel de Administración — Zona GSM</title>
+  <style>
+    * { box-sizing: border-box; font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif; }
+    body { background: #eef2f6; padding: 20px; color: #111827; margin: 0; }
+    .login-box { max-width: 320px; margin: 100px auto; background: white; padding: 30px; border-radius: 16px; box-shadow: 0 10px 25px rgba(0,0,0,0.05); text-align: center; }
+    .login-box input { width: 100%; padding: 12px; margin-bottom: 15px; border: 1px solid #cbd5e1; border-radius: 8px; font-size: 16px; }
+    .login-box button { width: 100%; padding: 12px; background: #c81d4e; color: white; border: none; border-radius: 8px; font-size: 16px; font-weight: bold; cursor: pointer; }
+    
+    .panel { display: none; max-width: 1200px; margin: 0 auto; }
+    .header { display: flex; justify-content: space-between; align-items: center; margin-bottom: 20px; }
+    .header h1 { font-size: 24px; color: #0f172a; margin: 0; }
+    .btn-refresh { padding: 10px 20px; background: #0f172a; color: white; border: none; border-radius: 8px; cursor: pointer; font-weight: bold; }
+    
+    .table-container { background: white; border-radius: 16px; box-shadow: 0 4px 15px rgba(0,0,0,0.05); overflow-x: auto; }
+    table { width: 100%; border-collapse: collapse; min-width: 900px; }
+    th, td { padding: 12px 15px; text-align: left; border-bottom: 1px solid #e2e8f0; font-size: 14px; }
+    th { background: #f8fafc; color: #475569; font-weight: 700; text-transform: uppercase; font-size: 12px; letter-spacing: 0.5px; }
+    
+    .badge { padding: 4px 8px; border-radius: 999px; font-size: 12px; font-weight: 700; }
+    .badge-Pendiente { background: #fef3c7; color: #d97706; }
+    .badge-Proceso { background: #e0f2fe; color: #0284c7; }
+    .badge-Exitoso { background: #dcfce7; color: #16a34a; }
+    
+    .btn-action { padding: 6px 12px; border: none; border-radius: 6px; cursor: pointer; font-weight: 600; font-size: 12px; margin-right: 5px; }
+    .btn-proceso { background: #0ea5e9; color: white; }
+    .btn-exitoso { background: #22c55e; color: white; }
+  </style>
+</head>
+<body>
+
+  <!-- LOGIN -->
+  <div id="loginBox" class="login-box">
+    <h2 style="margin-top: 0; color: #0f172a;">Zona GSM Admin</h2>
+    <p style="color: #64748b; font-size: 14px; margin-bottom: 20px;">Ingresa tus credenciales</p>
+    <input type="text" id="userInput" placeholder="Usuario" value="admin">
+    <input type="password" id="passwordInput" placeholder="Contraseña" value="admin">
+    <button onclick="login()">Ingresar al Panel</button>
+  </div>
+
+  <!-- PANEL -->
+  <div id="adminPanel" class="panel">
+    <div class="header">
+      <h1>Gestión de Órdenes</h1>
+      <button class="btn-refresh" onclick="cargarOrdenes()">🔄 Actualizar</button>
+    </div>
+    
+    <div class="table-container">
+      <table>
+        <thead>
+          <tr>
+            <th>Orden</th>
+            <th>Fecha</th>
+            <th>Cliente (WhatsApp)</th>
+            <th>Servicio</th>
+            <th>IMEI</th>
+            <th>Precio</th>
+            <th>Estado</th>
+            <th>Acciones</th>
+          </tr>
+        </thead>
+        <tbody id="tablaOrdenes">
+          <tr><td colspan="8" style="text-align: center; padding: 30px;">Cargando datos...</td></tr>
+        </tbody>
+      </table>
+    </div>
+  </div>
+
+  <script>
+    const WORKER_URL = "https://telegram-zonagsm.zonagsm023.workers.dev";
+
+    function login() {
+      const u = document.getElementById('userInput').value;
+      const p = document.getElementById('passwordInput').value;
+
+      if (u === 'admin' && p === 'admin') {
+        document.getElementById('loginBox').style.display = 'none';
+        document.getElementById('adminPanel').style.display = 'block';
+        localStorage.setItem('zg_admin_logged', 'true'); // Guarda la sesión
+        cargarOrdenes();
+      } else {
+        alert("Usuario o contraseña incorrectos");
+      }
+    }
+
+    // Comprobar si ya inició sesión antes
+    if (localStorage.getItem('zg_admin_logged') === 'true') {
+      document.getElementById('loginBox').style.display = 'none';
+      document.getElementById('adminPanel').style.display = 'block';
+      cargarOrdenes();
+    }
+
+    async function cargarOrdenes() {
+      const tbody = document.getElementById('tablaOrdenes');
+      tbody.innerHTML = '<tr><td colspan="8" style="text-align: center; padding: 30px;">Cargando datos...</td></tr>';
+
+      try {
+        const res = await fetch(WORKER_URL);
+        const data = await res.json();
+        
+        if (data.success) {
+          tbody.innerHTML = '';
+          if (data.ordenes.length === 0) {
+            tbody.innerHTML = '<tr><td colspan="8" style="text-align: center; padding: 30px;">No hay órdenes registradas aún.</td></tr>';
+            return;
+          }
+
+          data.ordenes.forEach(o => {
+            const tr = document.createElement('tr');
+            // Formatear fecha
+            const fecha = new Date(o.fecha + "Z").toLocaleString('es-CO', { timeZone: 'America/Bogota' });
+            
+            let estadoClass = 'Pendiente';
+            if (o.estado === 'En Proceso') estadoClass = 'Proceso';
+            if (o.estado === 'Exitoso') estadoClass = 'Exitoso';
+
+            tr.innerHTML = `
+              <td><strong>${o.numero_orden}</strong></td>
+              <td style="font-size: 12px; color:#64748b;">${fecha}</td>
+              <td><strong>${o.celular}</strong></td>
+              <td>${o.operador}</td>
+              <td style="font-family: monospace;">${o.imei}</td>
+              <td><strong>${o.precio}</strong></td>
+              <td><span class="badge badge-${estadoClass}">${o.estado}</span></td>
+              <td>
+                <button class="btn-action btn-proceso" onclick="cambiarEstado('${o.numero_orden}', 'En Proceso')">En Proceso</button>
+                <button class="btn-action btn-exitoso" onclick="cambiarEstado('${o.numero_orden}', 'Exitoso')">Exitoso</button>
+              </td>
+            `;
+            tbody.appendChild(tr);
+          });
+        } else {
+          throw new Error(data.error);
+        }
+      } catch (err) {
+        tbody.innerHTML = `<tr><td colspan="8" style="text-align: center; color: red; padding: 30px;">Error al cargar: ${err.message}</td></tr>`;
+      }
+    }
+
+    async function cambiarEstado(numeroOrden, nuevoEstado) {
+      if (!confirm(`¿Marcar la orden ${numeroOrden} como ${nuevoEstado}?`)) return;
+
+      try {
+        const res = await fetch(WORKER_URL, {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({
+            action: 'update_status',
+            numero_orden: numeroOrden,
+            estado: nuevoEstado,
+            admin_token: 'admin'
+          })
+        });
+        const data = await res.json();
+        
+        if (data.success) {
+          cargarOrdenes(); // Recargar la tabla
+        } else {
+          alert("Error al actualizar: " + data.error);
+        }
+      } catch (err) {
+        alert("Error de conexión al actualizar.");
+      }
+    }
+  </script>
+</body>
+</html>
