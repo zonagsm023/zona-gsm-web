@@ -125,6 +125,13 @@
     .imei-price-tag { font-size: 11px; font-weight: 800; color: #059669; background: #ecfdf5; border: 1px solid #a7f3d0; padding: 2px 8px; border-radius: 999px; }
     .imei-time-tag { font-size: 11px; font-weight: 700; color: #334155; background: #f1f5f9; border: 1px solid #cbd5e1; padding: 2px 8px; border-radius: 999px; }
     .imei-close { width: 28px; height: 28px; border-radius: 50%; border: none; background: #f1f5f9; color: #334155; font-size: 16px; font-weight: 700; cursor: pointer; flex-shrink: 0; display: flex; align-items: center; justify-content: center; }
+
+    /* Selector de modalidad exclusivo para Claro */
+    .claro-mode-switch { display: none; gap: 6px; margin-bottom: 12px; background: #f1f5f9; padding: 4px; border-radius: 12px; }
+    .claro-mode-switch.visible { display: flex; }
+    .claro-mode-btn { flex: 1; padding: 7px 8px; border: none; border-radius: 9px; background: transparent; color: #475569; font-size: 11.5px; font-weight: 800; cursor: pointer; transition: all 0.15s ease; }
+    .claro-mode-btn.active { background: #da291c; color: #ffffff; box-shadow: 0 2px 8px rgba(218, 41, 28, 0.25); }
+
     .imei-row { display: flex; align-items: center; gap: 8px; }
 
     /* Campo combinado: texto "Introduce IMEI" / dígitos + recuadro del último número a la derecha */
@@ -143,6 +150,12 @@
 
     .imei-send-btn { padding: 11px 16px; border: none; border-radius: 12px; background: #25D366; color: #ffffff; font-size: 14px; font-weight: 800; cursor: pointer; flex-shrink: 0; transition: background 0.15s ease; }
     .imei-send-btn:hover { background: #1ebe5d; }
+
+    /* Campo número de línea SIM más pequeño, debajo del cuadro del IMEI */
+    .sim-line-wrap { display: none; margin-top: 8px; }
+    .sim-line-wrap.visible { display: block; }
+    .sim-line-input { width: 100%; max-width: 220px; padding: 8px 11px; border-radius: 10px; border: 1.5px solid #cbd5e1; background: #f8fafc; font-size: 12.5px; font-weight: 700; letter-spacing: 0.3px; color: #0f172a; outline: none; transition: border-color 0.15s ease, background-color 0.15s ease; }
+    .sim-line-input:focus { border-color: #da291c; background: #ffffff; }
 
     /* Panel lector de código de barras / QR debajo del campo IMEI */
     .qr-reader-panel { margin-top: 12px; padding: 10px; border-radius: 14px; background: #f8fafc; border: 1.5px dashed #cbd5e1; display: none; }
@@ -325,6 +338,13 @@
         </div>
         <button type="button" class="imei-close" onclick="closeImeiBox()" aria-label="Cerrar">&times;</button>
       </div>
+
+      <!-- Selector solo para Claro -->
+      <div id="claroModeSwitch" class="claro-mode-switch">
+        <button id="claroBtnSoloImei" type="button" class="claro-mode-btn active" onclick="setClaroMode('imei')">IMEI + Línea ($15.000)</button>
+        <button id="claroBtnLineaDesactivada" type="button" class="claro-mode-btn" onclick="setClaroMode('linea')">Línea desactivada ($45.000)</button>
+      </div>
+
       <form onsubmit="sendImeiWa(event)">
         <div class="imei-row">
           <div id="imeiCombinedField" class="imei-combined-field">
@@ -335,6 +355,11 @@
             <svg width="20" height="20"><use href="#icon-qr"/></svg>
           </button>
           <button type="submit" class="imei-send-btn">Enviar</button>
+        </div>
+
+        <!-- Campo número de línea SIM más pequeño, debajo del cuadro del IMEI -->
+        <div id="simLineWrap" class="sim-line-wrap">
+          <input id="simLineField" class="sim-line-input" type="tel" inputmode="numeric" maxlength="15" placeholder="Número de línea SIM" oninput="this.value = this.value.replace(/\D/g, '')" />
         </div>
 
         <div id="qrReaderPanel" class="qr-reader-panel">
@@ -358,6 +383,8 @@
     let currentOperator = '';
     let currentPrice = '';
     let currentTime = '';
+    let isClaroSelected = false;
+    let claroMode = 'imei'; // 'imei' | 'linea'
     let lastAutoCompleted14 = '';
     let qrScannerInstance = null;
     let qrIsRunning = false;
@@ -368,6 +395,36 @@
         document.getElementById('mainContent').classList.add('visible');
       }, 1400);
     });
+
+    function syncClaroModalDetails() {
+      if (!isClaroSelected) return;
+      const simWrap = document.getElementById('simLineWrap');
+      const simInput = document.getElementById('simLineField');
+
+      if (claroMode === 'linea') {
+        currentPrice = '$45.000';
+        currentTime = '3 días';
+        document.getElementById('imeiTitle').textContent = 'No Registro CLARO (Línea desactivada)';
+        simWrap.classList.remove('visible');
+        simInput.required = false;
+      } else {
+        currentPrice = '$15.000';
+        currentTime = '6 hrs';
+        document.getElementById('imeiTitle').textContent = 'No Registro CLARO (IMEI + Línea)';
+        simWrap.classList.add('visible');
+        simInput.required = true;
+      }
+      document.getElementById('imeiPrice').textContent = 'Valor: ' + currentPrice;
+      document.getElementById('imeiTime').textContent = 'Tiempo: ' + currentTime;
+    }
+
+    function setClaroMode(mode) {
+      claroMode = mode;
+      document.getElementById('claroBtnSoloImei').classList.toggle('active', mode === 'imei');
+      document.getElementById('claroBtnLineaDesactivada').classList.toggle('active', mode === 'linea');
+      syncClaroModalDetails();
+      document.getElementById('imeiField').focus();
+    }
 
     // Cálculo oficial del dígito verificador Luhn (dígito 15 del IMEI)
     function computeImeiCheckDigit(first14) {
@@ -557,6 +614,8 @@
       currentOperator = operatorName.toUpperCase();
       currentPrice = price;
       currentTime = waitTime;
+      isClaroSelected = (currentOperator === 'CLARO');
+      claroMode = 'imei';
       lastAutoCompleted14 = '';
 
       const logoWrap = document.getElementById('imeiLogoWrap');
@@ -570,9 +629,24 @@
       };
       logoWrap.appendChild(img);
 
-      document.getElementById('imeiTitle').textContent = 'No Registro ' + operatorName;
-      document.getElementById('imeiPrice').textContent = 'Valor: ' + price;
-      document.getElementById('imeiTime').textContent = 'Tiempo: ' + waitTime;
+      const claroSwitch = document.getElementById('claroModeSwitch');
+      const simWrap = document.getElementById('simLineWrap');
+      const simInput = document.getElementById('simLineField');
+      simInput.value = '';
+
+      if (isClaroSelected) {
+        claroSwitch.classList.add('visible');
+        document.getElementById('claroBtnSoloImei').classList.add('active');
+        document.getElementById('claroBtnLineaDesactivada').classList.remove('active');
+        syncClaroModalDetails();
+      } else {
+        claroSwitch.classList.remove('visible');
+        simWrap.classList.remove('visible');
+        simInput.required = false;
+        document.getElementById('imeiTitle').textContent = 'No Registro ' + operatorName;
+        document.getElementById('imeiPrice').textContent = 'Valor: ' + price;
+        document.getElementById('imeiTime').textContent = 'Tiempo: ' + waitTime;
+      }
 
       const input = document.getElementById('imeiField');
       input.value = '';
@@ -597,6 +671,16 @@
     async function sendImeiWa(e) {
       e.preventDefault();
       const input = document.getElementById('imeiField');
+      const simInput = document.getElementById('simLineField');
+      const needsSimLine = isClaroSelected && claroMode === 'imei';
+      const simLine = simInput.value.replace(/\D/g, '').trim();
+
+      if (needsSimLine && simLine.length < 7) {
+        showToast('Escribe el número de la línea SIM');
+        simInput.focus();
+        return;
+      }
+
       let imei = input.value.replace(/\D/g, '');
 
       if (imei.length === 14) {
@@ -611,9 +695,18 @@
         return;
       }
 
+      const serviceLabel = isClaroSelected
+        ? (claroMode === 'linea'
+            ? 'No Registro CLARO (Línea desactivada)'
+            : 'No Registro CLARO (IMEI + Línea)')
+        : 'No Registro ' + currentOperator;
+
+      const linePart = needsSimLine ? '*LINEA: ' + simLine + '*\n\n' : '';
+
       const text =
         '*ZonaGSM.site*\n\n' +
-        '*No Registro ' + currentOperator + '*\n\n' +
+        '*' + serviceLabel + '*\n\n' +
+        linePart +
         '*Valor Promo : ' + currentPrice + '*\n\n' +
         '*Tiempo: ' + currentTime + '*\n\n' +
         '*IMEI: ' + imei + '*';
