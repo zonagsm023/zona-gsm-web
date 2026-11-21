@@ -7,6 +7,13 @@
       window.location.replace('/COMPROBANTE/');
     }
   </script>
+
+  <!-- REDIRECCIÓN AUTOMÁTICA PARA EL PANEL DE ADMINISTRADOR -->
+  <script>
+    if (window.location.hostname === 'admin.zonagsm.site') {
+      window.location.replace('/admin.html');
+    }
+  </script>
   
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
