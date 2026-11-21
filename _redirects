@@ -1,3 +1,3 @@
 https://pagos.zonagsm.site/* /PAGOS/:splat 301
 https://registros.zonagsm.site/* /REGISTROS/:splat 301
-https://factura.zonagsm.site/* /COMPROBANTE/:splat 200
+https://factura.zonagsm.site/* /COMPROBANTE/index.html 200
