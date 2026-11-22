@@ -437,8 +437,9 @@
   <div id="toast" class="toast">Copiado</div>
 
   <script>
+    // Base de datos en memoria (se llena al registrar o consultar)
     let dbClientes = [
-      { pin: '1234', celular: '3104141805', nombre: 'Cliente' }
+      { pin: '1234', celular: '3104141805', nombre: 'Cliente de Prueba' }
     ];
 
     let currentPin = '';
@@ -567,23 +568,54 @@
       }
     }
 
-    function registerNewPin() {
+    // FUNCIÓN ACTUALIZADA: Guarda el cliente en la base de datos real
+    async function registerNewPin() {
       const pin = document.getElementById('newPinInput').value.replace(/\D/g, '');
       const cel = document.getElementById('newPhoneInput').value.replace(/\D/g, '');
       const nombre = document.getElementById('newNameInput').value.trim();
 
       if (pin.length !== 4) { showToast('El PIN debe tener 4 dígitos'); return; }
       if (cel.length !== 10) { showToast('El celular debe tener exactamente 10 números'); return; }
-      if (nombre === '') { showToast('Por favor escribe tu nombre'); return; }
-      if (dbClientes.some(c => c.pin === pin)) { showToast('Ese PIN ya está en uso'); return; }
+      if (nombre === '') { showToast('Por favor escribe tu nombre o negocio'); return; }
 
-      dbClientes.push({ pin: pin, celular: cel, nombre: nombre });
+      const boton = document.querySelector('#registerOverlay .imei-send-btn');
+      const textoOriginal = boton.textContent;
+      boton.textContent = 'Guardando...';
+      boton.disabled = true;
 
-      document.getElementById('registerOverlay').classList.remove('open');
-      document.getElementById('successOverlay').classList.add('open');
+      try {
+        // Enviamos los datos al Worker para que se guarden en D1
+        const res = await fetch("https://telegram-zonagsm.zonagsm023.workers.dev", {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({
+            action: 'register_client',
+            pin: pin,
+            celular: cel,
+            nombre: nombre
+          })
+        });
 
-      currentPin = pin;
-      currentCelular = cel;
+        const result = await res.json();
+
+        if (result.success) {
+          // Si se guardó, actualizamos la memoria local para que la web funcione fluido
+          dbClientes.push({ pin: pin, celular: cel, nombre: nombre });
+          
+          document.getElementById('registerOverlay').classList.remove('open');
+          document.getElementById('successOverlay').classList.add('open');
+          
+          currentPin = pin;
+          currentCelular = cel;
+        } else {
+          showToast(result.error || 'Error al registrar');
+        }
+      } catch (error) {
+        showToast('Error de conexión. Intenta de nuevo.');
+      } finally {
+        boton.textContent = textoOriginal;
+        boton.disabled = false;
+      }
     }
 
     function closeSuccessAndGoToForm() {
