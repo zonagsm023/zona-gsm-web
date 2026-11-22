@@ -15,13 +15,19 @@
     
     /* Estilos del Panel */
     .panel { display: none; max-width: 1200px; margin: 0 auto; }
-    .header { display: flex; justify-content: space-between; align-items: center; margin-bottom: 20px; }
+    .header { display: flex; justify-content: space-between; align-items: center; margin-bottom: 20px; flex-wrap: wrap; gap: 10px; }
     .header h1 { font-size: 24px; color: #0f172a; margin: 0; }
     .btn-refresh { padding: 10px 20px; background: #0f172a; color: white; border: none; border-radius: 8px; cursor: pointer; font-weight: bold; }
     
-    /* Tabla */
+    /* Pestañas (Tabs) */
+    .tabs { display: flex; gap: 10px; margin-bottom: 20px; border-bottom: 2px solid #cbd5e1; }
+    .tab-btn { padding: 10px 20px; background: none; border: none; font-size: 16px; font-weight: 700; color: #64748b; cursor: pointer; border-bottom: 3px solid transparent; margin-bottom: -2px; transition: all 0.2s; }
+    .tab-btn.active { color: #c81d4e; border-bottom-color: #c81d4e; }
+    .tab-btn:hover { color: #0f172a; }
+
+    /* Tablas */
     .table-container { background: white; border-radius: 16px; box-shadow: 0 4px 15px rgba(0,0,0,0.05); overflow-x: auto; }
-    table { width: 100%; border-collapse: collapse; min-width: 1000px; }
+    table { width: 100%; border-collapse: collapse; min-width: 800px; }
     th, td { padding: 12px 15px; text-align: left; border-bottom: 1px solid #e2e8f0; font-size: 14px; }
     th { background: #f8fafc; color: #475569; font-weight: 700; text-transform: uppercase; font-size: 12px; letter-spacing: 0.5px; }
     
@@ -34,6 +40,8 @@
     /* Menú desplegable de acciones */
     select.estado-select { padding: 8px 12px; border-radius: 8px; border: 1px solid #cbd5e1; font-weight: 700; font-size: 13px; cursor: pointer; outline: none; background: #f8fafc; color: #334155; width: 100%; max-width: 150px; transition: all 0.2s; }
     select.estado-select:hover { background: #e2e8f0; }
+
+    .hidden { display: none !important; }
   </style>
 </head>
 <body>
@@ -50,11 +58,18 @@
   <!-- PANEL -->
   <div id="adminPanel" class="panel">
     <div class="header">
-      <h1>Gestión de Órdenes</h1>
-      <button class="btn-refresh" onclick="cargarOrdenes()">🔄 Actualizar</button>
+      <h1>Zona GSM Admin</h1>
+      <button class="btn-refresh" onclick="recargarTodo()">🔄 Actualizar Datos</button>
+    </div>
+
+    <!-- Pestañas -->
+    <div class="tabs">
+      <button class="tab-btn active" id="tab-orders-btn" onclick="showTab('orders')">Órdenes</button>
+      <button class="tab-btn" id="tab-clients-btn" onclick="showTab('clients')">Clientes Registrados</button>
     </div>
     
-    <div class="table-container">
+    <!-- VISTA: ÓRDENES -->
+    <div id="view-orders" class="table-container">
       <table>
         <thead>
           <tr>
@@ -74,6 +89,23 @@
         </tbody>
       </table>
     </div>
+
+    <!-- VISTA: CLIENTES -->
+    <div id="view-clients" class="table-container hidden">
+      <table>
+        <thead>
+          <tr>
+            <th>ID</th>
+            <th>Nombre / Negocio</th>
+            <th>Número de WhatsApp</th>
+            <th>PIN</th>
+          </tr>
+        </thead>
+        <tbody id="tablaClientes">
+          <tr><td colspan="4" style="text-align: center; padding: 30px;">Cargando datos...</td></tr>
+        </tbody>
+      </table>
+    </div>
   </div>
 
   <script>
@@ -86,26 +118,47 @@
       if (u === 'admin' && p === 'admin') {
         document.getElementById('loginBox').style.display = 'none';
         document.getElementById('adminPanel').style.display = 'block';
-        localStorage.setItem('zg_admin_logged', 'true'); // Guarda la sesión
-        cargarOrdenes();
+        localStorage.setItem('zg_admin_logged', 'true');
+        recargarTodo();
       } else {
         alert("Usuario o contraseña incorrectos");
       }
     }
 
-    // Comprobar si ya inició sesión antes
     if (localStorage.getItem('zg_admin_logged') === 'true') {
       document.getElementById('loginBox').style.display = 'none';
       document.getElementById('adminPanel').style.display = 'block';
-      cargarOrdenes();
+      recargarTodo();
     }
 
+    function showTab(tabName) {
+      // Cambiar estilos de los botones
+      document.getElementById('tab-orders-btn').classList.remove('active');
+      document.getElementById('tab-clients-btn').classList.remove('active');
+      
+      if (tabName === 'orders') {
+        document.getElementById('tab-orders-btn').classList.add('active');
+        document.getElementById('view-orders').classList.remove('hidden');
+        document.getElementById('view-clients').classList.add('hidden');
+      } else {
+        document.getElementById('tab-clients-btn').classList.add('active');
+        document.getElementById('view-clients').classList.remove('hidden');
+        document.getElementById('view-orders').classList.add('hidden');
+      }
+    }
+
+    function recargarTodo() {
+      cargarOrdenes();
+      cargarClientes();
+    }
+
+    // --- CARGAR ÓRDENES ---
     async function cargarOrdenes() {
       const tbody = document.getElementById('tablaOrdenes');
-      tbody.innerHTML = '<tr><td colspan="9" style="text-align: center; padding: 30px;">Cargando datos...</td></tr>';
+      tbody.innerHTML = '<tr><td colspan="9" style="text-align: center; padding: 30px;">Cargando...</td></tr>';
 
       try {
-        const res = await fetch(WORKER_URL);
+        const res = await fetch(WORKER_URL + "?action=get_orders");
         const data = await res.json();
         
         if (data.success) {
@@ -117,14 +170,12 @@
 
           data.ordenes.forEach(o => {
             const tr = document.createElement('tr');
-            // Formatear fecha
             const fecha = new Date(o.fecha + "Z").toLocaleString('es-CO', { timeZone: 'America/Bogota' });
             
             let estadoClass = 'Pendiente';
             if (o.estado === 'En Proceso') estadoClass = 'Proceso';
             if (o.estado === 'Exitoso') estadoClass = 'Exitoso';
 
-            // Generamos el menú desplegable
             const selectOptions = `
               <option value="Pendiente" ${o.estado === 'Pendiente' ? 'selected' : ''}>Pendiente</option>
               <option value="En Proceso" ${o.estado === 'En Proceso' ? 'selected' : ''}>En Proceso</option>
@@ -152,10 +203,45 @@
           throw new Error(data.error);
         }
       } catch (err) {
-        tbody.innerHTML = `<tr><td colspan="9" style="text-align: center; color: red; padding: 30px;">Error al cargar: ${err.message}</td></tr>`;
+        tbody.innerHTML = `<tr><td colspan="9" style="text-align: center; color: red; padding: 30px;">Error: ${err.message}</td></tr>`;
       }
     }
 
+    // --- CARGAR CLIENTES ---
+    async function cargarClientes() {
+      const tbody = document.getElementById('tablaClientes');
+      tbody.innerHTML = '<tr><td colspan="4" style="text-align: center; padding: 30px;">Cargando...</td></tr>';
+
+      try {
+        const res = await fetch(WORKER_URL + "?action=get_clients");
+        const data = await res.json();
+        
+        if (data.success) {
+          tbody.innerHTML = '';
+          if (data.clientes.length === 0) {
+            tbody.innerHTML = '<tr><td colspan="4" style="text-align: center; padding: 30px;">No hay clientes registrados aún.</td></tr>';
+            return;
+          }
+
+          data.clientes.forEach(c => {
+            const tr = document.createElement('tr');
+            tr.innerHTML = `
+              <td>${c.id}</td>
+              <td><strong>${c.nombre}</strong></td>
+              <td>${c.celular}</td>
+              <td style="font-family: monospace; font-size: 16px; font-weight: bold;">${c.pin}</td>
+            `;
+            tbody.appendChild(tr);
+          });
+        } else {
+          throw new Error(data.error);
+        }
+      } catch (err) {
+        tbody.innerHTML = `<tr><td colspan="4" style="text-align: center; color: red; padding: 30px;">Error: ${err.message}</td></tr>`;
+      }
+    }
+
+    // --- ACTUALIZAR ESTADO ---
     async function cambiarEstado(numeroOrden, nuevoEstado) {
       try {
         const res = await fetch(WORKER_URL, {
