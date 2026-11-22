@@ -1,622 +1,781 @@
 <!DOCTYPE html>
-<html lang="es">
+<html lang="es" class="scroll-smooth">
 <head>
-  <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>Zona GSM — Comprobante de Servicio</title>
-  <meta name="description" content="Generador de comprobante de servicio de No Registro y E-SIM para Zona GSM." />
-  <link rel="icon" type="image/jpeg" href="logo1.jpg" />
-
-  <!-- Librerías para generar imagen del comprobante y escanear IMEI -->
-  <script src="https://unpkg.com/html2canvas@1.4.1/dist/html2canvas.min.js"></script>
-  <script src="https://unpkg.com/html5-qrcode@2.3.8/html5-qrcode.min.js"></script>
-
-  <style>
-    * { box-sizing: border-box; margin: 0; padding: 0; font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif; }
-    body { min-height: 100vh; background: linear-gradient(180deg, #eef3f8 0%, #e4ebf2 100%); display: flex; justify-content: center; align-items: flex-start; padding: 0 0 48px; color: #111827; overflow-x: hidden; }
-
-    .container { width: 100%; max-width: 460px; background: #f4f7fa; border-radius: 0 0 28px 28px; padding: 0 0 32px; box-shadow: 0 12px 35px rgba(15, 23, 42, 0.08); border: 1px solid rgba(255, 255, 255, 0.85); border-top: none; text-align: center; overflow: hidden; position: relative; }
-
-    .cover-area { height: 145px; background: linear-gradient(135deg, #8a0f33 0%, #c81d4e 55%, #e62e62 100%); position: relative; }
-    .top-nav { position: absolute; top: 14px; left: 0; right: 0; display: flex; justify-content: center; gap: 6px; padding: 0 10px; z-index: 10; flex-wrap: wrap; }
-    .nav-pill { padding: 6px 11px; border-radius: 999px; font-size: 11px; font-weight: 700; text-decoration: none; color: rgba(255, 255, 255, 0.92); background: rgba(255, 255, 255, 0.14); backdrop-filter: blur(8px); -webkit-backdrop-filter: blur(8px); border: 1px solid rgba(255, 255, 255, 0.25); transition: all 0.2s ease; }
-    .nav-pill:hover { background: rgba(255, 255, 255, 0.26); transform: translateY(-1px); }
-    .nav-pill.active { background: #ffffff; color: #8a0f33; border-color: #ffffff; box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15); }
-    .mountain-divider { position: absolute; bottom: -1px; left: 0; width: 100%; height: 34px; fill: #f4f7fa; display: block; }
-
-    .avatar-wrapper { position: relative; width: 104px; height: 104px; margin: -60px auto 12px; z-index: 2; display: flex; align-items: center; justify-content: center; }
-    .avatar { width: 100px; height: 100px; border-radius: 50%; background: #ffffff; display: flex; align-items: center; justify-content: center; box-shadow: 0 6px 20px rgba(15, 23, 42, 0.1); overflow: hidden; }
-    .avatar-img { width: 100%; height: 100%; object-fit: cover; display: block; }
-
-    .content-box { padding: 0 16px; text-align: left; }
-    .page-head { text-align: center; margin-bottom: 18px; }
-    h1 { font-size: 22px; font-weight: 800; color: #0f172a; margin-bottom: 4px; }
-    .bio { font-size: 13px; color: #475569; }
-
-    .form-card { background: #ffffff; border-radius: 20px; padding: 16px; box-shadow: 0 4px 14px rgba(15, 23, 42, 0.05); border: 1px solid #eef2f6; margin-bottom: 18px; }
-    .field-group { margin-bottom: 12px; }
-    .field-group:last-child { margin-bottom: 0; }
-    .field-label { display: block; font-size: 11.5px; font-weight: 800; color: #334155; margin-bottom: 6px; text-transform: uppercase; letter-spacing: 0.4px; }
-
-    .segmented-row { display: flex; gap: 6px; background: #f1f5f9; padding: 4px; border-radius: 12px; }
-    .seg-btn { flex: 1; padding: 8px 10px; border: none; border-radius: 9px; background: transparent; color: #475569; font-size: 12px; font-weight: 800; cursor: pointer; transition: all 0.15s ease; }
-    .seg-btn.active { background: #c81d4e; color: #ffffff; box-shadow: 0 2px 8px rgba(200, 29, 78, 0.25); }
-    .seg-btn.paid-active { background: #059669; color: #ffffff; box-shadow: 0 2px 8px rgba(5, 150, 105, 0.25); }
-    .seg-btn.unpaid-active { background: #dc2626; color: #ffffff; box-shadow: 0 2px 8px rgba(220, 38, 38, 0.25); }
-    .seg-btn.success-active { background: #059669; color: #ffffff; box-shadow: 0 2px 8px rgba(5, 150, 105, 0.25); }
-    .seg-btn.process-active { background: #d97706; color: #ffffff; box-shadow: 0 2px 8px rgba(217, 119, 6, 0.25); }
-
-    .grid-2 { display: grid; grid-template-columns: 1fr 1fr; gap: 10px; }
-    .text-input, .select-input { width: 100%; padding: 10px 12px; border-radius: 12px; border: 1.5px solid #cbd5e1; background: #ffffff; font-size: 13.5px; font-weight: 700; color: #0f172a; outline: none; transition: border-color 0.15s ease; }
-    .text-input:focus, .select-input:focus { border-color: #c81d4e; }
-
-    .imei-row { display: flex; align-items: center; gap: 8px; }
-    .imei-combined-field { flex: 1; min-width: 0; display: flex; align-items: center; justify-content: space-between; gap: 8px; padding: 6px 6px 6px 12px; border-radius: 12px; border: 2px solid #cbd5e1; background: #ffffff; transition: all 0.15s ease; }
-    .imei-combined-field:focus-within { border-color: #c81d4e; }
-    .imei-combined-field.imei-valid { border-color: #10b981; background: #ecfdf5; }
-    .imei-input { flex: 1; min-width: 0; border: none; background: transparent; font-size: 13.5px; font-weight: 700; letter-spacing: 0.4px; color: #0f172a; outline: none; padding: 4px 0; }
-    .imei-last-square { width: 30px; height: 30px; border-radius: 8px; border: 2px solid #cbd5e1; background: #f8fafc; color: #94a3b8; font-size: 13px; font-weight: 900; display: inline-flex; align-items: center; justify-content: center; flex-shrink: 0; }
-    .imei-last-square.active { border-color: #c81d4e; background: #fce7ef; color: #8a0f33; }
-    .imei-combined-field.imei-valid .imei-last-square.active { border-color: #10b981; background: #d1fae5; color: #065f46; }
-
-    .qr-btn { width: 42px; height: 42px; border-radius: 12px; border: 1.5px solid #cbd5e1; background: #f8fafc; color: #0f172a; cursor: pointer; flex-shrink: 0; display: inline-flex; align-items: center; justify-content: center; }
-    .qr-btn.active { border-color: #c81d4e; background: #c81d4e; color: #ffffff; }
-
-    .qr-panel { margin-top: 10px; padding: 10px; border-radius: 12px; background: #f8fafc; border: 1.5px dashed #cbd5e1; display: none; }
-    .qr-panel.open { display: block; }
-    .qr-panel-top { display: flex; justify-content: space-between; align-items: center; margin-bottom: 8px; font-size: 11.5px; font-weight: 700; color: #334155; }
-    .qr-upload-lbl { font-size: 11px; font-weight: 700; color: #8a0f33; background: #fce7ef; padding: 4px 9px; border-radius: 8px; cursor: pointer; border: 1px solid #fbcfe1; }
-    #qrBox { width: 100%; border-radius: 10px; overflow: hidden; background: #0f172a; min-height: 130px; }
-    .qr-hint { margin-top: 6px; font-size: 11px; color: #64748b; text-align: center; }
-
-    .section-subtitle { font-size: 11.5px; font-weight: 800; letter-spacing: 0.8px; color: #64748b; text-transform: uppercase; text-align: center; margin-bottom: 10px; }
-
-    /* Tarjeta comprobante que se convierte en imagen */
-    .receipt-capture { background: #ffffff; border-radius: 22px; overflow: hidden; box-shadow: 0 10px 28px rgba(15, 23, 42, 0.1); border: 1px solid #e2e8f0; }
-    .receipt-header { background: linear-gradient(135deg, #8a0f33 0%, #c81d4e 60%, #e62e62 100%); color: #ffffff; padding: 16px; display: flex; align-items: center; gap: 12px; }
-    .receipt-logo-circle { width: 48px; height: 48px; border-radius: 50%; background: #ffffff; overflow: hidden; flex-shrink: 0; display: flex; align-items: center; justify-content: center; }
-    .receipt-logo-circle img { width: 100%; height: 100%; object-fit: cover; display: block; }
-    .receipt-brand-title { font-size: 17px; font-weight: 900; line-height: 1.15; }
-    .receipt-brand-sub { font-size: 11.5px; opacity: 0.92; margin-top: 2px; }
-
-    .receipt-body { padding: 16px; }
-    .receipt-meta { display: flex; justify-content: space-between; font-size: 11.5px; font-weight: 700; color: #64748b; padding-bottom: 10px; border-bottom: 1px dashed #cbd5e1; margin-bottom: 12px; }
-
-    .receipt-badges { display: flex; gap: 8px; margin-bottom: 14px; flex-wrap: wrap; }
-    .r-badge { padding: 5px 11px; border-radius: 999px; font-size: 11px; font-weight: 800; letter-spacing: 0.3px; display: inline-flex; align-items: center; gap: 5px; }
-    .r-badge.paid { background: #ecfdf5; color: #059669; border: 1px solid #a7f3d0; }
-    .r-badge.unpaid { background: #fef2f2; color: #dc2626; border: 1px solid #fecaca; }
-    .r-badge.success { background: #ecfdf5; color: #059669; border: 1px solid #a7f3d0; }
-    .r-badge.process { background: #fffbeb; color: #d97706; border: 1px solid #fde68a; }
-
-    .receipt-row { margin-bottom: 10px; }
-    .receipt-row-lbl { font-size: 10.5px; font-weight: 800; color: #64748b; text-transform: uppercase; letter-spacing: 0.4px; }
-    .receipt-row-val { font-size: 13.5px; font-weight: 800; color: #0f172a; margin-top: 2px; word-break: break-word; }
-
-    .imei-box-inline { display: inline-flex; align-items: center; gap: 3px; font-size: 13.5px; font-weight: 800; color: #0f172a; }
-    .imei-box-digit { display: inline-flex; align-items: center; justify-content: center; min-width: 22px; height: 24px; padding: 0 5px; border-radius: 6px; border: 2px solid #059669; background: #ecfdf5; color: #065f46; font-weight: 900; }
-
-    .receipt-total-box { margin-top: 14px; padding-top: 12px; border-top: 1.5px solid #e2e8f0; display: flex; justify-content: space-between; align-items: center; }
-    .receipt-total-lbl { font-size: 12px; font-weight: 800; color: #475569; }
-    .receipt-total-val { font-size: 19px; font-weight: 900; color: #8a0f33; }
-
-    .receipt-footer { margin-top: 14px; padding-top: 10px; border-top: 1px dashed #cbd5e1; font-size: 11px; color: #64748b; text-align: center; }
-
-    .actions-bar { display: flex; gap: 8px; margin-top: 14px; flex-wrap: wrap; }
-    .btn-share-img { flex: 1; min-width: 150px; padding: 12px 14px; border: none; border-radius: 14px; background: #25D366; color: #ffffff; font-size: 13.5px; font-weight: 800; cursor: pointer; transition: background 0.15s ease; }
-    .btn-share-img:hover { background: #1ebe5d; }
-    .btn-dl-img { padding: 12px 14px; border-radius: 14px; border: 1.5px solid #cbd5e1; background: #ffffff; color: #0f172a; font-size: 13px; font-weight: 800; cursor: pointer; }
-    .btn-dl-img:hover { background: #f8fafc; }
-
-    .toast { position: fixed; bottom: 24px; left: 50%; transform: translateX(-50%) translateY(20px); background: #0f172a; color: #ffffff; padding: 10px 18px; border-radius: 999px; font-size: 13px; font-weight: 600; opacity: 0; pointer-events: none; transition: opacity 0.25s ease, transform 0.25s ease; box-shadow: 0 8px 20px rgba(0, 0, 0, 0.2); z-index: 10002; }
-    .toast.show { opacity: 1; transform: translateX(-50%) translateY(0); }
-  </style>
-</head>
-<body>
-
-  <svg width="0" height="0" style="position:absolute" aria-hidden="true">
-    <symbol id="icon-qr" viewBox="0 0 24 24"><g fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="3" width="7" height="7" rx="1"/><rect x="14" y="3" width="7" height="7" rx="1"/><rect x="3" y="14" width="7" height="7" rx="1"/><line x1="14" y1="14" x2="17" y2="14"/><line x1="21" y1="14" x2="21" y2="17"/><line x1="14" y1="21" x2="17" y2="21"/><line x1="17" y1="17" x2="21" y2="21"/></g></symbol>
-  </svg>
-
-  <main class="container">
-    <div class="cover-area">
-      <nav class="top-nav">
-        <a class="nav-pill" href="index.html">Inicio</a>
-        <a class="nav-pill" href="https://registros.zonagsm.site/">No Registros</a>
-        <a class="nav-pill" href="https://esim.zonagsm.site/">E-SIM</a>
-        <a class="nav-pill active" href="factura.html">Comprobante</a>
-      </nav>
-      <svg class="mountain-divider" viewBox="0 0 1440 120" preserveAspectRatio="none"><path d="M0,75 Q720,0 1440,75 L1440,120 L0,120 Z"></path></svg>
-    </div>
-
-    <div class="avatar-wrapper">
-      <div class="avatar"><img src="logo1.jpg" alt="Zona GSM" class="avatar-img" onerror="this.style.display='none'" /></div>
-    </div>
-
-    <div class="content-box">
-      <div class="page-head">
-        <h1>Comprobante de Servicio</h1>
-        <p class="bio">Crea y envía la imagen del detalle para No Registros y E-SIM.</p>
-      </div>
-
-      <div class="form-card">
-        <div class="field-group">
-          <span class="field-label">Tipo de Servicio</span>
-          <div class="segmented-row">
-            <button id="btnTypeRegistro" type="button" class="seg-btn active" onclick="setServiceType('registro')">No Registro</button>
-            <button id="btnTypeEsim" type="button" class="seg-btn" onclick="setServiceType('esim')">E-SIM</button>
-          </div>
-        </div>
-
-        <div class="field-group">
-          <label class="field-label" for="operatorSelect">Operador / Modalidad</label>
-          <select id="operatorSelect" class="select-input" onchange="onOperatorChange()"></select>
-        </div>
-
-        <div class="grid-2 field-group">
-          <div>
-            <label class="field-label" for="clientNameInput">Cliente</label>
-            <input id="clientNameInput" class="text-input" type="text" placeholder="Nombre del cliente" oninput="updatePreview()" />
-          </div>
-          <div>
-            <label class="field-label" for="clientPhoneInput">WhatsApp Cliente</label>
-            <input id="clientPhoneInput" class="text-input" type="tel" inputmode="numeric" placeholder="Ej. 3104141805" oninput="this.value=this.value.replace(/\D/g,'');updatePreview()" />
-          </div>
-        </div>
-
-        <!-- Bloque para No Registro -->
-        <div id="registroFields" class="field-group">
-          <label class="field-label" for="imeiInput">IMEI (dígito 15 automático)</label>
-          <div class="imei-row">
-            <div id="imeiCombined" class="imei-combined-field">
-              <input id="imeiInput" class="imei-input" type="text" inputmode="numeric" maxlength="15" placeholder="Introduce IMEI" oninput="handleImeiInput(this)" />
-              <span id="imeiCheckBox" class="imei-last-square">-</span>
-            </div>
-            <button id="qrToggleBtn" type="button" class="qr-btn" onclick="toggleQrScanner()" title="Escanear código de barras / QR">
-              <svg width="20" height="20"><use href="#icon-qr"/></svg>
-            </button>
-          </div>
-
-          <div id="qrPanel" class="qr-panel">
-            <div class="qr-panel-top">
-              <span>Lector Código de Barras / QR</span>
-              <label class="qr-upload-lbl">
-                Subir imagen
-                <input type="file" accept="image/*" style="display:none" onchange="scanQrImage(this)" />
-              </label>
-            </div>
-            <div id="qrBox"></div>
-            <div id="qrHint" class="qr-hint">Alinea el código de barras en el recuadro</div>
-          </div>
-
-          <div class="field-group" style="margin-top:10px;">
-            <label class="field-label" for="simLineInput">Línea SIM (opcional)</label>
-            <input id="simLineInput" class="text-input" type="tel" inputmode="numeric" maxlength="15" placeholder="Número de línea SIM" oninput="this.value=this.value.replace(/\D/g,'');updatePreview()" />
-          </div>
-        </div>
-
-        <!-- Bloque para E-SIM -->
-        <div id="esimFields" class="field-group" style="display:none;">
-          <label class="field-label" for="esimQtyInput">Cantidad de E-SIM</label>
-          <input id="esimQtyInput" class="text-input" type="number" min="1" step="1" value="1" oninput="updatePreview()" />
-        </div>
-
-        <div class="grid-2 field-group">
-          <div>
-            <label class="field-label" for="priceInput">Valor</label>
-            <input id="priceInput" class="text-input" type="text" value="$15.000" oninput="updatePreview()" />
-          </div>
-          <div>
-            <label class="field-label" for="timeInput">Tiempo Est.</label>
-            <input id="timeInput" class="text-input" type="text" value="6 hrs" oninput="updatePreview()" />
-          </div>
-        </div>
-
-        <div class="field-group">
-          <span class="field-label">Estado de Pago</span>
-          <div class="segmented-row">
-            <button id="btnPaid" type="button" class="seg-btn paid-active" onclick="setPayStatus('PAGADO')">PAGADO</button>
-            <button id="btnUnpaid" type="button" class="seg-btn" onclick="setPayStatus('NO PAGADO')">NO PAGADO</button>
-          </div>
-        </div>
-
-        <div class="field-group">
-          <span class="field-label">Estado del Trámite</span>
-          <div class="segmented-row">
-            <button id="btnProcess" type="button" class="seg-btn process-active" onclick="setWorkStatus('EN PROCESO')">EN PROCESO</button>
-            <button id="btnSuccess" type="button" class="seg-btn" onclick="setWorkStatus('EXITOSO')">EXITOSO</button>
-          </div>
-        </div>
-      </div>
-
-      <div class="section-subtitle">Vista Previa del Comprobante</div>
-
-      <div id="receiptCard" class="receipt-capture">
-        <div class="receipt-header">
-          <div class="receipt-logo-circle"><img src="logo1.jpg" alt="Zona GSM" onerror="this.style.display='none'" /></div>
-          <div>
-            <div class="receipt-brand-title">Zona GSM</div>
-            <div class="receipt-brand-sub">Comprobante de Servicio · Colombia</div>
-          </div>
-        </div>
-
-        <div class="receipt-body">
-          <div class="receipt-meta">
-            <span id="rOrderCode">ORDEN #ZG-001</span>
-            <span id="rDateNow">--/--/----</span>
-          </div>
-
-          <div class="receipt-badges">
-            <span id="rPayBadge" class="r-badge paid">PAGADO</span>
-            <span id="rWorkBadge" class="r-badge process">EN PROCESO</span>
-          </div>
-
-          <div class="receipt-row">
-            <div class="receipt-row-lbl">Cliente</div>
-            <div id="rClientVal" class="receipt-row-val">Cliente General</div>
-          </div>
-
-          <div class="receipt-row">
-            <div class="receipt-row-lbl">Servicio</div>
-            <div id="rServiceVal" class="receipt-row-val">No Registro CLARO (IMEI + Línea)</div>
-          </div>
-
-          <div id="rImeiBlock" class="receipt-row">
-            <div class="receipt-row-lbl">IMEI</div>
-            <div id="rImeiVal" class="receipt-row-val">Pendiente</div>
-          </div>
-
-          <div id="rExtraBlock" class="receipt-row">
-            <div id="rExtraLbl" class="receipt-row-lbl">Línea / Tiempo</div>
-            <div id="rExtraVal" class="receipt-row-val">Tiempo est.: 6 hrs</div>
-          </div>
-
-          <div class="receipt-total-box">
-            <span class="receipt-total-lbl">VALOR</span>
-            <span id="rPriceVal" class="receipt-total-val">$15.000</span>
-          </div>
-
-          <div class="receipt-footer">
-            Soporte Zona GSM · WhatsApp +57 310 414 1805
-          </div>
-        </div>
-      </div>
-
-      <div class="actions-bar">
-        <button type="button" class="btn-share-img" onclick="shareReceiptImage()">Compartir Imagen (WhatsApp)</button>
-        <button type="button" class="btn-dl-img" onclick="downloadReceiptImage()">Descargar PNG</button>
-      </div>
-    </div>
-  </main>
-
-  <div id="toast" class="toast">Listo</div>
-
-  <script>
-    const REGISTRO_OPTIONS = [
-      { label: 'NO REGISTRO CLARO (IMEI + Línea)', price: '$15.000', time: '6 hrs' },
-      { label: 'NO REGISTRO CLARO (Línea desactivada)', price: '$45.000', time: '3 días' },
-      { label: 'NO REGISTRO TIGO', price: '$25.000', time: '6 hrs' },
-      { label: 'NO REGISTRO VIRGIN', price: '$30.000', time: '6 hrs' },
-      { label: 'NO REGISTRO WOM', price: '$45.000', time: '48 hrs' },
-      { label: 'NO REGISTRO MOVISTAR', price: '$15.000', time: '6 hrs' },
-      { label: 'NO REGISTRO MÓVIL ÉXITO', price: '$35.000', time: '24 hrs' }
-    ];
-
-    const ESIM_OPTIONS = [
-      { label: 'E-SIM CLARO (Línea nueva)', price: '$28.000', time: 'Inmediato' },
-      { label: 'E-SIM TIGO (Línea nueva)', price: '$30.000', time: 'Inmediato' },
-      { label: 'E-SIM WOM (Línea nueva)', price: '$35.000', time: 'Inmediato' }
-    ];
-
-    let serviceType = 'registro';
-    let payStatus = 'PAGADO';
-    let workStatus = 'EN PROCESO';
-    let lastAutoCompleted14 = '';
-    let qrScanner = null;
-    let qrRunning = false;
-
-    window.addEventListener('DOMContentLoaded', () => {
-      const now = new Date();
-      const d = String(now.getDate()).padStart(2, '0');
-      const m = String(now.getMonth() + 1).padStart(2, '0');
-      const y = now.getFullYear();
-      const hh = String(now.getHours()).padStart(2, '0');
-      const mm = String(now.getMinutes()).padStart(2, '0');
-      document.getElementById('rDateNow').textContent = `${d}/${m}/${y} ${hh}:${mm}`;
-      document.getElementById('rOrderCode').textContent = `ORDEN #ZG-${String(now.getTime()).slice(-4)}`;
-
-      populateOperatorSelect();
-      updatePreview();
-    });
-
-    function populateOperatorSelect() {
-      const sel = document.getElementById('operatorSelect');
-      const list = serviceType === 'registro' ? REGISTRO_OPTIONS : ESIM_OPTIONS;
-      sel.innerHTML = '';
-      list.forEach((item, idx) => {
-        const opt = document.createElement('option');
-        opt.value = String(idx);
-        opt.textContent = `${item.label} — ${item.price}`;
-        sel.appendChild(opt);
-      });
-      onOperatorChange();
-    }
-
-    function onOperatorChange() {
-      const sel = document.getElementById('operatorSelect');
-      const list = serviceType === 'registro' ? REGISTRO_OPTIONS : ESIM_OPTIONS;
-      const chosen = list[parseInt(sel.value, 10) || 0];
-      document.getElementById('priceInput').value = chosen.price;
-      document.getElementById('timeInput').value = chosen.time;
-      updatePreview();
-    }
-
-    async function setServiceType(type) {
-      serviceType = type;
-      document.getElementById('btnTypeRegistro').classList.toggle('active', type === 'registro');
-      document.getElementById('btnTypeEsim').classList.toggle('active', type === 'esim');
-      document.getElementById('registroFields').style.display = type === 'registro' ? 'block' : 'none';
-      document.getElementById('esimFields').style.display = type === 'esim' ? 'block' : 'none';
-      if (type === 'esim') {
-        await stopQrScanner();
-      }
-      populateOperatorSelect();
-    }
-
-    function setPayStatus(status) {
-      payStatus = status;
-      const bPaid = document.getElementById('btnPaid');
-      const bUnpaid = document.getElementById('btnUnpaid');
-      bPaid.className = 'seg-btn' + (status === 'PAGADO' ? ' paid-active' : '');
-      bUnpaid.className = 'seg-btn' + (status === 'NO PAGADO' ? ' unpaid-active' : '');
-      updatePreview();
-    }
-
-    function setWorkStatus(status) {
-      workStatus = status;
-      const bProc = document.getElementById('btnProcess');
-      const bSucc = document.getElementById('btnSuccess');
-      bProc.className = 'seg-btn' + (status === 'EN PROCESO' ? ' process-active' : '');
-      bSucc.className = 'seg-btn' + (status === 'EXITOSO' ? ' success-active' : '');
-      updatePreview();
-    }
-
-    function computeImeiCheckDigit(first14) {
-      let sum = 0;
-      for (let i = 0; i < 14; i++) {
-        let digit = parseInt(first14.charAt(i), 10);
-        if (i % 2 === 1) {
-          digit *= 2;
-          if (digit > 9) digit -= 9;
-        }
-        sum += digit;
-      }
-      return (10 - (sum % 10)) % 10;
-    }
-
-    function handleImeiInput(input) {
-      let digits = input.value.replace(/\D/g, '').slice(0, 15);
-      if (digits.length < 14) {
-        lastAutoCompleted14 = '';
-      } else if (digits.length === 14) {
-        if (lastAutoCompleted14 === digits) {
-          digits = digits.slice(0, 13);
-          lastAutoCompleted14 = '';
-        } else {
-          const check = computeImeiCheckDigit(digits);
-          lastAutoCompleted14 = digits;
-          digits = digits + check;
-        }
-      } else if (digits.length === 15) {
-        const base14 = digits.slice(0, 14);
-        const check = computeImeiCheckDigit(base14);
-        lastAutoCompleted14 = base14;
-        digits = base14 + check;
-      }
-      input.value = digits;
-
-      const box = document.getElementById('imeiCheckBox');
-      const comb = document.getElementById('imeiCombined');
-      if (digits.length >= 14) {
-        box.textContent = String(computeImeiCheckDigit(digits.slice(0, 14)));
-        box.classList.add('active');
-      } else {
-        box.textContent = '-';
-        box.classList.remove('active');
-      }
-      comb.classList.toggle('imei-valid', digits.length === 15);
-      updatePreview();
-    }
-
-    async function stopQrScanner() {
-      document.getElementById('qrPanel').classList.remove('open');
-      document.getElementById('qrToggleBtn').classList.remove('active');
-      if (qrScanner && qrRunning) {
-        try { await qrScanner.stop(); } catch (e) {}
-        qrRunning = false;
-      }
-    }
-
-    async function toggleQrScanner() {
-      const panel = document.getElementById('qrPanel');
-      const btn = document.getElementById('qrToggleBtn');
-      const hint = document.getElementById('qrHint');
-      if (panel.classList.contains('open')) {
-        await stopQrScanner();
-        return;
-      }
-      panel.classList.add('open');
-      btn.classList.add('active');
-      hint.textContent = 'Iniciando cámara...';
-
-      if (typeof Html5Qrcode === 'undefined') {
-        hint.textContent = 'Usa "Subir imagen" para escanear.';
-        return;
-      }
-      if (!qrScanner) qrScanner = new Html5Qrcode('qrBox');
-
-      try {
-        await qrScanner.start(
-          { facingMode: 'environment' },
-          { fps: 12, qrbox: { width: 250, height: 100 } },
-          async (text) => {
-            const match = String(text || '').match(/\d{14,15}/);
-            const digits = match ? match[0] : String(text || '').replace(/\D/g, '').slice(0, 15);
-            if (digits) {
-              const inp = document.getElementById('imeiInput');
-              inp.value = digits;
-              handleImeiInput(inp);
-              showToast('IMEI escaneado');
-              await stopQrScanner();
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Plomeros al Destape | Urgencias 24/7 y Destapes en Cali</title>
+    <meta name="description" content="Servicio profesional de plomería y destapes en Cali 24 horas. Llegamos en menos de 45 minutos. Destape con sonda eléctrica sin romper y detección de fugas. Tel: 300 302 8182.">
+    
+    <!-- Google Fonts -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Barlow+Condensed:ital,wght@0,600;0,700;0,800;1,700&family=Plus+Jakarta+Sans:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+    
+    <!-- Tailwind CSS CDN -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script>
+        tailwind.config = {
+            theme: {
+                extend: {
+                    colors: {
+                        navy: {
+                            DEFAULT: '#0F2942',
+                            50: '#F0F5FA',
+                            100: '#E1ECF5',
+                            800: '#143555',
+                            900: '#0F2942',
+                            950: '#091A2B'
+                        },
+                        cyanbrand: {
+                            DEFAULT: '#009EE3',
+                            hover: '#0084BE',
+                            light: '#E6F6FE'
+                        },
+                        cta: {
+                            DEFAULT: '#F97316',
+                            hover: '#EA580C',
+                            light: '#FFEDD5'
+                        },
+                        wsp: {
+                            DEFAULT: '#25D366',
+                            hover: '#1DA851',
+                            light: '#DCF8C6'
+                        }
+                    },
+                    fontFamily: {
+                        title: ['Barlow Condensed', 'sans-serif'],
+                        body: ['Plus Jakarta Sans', 'sans-serif']
+                    }
+                }
             }
-          },
-          () => {}
-        );
-        qrRunning = true;
-        hint.textContent = 'Alinea el código de barras en el recuadro';
-      } catch (e) {
-        qrRunning = false;
-        hint.textContent = 'Cámara no disponible. Puedes usar "Subir imagen".';
-      }
-    }
-
-    async function scanQrImage(fileInput) {
-      const file = fileInput.files && fileInput.files[0];
-      if (!file || typeof Html5Qrcode === 'undefined') return;
-      if (!qrScanner) qrScanner = new Html5Qrcode('qrBox');
-      try {
-        const text = await qrScanner.scanFile(file, true);
-        const match = String(text || '').match(/\d{14,15}/);
-        const digits = match ? match[0] : String(text || '').replace(/\D/g, '').slice(0, 15);
-        if (digits) {
-          const inp = document.getElementById('imeiInput');
-          inp.value = digits;
-          handleImeiInput(inp);
-          showToast('IMEI detectado');
-          await stopQrScanner();
         }
-      } catch (e) {
-        showToast('No se detectó código en la imagen');
-      } finally {
-        fileInput.value = '';
-      }
-    }
+    </script>
+    
+    <style>
+        /* Custom animations & polish */
+        @keyframes pulse-ring {
+            0% { transform: scale(0.95); opacity: 0.8; }
+            50% { transform: scale(1.15); opacity: 0.4; }
+            100% { transform: scale(0.95); opacity: 0.8; }
+        }
+        .animate-pulse-ring {
+            animation: pulse-ring 2s infinite ease-in-out;
+        }
+        .hero-pattern {
+            background-color: #0F2942;
+            background-image: radial-gradient(#009EE3 0.75px, transparent 0.75px), radial-gradient(#009EE3 0.75px, #0F2942 0.75px);
+            background-size: 30px 30px;
+            background-position: 0 0, 15px 15px;
+            background-opacity: 0.08;
+        }
+    </style>
+</head>
+<body class="font-body text-slate-800 bg-slate-50 antialiased selection:bg-cyanbrand selection:text-white pb-20 md:pb-0">
 
-    function updatePreview() {
-      const name = document.getElementById('clientNameInput').value.trim();
-      const phone = document.getElementById('clientPhoneInput').value.trim();
-      const sel = document.getElementById('operatorSelect');
-      const list = serviceType === 'registro' ? REGISTRO_OPTIONS : ESIM_OPTIONS;
-      const chosen = list[parseInt(sel.value, 10) || 0];
-      const price = document.getElementById('priceInput').value.trim() || chosen.price;
-      const time = document.getElementById('timeInput').value.trim() || chosen.time;
+    <!-- TOP ANNOUNCEMENT BAR -->
+    <div class="bg-navy-950 text-white text-xs sm:text-sm py-2 px-4 text-center font-medium border-b border-navy-800 flex items-center justify-center gap-2">
+        <span class="inline-block w-2.5 h-2.5 bg-green-400 rounded-full animate-pulse"></span>
+        <span><strong>¡Disponibilidad Inmediata en Cali y zonas de cobertura!</strong> Tiempo de llegada estimado: 30 - 45 min.</span>
+    </div>
 
-      const payBadge = document.getElementById('rPayBadge');
-      payBadge.textContent = payStatus;
-      payBadge.className = 'r-badge ' + (payStatus === 'PAGADO' ? 'paid' : 'unpaid');
+    <!-- MAIN HEADER / STICKY NAV -->
+    <header class="sticky top-0 z-40 bg-white/95 backdrop-blur-md shadow-sm border-b border-slate-100 transition-all">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 h-20 flex items-center justify-between gap-4">
+            
+            <!-- LOGO VECTORIZADO CORREGIDO -->
+            <a href="#" class="flex items-center gap-3 group focus:outline-none">
+                <!-- SVG Icon: Gota azul con llave en negativo blanco -->
+                <div class="relative w-11 h-11 sm:w-12 sm:h-12 flex-shrink-0 transition-transform group-hover:scale-105">
+                    <svg viewBox="0 0 100 110" fill="none" xmlns="http://www.w3.org/2000/svg" class="w-full h-full drop-shadow-sm">
+                        <!-- Gota Cyan principal -->
+                        <path d="M50 5C50 5 15 52 15 75C15 94.33 30.67 110 50 110C69.33 110 85 94.33 85 75C85 52 50 5 50 5Z" fill="#009EE3"/>
+                        <!-- Brillo superior -->
+                        <path d="M32 65C32 50 42 35 48 28C46 36 43 55 35 68C33 67 32 66 32 65Z" fill="white" fill-opacity="0.25"/>
+                        <!-- Llave inglesa inclinada en negativo blanco -->
+                        <g transform="translate(50, 72) rotate(-38) translate(-50, -72)">
+                            <rect x="44" y="58" width="12" height="34" rx="4" fill="white"/>
+                            <path d="M50 42C41.7 42 35 48.7 35 57C35 61.2 36.8 65 39.7 67.7L60.3 67.7C63.2 65 65 61.2 65 57C65 48.7 58.3 42 50 42Z" fill="white"/>
+                            <path d="M50 42L42 52H58L50 42Z" fill="#009EE3"/>
+                            <circle cx="50" cy="57" r="5" fill="#009EE3"/>
+                        </g>
+                    </svg>
+                </div>
+                <!-- Texto de Marca -->
+                <div class="flex flex-col">
+                    <span class="font-title text-2xl sm:text-3xl font-extrabold text-navy-900 tracking-tight leading-none uppercase">
+                        Plomeros
+                    </span>
+                    <span class="font-title text-xl sm:text-2xl font-bold text-cyanbrand tracking-wider leading-none uppercase">
+                        Al Destape
+                    </span>
+                </div>
+            </a>
 
-      const workBadge = document.getElementById('rWorkBadge');
-      workBadge.textContent = workStatus;
-      workBadge.className = 'r-badge ' + (workStatus === 'EXITOSO' ? 'success' : 'process');
+            <!-- Status Badge (Desktop) -->
+            <div class="hidden lg:flex items-center gap-2 bg-emerald-50 text-emerald-700 px-3 py-1.5 rounded-full border border-emerald-200 text-xs font-semibold">
+                <span class="relative flex h-2.5 w-2.5">
+                    <span class="animate-ping absolute inline-flex h-full w-full rounded-full bg-emerald-400 opacity-75"></span>
+                    <span class="relative inline-flex rounded-full h-2.5 w-2.5 bg-emerald-500"></span>
+                </span>
+                <span>Servicio 24/7 Activo en Cali</span>
+            </div>
 
-      document.getElementById('rClientVal').textContent = phone
-        ? `${name || 'Cliente'} · ${phone}`
-        : (name || 'Cliente');
+            <!-- Header Actions -->
+            <div class="flex items-center gap-2 sm:gap-3">
+                <!-- WhatsApp Header Button -->
+                <a href="https://wa.me/573003028182?text=Hola%20Plomeros%20al%20Destape,%20necesito%20un%20servicio%20urgente%20en%20Cali." 
+                   target="_blank" 
+                   rel="noopener"
+                   class="hidden sm:inline-flex items-center gap-2 bg-wsp hover:bg-wsp-hover text-white font-bold px-4 py-2.5 rounded-xl shadow-sm transition-all hover:shadow-md transform active:scale-95 text-sm">
+                    <svg class="w-5 h-5 fill-current" viewBox="0 0 24 24">
+                        <path d="M.057 24l1.687-6.163c-1.041-1.804-1.588-3.849-1.587-5.946.003-6.556 5.338-11.891 11.893-11.891 3.181.001 6.167 1.24 8.413 3.488 2.245 2.248 3.481 5.236 3.48 8.414-.003 6.557-5.338 11.892-11.893 11.892-1.99-.001-3.951-.5-5.688-1.448l-6.305 1.654zm6.597-3.807c1.676.995 3.276 1.591 5.392 1.592 5.448 0 9.886-4.434 9.889-9.885.002-5.462-4.415-9.89-9.881-9.892-5.452 0-9.887 4.434-9.889 9.884-.001 2.225.651 3.891 1.746 5.634l-.999 3.648 3.742-.981zm11.387-5.464c-.074-.124-.272-.198-.57-.347-.297-.149-1.758-.868-2.031-.967-.272-.099-.47-.149-.669.149-.198.297-.768.967-.941 1.165-.173.198-.347.223-.644.074-.297-.149-1.255-.462-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.297-.347.446-.521.151-.172.2-.296.3-.495.099-.198.05-.372-.025-.521-.075-.148-.669-1.611-.916-2.206-.242-.579-.487-.501-.669-.51l-.57-.01c-.198 0-.52.074-.792.372s-1.04 1.016-1.04 2.479 1.065 2.876 1.213 3.074c.149.198 2.095 3.2 5.076 4.487.709.306 1.263.489 1.694.626.712.226 1.36.194 1.872.118.572-.085 1.758-.719 2.006-1.413.248-.695.248-1.29.173-1.414z"/>
+                    </svg>
+                    <span>WhatsApp</span>
+                </a>
 
-      document.getElementById('rServiceVal').textContent = chosen.label;
-      document.getElementById('rPriceVal').textContent = price;
+                <!-- Phone Header Button -->
+                <a href="tel:+573003028182" 
+                   class="inline-flex items-center gap-2 bg-cta hover:bg-cta-hover text-white font-extrabold px-4 py-2.5 rounded-xl shadow-md transition-all transform active:scale-95 text-sm sm:text-base">
+                    <svg class="w-5 h-5 fill-current animate-bounce" viewBox="0 0 24 24">
+                        <path d="M6.62 10.79c1.44 2.83 3.76 5.14 6.59 6.59l2.2-2.2c.27-.27.67-.36 1.02-.24 1.12.37 2.33.57 3.57.57.55 0 1 .45 1 1V20c0 .55-.45 1-1 1-9.39 0-17-7.61-17-17 0-.55.45-1 1-1h3.5c.55 0 1 .45 1 1 0 1.25.2 2.45.57 3.57.11.35.03.74-.25 1.02l-2.2 2.2z"/>
+                    </svg>
+                    <span>300 302 8182</span>
+                </a>
+            </div>
+        </div>
+    </header>
 
-      const imeiBlock = document.getElementById('rImeiBlock');
-      const extraLbl = document.getElementById('rExtraLbl');
-      const extraVal = document.getElementById('rExtraVal');
+    <!-- HERO SECTION -->
+    <section class="relative bg-navy-900 text-white overflow-hidden py-12 lg:py-20">
+        <!-- Background Graphic Elements -->
+        <div class="absolute inset-0 opacity-10 bg-[radial-gradient(#009EE3_1px,transparent_1px)] [background-size:24px_24px]"></div>
+        <div class="absolute -top-32 -right-32 w-96 h-96 bg-cyanbrand/20 rounded-full blur-3xl pointer-events-none"></div>
+        <div class="absolute -bottom-32 -left-32 w-96 h-96 bg-cta/15 rounded-full blur-3xl pointer-events-none"></div>
 
-      if (serviceType === 'registro') {
-        imeiBlock.style.display = 'block';
-        const imei = document.getElementById('imeiInput').value.replace(/\D/g, '');
-        const rImeiVal = document.getElementById('rImeiVal');
-        if (imei.length === 15) {
-          const first14 = imei.slice(0, 14);
-          const last1 = imei.slice(14, 15);
-          rImeiVal.innerHTML = `<span class="imei-box-inline"><span>${first14}</span><span class="imei-box-digit">${last1}</span></span>`;
-        } else {
-          rImeiVal.textContent = imei || 'Pendiente';
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 relative z-10">
+            <div class="grid grid-cols-1 lg:grid-cols-12 gap-12 items-center">
+                
+                <!-- Hero Left: Value Proposition -->
+                <div class="lg:col-span-7 space-y-6 text-center lg:text-left">
+                    
+                    <div class="inline-flex items-center gap-2 bg-white/10 backdrop-blur-md border border-white/15 px-3.5 py-1.5 rounded-full text-xs sm:text-sm font-semibold text-cyanbrand-light">
+                        <span class="w-2 h-2 rounded-full bg-cyanbrand"></span>
+                        Plomería Profesional en Cali sin Destrozos
+                    </div>
+
+                    <h1 class="font-title text-4xl sm:text-5xl lg:text-6xl font-extrabold tracking-tight uppercase leading-none">
+                        ¡Urgencias de Plomería y <span class="text-cyanbrand">Destapes en Cali!</span>
+                    </h1>
+
+                    <p class="text-slate-300 text-base sm:text-lg max-w-2xl mx-auto lg:mx-0 leading-relaxed font-normal">
+                        Llegamos a su hogar, unidad residencial o negocio en <strong>menos de 45 minutos</strong>. Solucionamos taponamientos con sonda eléctrica rotativa y detectamos fugas ocultas sin romper sus pisos ni paredes.
+                    </p>
+
+                    <!-- Trust Badges Grid -->
+                    <div class="grid grid-cols-2 sm:grid-cols-4 gap-3 pt-2 text-xs sm:text-sm font-semibold text-slate-200">
+                        <div class="bg-white/5 border border-white/10 p-3 rounded-xl flex flex-col items-center lg:items-start gap-1">
+                            <span class="text-xl">🛡️</span>
+                            <span>Garantía escrita</span>
+                        </div>
+                        <div class="bg-white/5 border border-white/10 p-3 rounded-xl flex flex-col items-center lg:items-start gap-1">
+                            <span class="text-xl">👷‍♂️</span>
+                            <span>Técnicos uniformados</span>
+                        </div>
+                        <div class="bg-white/5 border border-white/10 p-3 rounded-xl flex flex-col items-center lg:items-start gap-1">
+                            <span class="text-xl">⚡</span>
+                            <span>Sonda eléctrica</span>
+                        </div>
+                        <div class="bg-white/5 border border-white/10 p-3 rounded-xl flex flex-col items-center lg:items-start gap-1">
+                            <span class="text-xl">💳</span>
+                            <span>Nequi / Efectivo</span>
+                        </div>
+                    </div>
+
+                    <!-- CTA Buttons inside Hero -->
+                    <div class="flex flex-col sm:flex-row items-center justify-center lg:justify-start gap-4 pt-4">
+                        <a href="tel:+573003028182" class="w-full sm:w-auto bg-cta hover:bg-cta-hover text-white font-extrabold text-lg px-8 py-4 rounded-xl shadow-lg shadow-cta/30 transition-all transform hover:-translate-y-0.5 flex items-center justify-center gap-3">
+                            <svg class="w-6 h-6 fill-current" viewBox="0 0 24 24">
+                                <path d="M6.62 10.79c1.44 2.83 3.76 5.14 6.59 6.59l2.2-2.2c.27-.27.67-.36 1.02-.24 1.12.37 2.33.57 3.57.57.55 0 1 .45 1 1V20c0 .55-.45 1-1 1-9.39 0-17-7.61-17-17 0-.55.45-1 1-1h3.5c.55 0 1 .45 1 1 0 1.25.2 2.45.57 3.57.11.35.03.74-.25 1.02l-2.2 2.2z"/>
+                            </svg>
+                            <span>Llamar al 300 302 8182</span>
+                        </a>
+
+                        <a href="#cotizador" class="w-full sm:w-auto bg-white/10 hover:bg-white/20 text-white font-bold text-lg px-6 py-4 rounded-xl border border-white/20 transition-all flex items-center justify-center gap-2">
+                            <span>Solicitar Cotización</span>
+                            <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7"/></svg>
+                        </a>
+                    </div>
+                </div>
+
+                <!-- Hero Right: Interactive Booking Card -->
+                <div class="lg:col-span-5" id="cotizador">
+                    <div class="bg-white text-slate-800 rounded-3xl p-6 sm:p-8 shadow-2xl border border-slate-100 relative">
+                        
+                        <div class="absolute -top-3 right-6 bg-cyanbrand text-white text-xs font-bold px-3 py-1 rounded-full uppercase tracking-wider shadow-sm">
+                            Respuesta Inmediata
+                        </div>
+
+                        <h3 class="font-title text-2xl sm:text-3xl font-extrabold text-navy-900 uppercase leading-tight mb-2">
+                            ¿Necesita un Plomero Ya?
+                        </h3>
+                        <p class="text-sm text-slate-500 mb-6">
+                            Diligencie sus datos y enviaremos una unidad técnica a su sector en Cali.
+                        </p>
+
+                        <form id="whatsappForm" onsubmit="handleFormSubmit(event)" class="space-y-4">
+                            <div>
+                                <label class="block text-xs font-bold text-navy-900 uppercase tracking-wider mb-1">Su Nombre</label>
+                                <input type="text" id="formName" required placeholder="Ej. Carlos Mendoza" class="w-full px-4 py-3 rounded-xl border border-slate-200 focus:border-cyanbrand focus:ring-2 focus:ring-cyanbrand/20 outline-none transition text-sm">
+                            </div>
+
+                            <div class="grid grid-cols-1 sm:grid-cols-2 gap-4">
+                                <div>
+                                    <label class="block text-xs font-bold text-navy-900 uppercase tracking-wider mb-1">Teléfono / Celular</label>
+                                    <input type="tel" id="formPhone" required placeholder="Ej. 315 123 4567" class="w-full px-4 py-3 rounded-xl border border-slate-200 focus:border-cyanbrand focus:ring-2 focus:ring-cyanbrand/20 outline-none transition text-sm">
+                                </div>
+                                <div>
+                                    <label class="block text-xs font-bold text-navy-900 uppercase tracking-wider mb-1">Barrio / Sector en Cali</label>
+                                    <select id="formZone" required class="w-full px-4 py-3 rounded-xl border border-slate-200 focus:border-cyanbrand focus:ring-2 focus:ring-cyanbrand/20 outline-none transition text-sm bg-white">
+                                        <option value="" disabled selected>Seleccione Zona</option>
+                                        <option value="Sur (Ciudad Jardín, Lili, Ingenio, Capri)">Sur (Ciudad Jardín, Lili, Ingenio...)</option>
+                                        <option value="Norte (La Flora, Chipichape, Menga)">Norte (La Flora, Chipichape...)</option>
+                                        <option value="Oeste (Normandía, Peñón, Centenario)">Oeste (Normandía, Peñón...)</option>
+                                        <option value="Centro & San Fernando">Centro & San Fernando</option>
+                                        <option value="Oriente de Cali">Oriente de Cali</option>
+                                        <option value="Jamundí / Yumbo">Jamundí / Yumbo</option>
+                                        <option value="Otro barrio en Cali">Otro barrio de Cali</option>
+                                    </select>
+                                </div>
+                            </div>
+
+                            <div>
+                                <label class="block text-xs font-bold text-navy-900 uppercase tracking-wider mb-1">Tipo de Servicio Requerido</label>
+                                <select id="formService" required class="w-full px-4 py-3 rounded-xl border border-slate-200 focus:border-cyanbrand focus:ring-2 focus:ring-cyanbrand/20 outline-none transition text-sm bg-white">
+                                    <option value="Destape de Cañería / Sonda">Destape de Tubería / Cañería / Sanitario</option>
+                                    <option value="Detección de Fuga de Agua">Detección de Fuga / Humedad sin romper</option>
+                                    <option value="Mantenimiento de Calentador">Mantenimiento / Reparación de Calentador</option>
+                                    <option value="Instalación de Grifería">Instalación de Grifería / Sanitario</option>
+                                    <option value="Bomba de Agua / Tanque">Bomba Hidráulica / Tanque de Reserva</option>
+                                    <option value="Otro problema de plomería">Otro inconveniente de plomería</option>
+                                </select>
+                            </div>
+
+                            <button type="submit" class="w-full bg-wsp hover:bg-wsp-hover text-white font-extrabold text-base py-4 rounded-xl shadow-lg shadow-wsp/25 transition-all flex items-center justify-center gap-2 transform active:scale-98">
+                                <svg class="w-6 h-6 fill-current" viewBox="0 0 24 24">
+                                    <path d="M.057 24l1.687-6.163c-1.041-1.804-1.588-3.849-1.587-5.946.003-6.556 5.338-11.891 11.893-11.891 3.181.001 6.167 1.24 8.413 3.488 2.245 2.248 3.481 5.236 3.48 8.414-.003 6.557-5.338 11.892-11.893 11.892-1.99-.001-3.951-.5-5.688-1.448l-6.305 1.654zm6.597-3.807c1.676.995 3.276 1.591 5.392 1.592 5.448 0 9.886-4.434 9.889-9.885.002-5.462-4.415-9.89-9.881-9.892-5.452 0-9.887 4.434-9.889 9.884-.001 2.225.651 3.891 1.746 5.634l-.999 3.648 3.742-.981zm11.387-5.464c-.074-.124-.272-.198-.57-.347-.297-.149-1.758-.868-2.031-.967-.272-.099-.47-.149-.669.149-.198.297-.768.967-.941 1.165-.173.198-.347.223-.644.074-.297-.149-1.255-.462-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.297-.347.446-.521.151-.172.2-.296.3-.495.099-.198.05-.372-.025-.521-.075-.148-.669-1.611-.916-2.206-.242-.579-.487-.501-.669-.51l-.57-.01c-.198 0-.52.074-.792.372s-1.04 1.016-1.04 2.479 1.065 2.876 1.213 3.074c.149.198 2.095 3.2 5.076 4.487.709.306 1.263.489 1.694.626.712.226 1.36.194 1.872.118.572-.085 1.758-.719 2.006-1.413.248-.695.248-1.29.173-1.414z"/>
+                                </svg>
+                                <span>Solicitar Técnico por WhatsApp</span>
+                            </button>
+
+                            <p class="text-xs text-center text-slate-400">
+                                🔒 Datos protegidos. Respuesta promedio en 2 minutos.
+                            </p>
+                        </form>
+                    </div>
+                </div>
+
+            </div>
+        </div>
+    </section>
+
+    <!-- STATS COUNTER STRIP -->
+    <section class="bg-navy-950 text-white border-y border-navy-800 py-6">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+            <div class="grid grid-cols-2 md:grid-cols-4 gap-6 text-center">
+                <div>
+                    <div class="font-title text-3xl sm:text-4xl font-extrabold text-cyanbrand">+15.000</div>
+                    <div class="text-xs sm:text-sm text-slate-300">Servicios Atendidos</div>
+                </div>
+                <div>
+                    <div class="font-title text-3xl sm:text-4xl font-extrabold text-cta">&lt; 45 Min</div>
+                    <div class="text-xs sm:text-sm text-slate-300">Llegada Promedio en Cali</div>
+                </div>
+                <div>
+                    <div class="font-title text-3xl sm:text-4xl font-extrabold text-cyanbrand">100%</div>
+                    <div class="text-xs sm:text-sm text-slate-300">Garantía por Escrito</div>
+                </div>
+                <div>
+                    <div class="font-title text-3xl sm:text-4xl font-extrabold text-wsp">24/7</div>
+                    <div class="text-xs sm:text-sm text-slate-300">Días al Año</div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- SERVICES SECTION -->
+    <section id="servicios" class="py-16 sm:py-24 bg-slate-50">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+            
+            <div class="text-center max-w-3xl mx-auto mb-16 space-y-3">
+                <span class="text-xs font-bold uppercase tracking-widest text-cyanbrand bg-cyanbrand/10 px-3 py-1 rounded-full">
+                    Soluciones de Plomería
+                </span>
+                <h2 class="font-title text-3xl sm:text-4xl lg:text-5xl font-extrabold text-navy-900 uppercase">
+                    Nuestros Servicios Especializados en Cali
+                </h2>
+                <p class="text-slate-600 text-sm sm:text-base">
+                    Contamos con herramientas industriales modernas para resolver cualquier problema sin causar daños innecesarios en su propiedad.
+                </p>
+            </div>
+
+            <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-8">
+                
+                <!-- Service 1 -->
+                <div class="bg-white rounded-2xl p-6 shadow-md hover:shadow-xl transition-all duration-300 border border-slate-100 flex flex-col justify-between group hover:-translate-y-1">
+                    <div>
+                        <div class="w-14 h-14 bg-cyanbrand/10 rounded-2xl flex items-center justify-center text-cyanbrand mb-6 group-hover:bg-cyanbrand group-hover:text-white transition-colors">
+                            <svg class="w-8 h-8" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 11H5m14 0a2 2 0 012 2v6a2 2 0 01-2 2H5a2 2 0 01-2-2v-6a2 2 0 012-2m14 0V9a2 2 0 00-2-2M5 11V9a2 2 0 012-2m0 0V5a2 2 0 012-2h6a2 2 0 012 2v2M7 7h10"/>
+                            </svg>
+                        </div>
+                        <h3 class="font-title text-2xl font-bold text-navy-900 mb-3 uppercase">
+                            Destape de Cañerías con Sonda
+                        </h3>
+                        <p class="text-slate-600 text-sm leading-relaxed mb-4">
+                            Desobstrucción rápida de sifones, sanitarios, bajantes y cajas de inspección con sondas eléctricas guaya rotativas. <strong>Sin romper pisos ni baldosas.</strong>
+                        </p>
+                    </div>
+                    <a href="https://wa.me/573003028182?text=Necesito%20destape%20de%20cañeria%20o%20sanitario%20en%20Cali" class="inline-flex items-center text-cyanbrand font-bold text-sm hover:underline gap-1 group-hover:text-cyanbrand-hover">
+                        <span>Solicitar Destape</span>
+                        <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5l7 7-7 7"/></svg>
+                    </a>
+                </div>
+
+                <!-- Service 2 -->
+                <div class="bg-white rounded-2xl p-6 shadow-md hover:shadow-xl transition-all duration-300 border border-slate-100 flex flex-col justify-between group hover:-translate-y-1">
+                    <div>
+                        <div class="w-14 h-14 bg-cyanbrand/10 rounded-2xl flex items-center justify-center text-cyanbrand mb-6 group-hover:bg-cyanbrand group-hover:text-white transition-colors">
+                            <svg class="w-8 h-8" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z"/>
+                            </svg>
+                        </div>
+                        <h3 class="font-title text-2xl font-bold text-navy-900 mb-3 uppercase">
+                            Detección de Fugas sin Romper
+                        </h3>
+                        <p class="text-slate-600 text-sm leading-relaxed mb-4">
+                            Uso de geófono digital y cámaras de inspección para localizar la ubicación exacta de filtraciones, tubos rotos y humedades ocultas.
+                        </p>
+                    </div>
+                    <a href="https://wa.me/573003028182?text=Necesito%20deteccion%20de%20fuga%20o%20humedad%20en%20Cali" class="inline-flex items-center text-cyanbrand font-bold text-sm hover:underline gap-1 group-hover:text-cyanbrand-hover">
+                        <span>Localizar Fuga</span>
+                        <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5l7 7-7 7"/></svg>
+                    </a>
+                </div>
+
+                <!-- Service 3 -->
+                <div class="bg-white rounded-2xl p-6 shadow-md hover:shadow-xl transition-all duration-300 border border-slate-100 flex flex-col justify-between group hover:-translate-y-1">
+                    <div>
+                        <div class="w-14 h-14 bg-cyanbrand/10 rounded-2xl flex items-center justify-center text-cyanbrand mb-6 group-hover:bg-cyanbrand group-hover:text-white transition-colors">
+                            <svg class="w-8 h-8" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17.657 18.657A8 8 0 016.343 7.343S7 9 9 10c0-2 .5-5 2.986-7C14 5 16.09 5.777 17.656 7.343A7.975 7.975 0 0120 13a7.975 7.975 0 01-2.343 5.657z"/>
+                            </svg>
+                        </div>
+                        <h3 class="font-title text-2xl font-bold text-navy-900 mb-3 uppercase">
+                            Calentadores y Grifería
+                        </h3>
+                        <p class="text-slate-600 text-sm leading-relaxed mb-4">
+                            Mantenimiento técnico, reparación de fallas de encendido e instalación de calentadores a gas o eléctricos. Instalación de griferías y sanitarios.
+                        </p>
+                    </div>
+                    <a href="https://wa.me/573003028182?text=Necesito%20servicio%20de%20calentador%20o%20griferia" class="inline-flex items-center text-cyanbrand font-bold text-sm hover:underline gap-1 group-hover:text-cyanbrand-hover">
+                        <span>Reparar Calentador</span>
+                        <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5l7 7-7 7"/></svg>
+                    </a>
+                </div>
+
+                <!-- Service 4 -->
+                <div class="bg-white rounded-2xl p-6 shadow-md hover:shadow-xl transition-all duration-300 border border-slate-100 flex flex-col justify-between group hover:-translate-y-1">
+                    <div>
+                        <div class="w-14 h-14 bg-cyanbrand/10 rounded-2xl flex items-center justify-center text-cyanbrand mb-6 group-hover:bg-cyanbrand group-hover:text-white transition-colors">
+                            <svg class="w-8 h-8" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 7v10c0 2.21 3.582 4 8 4s8-1.79 8-4V7M4 7c0 2.21 3.582 4 8 4s8-1.79 8-4M4 7c0-2.21 3.582-4 8-4s8 1.79 8 4m0 5c0 2.21-3.582 4-8 4s-8-1.79-8-4"/>
+                            </svg>
+                        </div>
+                        <h3 class="font-title text-2xl font-bold text-navy-900 mb-3 uppercase">
+                            Bombas y Tanques de Agua
+                        </h3>
+                        <p class="text-slate-600 text-sm leading-relaxed mb-4">
+                            Lavado, desinfección y mantenimiento de tanques de reserva de agua potable en hogares y unidades residenciales. Mantenimiento de bombas de agua.
+                        </p>
+                    </div>
+                    <a href="https://wa.me/573003028182?text=Necesito%20servicio%20de%20tanques%20o%20bombas%20de%20agua" class="inline-flex items-center text-cyanbrand font-bold text-sm hover:underline gap-1 group-hover:text-cyanbrand-hover">
+                        <span>Cotizar Tanques</span>
+                        <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5l7 7-7 7"/></svg>
+                    </a>
+                </div>
+
+            </div>
+
+        </div>
+    </section>
+
+    <!-- WHY CHOOSE US -->
+    <section class="py-16 bg-navy-900 text-white relative overflow-hidden">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 relative z-10">
+            <div class="text-center max-w-3xl mx-auto mb-16 space-y-3">
+                <span class="text-xs font-bold uppercase tracking-widest text-cyanbrand bg-white/10 px-3 py-1 rounded-full">
+                    Respuesta Inmediata y Confianza
+                </span>
+                <h2 class="font-title text-3xl sm:text-4xl lg:text-5xl font-extrabold uppercase">
+                    ¿Por qué elegir Plomeros al Destape en Cali?
+                </h2>
+                <p class="text-slate-300 text-sm sm:text-base">
+                    Nos caracterizamos por la puntualidad, transparencia en los precios y el respeto por su hogar.
+                </p>
+            </div>
+
+            <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-8">
+                
+                <div class="bg-navy-800/60 backdrop-blur border border-white/10 p-6 rounded-2xl space-y-3">
+                    <div class="text-4xl mb-2">⏱️</div>
+                    <h4 class="font-title text-xl font-bold text-white uppercase">Rapidez Garantizada</h4>
+                    <p class="text-slate-300 text-sm leading-relaxed">
+                        Unidades motorizadas distribuidas estratégicamente en Cali para llegar a su dirección en menos de 45 minutos.
+                    </p>
+                </div>
+
+                <div class="bg-navy-800/60 backdrop-blur border border-white/10 p-6 rounded-2xl space-y-3">
+                    <div class="text-4xl mb-2">🛠️</div>
+                    <h4 class="font-title text-xl font-bold text-white uppercase">Tecnología Sin Romper</h4>
+                    <p class="text-slate-300 text-sm leading-relaxed">
+                        Utilizamos sondas eléctricas de alto rendimiento y geófonos digitales que solucionan el problema protegiendo sus acabados.
+                    </p>
+                </div>
+
+                <div class="bg-navy-800/60 backdrop-blur border border-white/10 p-6 rounded-2xl space-y-3">
+                    <div class="text-4xl mb-2">📝</div>
+                    <h4 class="font-title text-xl font-bold text-white uppercase">Garantía por Escrito</h4>
+                    <p class="text-slate-300 text-sm leading-relaxed">
+                        Todos nuestros servicios cuentan con respaldo formal. Si el inconveniente persiste, regresamos sin costo adicional.
+                    </p>
+                </div>
+
+                <div class="bg-navy-800/60 backdrop-blur border border-white/10 p-6 rounded-2xl space-y-3">
+                    <div class="text-4xl mb-2">💳</div>
+                    <h4 class="font-title text-xl font-bold text-white uppercase">Todos los Medios de Pago</h4>
+                    <p class="text-slate-300 text-sm leading-relaxed">
+                        Aceptamos Nequi, Daviplata, transferencias Bancolombia, efectivo y tarjetas de crédito o débito.
+                    </p>
+                </div>
+
+            </div>
+        </div>
+    </section>
+
+    <!-- CALI COVERAGE ZONES & REVIEWS -->
+    <section class="py-16 sm:py-24 bg-white">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+            
+            <div class="grid grid-cols-1 lg:grid-cols-12 gap-12">
+                
+                <!-- Coverage Zonas -->
+                <div class="lg:col-span-5 space-y-6">
+                    <span class="text-xs font-bold uppercase tracking-widest text-cyanbrand bg-cyanbrand/10 px-3 py-1 rounded-full">
+                        Cobertura en Cali
+                    </span>
+                    <h2 class="font-title text-3xl sm:text-4xl font-extrabold text-navy-900 uppercase leading-tight">
+                        Llegamos a Todos los Barrios de Cali y Alrededores
+                    </h2>
+                    <p class="text-slate-600 text-sm sm:text-base">
+                        Nuestras patrullas de servicio están listas para desplazarse de forma inmediata en las siguientes zonas:
+                    </p>
+
+                    <div class="grid grid-cols-2 gap-3 text-sm font-semibold text-slate-700">
+                        <div class="bg-slate-50 border border-slate-200 p-3 rounded-xl flex items-center gap-2">
+                            <span class="text-cyanbrand">📍</span> Sur de Cali
+                        </div>
+                        <div class="bg-slate-50 border border-slate-200 p-3 rounded-xl flex items-center gap-2">
+                            <span class="text-cyanbrand">📍</span> Norte de Cali
+                        </div>
+                        <div class="bg-slate-50 border border-slate-200 p-3 rounded-xl flex items-center gap-2">
+                            <span class="text-cyanbrand">📍</span> Oeste de Cali
+                        </div>
+                        <div class="bg-slate-50 border border-slate-200 p-3 rounded-xl flex items-center gap-2">
+                            <span class="text-cyanbrand">📍</span> San Fernando / Centro
+                        </div>
+                        <div class="bg-slate-50 border border-slate-200 p-3 rounded-xl flex items-center gap-2">
+                            <span class="text-cyanbrand">📍</span> Valle del Lili / Ciudad Jardín
+                        </div>
+                        <div class="bg-slate-50 border border-slate-200 p-3 rounded-xl flex items-center gap-2">
+                            <span class="text-cyanbrand">📍</span> Jamundí y Yumbo
+                        </div>
+                    </div>
+
+                    <div class="bg-cyanbrand/10 border border-cyanbrand/20 p-4 rounded-2xl flex items-center gap-4">
+                        <div class="text-3xl">🚗</div>
+                        <div class="text-xs sm:text-sm text-slate-700">
+                            <strong>¿Tu barrio no aparece?</strong> No te preocupes, cubrimos el 100% del área metropolitana de Cali. Llámanos para confirmar tiempo de llegada.
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Reviews -->
+                <div class="lg:col-span-7 space-y-6">
+                    <div class="flex items-center justify-between">
+                        <div>
+                            <span class="text-xs font-bold uppercase tracking-widest text-cta bg-cta/10 px-3 py-1 rounded-full">
+                                Opiniones Reales
+                            </span>
+                            <h3 class="font-title text-3xl font-extrabold text-navy-900 uppercase mt-2">
+                                Lo que dicen nuestros clientes en Cali
+                            </h3>
+                        </div>
+                        <div class="hidden sm:flex items-center gap-1 text-amber-400 text-sm font-bold">
+                            <span>★ 4.9 / 5.0</span>
+                        </div>
+                    </div>
+
+                    <div class="space-y-4">
+                        
+                        <!-- Review 1 -->
+                        <div class="bg-slate-50 p-5 rounded-2xl border border-slate-200 space-y-2">
+                            <div class="flex items-center justify-between">
+                                <div class="font-bold text-navy-900 text-sm">María Fernanda R. - <span class="text-slate-500 font-normal">Ciudad Jardín</span></div>
+                                <div class="text-amber-400 text-xs">★★★★★</div>
+                            </div>
+                            <p class="text-slate-600 text-xs sm:text-sm italic">
+                                "Se me tapó el lavaplatos un domingo por la noche. Los llamé y en 35 minutos estaba el técnico en mi casa con la sonda eléctrica. Solucionado impecable y sin romper nada."
+                            </p>
+                        </div>
+
+                        <!-- Review 2 -->
+                        <div class="bg-slate-50 p-5 rounded-2xl border border-slate-200 space-y-2">
+                            <div class="flex items-center justify-between">
+                                <div class="font-bold text-navy-900 text-sm">Gonzalo Restrepo - <span class="text-slate-500 font-normal">La Flora</span></div>
+                                <div class="text-amber-400 text-xs">★★★★★</div>
+                            </div>
+                            <p class="text-slate-600 text-xs sm:text-sm italic">
+                                "Excelente servicio para nuestro restaurante. Teníamos una filtración difícil de ubicar en el baño y con el geófono la encontraron rápido. Muy honestos con el precio."
+                            </p>
+                        </div>
+
+                        <!-- Review 3 -->
+                        <div class="bg-slate-50 p-5 rounded-2xl border border-slate-200 space-y-2">
+                            <div class="flex items-center justify-between">
+                                <div class="font-bold text-navy-900 text-sm">Patricia Caicedo - <span class="text-slate-500 font-normal">El Ingenio</span></div>
+                                <div class="text-amber-400 text-xs">★★★★★</div>
+                            </div>
+                            <p class="text-slate-600 text-xs sm:text-sm italic">
+                                "Técnicos super educados, uniformados y dejaron todo limpio al terminar. La garantía por escrito da mucha tranquilidad para la administración del conjunto."
+                            </p>
+                        </div>
+
+                    </div>
+                </div>
+
+            </div>
+
+        </div>
+    </section>
+
+    <!-- FAQ ACCORDION -->
+    <section class="py-16 sm:py-24 bg-slate-50 border-t border-slate-200">
+        <div class="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8">
+            
+            <div class="text-center mb-12 space-y-3">
+                <span class="text-xs font-bold uppercase tracking-widest text-cyanbrand bg-cyanbrand/10 px-3 py-1 rounded-full">
+                    Resuelve tus Dudas
+                </span>
+                <h2 class="font-title text-3xl sm:text-4xl font-extrabold text-navy-900 uppercase">
+                    Preguntas Frecuentes
+                </h2>
+            </div>
+
+            <div class="space-y-4" id="faqAccordion">
+                
+                <!-- FAQ Item 1 -->
+                <div class="bg-white rounded-2xl border border-slate-200 overflow-hidden">
+                    <button onclick="toggleFaq(this)" class="w-full text-left p-5 font-bold text-navy-900 flex justify-between items-center gap-4 hover:bg-slate-50 transition">
+                        <span>¿Cuánto tiempo tardan en llegar a mi dirección en Cali?</span>
+                        <svg class="w-5 h-5 text-cyanbrand transform transition-transform" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7"/></svg>
+                    </button>
+                    <div class="hidden p-5 pt-0 text-slate-600 text-sm border-t border-slate-100">
+                        Nuestro tiempo promedio de llegada en Cali es de <strong>30 a 45 minutos</strong>, dependiendo del tráfico y la zona específica. Contamos con técnicos distribuidos en el Norte, Sur y Oeste de la ciudad para garantizar respuesta inmediata.
+                    </div>
+                </div>
+
+                <!-- FAQ Item 2 -->
+                <div class="bg-white rounded-2xl border border-slate-200 overflow-hidden">
+                    <button onclick="toggleFaq(this)" class="w-full text-left p-5 font-bold text-navy-900 flex justify-between items-center gap-4 hover:bg-slate-50 transition">
+                        <span>¿Es obligatorio romper pisos o muros para destapar una cañería?</span>
+                        <svg class="w-5 h-5 text-cyanbrand transform transition-transform" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7"/></svg>
+                    </button>
+                    <div class="hidden p-5 pt-0 text-slate-600 text-sm border-t border-slate-100">
+                        No. En el 95% de los casos utilizamos <strong>sondas eléctricas profesionales</strong> que se introducen por las tuberías existentes para triturar y eliminar obstrucciones sin romper paredes ni baldosas.
+                    </div>
+                </div>
+
+                <!-- FAQ Item 3 -->
+                <div class="bg-white rounded-2xl border border-slate-200 overflow-hidden">
+                    <button onclick="toggleFaq(this)" class="w-full text-left p-5 font-bold text-navy-900 flex justify-between items-center gap-4 hover:bg-slate-50 transition">
+                        <span>¿Atienden urgencias los fines de semana y festivos?</span>
+                        <svg class="w-5 h-5 text-cyanbrand transform transition-transform" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7"/></svg>
+                    </button>
+                    <div class="hidden p-5 pt-0 text-slate-600 text-sm border-t border-slate-100">
+                        Sí, nuestro servicio funciona <strong>las 24 horas del día, los 7 días de la semana y los 365 días del año</strong>, incluyendo domingos y festivos sin interrupciones.
+                    </div>
+                </div>
+
+                <!-- FAQ Item 4 -->
+                <div class="bg-white rounded-2xl border border-slate-200 overflow-hidden">
+                    <button onclick="toggleFaq(this)" class="w-full text-left p-5 font-bold text-navy-900 flex justify-between items-center gap-4 hover:bg-slate-50 transition">
+                        <span>¿Qué medios de pago reciben?</span>
+                        <svg class="w-5 h-5 text-cyanbrand transform transition-transform" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7"/></svg>
+                    </button>
+                    <div class="hidden p-5 pt-0 text-slate-600 text-sm border-t border-slate-100">
+                        Aceptamos dinero en efectivo, transferencias por Nequi, Daviplata, Bancolombia y pagos con tarjeta débito o crédito a través de datáfono móvil.
+                    </div>
+                </div>
+
+            </div>
+
+        </div>
+    </section>
+
+    <!-- FINAL CTA BANNER -->
+    <section class="py-16 bg-gradient-to-br from-navy-950 to-navy-900 text-white relative overflow-hidden">
+        <div class="max-w-5xl mx-auto px-4 sm:px-6 lg:px-8 text-center space-y-6 relative z-10">
+            <h2 class="font-title text-3xl sm:text-5xl font-extrabold uppercase leading-tight">
+                ¿Tiene una emergencia de plomería ahora mismo?
+            </h2>
+            <p class="text-slate-300 text-base sm:text-lg max-w-2xl mx-auto">
+                No espere a que la humedad empeore o el agua cause daños mayores. Llámenos ya y un especialista estará en camino.
+            </p>
+            <div class="flex flex-col sm:flex-row items-center justify-center gap-4 pt-4">
+                <a href="tel:+573003028182" class="w-full sm:w-auto bg-cta hover:bg-cta-hover text-white font-extrabold text-xl px-10 py-4 rounded-xl shadow-xl shadow-cta/30 transition-all flex items-center justify-center gap-3">
+                    <svg class="w-6 h-6 fill-current animate-bounce" viewBox="0 0 24 24">
+                        <path d="M6.62 10.79c1.44 2.83 3.76 5.14 6.59 6.59l2.2-2.2c.27-.27.67-.36 1.02-.24 1.12.37 2.33.57 3.57.57.55 0 1 .45 1 1V20c0 .55-.45 1-1 1-9.39 0-17-7.61-17-17 0-.55.45-1 1-1h3.5c.55 0 1 .45 1 1 0 1.25.2 2.45.57 3.57.11.35.03.74-.25 1.02l-2.2 2.2z"/>
+                    </svg>
+                    <span>Llamar al 300 302 8182</span>
+                </a>
+                <a href="https://wa.me/573003028182?text=Hola%20Plomeros%20al%20Destape,%20necesito%20atencion%20urgente%20en%20Cali" target="_blank" rel="noopener" class="w-full sm:w-auto bg-wsp hover:bg-wsp-hover text-white font-bold text-xl px-8 py-4 rounded-xl shadow-lg transition-all flex items-center justify-center gap-3">
+                    <svg class="w-6 h-6 fill-current" viewBox="0 0 24 24">
+                        <path d="M.057 24l1.687-6.163c-1.041-1.804-1.588-3.849-1.587-5.946.003-6.556 5.338-11.891 11.893-11.891 3.181.001 6.167 1.24 8.413 3.488 2.245 2.248 3.481 5.236 3.48 8.414-.003 6.557-5.338 11.892-11.893 11.892-1.99-.001-3.951-.5-5.688-1.448l-6.305 1.654zm6.597-3.807c1.676.995 3.276 1.591 5.392 1.592 5.448 0 9.886-4.434 9.889-9.885.002-5.462-4.415-9.89-9.881-9.892-5.452 0-9.887 4.434-9.889 9.884-.001 2.225.651 3.891 1.746 5.634l-.999 3.648 3.742-.981zm11.387-5.464c-.074-.124-.272-.198-.57-.347-.297-.149-1.758-.868-2.031-.967-.272-.099-.47-.149-.669.149-.198.297-.768.967-.941 1.165-.173.198-.347.223-.644.074-.297-.149-1.255-.462-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.297-.347.446-.521.151-.172.2-.296.3-.495.099-.198.05-.372-.025-.521-.075-.148-.669-1.611-.916-2.206-.242-.579-.487-.501-.669-.51l-.57-.01c-.198 0-.52.074-.792.372s-1.04 1.016-1.04 2.479 1.065 2.876 1.213 3.074c.149.198 2.095 3.2 5.076 4.487.709.306 1.263.489 1.694.626.712.226 1.36.194 1.872.118.572-.085 1.758-.719 2.006-1.413.248-.695.248-1.29.173-1.414z"/>
+                    </svg>
+                    <span>Escribir por WhatsApp</span>
+                </a>
+            </div>
+        </div>
+    </section>
+
+    <!-- FOOTER -->
+    <footer class="bg-navy-950 text-slate-400 text-xs sm:text-sm py-12 border-t border-navy-900">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 grid grid-cols-1 md:grid-cols-4 gap-8 mb-8">
+            
+            <div class="space-y-3">
+                <div class="flex items-center gap-2">
+                    <svg viewBox="0 0 100 110" fill="none" class="w-8 h-8">
+                        <path d="M50 5C50 5 15 52 15 75C15 94.33 30.67 110 50 110C69.33 110 85 94.33 85 75C85 52 50 5 50 5Z" fill="#009EE3"/>
+                    </svg>
+                    <span class="font-title text-xl font-bold text-white uppercase tracking-tight">Plomeros al Destape</span>
+                </div>
+                <p class="text-xs text-slate-400">
+                    Empresa líder en servicios de plomería, destape con sonda eléctrica y detección de fugas en la ciudad de Cali, Colombia.
+                </p>
+            </div>
+
+            <div>
+                <h5 class="font-title text-white font-bold text-base uppercase mb-3">Servicios</h5>
+                <ul class="space-y-2 text-xs">
+                    <li>Destape de cañerías y sanitarios</li>
+                    <li>Detección de fugas con geófono</li>
+                    <li>Mantenimiento de calentadores a gas</li>
+                    <li>Lavado y desinfección de tanques</li>
+                    <li>Plomería para empresas y conjuntos</li>
+                </ul>
+            </div>
+
+            <div>
+                <h5 class="font-title text-white font-bold text-base uppercase mb-3">Contacto Cali</h5>
+                <ul class="space-y-2 text-xs">
+                    <li>📍 Cobertura: Toda Cali, Yumbo y Jamundí</li>
+                    <li>📞 Teléfono Urgencias: <a href="tel:+573003028182" class="text-cyanbrand underline font-bold">300 302 8182</a></li>
+                    <li>💬 WhatsApp 24/7: <a href="https://wa.me/573003028182" class="text-wsp underline font-bold">300 302 8182</a></li>
+                    <li>⏰ Horario: Atención 24 Horas</li>
+                </ul>
+            </div>
+
+            <div>
+                <h5 class="font-title text-white font-bold text-base uppercase mb-3">Medios de Pago</h5>
+                <p class="text-xs text-slate-400 mb-3">Recibimos efectivo, transferencias inmediatas y tarjetas.</p>
+                <div class="flex flex-wrap gap-2 text-xs font-semibold text-white">
+                    <span class="bg-navy-900 border border-navy-800 px-2.5 py-1 rounded">Nequi</span>
+                    <span class="bg-navy-900 border border-navy-800 px-2.5 py-1 rounded">Bancolombia</span>
+                    <span class="bg-navy-900 border border-navy-800 px-2.5 py-1 rounded">Daviplata</span>
+                    <span class="bg-navy-900 border border-navy-800 px-2.5 py-1 rounded">Tarjetas</span>
+                </div>
+            </div>
+
+        </div>
+
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 border-t border-navy-900 pt-6 text-center text-xs text-slate-500">
+            © <span id="year"></span> Plomeros al Destape Cali. Todos los derechos reservados.
+        </div>
+    </footer>
+
+    <!-- DESKTOP FLOATING WHATSAPP BUTTON -->
+    <a href="https://wa.me/573003028182?text=Hola%20Plomeros%20al%20Destape,%20requiero%20asistencia%20tecnica%20en%20Cali." 
+       target="_blank" 
+       rel="noopener"
+       aria-label="Contactar por WhatsApp"
+       class="hidden md:flex fixed bottom-6 right-6 z-50 bg-wsp hover:bg-wsp-hover text-white p-4 rounded-full shadow-2xl transition-all hover:scale-110 items-center justify-center group">
+        <span class="absolute -top-1 -right-1 bg-red-500 text-white text-[10px] font-bold w-5 h-5 rounded-full flex items-center justify-center animate-bounce">1</span>
+        <svg class="w-8 h-8 fill-current" viewBox="0 0 24 24">
+            <path d="M.057 24l1.687-6.163c-1.041-1.804-1.588-3.849-1.587-5.946.003-6.556 5.338-11.891 11.893-11.891 3.181.001 6.167 1.24 8.413 3.488 2.245 2.248 3.481 5.236 3.48 8.414-.003 6.557-5.338 11.892-11.893 11.892-1.99-.001-3.951-.5-5.688-1.448l-6.305 1.654zm6.597-3.807c1.676.995 3.276 1.591 5.392 1.592 5.448 0 9.886-4.434 9.889-9.885.002-5.462-4.415-9.89-9.881-9.892-5.452 0-9.887 4.434-9.889 9.884-.001 2.225.651 3.891 1.746 5.634l-.999 3.648 3.742-.981zm11.387-5.464c-.074-.124-.272-.198-.57-.347-.297-.149-1.758-.868-2.031-.967-.272-.099-.47-.149-.669.149-.198.297-.768.967-.941 1.165-.173.198-.347.223-.644.074-.297-.149-1.255-.462-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.297-.347.446-.521.151-.172.2-.296.3-.495.099-.198.05-.372-.025-.521-.075-.148-.669-1.611-.916-2.206-.242-.579-.487-.501-.669-.51l-.57-.01c-.198 0-.52.074-.792.372s-1.04 1.016-1.04 2.479 1.065 2.876 1.213 3.074c.149.198 2.095 3.2 5.076 4.487.709.306 1.263.489 1.694.626.712.226 1.36.194 1.872.118.572-.085 1.758-.719 2.006-1.413.248-.695.248-1.29.173-1.414z"/>
+        </svg>
+    </a>
+
+    <!-- MOBILE STICKY BOTTOM BAR -->
+    <div class="md:hidden fixed bottom-0 left-0 right-0 z-50 bg-white border-t border-slate-200 p-2 shadow-2xl grid grid-cols-2 gap-2">
+        <a href="tel:+573003028182" class="bg-cta hover:bg-cta-hover text-white font-extrabold text-sm py-3 px-2 rounded-xl flex items-center justify-center gap-2 shadow-md">
+            <svg class="w-5 h-5 fill-current" viewBox="0 0 24 24">
+                <path d="M6.62 10.79c1.44 2.83 3.76 5.14 6.59 6.59l2.2-2.2c.27-.27.67-.36 1.02-.24 1.12.37 2.33.57 3.57.57.55 0 1 .45 1 1V20c0 .55-.45 1-1 1-9.39 0-17-7.61-17-17 0-.55.45-1 1-1h3.5c.55 0 1 .45 1 1 0 1.25.2 2.45.57 3.57.11.35.03.74-.25 1.02l-2.2 2.2z"/>
+            </svg>
+            <span>Llamar Ahora</span>
+        </a>
+        <a href="https://wa.me/573003028182?text=Hola%20Plomeros%20al%20Destape,%20necesito%20un%20servicio%20de%20urgencia%20en%20Cali" target="_blank" rel="noopener" class="bg-wsp hover:bg-wsp-hover text-white font-extrabold text-sm py-3 px-2 rounded-xl flex items-center justify-center gap-2 shadow-md">
+            <svg class="w-5 h-5 fill-current" viewBox="0 0 24 24">
+                <path d="M.057 24l1.687-6.163c-1.041-1.804-1.588-3.849-1.587-5.946.003-6.556 5.338-11.891 11.893-11.891 3.181.001 6.167 1.24 8.413 3.488 2.245 2.248 3.481 5.236 3.48 8.414-.003 6.557-5.338 11.892-11.893 11.892-1.99-.001-3.951-.5-5.688-1.448l-6.305 1.654zm6.597-3.807c1.676.995 3.276 1.591 5.392 1.592 5.448 0 9.886-4.434 9.889-9.885.002-5.462-4.415-9.89-9.881-9.892-5.452 0-9.887 4.434-9.889 9.884-.001 2.225.651 3.891 1.746 5.634l-.999 3.648 3.742-.981zm11.387-5.464c-.074-.124-.272-.198-.57-.347-.297-.149-1.758-.868-2.031-.967-.272-.099-.47-.149-.669.149-.198.297-.768.967-.941 1.165-.173.198-.347.223-.644.074-.297-.149-1.255-.462-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.297-.347.446-.521.151-.172.2-.296.3-.495.099-.198.05-.372-.025-.521-.075-.148-.669-1.611-.916-2.206-.242-.579-.487-.501-.669-.51l-.57-.01c-.198 0-.52.074-.792.372s-1.04 1.016-1.04 2.479 1.065 2.876 1.213 3.074c.149.198 2.095 3.2 5.076 4.487.709.306 1.263.489 1.694.626.712.226 1.36.194 1.872.118.572-.085 1.758-.719 2.006-1.413.248-.695.248-1.29.173-1.414z"/>
+            </svg>
+            <span>WhatsApp</span>
+        </a>
+    </div>
+
+    <!-- JAVASCRIPT LOGIC -->
+    <script>
+        // Set dynamic copyright year
+        document.getElementById('year').textContent = new Date().getFullYear();
+
+        // FAQ Accordion Toggle Function
+        function toggleFaq(buttonElement) {
+            const content = buttonElement.nextElementSibling;
+            const icon = buttonElement.querySelector('svg');
+            
+            const isOpen = !content.classList.contains('hidden');
+
+            // Close all items
+            document.querySelectorAll('#faqAccordion > div > div').forEach(el => el.classList.add('hidden'));
+            document.querySelectorAll('#faqAccordion button svg').forEach(el => el.classList.remove('rotate-180'));
+
+            if (!isOpen) {
+                content.classList.remove('hidden');
+                icon.classList.add('rotate-180');
+            }
         }
 
-        const simLine = document.getElementById('simLineInput').value.trim();
-        extraLbl.textContent = 'Línea / Tiempo Estimado';
-        extraVal.textContent = simLine
-          ? `Línea: ${simLine} · Tiempo est.: ${time}`
-          : `Tiempo est.: ${time}`;
-      } else {
-        imeiBlock.style.display = 'none';
-        const qty = parseInt(document.getElementById('esimQtyInput').value, 10) || 1;
-        extraLbl.textContent = 'Cantidad / Entrega';
-        extraVal.textContent = `Cantidad: ${qty} · Entrega: ${time}`;
-      }
-    }
+        // WhatsApp Form Handler
+        function handleFormSubmit(e) {
+            e.preventDefault();
+            const name = document.getElementById('formName').value;
+            const phone = document.getElementById('formPhone').value;
+            const zone = document.getElementById('formZone').value;
+            const service = document.getElementById('formService').value;
 
-    async function renderReceiptCanvas() {
-      if (typeof html2canvas === 'undefined') {
-        showToast('No se pudo cargar el generador de imagen');
-        return null;
-      }
-      const el = document.getElementById('receiptCard');
-      return await html2canvas(el, { scale: 2, backgroundColor: '#ffffff', useCORS: true });
-    }
+            const textMessage = `Hola Plomeros al Destape 👋, necesito ayuda técnica.%0A%0A📌 *Nombre:* ${encodeURIComponent(name)}%0A📞 *Teléfono:* ${encodeURIComponent(phone)}%0A📍 *Sector en Cali:* ${encodeURIComponent(zone)}%0A🛠️ *Servicio:* ${encodeURIComponent(service)}%0A%0A¿Podrían indicarme el tiempo de llegada estimado?`;
 
-    async function shareReceiptImage() {
-      const canvas = await renderReceiptCanvas();
-      if (!canvas) return;
-
-      canvas.toBlob(async (blob) => {
-        if (!blob) {
-          showToast('Error al crear la imagen');
-          return;
+            const whatsappUrl = `https://wa.me/573003028182?text=${textMessage}`;
+            window.open(whatsappUrl, '_blank');
         }
-        const file = new File([blob], 'comprobante-zonagsm.png', { type: 'image/png' });
-        const phone = document.getElementById('clientPhoneInput').value.trim();
-
-        if (navigator.canShare && navigator.canShare({ files: [file] })) {
-          try {
-            await navigator.share({
-              title: 'Comprobante Zona GSM',
-              files: [file]
-            });
-            return;
-          } catch (e) {}
-        }
-
-        const url = URL.createObjectURL(blob);
-        const a = document.createElement('a');
-        a.href = url;
-        a.download = 'comprobante-zonagsm.png';
-        a.click();
-        setTimeout(() => URL.revokeObjectURL(url), 1500);
-        showToast('Imagen descargada. Ábrela y envíala en WhatsApp');
-
-        if (phone) {
-          const cleanPhone = phone.length === 10 ? '57' + phone : phone;
-          window.open(`https://wa.me/${cleanPhone}`, '_blank', 'noopener,noreferrer');
-        }
-      }, 'image/png');
-    }
-
-    async function downloadReceiptImage() {
-      const canvas = await renderReceiptCanvas();
-      if (!canvas) return;
-      const link = document.createElement('a');
-      link.download = 'comprobante-zonagsm.png';
-      link.href = canvas.toDataURL('image/png');
-      link.click();
-      showToast('PNG descargado');
-    }
-
-    function showToast(msg) {
-      const t = document.getElementById('toast');
-      t.textContent = msg;
-      t.classList.add('show');
-      setTimeout(() => t.classList.remove('show'), 2400);
-    }
-  </script>
+    </script>
 </body>
 </html>
