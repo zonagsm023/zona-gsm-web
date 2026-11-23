@@ -100,13 +100,13 @@
     .imei-overlay { position: fixed; inset: 0; background: rgba(15, 23, 42, 0.55); backdrop-filter: blur(4px); -webkit-backdrop-filter: blur(4px); display: none; align-items: center; justify-content: center; padding: 18px; z-index: 10001; }
     .imei-overlay.open { display: flex; }
     .imei-box { width: 100%; max-width: 390px; background: #ffffff; border-radius: 22px; padding: 18px; box-shadow: 0 18px 40px rgba(15, 23, 42, 0.22); text-align: left; max-height: 90vh; overflow-y: auto; }
-    
+
     .imei-box-top { display: flex; align-items: center; justify-content: space-between; gap: 10px; margin-bottom: 12px; }
     .imei-op-head { display: flex; align-items: center; gap: 10px; min-width: 0; }
     .imei-op-logo { width: 42px; height: 42px; border-radius: 50%; flex-shrink: 0; display: flex; align-items: center; justify-content: center; overflow: hidden; background: #fff; border: 1px solid #e2e8f0; }
     .imei-op-logo img { width: 100%; height: 100%; object-fit: cover; display: block; }
     .imei-box-title { font-size: 15px; font-weight: 800; color: #0f172a; line-height: 1.2; }
-    
+
     .imei-badges { display: flex; align-items: center; gap: 6px; margin-top: 4px; flex-wrap: wrap; }
     .imei-price-tag { font-size: 11px; font-weight: 800; color: #059669; background: #ecfdf5; border: 1px solid #a7f3d0; padding: 2px 8px; border-radius: 999px; }
     .imei-time-tag { font-size: 11px; font-weight: 700; color: #334155; background: #f1f5f9; border: 1px solid #cbd5e1; padding: 2px 8px; border-radius: 999px; }
@@ -217,7 +217,7 @@
     <div class="content-box">
       <h1>Zona GSM</h1>
       <p class="bio">Solución de No Registro por IMEI en Colombia. Proceso rápido y garantizado.</p>
-      
+
       <button class="track-order-btn" onclick="openClientPanel()">
         🔍 Consultar estado de mi pedido
       </button>
@@ -345,7 +345,7 @@
   <!-- MODAL PRINCIPAL -->
   <div id="imeiOverlay" class="imei-overlay" onclick="closeImeiOutside(event)">
     <div class="imei-box" role="dialog" aria-modal="true" aria-labelledby="imeiTitle">
-      
+
       <div class="imei-box-top">
         <div class="imei-op-head">
           <div id="imeiLogoWrap" class="imei-op-logo"></div>
@@ -366,7 +366,7 @@
       </div>
 
       <form onsubmit="sendImeiWa(event)">
-        
+
         <div class="input-group">
           <label>Tu PIN de 4 dígitos:</label>
           <input id="mainPinInput" class="pin-input" type="text" maxlength="4" inputmode="numeric" placeholder="••••" oninput="checkPin(this.value)">
@@ -393,11 +393,11 @@
           <input id="simLineField" class="sim-line-input" type="tel" inputmode="numeric" maxlength="15" placeholder="Número de línea SIM" oninput="this.value = this.value.replace(/\D/g, '')" />
         </div>
 
-        <!-- CANALES DE PAGO -->
+        <!-- CANAL DE PAGO -->
         <div style="background: #f8fafc; padding: 10px; border-radius: 12px; margin-top: 12px; border: 1px solid #e2e8f0;">
-          <p style="font-size: 12px; font-weight: 700; color: #334155; margin-bottom: 8px;">💳 Canales de Pago (Toca para copiar):</p>
+          <p style="font-size: 12px; font-weight: 700; color: #334155; margin-bottom: 8px;">💳 Canal de Pago (Toca para copiar):</p>
           <div style="display: flex; gap: 6px; flex-wrap: wrap;">
-            <button type="button" onclick="copyPayment('3246816788', 'Nequi')" style="flex: 1; padding: 8px; background: white; border: 1px solid #cbd5e1; border-radius: 8px; font-size: 11px; font-weight: bold; cursor: pointer;">Nequi: 3104141805</button>
+            <button type="button" onclick="copyPayment('3246816788', 'Nequi')" style="flex: 1; padding: 8px; background: white; border: 1px solid #cbd5e1; border-radius: 8px; font-size: 11px; font-weight: bold; cursor: pointer;">Nequi: 3246816788</button>
           </div>
         </div>
 
@@ -419,7 +419,7 @@
           <div id="qrCameraBox"></div>
           <div id="qrStatusMsg" class="qr-status-msg">Alinea el código de barras en el recuadro rectangular</div>
         </div>
-        
+
         <button type="submit" class="imei-send-btn">Enviar Solicitud</button>
       </form>
 
@@ -429,14 +429,14 @@
   <!-- MODAL: REGISTRO DE NUEVO PIN -->
   <div id="registerOverlay" class="imei-overlay" onclick="closeRegisterOutside(event)">
     <div class="imei-box" style="max-width: 340px; text-align: center;">
-      
+
       <div style="display: flex; justify-content: flex-end; margin-bottom: -10px;">
         <button type="button" class="imei-close" onclick="closeRegisterBox()" aria-label="Cerrar">&times;</button>
       </div>
 
       <h2 style="font-size: 18px; margin-bottom: 10px; color: #0f172a;">Registra tu PIN</h2>
       <p style="font-size: 13px; color: #475569; margin-bottom: 15px;">El PIN ingresado no existe. Crea uno nuevo y registra tu número de WhatsApp.</p>
-      
+
       <div class="input-group" style="text-align: left;">
         <label>Nuevo PIN de 4 dígitos</label>
         <input id="newPinInput" class="pin-input" type="text" maxlength="4" inputmode="numeric" placeholder="••••" oninput="checkNewPin(this.value)">
@@ -472,7 +472,7 @@
   <!-- MODAL: CONSULTA DE PEDIDOS DEL CLIENTE -->
   <div id="clientPanelOverlay" class="imei-overlay" onclick="closeClientPanelOutside(event)">
     <div class="imei-box" style="max-width: 420px;">
-      
+
       <div class="imei-box-top">
         <div class="imei-op-head">
           <div>
@@ -525,7 +525,7 @@
     let lastAutoCompleted14 = '';
     let qrScannerInstance = null;
     let qrIsRunning = false;
-    
+
     // Variables para subir foto
     let receiptBase64 = null;
 
@@ -572,7 +572,7 @@
       const msg = document.getElementById('pinMessage');
       const verifyGroup = document.getElementById('phoneVerifyGroup');
       const verifyInput = document.getElementById('verifyPhoneInput');
-      
+
       currentPin = val.replace(/\D/g, '');
       input.value = currentPin;
 
@@ -584,7 +584,7 @@
           msg.textContent = '✓ PIN correcto. Confirma tu número.';
           msg.className = 'pin-msg success';
           input.blur();
-          
+
           verifyGroup.style.display = 'flex';
           verifyInput.value = '';
           currentCelular = '';
@@ -704,10 +704,10 @@
 
         if (result.success) {
           dbClientes.push({ pin: pin, celular: cel, nombre: nombre });
-          
+
           document.getElementById('registerOverlay').classList.remove('open');
           document.getElementById('successOverlay').classList.add('open');
-          
+
           currentPin = pin;
           currentCelular = cel;
         } else {
@@ -724,7 +724,7 @@
     function closeSuccessAndGoToForm() {
       document.getElementById('successOverlay').classList.remove('open');
       document.getElementById('mainPinInput').value = currentPin;
-      checkPin(currentPin); 
+      checkPin(currentPin);
     }
 
     /* --- LÓGICA ORIGINAL DE IMEI Y OPERADORES --- */
@@ -913,7 +913,7 @@
       }
       input.value = digits;
       updateImeiVisualState(digits);
-      
+
       if (digits.length === 15) {
         input.blur();
       }
@@ -943,7 +943,7 @@
       document.getElementById('mainPinInput').value = '';
       document.getElementById('pinMessage').textContent = '';
       document.getElementById('mainPinInput').classList.remove('error', 'success');
-      
+
       document.getElementById('phoneVerifyGroup').style.display = 'none';
       document.getElementById('verifyPhoneInput').value = '';
       document.getElementById('phoneVerifyMsg').textContent = '';
@@ -951,11 +951,11 @@
 
       document.getElementById('imeiField').value = '';
       updateImeiVisualState('');
-      
+
       document.getElementById('imeiTitle').textContent = 'No Registro ' + operatorName;
       document.getElementById('imeiPrice').textContent = 'Valor: ' + price;
       document.getElementById('imeiTime').textContent = 'Tiempo: ' + waitTime;
-      
+
       const claroSwitch = document.getElementById('claroModeSwitch');
       const simWrap = document.getElementById('simLineWrap');
       const simInput = document.getElementById('simLineField');
@@ -974,7 +974,7 @@
 
       document.getElementById('qrReaderPanel').classList.remove('open');
       document.getElementById('qrToggleBtn').classList.remove('active');
-      
+
       document.getElementById('imeiOverlay').classList.add('open');
     }
 
@@ -989,7 +989,7 @@
 
     async function sendImeiWa(e) {
       e.preventDefault();
-      
+
       const cliente = dbClientes.find(c => c.pin === currentPin);
       if (!cliente || currentCelular !== cliente.celular) {
         showToast('Debes verificar tu número de WhatsApp');
@@ -1021,8 +1021,8 @@
         return;
       }
 
-      const WORKER_URL = "https://telegram-zonagsm.zonagsm023.workers.dev"; 
-      
+      const WORKER_URL = "https://telegram-zonagsm.zonagsm023.workers.dev";
+
       const datosParaEnviar = {
         nombre: cliente.nombre,
         celular: cliente.celular,
@@ -1137,7 +1137,7 @@
           data.ordenes.forEach(o => {
             const estadoClass = o.estado.replace(' ', '-');
             const fecha = new Date(o.fecha + "Z").toLocaleString('es-CO', { timeZone: 'America/Bogota' });
-            
+
             html += `
               <div class="client-order-card ${estadoClass}">
                 <div class="client-order-top">
