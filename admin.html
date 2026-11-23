@@ -16,7 +16,11 @@
     /* Estilos del Panel */
     .panel { display: none; max-width: 1200px; margin: 0 auto; }
     .header { display: flex; justify-content: space-between; align-items: center; margin-bottom: 20px; flex-wrap: wrap; gap: 10px; }
+    .header-left { display: flex; align-items: center; gap: 12px; }
     .header h1 { font-size: 24px; color: #0f172a; margin: 0; }
+    .live-badge { display: inline-flex; align-items: center; gap: 6px; padding: 5px 10px; border-radius: 999px; background: #ecfdf5; border: 1px solid #a7f3d0; color: #059669; font-size: 12px; font-weight: 800; }
+    .live-dot { width: 8px; height: 8px; border-radius: 50%; background: #10b981; animation: pulseLive 1.6s infinite; }
+    @keyframes pulseLive { 0%, 100% { opacity: 1; transform: scale(1); } 50% { opacity: 0.4; transform: scale(1.25); } }
     .btn-refresh { padding: 10px 20px; background: #0f172a; color: white; border: none; border-radius: 8px; cursor: pointer; font-weight: bold; }
 
     /* Pestañas (Tabs) */
@@ -52,6 +56,30 @@
     select.estado-select { padding: 8px 12px; border-radius: 8px; border: 1px solid #cbd5e1; font-weight: 700; font-size: 13px; cursor: pointer; outline: none; background: #f8fafc; color: #334155; width: 100%; max-width: 150px; transition: all 0.2s; }
     select.estado-select:hover { background: #e2e8f0; }
 
+    /* MODAL CENTRAL DE NUEVA ORDEN */
+    .new-order-overlay { position: fixed; inset: 0; background: rgba(15, 23, 42, 0.65); backdrop-filter: blur(5px); -webkit-backdrop-filter: blur(5px); display: none; align-items: center; justify-content: center; padding: 20px; z-index: 9999; }
+    .new-order-overlay.open { display: flex; animation: fadeInModal 0.2s ease; }
+    @keyframes fadeInModal { from { opacity: 0; } to { opacity: 1; } }
+    .new-order-modal { width: 100%; max-width: 480px; background: #ffffff; border-radius: 22px; overflow: hidden; box-shadow: 0 25px 50px rgba(15, 23, 42, 0.35); border: 2px solid #c81d4e; animation: popModal 0.25s cubic-bezier(0.22, 1, 0.36, 1); }
+    @keyframes popModal { from { transform: scale(0.92); opacity: 0; } to { transform: scale(1); opacity: 1; } }
+    .new-order-header { background: linear-gradient(135deg, #8a0f33 0%, #c81d4e 100%); color: #ffffff; padding: 18px 22px; display: flex; align-items: center; justify-content: space-between; }
+    .new-order-header h2 { margin: 0; font-size: 20px; font-weight: 900; letter-spacing: 0.2px; }
+    .new-order-queue { background: rgba(255,255,255,0.2); padding: 4px 10px; border-radius: 999px; font-size: 12px; font-weight: 800; }
+    .new-order-body { padding: 20px 22px; }
+    .order-detail-grid { background: #f8fafc; border: 1px solid #e2e8f0; border-radius: 14px; padding: 14px 16px; display: flex; flex-direction: column; gap: 10px; margin-bottom: 18px; }
+    .order-detail-row { display: flex; justify-content: space-between; align-items: center; gap: 12px; font-size: 14px; border-bottom: 1px dashed #e2e8f0; padding-bottom: 8px; }
+    .order-detail-row:last-child { border-bottom: none; padding-bottom: 0; }
+    .order-detail-label { color: #64748b; font-weight: 700; font-size: 12.5px; text-transform: uppercase; }
+    .order-detail-value { color: #0f172a; font-weight: 800; text-align: right; word-break: break-all; }
+    .order-detail-value.mono { font-family: monospace; font-size: 15px; background: #eef2f6; padding: 3px 8px; border-radius: 6px; }
+    .new-order-actions { display: grid; grid-template-columns: 1fr 1fr; gap: 10px; }
+    .btn-modal-accept { grid-column: 1 / -1; padding: 13px; border: none; border-radius: 12px; background: #0284c7; color: #ffffff; font-size: 15px; font-weight: 800; cursor: pointer; transition: background 0.15s; }
+    .btn-modal-accept:hover { background: #0369a1; }
+    .btn-modal-reject { padding: 11px; border: none; border-radius: 12px; background: #fee2e2; color: #dc2626; font-size: 13.5px; font-weight: 800; cursor: pointer; transition: background 0.15s; }
+    .btn-modal-reject:hover { background: #fecaca; }
+    .btn-modal-dismiss { padding: 11px; border: 1px solid #cbd5e1; border-radius: 12px; background: #ffffff; color: #334155; font-size: 13.5px; font-weight: 700; cursor: pointer; transition: background 0.15s; }
+    .btn-modal-dismiss:hover { background: #f1f5f9; }
+
     .hidden { display: none !important; }
   </style>
 </head>
@@ -69,7 +97,10 @@
   <!-- PANEL -->
   <div id="adminPanel" class="panel">
     <div class="header">
-      <h1>Zona GSM Admin</h1>
+      <div class="header-left">
+        <h1>Zona GSM Admin</h1>
+        <span class="live-badge"><span class="live-dot"></span>En vivo</span>
+      </div>
       <button class="btn-refresh" onclick="recargarTodo()">🔄 Actualizar Datos</button>
     </div>
 
@@ -133,10 +164,82 @@
     </div>
   </div>
 
+  <!-- AVISO CENTRAL DE NUEVA ORDEN -->
+  <div id="newOrderOverlay" class="new-order-overlay">
+    <div class="new-order-modal" role="dialog" aria-modal="true" aria-labelledby="newOrderModalTitle">
+      <div class="new-order-header">
+        <h2 id="newOrderModalTitle">🔔 ¡Nueva Orden Recibida!</h2>
+        <span id="newOrderQueueBadge" class="new-order-queue">1 pendiente</span>
+      </div>
+      <div class="new-order-body">
+        <div id="newOrderDetails" class="order-detail-grid"></div>
+        <div class="new-order-actions">
+          <button type="button" id="btnModalAccept" class="btn-modal-accept" onclick="procesarOrdenModal('En Proceso')">
+            ✅ Aceptar y poner En Proceso
+          </button>
+          <button type="button" id="btnModalReject" class="btn-modal-reject" onclick="procesarOrdenModal('Rechazado')">
+            ❌ Rechazar Orden
+          </button>
+          <button type="button" class="btn-modal-dismiss" onclick="cerrarAvisoNuevaOrden()">
+            Ver después en tabla
+          </button>
+        </div>
+      </div>
+    </div>
+  </div>
+
   <script>
     const WORKER_URL = "https://telegram-zonagsm.zonagsm023.workers.dev";
+    const SEEN_ORDERS_KEY = "zg_admin_seen_orders";
+
     let ordenesCache = [];
     let clientesCache = [];
+    let colaNuevasOrdenes = [];
+    let ordenActualModal = null;
+    let adminPollingTimer = null;
+
+    function getOrdenesVistas() {
+      try {
+        return JSON.parse(localStorage.getItem(SEEN_ORDERS_KEY) || "[]");
+      } catch (e) {
+        return [];
+      }
+    }
+
+    function marcarOrdenComoVista(numeroOrden) {
+      if (!numeroOrden) return;
+      const vistas = getOrdenesVistas();
+      if (!vistas.includes(numeroOrden)) {
+        vistas.push(numeroOrden);
+        localStorage.setItem(SEEN_ORDERS_KEY, JSON.stringify(vistas.slice(-300)));
+      }
+    }
+
+    function reproducirSonidoNuevaOrden() {
+      try {
+        const AudioCtx = window.AudioContext || window.webkitAudioContext;
+        if (!AudioCtx) return;
+        const ctx = new AudioCtx();
+        const osc = ctx.createOscillator();
+        const gain = ctx.createGain();
+        osc.type = "sine";
+        osc.frequency.setValueAtTime(880, ctx.currentTime);
+        osc.frequency.setValueAtTime(1174.66, ctx.currentTime + 0.14);
+        gain.gain.setValueAtTime(0.18, ctx.currentTime);
+        gain.gain.exponentialRampToValueAtTime(0.001, ctx.currentTime + 0.42);
+        osc.connect(gain);
+        gain.connect(ctx.destination);
+        osc.start();
+        osc.stop(ctx.currentTime + 0.42);
+      } catch (e) {}
+    }
+
+    function iniciarMonitoreoOrdenes() {
+      if (adminPollingTimer) clearInterval(adminPollingTimer);
+      adminPollingTimer = setInterval(() => {
+        cargarOrdenes(true);
+      }, 8000);
+    }
 
     function login() {
       const u = document.getElementById('userInput').value;
@@ -147,6 +250,7 @@
         document.getElementById('adminPanel').style.display = 'block';
         localStorage.setItem('zg_admin_logged', 'true');
         recargarTodo();
+        iniciarMonitoreoOrdenes();
       } else {
         alert("Usuario o contraseña incorrectos");
       }
@@ -156,6 +260,7 @@
       document.getElementById('loginBox').style.display = 'none';
       document.getElementById('adminPanel').style.display = 'block';
       recargarTodo();
+      iniciarMonitoreoOrdenes();
     }
 
     function showTab(tabName) {
@@ -174,7 +279,7 @@
     }
 
     async function recargarTodo() {
-      await Promise.all([cargarClientes(), cargarOrdenes()]);
+      await Promise.all([cargarClientes(), cargarOrdenes(false)]);
     }
 
     function poblarFiltroClientes() {
@@ -202,6 +307,116 @@
       document.getElementById('filtroCliente').value = '';
       document.getElementById('buscadorOrdenes').value = '';
       renderOrdenes(ordenesCache);
+    }
+
+    function evaluarNuevasOrdenes(lista) {
+      const vistas = getOrdenesVistas();
+      if (vistas.length === 0 && lista.length > 0) {
+        // Primera carga: registrar las existentes para avisar solo sobre las nuevas que lleguen
+        lista.forEach(o => marcarOrdenComoVista(o.numero_orden));
+        return;
+      }
+
+      let huboNueva = false;
+      lista.forEach(o => {
+        const yaVista = vistas.includes(o.numero_orden);
+        const enCola = colaNuevasOrdenes.some(item => item.numero_orden === o.numero_orden);
+        if (!yaVista && !enCola && o.estado === 'Pendiente') {
+          colaNuevasOrdenes.push(o);
+          huboNueva = true;
+        } else if (!yaVista) {
+          marcarOrdenComoVista(o.numero_orden);
+        }
+      });
+
+      if (huboNueva) {
+        reproducirSonidoNuevaOrden();
+        mostrarSiguienteOrdenModal();
+      }
+    }
+
+    function mostrarSiguienteOrdenModal() {
+      const overlay = document.getElementById('newOrderOverlay');
+      if (colaNuevasOrdenes.length === 0) {
+        ordenActualModal = null;
+        overlay.classList.remove('open');
+        return;
+      }
+
+      ordenActualModal = colaNuevasOrdenes[0];
+      const o = ordenActualModal;
+      const fecha = new Date(o.fecha + "Z").toLocaleString('es-CO', { timeZone: 'America/Bogota' });
+
+      document.getElementById('newOrderQueueBadge').textContent =
+        colaNuevasOrdenes.length > 1 ? `${colaNuevasOrdenes.length} nuevas` : '1 nueva';
+
+      document.getElementById('newOrderDetails').innerHTML = `
+        <div class="order-detail-row">
+          <span class="order-detail-label">Orden</span>
+          <span class="order-detail-value" style="color:#c81d4e; font-size:16px;">${o.numero_orden}</span>
+        </div>
+        <div class="order-detail-row">
+          <span class="order-detail-label">Cliente</span>
+          <span class="order-detail-value">${o.nombre || 'Sin nombre'}</span>
+        </div>
+        <div class="order-detail-row">
+          <span class="order-detail-label">WhatsApp</span>
+          <span class="order-detail-value">${o.celular}</span>
+        </div>
+        <div class="order-detail-row">
+          <span class="order-detail-label">Servicio</span>
+          <span class="order-detail-value">No Registro ${o.operador}</span>
+        </div>
+        <div class="order-detail-row">
+          <span class="order-detail-label">IMEI</span>
+          <span class="order-detail-value mono">${o.imei}</span>
+        </div>
+        <div class="order-detail-row">
+          <span class="order-detail-label">Valor</span>
+          <span class="order-detail-value" style="color:#059669;">${o.precio}</span>
+        </div>
+        <div class="order-detail-row">
+          <span class="order-detail-label">Comprobante</span>
+          <span class="order-detail-value">
+            ${o.comprobante_url
+              ? `<a href="${o.comprobante_url}" target="_blank" style="color:#2563eb; text-decoration:underline;">📷 Ver Comprobante</a>`
+              : '<span style="color:#94a3b8;">Sin foto adjunta</span>'}
+          </span>
+        </div>
+        <div class="order-detail-row">
+          <span class="order-detail-label">Hora</span>
+          <span class="order-detail-value" style="font-size:12px; color:#64748b;">${fecha}</span>
+        </div>
+      `;
+
+      overlay.classList.add('open');
+    }
+
+    function cerrarAvisoNuevaOrden() {
+      if (ordenActualModal) {
+        marcarOrdenComoVista(ordenActualModal.numero_orden);
+        colaNuevasOrdenes.shift();
+      }
+      mostrarSiguienteOrdenModal();
+    }
+
+    async function procesarOrdenModal(nuevoEstado) {
+      if (!ordenActualModal) return;
+      const btnAccept = document.getElementById('btnModalAccept');
+      const btnReject = document.getElementById('btnModalReject');
+      btnAccept.disabled = true;
+      btnReject.disabled = true;
+
+      try {
+        const numeroOrden = ordenActualModal.numero_orden;
+        await cambiarEstado(numeroOrden, nuevoEstado);
+        marcarOrdenComoVista(numeroOrden);
+        colaNuevasOrdenes.shift();
+        mostrarSiguienteOrdenModal();
+      } finally {
+        btnAccept.disabled = false;
+        btnReject.disabled = false;
+      }
     }
 
     function renderOrdenes(lista) {
@@ -274,9 +489,11 @@
     }
 
     // --- CARGAR ÓRDENES ---
-    async function cargarOrdenes() {
+    async function cargarOrdenes(silencioso = false) {
       const tbody = document.getElementById('tablaOrdenes');
-      tbody.innerHTML = '<tr><td colspan="10" style="text-align: center; padding: 30px;">Cargando...</td></tr>';
+      if (!silencioso && ordenesCache.length === 0) {
+        tbody.innerHTML = '<tr><td colspan="10" style="text-align: center; padding: 30px;">Cargando...</td></tr>';
+      }
 
       try {
         const res = await fetch(WORKER_URL + "?action=get_orders");
@@ -285,11 +502,14 @@
         if (data.success) {
           ordenesCache = data.ordenes || [];
           renderOrdenes(ordenesCache);
+          evaluarNuevasOrdenes(ordenesCache);
         } else {
           throw new Error(data.error);
         }
       } catch (err) {
-        tbody.innerHTML = `<tr><td colspan="10" style="text-align: center; color: red; padding: 30px;">Error: ${err.message}</td></tr>`;
+        if (!silencioso) {
+          tbody.innerHTML = `<tr><td colspan="10" style="text-align: center; color: red; padding: 30px;">Error: ${err.message}</td></tr>`;
+        }
       }
     }
 
@@ -345,7 +565,8 @@
         const data = await res.json();
 
         if (data.success) {
-          cargarOrdenes();
+          marcarOrdenComoVista(numeroOrden);
+          await cargarOrdenes(true);
         } else {
           alert("Error al actualizar: " + data.error);
         }
