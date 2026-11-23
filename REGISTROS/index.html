@@ -561,16 +561,27 @@
     let activeClientPin = '';
     let activeClientPhone = '';
 
+    function normalizarPago(valor) {
+      if (typeof valor !== 'string') return null;
+      const limpio = valor.trim().toLowerCase();
+      if (limpio === 'pagado' || limpio === 'paid' || limpio === 'si' || limpio === 'sí') return 'Pagado';
+      if (limpio === 'no pagado' || limpio === 'no_pagado' || limpio === 'nopagado' || limpio === 'unpaid' || limpio === 'no') return 'No Pagado';
+      return null;
+    }
+
     function resolverEstadoPagoCliente(orden) {
-      if (orden.pago === 'Pagado' || orden.pago === 'No Pagado') {
-        return orden.pago;
-      }
       try {
         const mapa = JSON.parse(localStorage.getItem(PAYMENT_STATE_KEY) || "{}");
-        if (orden.numero_orden && mapa[orden.numero_orden]) {
-          return mapa[orden.numero_orden];
+        if (orden.numero_orden && normalizarPago(mapa[orden.numero_orden])) {
+          return normalizarPago(mapa[orden.numero_orden]);
         }
       } catch (e) {}
+
+      const pagoServidor = normalizarPago(orden.pago ?? orden.estado_pago ?? orden.payment_status ?? '');
+      if (pagoServidor) {
+        return pagoServidor;
+      }
+
       return orden.comprobante_url ? 'Pagado' : 'No Pagado';
     }
 
@@ -1241,7 +1252,6 @@
           historial = [...data.ordenes];
         }
 
-        // Respaldo: consultar todas las órdenes y filtrar las de este número o PIN para asegurar el historial completo
         try {
           const resAll = await fetch(`${WORKER_URL}?action=get_orders`);
           const dataAll = await resAll.json();
