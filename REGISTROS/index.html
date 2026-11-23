@@ -142,6 +142,11 @@
     .imei-send-btn { width: 100%; padding: 12px; border: none; border-radius: 12px; background: #c81d4e; color: #ffffff; font-size: 14px; font-weight: 800; cursor: pointer; transition: background 0.15s ease; margin-top: 12px; }
     .imei-send-btn:hover { background: #a61840; }
 
+    .receipt-dropzone { display: flex; align-items: center; justify-content: space-between; gap: 10px; padding: 10px 12px; border-radius: 12px; border: 1.5px dashed #cbd5e1; background: #f8fafc; cursor: pointer; transition: all 0.2s ease; }
+    .receipt-dropzone:hover, .receipt-dropzone.has-file { border-color: #c81d4e; background: #fff5f8; }
+    .receipt-btn-pill { background: #c81d4e; color: #ffffff; font-size: 12px; font-weight: 700; padding: 7px 12px; border-radius: 9px; white-space: nowrap; flex-shrink: 0; }
+    .receipt-file-name { font-size: 12px; font-weight: 600; color: #475569; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; flex: 1; }
+
     .sim-line-wrap { display: none; margin-top: 8px; }
     .sim-line-wrap.visible { display: block; }
     .sim-line-input { width: 100%; padding: 10px 12px; border-radius: 10px; border: 1.5px solid #cbd5e1; background: #f8fafc; font-size: 13.5px; font-weight: 700; letter-spacing: 0.3px; color: #0f172a; outline: none; transition: border-color 0.15s ease, background-color 0.15s ease; }
@@ -413,7 +418,11 @@
         <!-- SUBIR COMPROBANTE -->
         <div class="input-group" style="margin-top: 12px;">
           <label>Subir Comprobante de Pago:</label>
-          <input type="file" id="receiptInput" accept="image/*" style="width: 100%; padding: 10px; border: 1.5px dashed #cbd5e1; border-radius: 10px; background: #f8fafc; font-size: 13px;" onchange="previewReceipt(this)">
+          <label id="receiptDropzone" for="receiptInput" class="receipt-dropzone">
+            <span class="receipt-btn-pill">📷 Elegir foto</span>
+            <span id="receiptFileName" class="receipt-file-name">Sin archivo seleccionado</span>
+          </label>
+          <input type="file" id="receiptInput" accept="image/*" style="display: none;" onchange="previewReceipt(this)">
           <img id="receiptPreview" style="display: none; max-width: 100%; margin-top: 10px; border-radius: 8px; max-height: 150px; object-fit: contain;">
         </div>
 
@@ -584,7 +593,11 @@
     /* --- SUBIR COMPROBANTE --- */
     function previewReceipt(input) {
       const file = input.files[0];
+      const dropzone = document.getElementById('receiptDropzone');
+      const nameLabel = document.getElementById('receiptFileName');
       if (file) {
+        nameLabel.textContent = file.name;
+        dropzone.classList.add('has-file');
         const reader = new FileReader();
         reader.onload = function(e) {
           receiptBase64 = e.target.result;
@@ -595,6 +608,8 @@
         reader.readAsDataURL(file);
       } else {
         receiptBase64 = null;
+        nameLabel.textContent = 'Sin archivo seleccionado';
+        dropzone.classList.remove('has-file');
         document.getElementById('receiptPreview').style.display = 'none';
       }
     }
@@ -997,6 +1012,8 @@
       currentCelular = '';
       document.getElementById('receiptPreview').style.display = 'none';
       document.getElementById('receiptInput').value = '';
+      document.getElementById('receiptFileName').textContent = 'Sin archivo seleccionado';
+      document.getElementById('receiptDropzone').classList.remove('has-file');
 
       const logoWrap = document.getElementById('imeiLogoWrap');
       logoWrap.className = 'imei-op-logo ' + bgClass;
