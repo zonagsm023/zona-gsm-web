@@ -4,13 +4,13 @@
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <title>Zona GSM — Métodos de Pago</title>
-  <meta name="description" content="Paga en Zona GSM por Nequi, Bancolombia, Bre-B o Binance. Copia el dato con un toque y envía tu comprobante." />
+  <meta name="description" content="Paga en Zona GSM por Nequi o Binance. Copia el dato con un toque y envía tu comprobante." />
   <link rel="canonical" href="https://pagos.zonagsm.site/" />
   <link rel="icon" type="image/png" href="logo.png" />
 
   <meta property="og:type" content="website" />
   <meta property="og:title" content="Zona GSM — Métodos de Pago" />
-  <meta property="og:description" content="Paga por Nequi, Bancolombia, Bre-B o Binance." />
+  <meta property="og:description" content="Paga por Nequi o Binance." />
   <meta property="og:url" content="https://pagos.zonagsm.site/" />
   <meta property="og:image" content="logo.png" />
   <meta property="og:site_name" content="Zona GSM" />
@@ -23,8 +23,7 @@
     .preloader.hidden { opacity: 0; visibility: hidden; pointer-events: none; }
     .loader-circle-wrap { position: relative; width: 124px; height: 124px; display: flex; align-items: center; justify-content: center; animation: loaderPopIn 0.5s cubic-bezier(0.22, 1, 0.36, 1) forwards; }
     @keyframes loaderPopIn { 0% { transform: scale(0.85); opacity: 0; } 100% { transform: scale(1); opacity: 1; } }
-    
-    /* CAMBIO: Anillos del preloader en tonos rojos */
+
     .loader-ring { position: absolute; inset: 0; border-radius: 50%; border: 2px solid rgba(200, 29, 78, 0.35); background: rgba(200, 29, 78, 0.05); animation: loaderPulse 1.4s ease-in-out infinite; }
     .loader-ring-2 { position: absolute; inset: 0; border-radius: 50%; border: 1.5px solid rgba(200, 29, 78, 0.2); animation: loaderPulse 1.4s ease-in-out 0.35s infinite; }
     @keyframes loaderPulse { 0% { transform: scale(0.98); opacity: 0.9; } 70%, 100% { transform: scale(1.24); opacity: 0; } }
@@ -32,13 +31,10 @@
     .container { width: 100%; max-width: 460px; background: #f4f7fa; border-radius: 0 0 28px 28px; padding: 0 0 32px; box-shadow: 0 12px 35px rgba(15, 23, 42, 0.08); border: 1px solid rgba(255, 255, 255, 0.85); border-top: none; text-align: center; overflow: hidden; position: relative; opacity: 0; transform: translateY(14px); transition: opacity 0.75s cubic-bezier(0.22, 1, 0.36, 1), transform 0.75s cubic-bezier(0.22, 1, 0.36, 1); }
     .container.visible { opacity: 1; transform: translateY(0); }
 
-    /* CAMBIO: Fondo superior cambiado a tonos rojos del logo */
     .cover-area { height: 155px; background: linear-gradient(135deg, #8a0f33 0%, #c81d4e 55%, #e62e62 100%); position: relative; }
     .top-nav { position: absolute; top: 14px; left: 0; right: 0; display: flex; justify-content: center; gap: 6px; padding: 0 10px; z-index: 10; flex-wrap: wrap; }
     .nav-pill { padding: 6px 11px; border-radius: 999px; font-size: 11px; font-weight: 700; text-decoration: none; color: rgba(255, 255, 255, 0.92); background: rgba(255, 255, 255, 0.14); backdrop-filter: blur(8px); -webkit-backdrop-filter: blur(8px); border: 1px solid rgba(255, 255, 255, 0.25); transition: all 0.2s ease; }
     .nav-pill:hover { background: rgba(255, 255, 255, 0.26); transform: translateY(-1px); }
-    
-    /* CAMBIO: Color del texto del botón activo */
     .nav-pill.active { background: #ffffff; color: #8a0f33; border-color: #ffffff; box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15); }
     .mountain-divider { position: absolute; bottom: -1px; left: 0; width: 100%; height: 36px; fill: #f4f7fa; display: block; }
 
@@ -47,10 +43,9 @@
     .avatar-img { width: 100%; height: 100%; object-fit: cover; mix-blend-mode: multiply; filter: contrast(1.08) brightness(1.04); display: block; }
     .avatar-fallback { width: 100%; height: 100%; display: flex; align-items: center; justify-content: center; background: #ffffff; }
     .logo-badge { display: inline-flex; align-items: center; font-weight: 800; font-size: 16px; letter-spacing: -0.3px; }
-    .logo-zona { background: #c81d4e; color: #ffffff; padding: 3px 6px; border-radius: 4px; margin-right: 4px; }
+    .logo-zona { background: #c81d4e; color: #ffffff; padding: 3px 6px; border-radius: 2px; margin-right: 4px; }
     .logo-gsm { color: #0f0f0f; }
 
-    /* CAMBIO: Anillos de pulso del avatar en tonos rojos */
     .pulse-ring { position: absolute; top: 0; left: 0; width: 100%; height: 100%; border-radius: 50%; border: 1.5px solid rgba(200, 29, 78, 0.32); background: rgba(200, 29, 78, 0.05); pointer-events: none; z-index: 1; }
     .ring-1 { animation: breatheRing1 4.2s ease-in-out infinite; }
     .ring-2 { border-color: rgba(200, 29, 78, 0.2); background: rgba(200, 29, 78, 0.03); animation: breatheRing2 4.2s ease-in-out infinite; }
@@ -79,8 +74,6 @@
 
     .bank-icon { width: 46px; height: 46px; border-radius: 50%; flex-shrink: 0; display: flex; align-items: center; justify-content: center; font-weight: 800; font-size: 15px; }
     .icon-nequi { background: #f5eff7; color: #200020; }
-    .icon-breb { background: #2b0057; color: #00e5a8; font-size: 12px; }
-    .icon-bancolombia { background: #f8fafc; border: 1px solid #e2e8f0; }
     .icon-binance { background: #181a20; color: #f0b90b; }
 
     .card-info { display: flex; flex-direction: column; min-width: 0; }
@@ -88,7 +81,6 @@
     .account-number { font-size: 14px; font-weight: 600; color: #475569; margin-top: 1px; word-break: break-all; }
     .account-holder { font-size: 12px; color: #64748b; margin-top: 1px; }
 
-    /* CAMBIO: Botones de copiar ahora son rojos */
     .copy-btn { width: 40px; height: 40px; border-radius: 50%; border: none; background: #c81d4e; color: #ffffff; cursor: pointer; flex-shrink: 0; display: flex; align-items: center; justify-content: center; transition: background 0.2s ease, transform 0.1s ease; }
     .copy-btn:hover { background: #a3163f; }
     .copy-btn:active { transform: scale(0.94); }
@@ -136,7 +128,7 @@
 
     <div class="content-box">
       <h1>Zona GSM</h1>
-      <p class="bio">Paga por Nequi, Bancolombia, Bre-B o Binance. Copia el dato con un toque y envía tu comprobante.</p>
+      <p class="bio">Paga por Nequi o Binance. Copia el dato con un toque y envía tu comprobante.</p>
 
       <div class="socials">
         <a class="social-item" href="https://wa.me/573104141805" target="_blank" rel="noopener noreferrer" aria-label="Soporte 1 por WhatsApp">
@@ -164,36 +156,6 @@
       <div class="section-title">MÉTODOS DE PAGO</div>
 
       <div class="cards">
-        <div class="card">
-          <div class="card-left">
-            <div class="bank-icon icon-breb">Bre-B</div>
-            <div class="card-info">
-              <span class="bank-name">LLAVE BRE-B</span>
-              <span class="account-number">@cordero4600</span>
-              <span class="account-holder">Diana Cordero</span>
-            </div>
-          </div>
-          <button class="copy-btn" onclick="copyText('@cordero4600', 'Llave Bre-B', this)" title="Copiar llave" aria-label="Copiar llave Bre-B"><svg width="18" height="18"><use href="#icon-copy"/></svg></button>
-        </div>
-
-        <div class="card">
-          <div class="card-left">
-            <div class="bank-icon icon-bancolombia">
-              <svg width="24" height="24" viewBox="0 0 24 24" fill="none">
-                <path d="M4 7C9 5 15 5 20 7" stroke="#FDDA24" stroke-width="3.2" stroke-linecap="round"/>
-                <path d="M4 12C9 10 15 10 20 12" stroke="#00448D" stroke-width="3.2" stroke-linecap="round"/>
-                <path d="M4 17C9 15 15 15 20 17" stroke="#E2001A" stroke-width="3.2" stroke-linecap="round"/>
-              </svg>
-            </div>
-            <div class="card-info">
-              <span class="bank-name">BANCOLOMBIA</span>
-              <span class="account-number">91293104498</span>
-              <span class="account-holder">Ahorros Diana Cordero</span>
-            </div>
-          </div>
-          <button class="copy-btn" onclick="copyText('91293104498', 'Bancolombia', this)" title="Copiar cuenta" aria-label="Copiar cuenta Bancolombia"><svg width="18" height="18"><use href="#icon-copy"/></svg></button>
-        </div>
-
         <div class="card">
           <div class="card-left">
             <div class="bank-icon icon-nequi"><span style="color:#da0081;margin-right:1px;">•</span>N</div>
