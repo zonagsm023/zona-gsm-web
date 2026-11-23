@@ -570,17 +570,17 @@
     }
 
     function resolverEstadoPagoCliente(orden) {
+      const pagoServidor = normalizarPago(orden.pago ?? orden.estado_pago ?? orden.payment_status ?? '');
+      if (pagoServidor) {
+        return pagoServidor;
+      }
+
       try {
         const mapa = JSON.parse(localStorage.getItem(PAYMENT_STATE_KEY) || "{}");
         if (orden.numero_orden && normalizarPago(mapa[orden.numero_orden])) {
           return normalizarPago(mapa[orden.numero_orden]);
         }
       } catch (e) {}
-
-      const pagoServidor = normalizarPago(orden.pago ?? orden.estado_pago ?? orden.payment_status ?? '');
-      if (pagoServidor) {
-        return pagoServidor;
-      }
 
       return orden.comprobante_url ? 'Pagado' : 'No Pagado';
     }
