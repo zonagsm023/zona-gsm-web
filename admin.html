@@ -25,10 +25,13 @@
     .tab-btn.active { color: #c81d4e; border-bottom-color: #c81d4e; }
     .tab-btn:hover { color: #0f172a; }
 
-    /* Barra de filtro de clientes */
+    /* Barra de filtro y búsqueda */
     .filter-bar { display: flex; align-items: center; gap: 12px; padding: 14px 16px; background: white; border-bottom: 1px solid #e2e8f0; flex-wrap: wrap; }
+    .filter-group { display: flex; align-items: center; gap: 8px; flex-wrap: wrap; }
     .filter-bar label { font-size: 13px; font-weight: 700; color: #334155; }
-    .filter-select { padding: 8px 12px; border-radius: 8px; border: 1px solid #cbd5e1; font-size: 13px; font-weight: 600; color: #0f172a; background: #f8fafc; min-width: 240px; outline: none; cursor: pointer; }
+    .filter-select { padding: 8px 12px; border-radius: 8px; border: 1px solid #cbd5e1; font-size: 13px; font-weight: 600; color: #0f172a; background: #f8fafc; min-width: 220px; outline: none; cursor: pointer; }
+    .search-input { padding: 8px 12px; border-radius: 8px; border: 1px solid #cbd5e1; font-size: 13px; font-weight: 600; color: #0f172a; background: #f8fafc; min-width: 240px; outline: none; transition: border-color 0.15s ease, background-color 0.15s ease; }
+    .search-input:focus { border-color: #c81d4e; background: #ffffff; }
     .btn-clear { padding: 8px 12px; border-radius: 8px; border: 1px solid #cbd5e1; background: #ffffff; color: #475569; font-size: 12px; font-weight: 700; cursor: pointer; }
     .btn-clear:hover { background: #f1f5f9; color: #0f172a; }
 
@@ -79,10 +82,16 @@
     <!-- VISTA: ÓRDENES -->
     <div id="view-orders" class="table-container">
       <div class="filter-bar">
-        <label for="filtroCliente">Ver órdenes de cliente:</label>
-        <select id="filtroCliente" class="filter-select" onchange="aplicarFiltroCliente()">
-          <option value="">Todos los clientes</option>
-        </select>
+        <div class="filter-group">
+          <label for="filtroCliente">Ver órdenes de cliente:</label>
+          <select id="filtroCliente" class="filter-select" onchange="aplicarFiltroCliente()">
+            <option value="">Todos los clientes</option>
+          </select>
+        </div>
+        <div class="filter-group">
+          <label for="buscadorOrdenes">Buscar:</label>
+          <input type="text" id="buscadorOrdenes" class="search-input" placeholder="N° orden, teléfono, IMEI o cliente..." oninput="aplicarFiltroCliente()">
+        </div>
         <button type="button" class="btn-clear" onclick="limpiarFiltroCliente()">Mostrar todos</button>
       </div>
       <table>
@@ -191,19 +200,30 @@
 
     function limpiarFiltroCliente() {
       document.getElementById('filtroCliente').value = '';
+      document.getElementById('buscadorOrdenes').value = '';
       renderOrdenes(ordenesCache);
     }
 
     function renderOrdenes(lista) {
       const tbody = document.getElementById('tablaOrdenes');
       const filtroVal = document.getElementById('filtroCliente').value;
+      const textoBusqueda = String(document.getElementById('buscadorOrdenes').value || '').trim().toLowerCase();
 
       let filtradas = lista;
       if (filtroVal) {
         const [pinSel, celSel] = filtroVal.split('||');
-        filtradas = lista.filter(o =>
+        filtradas = filtradas.filter(o =>
           (pinSel && String(o.pin || '') === pinSel) ||
           (celSel && String(o.celular || '') === celSel)
+        );
+      }
+
+      if (textoBusqueda) {
+        filtradas = filtradas.filter(o =>
+          String(o.numero_orden || '').toLowerCase().includes(textoBusqueda) ||
+          String(o.celular || '').toLowerCase().includes(textoBusqueda) ||
+          String(o.imei || '').toLowerCase().includes(textoBusqueda) ||
+          String(o.nombre || '').toLowerCase().includes(textoBusqueda)
         );
       }
 
