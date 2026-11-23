@@ -19,7 +19,7 @@
     .loader-ring-2 { position: absolute; inset: 0; border-radius: 50%; border: 1.5px solid rgba(200, 29, 78, 0.2); animation: loaderPulse 1.4s ease-in-out 0.35s infinite; }
     @keyframes loaderPulse { 0% { transform: scale(0.98); opacity: 0.9; } 70%, 100% { transform: scale(1.24); opacity: 0; } }
 
-    .container { width: 100%; max-width: 460px; background: #f4f7fa; border-radius: 0 0 28px 28px; padding: 0 0 32px; box-shadow: 0 12px 35px rgba(15, 23, 42, 0.08); border: 1px solid rgba(255, 255, 255, 0.85); border-top: none; text-align: center; overflow: hidden; position: relative; opacity: 0; transform: translateY(14px); transition: opacity 0.75s cubic-bezier(0.22, 1, 0.36, 1), transform 0.75s cubic-bezier(0.22, 1, 0.36, 1); }
+    .container { width: 100%; max-width: 960px; background: #f4f7fa; border-radius: 0 0 28px 28px; padding: 0 0 32px; box-shadow: 0 12px 35px rgba(15, 23, 42, 0.08); border: 1px solid rgba(255, 255, 255, 0.85); border-top: none; text-align: center; overflow: hidden; position: relative; opacity: 0; transform: translateY(14px); transition: opacity 0.75s cubic-bezier(0.22, 1, 0.36, 1), transform 0.75s cubic-bezier(0.22, 1, 0.36, 1); }
     .container.visible { opacity: 1; transform: translateY(0); }
     .cover-area { height: 155px; background: linear-gradient(135deg, #8a0f33 0%, #c81d4e 55%, #e62e62 100%); position: relative; }
     .top-nav { position: absolute; top: 14px; left: 0; right: 0; display: flex; justify-content: center; gap: 6px; padding: 0 10px; z-index: 10; flex-wrap: wrap; }
@@ -95,6 +95,13 @@
     .card:active .wa-btn { transform: scale(0.94); }
     .wa-btn.offline-wa { background: #ef4444; color: #ffffff; }
     .card:hover .wa-btn.offline-wa { background: #dc2626; }
+
+    @media (min-width: 720px) {
+      body { padding: 24px 16px 48px; }
+      .container { border-radius: 28px; border-top: 1px solid rgba(255, 255, 255, 0.85); }
+      .bio { max-width: 560px; }
+      .cards { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 14px; }
+    }
 
     /* --- MODALES Y FORMULARIOS NUEVOS --- */
     .imei-overlay { position: fixed; inset: 0; background: rgba(15, 23, 42, 0.55); backdrop-filter: blur(4px); -webkit-backdrop-filter: blur(4px); display: none; align-items: center; justify-content: center; padding: 18px; z-index: 10001; }
