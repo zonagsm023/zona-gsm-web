@@ -4,13 +4,13 @@
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <title>Zona GSM — E-SIM Colombia</title>
-  <meta name="description" content="E-SIM Claro, Tigo, WOM y Movistar en Colombia. Activación y entrega inmediata. Proceso 100% digital por WhatsApp." />
+  <meta name="description" content="E-SIM Claro, Tigo, WOM y Movistar en Colombia. Activación y entrega inmediata. Proceso 100% digital." />
   <link rel="canonical" href="https://esim.zonagsm.site/" />
   <link rel="icon" type="image/png" href="logo.png" />
 
   <meta property="og:type" content="website" />
   <meta property="og:title" content="Zona GSM — E-SIM Colombia" />
-  <meta property="og:description" content="E-SIM Claro, Tigo, WOM y Movistar. Activación inmediata por WhatsApp." />
+  <meta property="og:description" content="E-SIM Claro, Tigo, WOM y Movistar. Activación inmediata." />
   <meta property="og:url" content="https://esim.zonagsm.site/" />
   <meta property="og:image" content="logo.png" />
   <meta property="og:site_name" content="Zona GSM" />
@@ -30,6 +30,12 @@
 
     .container { width: 100%; max-width: 460px; background: #f4f7fa; border-radius: 0 0 28px 28px; padding: 0 0 32px; box-shadow: 0 12px 35px rgba(15, 23, 42, 0.08); border: 1px solid rgba(255, 255, 255, 0.85); border-top: none; text-align: center; overflow: hidden; position: relative; opacity: 0; transform: translateY(14px); transition: opacity 0.75s cubic-bezier(0.22, 1, 0.36, 1), transform 0.75s cubic-bezier(0.22, 1, 0.36, 1); }
     .container.visible { opacity: 1; transform: translateY(0); }
+
+    @media (min-width: 720px) {
+      body { padding: 24px 16px 48px; }
+      .container { max-width: 560px; border-radius: 28px; border-top: 1px solid rgba(255, 255, 255, 0.85); }
+      .content-box { padding: 0 28px; }
+    }
 
     .cover-area { height: 155px; background: linear-gradient(135deg, #8a0f33 0%, #c81d4e 55%, #e62e62 100%); position: relative; }
     .top-nav { position: absolute; top: 14px; left: 0; right: 0; display: flex; justify-content: center; gap: 6px; padding: 0 10px; z-index: 10; flex-wrap: wrap; }
@@ -54,7 +60,10 @@
 
     .content-box { padding: 0 18px; }
     h1 { font-size: 24px; font-weight: 800; color: #0f172a; margin-bottom: 8px; }
-    .bio { font-size: 14px; line-height: 1.45; color: #334155; max-width: 340px; margin: 0 auto 22px; }
+    .bio { font-size: 14px; line-height: 1.45; color: #334155; max-width: 360px; margin: 0 auto 12px; }
+
+    .track-order-btn { margin-bottom: 22px; padding: 10px 20px; background: #0f172a; color: white; border: none; border-radius: 8px; font-size: 13px; font-weight: 700; cursor: pointer; display: inline-flex; align-items: center; gap: 6px; transition: background 0.2s; }
+    .track-order-btn:hover { background: #334155; }
 
     @keyframes subtleHop { 0%, 78%, 100% { transform: translateY(0); } 84% { transform: translateY(-5px); } 90% { transform: translateY(0); } 94% { transform: translateY(-2px); } }
     .socials { display: flex; justify-content: center; align-items: flex-start; gap: 10px; margin-bottom: 26px; }
@@ -68,7 +77,7 @@
     .section-title { font-size: 12px; font-weight: 700; letter-spacing: 1px; color: #64748b; text-transform: uppercase; margin-bottom: 16px; }
     .cards { display: flex; flex-direction: column; gap: 14px; padding: 0 4px; }
 
-    .card { background: #ffffff; border-radius: 50px; padding: 12px 16px; display: flex; align-items: center; justify-content: space-between; gap: 10px; box-shadow: 0 4px 14px rgba(15, 23, 42, 0.05); border: 1px solid #eef2f6; text-align: left; text-decoration: none; color: inherit; width: 100%; cursor: pointer; transition: transform 0.15s ease, box-shadow 0.15s ease; }
+    .card { background: #ffffff; border-radius: 36px; padding: 12px 16px; display: flex; align-items: center; justify-content: space-between; gap: 10px; box-shadow: 0 4px 14px rgba(15, 23, 42, 0.05); border: 1px solid #eef2f6; text-align: left; text-decoration: none; color: inherit; width: 100%; cursor: pointer; transition: transform 0.15s ease, box-shadow 0.15s ease; }
     .card:hover { transform: translateY(-1px); box-shadow: 0 6px 18px rgba(15, 23, 42, 0.09); }
     .card.is-offline { opacity: 0.8; }
     .card-left { display: flex; align-items: center; gap: 12px; min-width: 0; flex: 1; }
@@ -98,32 +107,87 @@
     .service-note { font-size: 11px; color: #64748b; margin-top: 2px; }
     .price-note { font-size: 11.5px; font-weight: 800; color: #059669; margin-top: 3px; }
 
-    .action-btn { width: 40px; height: 40px; border-radius: 50%; border: none; background: #25D366; color: #ffffff; flex-shrink: 0; display: flex; align-items: center; justify-content: center; transition: background 0.2s ease, transform 0.1s ease; }
-    .card:hover .action-btn { background: #1ebe5d; }
+    .action-btn { width: 40px; height: 40px; border-radius: 50%; border: none; background: #c81d4e; color: #ffffff; flex-shrink: 0; display: flex; align-items: center; justify-content: center; transition: background 0.2s ease, transform 0.1s ease; }
+    .card:hover .action-btn { background: #a61840; }
     .card:active .action-btn { transform: scale(0.94); }
     .action-btn.offline-wa { background: #ef4444; color: #ffffff; }
     .card:hover .action-btn.offline-wa { background: #dc2626; }
 
-    /* Cuadro modal de cantidad y precio */
+    /* Modales */
     .esim-overlay { position: fixed; inset: 0; background: rgba(15, 23, 42, 0.55); backdrop-filter: blur(4px); -webkit-backdrop-filter: blur(4px); display: none; align-items: center; justify-content: center; padding: 18px; z-index: 10001; }
     .esim-overlay.open { display: flex; }
-    .esim-box { width: 100%; max-width: 390px; background: #ffffff; border-radius: 22px; padding: 18px; box-shadow: 0 18px 40px rgba(15, 23, 42, 0.22); text-align: left; }
+    .esim-box { width: 100%; max-width: 420px; background: #ffffff; border-radius: 22px; padding: 18px; box-shadow: 0 18px 40px rgba(15, 23, 42, 0.22); text-align: left; max-height: 90vh; overflow-y: auto; }
     .esim-box-top { display: flex; align-items: center; justify-content: space-between; gap: 10px; margin-bottom: 14px; }
     .esim-op-head { display: flex; align-items: center; gap: 10px; min-width: 0; }
-    .esim-op-logo { width: 42px; height: 42px; border-radius: 50%; flex-shrink: 0; display: flex; align-items: center; justify-content: center; overflow: hidden; background: #ffffff; }
+    .esim-op-logo { width: 42px; height: 42px; border-radius: 50%; flex-shrink: 0; display: flex; align-items: center; justify-content: center; overflow: hidden; background: #ffffff; border: 1px solid #e2e8f0; }
     .esim-op-logo img { width: 100%; height: 100%; object-fit: cover; display: block; }
-    .esim-box-title { font-size: 15px; font-weight: 800; color: #0f172a; line-height: 1.2; }
+    .esim-box-title { font-size: 16px; font-weight: 800; color: #0f172a; line-height: 1.2; }
     .esim-price-pill { display: inline-block; margin-top: 4px; font-size: 11.5px; font-weight: 800; color: #059669; background: #ecfdf5; border: 1px solid #a7f3d0; padding: 2px 9px; border-radius: 999px; }
     .esim-close { width: 28px; height: 28px; border-radius: 50%; border: none; background: #f1f5f9; color: #334155; font-size: 16px; font-weight: 700; cursor: pointer; flex-shrink: 0; display: flex; align-items: center; justify-content: center; }
 
-    .esim-qty-label { font-size: 12px; font-weight: 700; color: #475569; margin-bottom: 8px; }
-    .esim-row { display: flex; align-items: center; gap: 8px; }
-    .esim-qty-input { width: 92px; padding: 11px 12px; border-radius: 12px; border: 1.5px solid #cbd5e1; font-size: 15px; font-weight: 800; color: #0f172a; text-align: center; outline: none; }
-    .esim-qty-input:focus { border-color: #c81d4e; }
-    .esim-send-btn { flex: 1; padding: 11px 16px; border: none; border-radius: 12px; background: #25D366; color: #ffffff; font-size: 14px; font-weight: 800; cursor: pointer; transition: background 0.15s ease; }
-    .esim-send-btn:hover { background: #1ebe5d; }
+    .input-group { display: flex; flex-direction: column; gap: 6px; margin-bottom: 12px; }
+    .input-group label { font-size: 12px; font-weight: 700; color: #334155; }
+    .pin-input { width: 100%; padding: 10px; border-radius: 12px; border: 2px solid #cbd5e1; font-size: 16px; text-align: center; letter-spacing: 6px; font-weight: 900; color: #0f172a; outline: none; transition: all 0.15s ease; }
+    .pin-input:focus { border-color: #c81d4e; }
+    .pin-input.error { border-color: #ef4444; background: #fef2f2; color: #dc2626; }
+    .pin-input.success { border-color: #10b981; background: #ecfdf5; color: #059669; }
+    .pin-msg { font-size: 11px; font-weight: 700; text-align: center; min-height: 16px; margin-top: 4px; }
+    .pin-msg.error { color: #dc2626; }
+    .pin-msg.success { color: #059669; }
 
-    .toast { position: fixed; bottom: 24px; left: 50%; transform: translateX(-50%) translateY(20px); background: #0f172a; color: #ffffff; padding: 10px 18px; border-radius: 999px; font-size: 13px; font-weight: 600; opacity: 0; pointer-events: none; transition: opacity 0.25s ease, transform 0.25s ease; box-shadow: 0 8px 20px rgba(0, 0, 0, 0.2); z-index: 10002; }
+    .esim-qty-input { width: 100%; padding: 10px 12px; border-radius: 12px; border: 1.5px solid #cbd5e1; font-size: 15px; font-weight: 800; color: #0f172a; text-align: center; outline: none; }
+    .esim-qty-input:focus { border-color: #c81d4e; }
+
+    .pay-box { background: #f8fafc; padding: 10px; border-radius: 12px; margin-bottom: 12px; border: 1px solid #e2e8f0; }
+    .pay-box-title { font-size: 12px; font-weight: 700; color: #334155; margin-bottom: 8px; }
+    .pay-btns { display: flex; gap: 6px; flex-wrap: wrap; }
+    .pay-chip-btn { flex: 1; min-width: 140px; padding: 8px 10px; background: #ffffff; border: 1px solid #cbd5e1; border-radius: 8px; font-size: 11px; font-weight: 800; color: #0f172a; cursor: pointer; text-align: left; }
+    .pay-chip-btn:hover { border-color: #c81d4e; background: #fff5f8; }
+
+    .receipt-dropzone { display: flex; align-items: center; justify-content: space-between; gap: 10px; padding: 10px 12px; border-radius: 12px; border: 1.5px dashed #cbd5e1; background: #f8fafc; cursor: pointer; transition: all 0.2s ease; }
+    .receipt-dropzone:hover, .receipt-dropzone.has-file { border-color: #c81d4e; background: #fff5f8; }
+    .receipt-btn-pill { background: #c81d4e; color: #ffffff; font-size: 12px; font-weight: 700; padding: 7px 12px; border-radius: 9px; white-space: nowrap; flex-shrink: 0; }
+    .receipt-file-name { font-size: 12px; font-weight: 600; color: #475569; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; flex: 1; }
+
+    .esim-send-btn { width: 100%; padding: 12px 16px; border: none; border-radius: 12px; background: #c81d4e; color: #ffffff; font-size: 14px; font-weight: 800; cursor: pointer; transition: background 0.15s ease; }
+    .esim-send-btn:hover { background: #a61840; }
+
+    /* Historial y expansión de E-SIM */
+    .client-order-card { background: #f8fafc; border: 1px solid #e2e8f0; border-radius: 14px; padding: 14px; margin-bottom: 10px; border-left: 5px solid #cbd5e1; cursor: pointer; transition: transform 0.12s ease, box-shadow 0.12s ease; }
+    .client-order-card:hover { transform: translateY(-1px); box-shadow: 0 4px 12px rgba(15, 23, 42, 0.06); }
+    .client-order-card.Pendiente { border-left-color: #f59e0b; }
+    .client-order-card.En-Proceso { border-left-color: #3b82f6; }
+    .client-order-card.Exitoso { border-left-color: #10b981; }
+    .client-order-card.Rechazado { border-left-color: #dc2626; background: #fef2f2; border-color: #fecaca; }
+    .client-order-top { display: flex; justify-content: space-between; align-items: center; margin-bottom: 6px; gap: 6px; flex-wrap: wrap; }
+    .client-order-id { font-weight: 800; font-size: 14px; color: #0f172a; }
+    .client-badges-wrap { display: inline-flex; align-items: center; gap: 5px; flex-wrap: wrap; }
+    .client-badge { padding: 3px 8px; border-radius: 99px; font-size: 10px; font-weight: 700; text-transform: uppercase; }
+    .client-badge.Pendiente { background: #fef3c7; color: #d97706; }
+    .client-badge.En-Proceso { background: #e0f2fe; color: #0284c7; }
+    .client-badge.Exitoso { background: #dcfce7; color: #16a34a; }
+    .client-badge.Rechazado { background: #fee2e2; color: #dc2626; border: 1px solid #fca5a5; }
+    .client-pay-badge { padding: 3px 8px; border-radius: 99px; font-size: 10px; font-weight: 700; text-transform: uppercase; }
+    .client-pay-badge.pagado { background: #dcfce7; color: #15803d; border: 1px solid #86efac; }
+    .client-pay-badge.no-pagado { background: #fef2f2; color: #b91c1c; border: 1px solid #fecaca; }
+    .client-order-details { font-size: 12.5px; color: #475569; line-height: 1.5; }
+    .client-order-details strong { color: #0f172a; }
+    .esim-ready-tag { display: inline-block; margin-top: 6px; font-size: 11px; font-weight: 800; color: #047857; background: #ecfdf5; border: 1px solid #a7f3d0; padding: 3px 8px; border-radius: 8px; }
+
+    .esim-expanded-box { background: #ecfdf5; border: 2px solid #10b981; border-radius: 16px; padding: 14px; margin-bottom: 12px; animation: expandPop 0.22s ease; }
+    @keyframes expandPop { from { transform: scale(0.96); opacity: 0; } to { transform: scale(1); opacity: 1; } }
+    .esim-expanded-header { display: flex; justify-content: space-between; align-items: center; gap: 8px; margin-bottom: 10px; flex-wrap: wrap; }
+    .esim-back-btn { padding: 6px 11px; border-radius: 8px; border: 1px solid #cbd5e1; background: #ffffff; color: #0f172a; font-size: 11.5px; font-weight: 800; cursor: pointer; }
+    .esim-back-btn:hover { background: #f1f5f9; }
+    .esim-number-row { display: flex; align-items: center; justify-content: space-between; gap: 8px; background: #ffffff; border: 1px solid #a7f3d0; border-radius: 10px; padding: 8px 12px; margin-bottom: 10px; }
+    .esim-number-val { font-family: monospace; font-size: 15px; font-weight: 900; color: #065f46; word-break: break-all; }
+    .esim-copy-num-btn { padding: 6px 10px; border: none; border-radius: 8px; background: #059669; color: #ffffff; font-size: 11px; font-weight: 800; cursor: pointer; flex-shrink: 0; }
+    .esim-qr-frame { background: #ffffff; border: 1px solid #d1fae5; border-radius: 12px; padding: 10px; text-align: center; }
+    .esim-qr-frame img { max-width: 220px; width: 100%; max-height: 220px; object-fit: contain; border-radius: 8px; cursor: zoom-in; display: inline-block; }
+
+    @keyframes pulse { 0% { opacity: 1; } 50% { opacity: 0.4; } 100% { opacity: 1; } }
+
+    .toast { position: fixed; bottom: 24px; left: 50%; transform: translateX(-50%) translateY(20px); background: #0f172a; color: #ffffff; padding: 10px 18px; border-radius: 999px; font-size: 13px; font-weight: 600; opacity: 0; pointer-events: none; transition: opacity 0.25s ease, transform 0.25s ease; box-shadow: 0 8px 20px rgba(0, 0, 0, 0.2); z-index: 10003; }
     .toast.show { opacity: 1; transform: translateX(-50%) translateY(0); }
   </style>
 </head>
@@ -135,6 +199,7 @@
     <symbol id="icon-vip" viewBox="0 0 24 24"><path fill="#075e54" d="M16.67 13.13C16.42 13 15.19 12.4 14.97 12.32C14.74 12.24 14.6 12.2 14.41 12.44C14.25 12.69 13.77 13.25 13.63 13.41C13.48 13.58 13.34 13.6 13.1 13.48C12.84 13.35 12.04 13.09 11.1 12.25C10.36 11.59 9.87 10.78 9.72 10.53C9.6 10.29 9.71 10.14 9.83 10.03C9.94 9.92 10.1 9.74 10.2 9.59C10.33 9.45 10.37 9.34 10.45 9.18C10.53 9.01 10.49 8.87 10.43 8.75C10.37 8.64 9.87 7.4 9.66 6.91C9.46 6.43 9.26 6.49 9.1 6.48C8.96 6.48 8.8 6.47 8.63 6.47C8.47 6.47 8.2 6.53 7.97 6.78C7.75 7.03 7.1 7.64 7.1 8.85C7.1 10.07 7.99 11.24 8.1 11.41C8.24 11.58 9.86 14.08 12.35 15.14C12.94 15.41 13.4 15.56 13.76 15.67C14.35 15.86 14.89 15.83 15.32 15.77C15.8 15.7 16.78 15.17 16.99 14.59C17.2 14.01 17.2 13.52 17.14 13.41C17.07 13.31 16.91 13.25 16.67 13.13M12.04 2C6.58 2 2.13 6.45 2.13 11.91C2.13 13.66 2.59 15.36 3.45 16.86L2.05 22L7.3 20.62C8.75 21.41 10.38 21.83 12.04 21.83C17.5 21.83 21.95 17.38 21.95 11.92C21.95 9.27 20.92 6.78 19.05 4.91C17.18 3.03 14.69 2 12.04 2M12.05 3.67C14.25 3.67 16.31 4.53 17.87 6.09C19.42 7.65 20.28 9.72 20.28 11.92C20.28 16.46 16.58 20.15 12.04 20.15C10.56 20.15 9.11 19.76 7.85 19L7.55 18.83L4.43 19.65L5.26 16.61L5.06 16.29C4.24 15 3.8 13.47 3.8 11.91C3.81 7.37 7.5 3.67 12.05 3.67Z"/></symbol>
     <symbol id="icon-tg" viewBox="0 0 24 24"><path fill="#229ED9" d="M11.944 0A12 12 0 0 0 0 12a12 12 0 0 0 12 12 12 12 0 0 0 12-12A12 12 0 0 0 12 0a12 12 0 0 0-.056 0zm4.962 7.224c.1-.002.321.023.465.14a.506.506 0 0 1 .171.325c.016.093.036.306.02.472-.18 1.898-.962 6.502-1.36 8.627-.168.9-.499 1.201-.82 1.23-.696.065-1.225-.46-1.9-.902-1.056-.693-1.653-1.124-2.678-1.8-1.185-.78-.417-1.21.258-1.91.177-.184 3.247-2.977 3.307-3.23.007-.032.014-.15-.056-.212s-.174-.041-.249-.024c-.106.024-1.793 1.14-5.061 3.345-.48.33-.913.49-1.302.48-.428-.008-1.252-.241-1.865-.44-.752-.245-1.349-.374-1.297-.789.027-.216.325-.437.893-.663 3.498-1.524 5.83-2.529 6.998-3.014 3.332-1.386 4.025-1.627 4.476-1.635z"/></symbol>
     <symbol id="icon-share" viewBox="0 0 24 24"><g fill="none" stroke="#0f172a" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><circle cx="18" cy="5" r="3"/><circle cx="6" cy="12" r="3"/><circle cx="18" cy="19" r="3"/><line x1="8.59" y1="13.51" x2="15.42" y2="17.49"/><line x1="15.41" y1="6.51" x2="8.59" y2="10.49"/></g></symbol>
+    <symbol id="icon-qr" viewBox="0 0 24 24"><g fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="3" width="7" height="7" rx="1"/><rect x="14" y="3" width="7" height="7" rx="1"/><rect x="3" y="14" width="7" height="7" rx="1"/><line x1="14" y1="14" x2="17" y2="14"/><line x1="21" y1="14" x2="21" y2="17"/><line x1="14" y1="21" x2="17" y2="21"/><line x1="17" y1="17" x2="21" y2="21"/></g></symbol>
   </svg>
 
   <div id="preloader" class="preloader">
@@ -164,7 +229,11 @@
 
     <div class="content-box">
       <h1>Zona GSM</h1>
-      <p class="bio">Activación y entrega inmediata de E-SIM para operadores en Colombia. Líneas nuevas 100% digitales.</p>
+      <p class="bio">Activación y entrega de E-SIM para operadores en Colombia. Líneas nuevas 100% digitales.</p>
+
+      <button class="track-order-btn" type="button" onclick="openEsimClientPanel()">
+        📱 Consultar mis E-SIM y QR
+      </button>
 
       <div class="socials">
         <a class="social-item" href="https://wa.me/573104141805" target="_blank" rel="noopener noreferrer" aria-label="Soporte 1 por WhatsApp">
@@ -192,7 +261,7 @@
       <div class="section-title">OPERADORES E-SIM DISPONIBLES</div>
 
       <div class="cards">
-        <button class="card" type="button" onclick="openEsimBox('E-SIM CLARO', 'CLARO.jpg', 'CLARO', 'bg-claro', '$28.000', true)">
+        <button class="card" type="button" onclick="openEsimBox('E-SIM CLARO', 'CLARO.jpg', 'CLARO', 'bg-claro', 28000, true)">
           <div class="card-left">
             <div class="operator-icon"><img src="CLARO.jpg" alt="Claro Colombia" onerror="handleImgError(this, 'CLARO', 'bg-claro')" /></div>
             <div class="card-info">
@@ -201,14 +270,14 @@
                 <span class="online-pill"><span class="online-dot"></span>Online</span>
               </div>
               <span class="service-detail">Líneas nuevas · Código QR Digital</span>
-              <span class="service-note">Activación y entrega inmediata</span>
+              <span class="service-note">Activación y entrega digital</span>
               <span class="price-note">$28.000</span>
             </div>
           </div>
-          <div class="action-btn" aria-hidden="true"><svg width="19" height="19"><use href="#icon-wa"/></svg></div>
+          <div class="action-btn" aria-hidden="true"><svg width="19" height="19"><use href="#icon-qr"/></svg></div>
         </button>
 
-        <button class="card" type="button" onclick="openEsimBox('E-SIM TIGO', 'TIGO.jpg', 'TIGO', 'bg-tigo', '$30.000', true)">
+        <button class="card" type="button" onclick="openEsimBox('E-SIM TIGO', 'TIGO.jpg', 'TIGO', 'bg-tigo', 30000, true)">
           <div class="card-left">
             <div class="operator-icon"><img src="TIGO.jpg" alt="Tigo Colombia" onerror="handleImgError(this, 'TIGO', 'bg-tigo')" /></div>
             <div class="card-info">
@@ -217,14 +286,14 @@
                 <span class="online-pill"><span class="online-dot"></span>Online</span>
               </div>
               <span class="service-detail">Líneas nuevas · Código QR Digital</span>
-              <span class="service-note">Activación y entrega inmediata</span>
+              <span class="service-note">Activación y entrega digital</span>
               <span class="price-note">$30.000</span>
             </div>
           </div>
-          <div class="action-btn" aria-hidden="true"><svg width="19" height="19"><use href="#icon-wa"/></svg></div>
+          <div class="action-btn" aria-hidden="true"><svg width="19" height="19"><use href="#icon-qr"/></svg></div>
         </button>
 
-        <button class="card" type="button" onclick="openEsimBox('E-SIM WOM', 'WOM_logo.png', 'WOM', 'bg-wom', '$35.000', true)">
+        <button class="card" type="button" onclick="openEsimBox('E-SIM WOM', 'WOM_logo.png', 'WOM', 'bg-wom', 35000, true)">
           <div class="card-left">
             <div class="operator-icon"><img src="WOM_logo.png" alt="WOM Colombia" onerror="handleImgError(this, 'WOM', 'bg-wom')" /></div>
             <div class="card-info">
@@ -233,14 +302,14 @@
                 <span class="online-pill"><span class="online-dot"></span>Online</span>
               </div>
               <span class="service-detail">Líneas nuevas · Código QR Digital</span>
-              <span class="service-note">Activación y entrega inmediata</span>
+              <span class="service-note">Activación y entrega digital</span>
               <span class="price-note">$35.000</span>
             </div>
           </div>
-          <div class="action-btn" aria-hidden="true"><svg width="19" height="19"><use href="#icon-wa"/></svg></div>
+          <div class="action-btn" aria-hidden="true"><svg width="19" height="19"><use href="#icon-qr"/></svg></div>
         </button>
 
-        <button class="card is-offline" type="button" onclick="openEsimBox('E-SIM MOVISTAR', 'movistar.png', 'MOVISTAR', 'bg-movistar', '', false)">
+        <button class="card is-offline" type="button" onclick="openEsimBox('E-SIM MOVISTAR', 'movistar.png', 'MOVISTAR', 'bg-movistar', 0, false)">
           <div class="card-left">
             <div class="operator-icon"><img src="movistar.png" alt="Movistar Colombia" onerror="handleImgError(this, 'MOVISTAR', 'bg-movistar')" /></div>
             <div class="card-info">
@@ -252,13 +321,13 @@
               <span class="service-note">Servicio temporalmente offline</span>
             </div>
           </div>
-          <div class="action-btn offline-wa" aria-hidden="true"><svg width="19" height="19"><use href="#icon-wa"/></svg></div>
+          <div class="action-btn offline-wa" aria-hidden="true"><svg width="19" height="19"><use href="#icon-qr"/></svg></div>
         </button>
       </div>
     </div>
   </main>
 
-  <!-- Cuadro modal para elegir cantidad y enviar pedido -->
+  <!-- MODAL: PEDIR E-SIM -->
   <div id="esimOverlay" class="esim-overlay" onclick="closeEsimOutside(event)">
     <div class="esim-box" role="dialog" aria-modal="true" aria-labelledby="esimModalTitle">
       <div class="esim-box-top">
@@ -266,128 +335,745 @@
           <div id="esimModalLogo" class="esim-op-logo"></div>
           <div>
             <div id="esimModalTitle" class="esim-box-title">E-SIM</div>
-            <span id="esimModalPrice" class="esim-price-pill">Precio: $0</span>
+            <span id="esimModalPrice" class="esim-price-pill">Total: $0</span>
           </div>
         </div>
         <button type="button" class="esim-close" onclick="closeEsimBox()" aria-label="Cerrar">&times;</button>
       </div>
-      <form onsubmit="sendEsimWa(event)">
-        <div class="esim-qty-label">Cantidad (líneas nuevas)</div>
-        <div class="esim-row">
-          <input id="esimQtyField" class="esim-qty-input" type="number" min="1" step="1" value="1" required />
-          <button type="submit" class="esim-send-btn">Enviar</button>
+
+      <form onsubmit="sendEsimOrder(event)">
+        <div class="input-group">
+          <label>Tu PIN de 4 dígitos:</label>
+          <input id="esimPinInput" class="pin-input" type="text" maxlength="4" inputmode="numeric" placeholder="••••" oninput="checkEsimPin(this.value)">
+          <div id="esimPinMsg" class="pin-msg"></div>
         </div>
+
+        <div id="esimPhoneGroup" class="input-group" style="display: none;">
+          <label>Confirma tu Número de WhatsApp (10 dígitos):</label>
+          <input id="esimVerifyPhoneInput" type="tel" inputmode="numeric" maxlength="10" placeholder="Ej: 3104141805" style="width: 100%; padding: 10px; border-radius: 12px; border: 2px solid #cbd5e1; font-size: 14px; font-weight: 700; outline: none;" oninput="verifyEsimPhone(this.value)">
+          <div id="esimPhoneMsg" class="pin-msg"></div>
+        </div>
+
+        <div class="input-group">
+          <label for="esimQtyField">Cantidad (líneas nuevas)</label>
+          <input id="esimQtyField" class="esim-qty-input" type="number" min="1" step="1" value="1" oninput="updateEsimTotalPill()" required />
+        </div>
+
+        <div class="pay-box">
+          <div class="pay-box-title">💳 Canales de Pago (Toca para copiar):</div>
+          <div class="pay-btns">
+            <button type="button" class="pay-chip-btn" data-copy="3246816788" data-label="Nequi" onclick="copyFromAttr(this)">Nequi: 3246816788 (Victor Ruiz)</button>
+            <button type="button" class="pay-chip-btn" data-copy="91851198" data-label="Binance ID" onclick="copyFromAttr(this)">Binance: 91851198</button>
+          </div>
+        </div>
+
+        <div class="input-group">
+          <label>Subir Comprobante de Pago:</label>
+          <label id="esimReceiptDropzone" for="esimReceiptInput" class="receipt-dropzone">
+            <span class="receipt-btn-pill">📷 Elegir foto</span>
+            <span id="esimReceiptFileName" class="receipt-file-name">Sin archivo seleccionado</span>
+          </label>
+          <input type="file" id="esimReceiptInput" accept="image/*" style="display: none;" onchange="previewEsimReceipt(this)">
+          <img id="esimReceiptPreview" style="display: none; max-width: 100%; margin-top: 8px; border-radius: 8px; max-height: 140px; object-fit: contain;">
+        </div>
+
+        <button type="submit" id="esimSubmitBtn" class="esim-send-btn">Enviar Solicitud E-SIM</button>
       </form>
+    </div>
+  </div>
+
+  <!-- MODAL: REGISTRO DE NUEVO PIN -->
+  <div id="registerOverlay" class="esim-overlay" onclick="closeRegisterOutside(event)">
+    <div class="esim-box" style="max-width: 340px; text-align: center;">
+      <div style="display: flex; justify-content: flex-end; margin-bottom: -10px;">
+        <button type="button" class="esim-close" onclick="closeRegisterBox()" aria-label="Cerrar">&times;</button>
+      </div>
+      <h2 style="font-size: 18px; margin-bottom: 10px; color: #0f172a;">Registra tu PIN</h2>
+      <p style="font-size: 13px; color: #475569; margin-bottom: 15px;">El PIN ingresado no existe. Crea uno nuevo y registra tu número de WhatsApp.</p>
+
+      <div class="input-group" style="text-align: left;">
+        <label>Nuevo PIN de 4 dígitos</label>
+        <input id="newPinInput" class="pin-input" type="text" maxlength="4" inputmode="numeric" placeholder="••••" oninput="checkNewPin(this.value)">
+        <div id="newPinMsg" class="pin-msg"></div>
+      </div>
+
+      <div class="input-group" style="text-align: left;">
+        <label>Nombre o Nombre de tu Negocio</label>
+        <input id="newNameInput" type="text" placeholder="Ej: Juan Pérez" style="width: 100%; padding: 12px; border-radius: 12px; border: 2px solid #cbd5e1; font-size: 14px; font-weight: 700; outline: none;">
+      </div>
+
+      <div class="input-group" style="text-align: left;">
+        <label>Número de WhatsApp (10 dígitos)</label>
+        <input id="newPhoneInput" type="tel" inputmode="numeric" maxlength="10" placeholder="Ej: 3104141805" style="width: 100%; padding: 12px; border-radius: 12px; border: 2px solid #cbd5e1; font-size: 14px; font-weight: 700; outline: none;">
+      </div>
+
+      <button class="esim-send-btn" id="btnRegisterPin" onclick="registerNewPin()">Confirmar Registro</button>
+    </div>
+  </div>
+
+  <!-- MODAL: HISTORIAL Y ENTREGA QR E-SIM DEL CLIENTE -->
+  <div id="esimClientOverlay" class="esim-overlay" onclick="closeEsimClientOutside(event)">
+    <div class="esim-box" style="max-width: 440px;">
+      <div class="esim-box-top">
+        <div>
+          <div class="esim-box-title" style="font-size: 18px;">Mis E-SIM y QR</div>
+          <span style="font-size: 11px; color: #64748b; font-weight: 600;">Toca cualquier orden para ver su QR y número</span>
+        </div>
+        <button type="button" class="esim-close" onclick="closeEsimClientPanel()" aria-label="Cerrar">&times;</button>
+      </div>
+
+      <div id="esimClientLoginForm">
+        <div class="input-group">
+          <label>Tu PIN de 4 dígitos:</label>
+          <input id="clientEsimPinInput" class="pin-input" type="text" maxlength="4" inputmode="numeric" placeholder="••••">
+        </div>
+        <div class="input-group">
+          <label>Número de WhatsApp (10 dígitos):</label>
+          <input id="clientEsimPhoneInput" type="tel" inputmode="numeric" maxlength="10" placeholder="Ej: 3104141805" style="width: 100%; padding: 10px; border-radius: 12px; border: 2px solid #cbd5e1; font-size: 14px; font-weight: 700; outline: none; text-align: center;">
+        </div>
+        <button type="button" class="esim-send-btn" style="background: #0f172a;" onclick="loginEsimClientPanel()">Consultar Mis E-SIM</button>
+      </div>
+
+      <div id="esimClientOrdersView" style="display: none;">
+        <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 12px; gap: 8px; flex-wrap: wrap;">
+          <div style="display:flex; align-items:center; gap:8px;">
+            <span style="font-size: 12px; font-weight: 700; color: #10b981; animation: pulse 1.5s infinite;">● En vivo</span>
+            <span id="esimOrdersCountBadge" style="font-size: 11.5px; font-weight: 800; color: #334155; background: #e2e8f0; padding: 2px 8px; border-radius: 999px;">0 órdenes</span>
+          </div>
+          <button type="button" onclick="logoutEsimClientPanel()" style="background: none; border: none; color: #64748b; font-size: 12px; font-weight: 700; cursor: pointer; text-decoration: underline;">Cambiar datos</button>
+        </div>
+
+        <div id="esimExpandedDetail"></div>
+        <div id="esimClientOrdersList" style="max-height: 52vh; overflow-y: auto; padding-right: 4px;"></div>
+      </div>
+    </div>
+  </div>
+
+  <!-- MODAL: QR AMPLIADO -->
+  <div id="qrZoomOverlay" class="esim-overlay" style="z-index: 10002;" onclick="closeQrZoom()">
+    <div class="esim-box" style="max-width: 340px; text-align: center;" onclick="event.stopPropagation()">
+      <div class="esim-box-top">
+        <div class="esim-box-title">Código QR E-SIM</div>
+        <button type="button" class="esim-close" onclick="closeQrZoom()">&times;</button>
+      </div>
+      <img id="qrZoomImg" src="" alt="QR E-SIM" style="width: 100%; max-height: 300px; object-fit: contain; border-radius: 12px;" />
+      <p id="qrZoomNumber" style="margin-top: 10px; font-family: monospace; font-size: 15px; font-weight: 900; color: #065f46;"></p>
     </div>
   </div>
 
   <div id="toast" class="toast">Copiado</div>
 
   <script>
-    let currentEsimName = '';
-    let currentEsimPrice = '';
+    const WORKER_URL = "https://telegram-zonagsm.zonagsm023.workers.dev";
 
-    window.addEventListener('DOMContentLoaded', () => {
+    let dbClientesNube = [];
+    let clienteVerificado = null;
+
+    let currentEsimName = "";
+    let currentEsimUnitPrice = 0;
+    let currentPin = "";
+    let currentCelular = "";
+    let receiptBase64 = null;
+
+    let esimPollingInterval = null;
+    let activeClientPin = "";
+    let activeClientPhone = "";
+    let esimHistorialCache = [];
+    let selectedOrderId = null;
+    let lastDeliveredOrderKey = "";
+
+    window.addEventListener("DOMContentLoaded", () => {
+      cargarClientesDesdeNube();
       setTimeout(() => {
-        document.getElementById('preloader').classList.add('hidden');
-        document.getElementById('mainContent').classList.add('visible');
+        document.getElementById("preloader").classList.add("hidden");
+        document.getElementById("mainContent").classList.add("visible");
       }, 1400);
     });
 
-    function openEsimBox(opName, logoSrc, fallbackText, bgClass, price, isOnline) {
+    function formatCOP(amount) {
+      return "$" + Number(amount || 0).toLocaleString("es-CO");
+    }
+
+    function updateEsimTotalPill() {
+      const qty = Math.max(1, parseInt(document.getElementById("esimQtyField").value, 10) || 1);
+      const total = currentEsimUnitPrice * qty;
+      document.getElementById("esimModalPrice").textContent = "Total: " + formatCOP(total);
+    }
+
+    async function cargarClientesDesdeNube() {
+      try {
+        const res = await fetch(`${WORKER_URL}?action=get_clients`);
+        const data = await res.json();
+        if (data.success && Array.isArray(data.clientes)) {
+          dbClientesNube = data.clientes;
+        }
+      } catch (err) {
+        console.error("Error cargando clientes:", err);
+      }
+    }
+
+    async function consultarClienteEnNube(pin, celular = null) {
+      await cargarClientesDesdeNube();
+      if (celular) {
+        return dbClientesNube.find(
+          c => String(c.pin) === String(pin) && String(c.celular) === String(celular)
+        ) || null;
+      }
+      return dbClientesNube.find(c => String(c.pin) === String(pin)) || null;
+    }
+
+    function previewEsimReceipt(input) {
+      const file = input.files && input.files[0];
+      const dropzone = document.getElementById("esimReceiptDropzone");
+      const nameLabel = document.getElementById("esimReceiptFileName");
+      if (file) {
+        nameLabel.textContent = file.name;
+        dropzone.classList.add("has-file");
+        const reader = new FileReader();
+        reader.onload = function (e) {
+          receiptBase64 = e.target.result;
+          const img = document.getElementById("esimReceiptPreview");
+          img.src = receiptBase64;
+          img.style.display = "block";
+        };
+        reader.readAsDataURL(file);
+      } else {
+        receiptBase64 = null;
+        nameLabel.textContent = "Sin archivo seleccionado";
+        dropzone.classList.remove("has-file");
+        document.getElementById("esimReceiptPreview").style.display = "none";
+      }
+    }
+
+    async function checkEsimPin(val) {
+      const input = document.getElementById("esimPinInput");
+      const msg = document.getElementById("esimPinMsg");
+      const phoneGroup = document.getElementById("esimPhoneGroup");
+      const verifyInput = document.getElementById("esimVerifyPhoneInput");
+
+      currentPin = val.replace(/\D/g, "");
+      input.value = currentPin;
+      clienteVerificado = null;
+      currentCelular = "";
+
+      if (currentPin.length === 4) {
+        msg.textContent = "Verificando PIN...";
+        msg.className = "pin-msg";
+        try {
+          const cliente = await consultarClienteEnNube(currentPin);
+          if (String(input.value) !== currentPin) return;
+
+          if (cliente) {
+            input.classList.add("success");
+            input.classList.remove("error");
+            msg.textContent = "✓ PIN correcto. Confirma tu número.";
+            msg.className = "pin-msg success";
+            input.blur();
+
+            phoneGroup.style.display = "flex";
+            verifyInput.value = "";
+            document.getElementById("esimPhoneMsg").textContent = "";
+            verifyInput.classList.remove("error", "success");
+          } else {
+            input.classList.add("error");
+            input.classList.remove("success");
+            msg.textContent = "❌ PIN no encontrado. Regístrate.";
+            msg.className = "pin-msg error";
+            phoneGroup.style.display = "none";
+            setTimeout(() => {
+              document.getElementById("registerOverlay").classList.add("open");
+            }, 350);
+          }
+        } catch (err) {
+          msg.textContent = "Error al verificar PIN.";
+          msg.className = "pin-msg error";
+        }
+      } else {
+        input.classList.remove("success", "error");
+        msg.textContent = "";
+        msg.className = "pin-msg";
+        phoneGroup.style.display = "none";
+      }
+    }
+
+    async function verifyEsimPhone(val) {
+      const input = document.getElementById("esimVerifyPhoneInput");
+      const msg = document.getElementById("esimPhoneMsg");
+      const num = val.replace(/\D/g, "");
+      input.value = num;
+      clienteVerificado = null;
+      currentCelular = "";
+
+      if (num.length === 10) {
+        msg.textContent = "Verificando número...";
+        msg.className = "pin-msg";
+        try {
+          const cliente = await consultarClienteEnNube(currentPin, num);
+          if (String(input.value) !== num) return;
+
+          if (cliente) {
+            input.classList.add("success");
+            input.classList.remove("error");
+            msg.textContent = "✓ Identidad verificada (" + cliente.nombre + ")";
+            msg.className = "pin-msg success";
+            clienteVerificado = cliente;
+            currentCelular = num;
+            input.blur();
+          } else {
+            input.classList.add("error");
+            input.classList.remove("success");
+            msg.textContent = "❌ Número incorrecto para este PIN";
+            msg.className = "pin-msg error";
+          }
+        } catch (err) {
+          msg.textContent = "Error al verificar número.";
+          msg.className = "pin-msg error";
+        }
+      } else {
+        input.classList.remove("success", "error");
+        msg.textContent = "";
+        msg.className = "pin-msg";
+      }
+    }
+
+    function closeRegisterBox() {
+      document.getElementById("registerOverlay").classList.remove("open");
+      document.getElementById("esimPinInput").focus();
+    }
+    function closeRegisterOutside(e) {
+      if (e.target.id === "registerOverlay") closeRegisterBox();
+    }
+
+    async function checkNewPin(val) {
+      const input = document.getElementById("newPinInput");
+      const msg = document.getElementById("newPinMsg");
+      const pin = val.replace(/\D/g, "");
+      input.value = pin;
+
+      if (pin.length === 4) {
+        msg.textContent = "Revisando disponibilidad...";
+        msg.className = "pin-msg";
+        try {
+          const existe = await consultarClienteEnNube(pin);
+          if (String(input.value) !== pin) return;
+          if (existe) {
+            input.classList.add("error");
+            input.classList.remove("success");
+            msg.textContent = "❌ Este PIN ya está en uso.";
+            msg.className = "pin-msg error";
+          } else {
+            input.classList.add("success");
+            input.classList.remove("error");
+            msg.textContent = "✓ ¡PIN disponible!";
+            msg.className = "pin-msg success";
+            input.blur();
+          }
+        } catch (err) {
+          msg.textContent = "Error al comprobar el PIN.";
+          msg.className = "pin-msg error";
+        }
+      } else {
+        input.classList.remove("success", "error");
+        msg.textContent = "";
+        msg.className = "pin-msg";
+      }
+    }
+
+    async function registerNewPin() {
+      const pin = document.getElementById("newPinInput").value.replace(/\D/g, "");
+      const cel = document.getElementById("newPhoneInput").value.replace(/\D/g, "");
+      const nombre = document.getElementById("newNameInput").value.trim();
+
+      if (pin.length !== 4) { showToast("El PIN debe tener 4 dígitos"); return; }
+      if (cel.length !== 10) { showToast("El celular debe tener 10 números"); return; }
+      if (!nombre) { showToast("Escribe tu nombre o negocio"); return; }
+
+      const btn = document.getElementById("btnRegisterPin");
+      const orig = btn.textContent;
+      btn.textContent = "Guardando...";
+      btn.disabled = true;
+
+      try {
+        const res = await fetch(WORKER_URL, {
+          method: "POST",
+          headers: { "Content-Type": "application/json" },
+          body: JSON.stringify({ action: "register_client", pin, celular: cel, nombre }),
+        });
+        const result = await res.json();
+        if (result.success) {
+          await cargarClientesDesdeNube();
+          document.getElementById("registerOverlay").classList.remove("open");
+          document.getElementById("esimPinInput").value = pin;
+          await checkEsimPin(pin);
+          showToast("¡PIN registrado! Confirma tu número.");
+        } else {
+          showToast(result.error || "Error al registrar");
+        }
+      } catch (e) {
+        showToast("Error de conexión.");
+      } finally {
+        btn.textContent = orig;
+        btn.disabled = false;
+      }
+    }
+
+    function openEsimBox(opName, logoSrc, fallbackText, bgClass, unitPrice, isOnline) {
       if (!isOnline) {
-        showToast(opName + ' está OFFLINE');
+        showToast(opName + " está OFFLINE");
         return;
       }
 
       currentEsimName = opName.toUpperCase();
-      currentEsimPrice = price;
+      currentEsimUnitPrice = Number(unitPrice) || 0;
+      clienteVerificado = null;
+      currentCelular = "";
+      receiptBase64 = null;
 
-      const logoWrap = document.getElementById('esimModalLogo');
-      logoWrap.className = 'esim-op-logo ' + bgClass;
-      logoWrap.innerHTML = '';
-      const img = document.createElement('img');
+      const logoWrap = document.getElementById("esimModalLogo");
+      logoWrap.className = "esim-op-logo " + bgClass;
+      logoWrap.innerHTML = "";
+      const img = document.createElement("img");
       img.src = logoSrc;
       img.alt = opName;
-      img.onerror = function () {
-        handleImgError(this, fallbackText, bgClass);
-      };
+      img.onerror = function () { handleImgError(this, fallbackText, bgClass); };
       logoWrap.appendChild(img);
 
-      document.getElementById('esimModalTitle').textContent = currentEsimName;
-      document.getElementById('esimModalPrice').textContent = 'Precio: ' + price;
+      document.getElementById("esimModalTitle").textContent = currentEsimName;
+      document.getElementById("esimPinInput").value = "";
+      document.getElementById("esimPinMsg").textContent = "";
+      document.getElementById("esimPinInput").classList.remove("error", "success");
+      document.getElementById("esimPhoneGroup").style.display = "none";
+      document.getElementById("esimVerifyPhoneInput").value = "";
+      document.getElementById("esimPhoneMsg").textContent = "";
+      document.getElementById("esimQtyField").value = "1";
+      document.getElementById("esimReceiptInput").value = "";
+      document.getElementById("esimReceiptFileName").textContent = "Sin archivo seleccionado";
+      document.getElementById("esimReceiptDropzone").classList.remove("has-file");
+      document.getElementById("esimReceiptPreview").style.display = "none";
 
-      const qtyInput = document.getElementById('esimQtyField');
-      qtyInput.value = '1';
-      document.getElementById('esimOverlay').classList.add('open');
-      setTimeout(() => {
-        qtyInput.focus();
-        qtyInput.select();
-      }, 50);
+      updateEsimTotalPill();
+      document.getElementById("esimOverlay").classList.add("open");
+      cargarClientesDesdeNube();
     }
 
     function closeEsimBox() {
-      document.getElementById('esimOverlay').classList.remove('open');
+      document.getElementById("esimOverlay").classList.remove("open");
     }
 
     function closeEsimOutside(e) {
-      if (e.target.id === 'esimOverlay') {
-        closeEsimBox();
+      if (e.target.id === "esimOverlay") closeEsimBox();
+    }
+
+    async function sendEsimOrder(e) {
+      e.preventDefault();
+      const btn = document.getElementById("esimSubmitBtn");
+      const orig = btn.textContent;
+      btn.textContent = "Verificando...";
+      btn.disabled = true;
+
+      try {
+        const cliente = await consultarClienteEnNube(currentPin, currentCelular);
+        if (!cliente || !currentCelular || String(cliente.celular) !== String(currentCelular)) {
+          showToast("Debes verificar tu PIN y número de WhatsApp");
+          document.getElementById("esimVerifyPhoneInput").focus();
+          return;
+        }
+
+        const qty = parseInt(document.getElementById("esimQtyField").value, 10);
+        if (!qty || qty < 1) {
+          showToast("Ingresa una cantidad válida");
+          return;
+        }
+
+        const totalFormatted = formatCOP(currentEsimUnitPrice * qty);
+        btn.textContent = "Enviando...";
+
+        const res = await fetch(WORKER_URL, {
+          method: "POST",
+          headers: { "Content-Type": "application/json" },
+          body: JSON.stringify({
+            action: "create_esim_order",
+            nombre: cliente.nombre,
+            celular: cliente.celular,
+            pin: currentPin,
+            operador: currentEsimName,
+            cantidad: qty,
+            precio: totalFormatted,
+            comprobanteBase64: receiptBase64,
+          }),
+        });
+
+        const result = await res.json();
+        if (result.success) {
+          closeEsimBox();
+          showToast("¡Solicitud E-SIM enviada! (" + result.numero_orden + ")");
+        } else {
+          throw new Error(result.error || "Error al enviar");
+        }
+      } catch (err) {
+        showToast("Error al enviar la solicitud E-SIM: " + (err.message || ""));
+      } finally {
+        btn.textContent = orig;
+        btn.disabled = false;
       }
     }
 
-    function sendEsimWa(e) {
-      e.preventDefault();
-      const qtyInput = document.getElementById('esimQtyField');
-      const qty = parseInt(qtyInput.value, 10);
+    /* --- HISTORIAL Y EXPANSIÓN QR E-SIM --- */
+    function openEsimClientPanel() {
+      document.getElementById("esimClientOverlay").classList.add("open");
+      document.getElementById("esimClientLoginForm").style.display = "block";
+      document.getElementById("esimClientOrdersView").style.display = "none";
+      document.getElementById("clientEsimPinInput").value = "";
+      document.getElementById("clientEsimPhoneInput").value = "";
+      document.getElementById("esimExpandedDetail").innerHTML = "";
+      selectedOrderId = null;
+    }
 
-      if (!qty || qty < 1) {
-        showToast('Ingresa una cantidad válida');
-        qtyInput.focus();
+    function closeEsimClientPanel() {
+      document.getElementById("esimClientOverlay").classList.remove("open");
+      if (esimPollingInterval) {
+        clearInterval(esimPollingInterval);
+        esimPollingInterval = null;
+      }
+    }
+
+    function closeEsimClientOutside(e) {
+      if (e.target.id === "esimClientOverlay") closeEsimClientPanel();
+    }
+
+    function logoutEsimClientPanel() {
+      document.getElementById("esimClientOrdersView").style.display = "none";
+      document.getElementById("esimClientLoginForm").style.display = "block";
+      document.getElementById("esimExpandedDetail").innerHTML = "";
+      selectedOrderId = null;
+      if (esimPollingInterval) {
+        clearInterval(esimPollingInterval);
+        esimPollingInterval = null;
+      }
+    }
+
+    async function loginEsimClientPanel() {
+      const pin = document.getElementById("clientEsimPinInput").value.replace(/\D/g, "");
+      const phone = document.getElementById("clientEsimPhoneInput").value.replace(/\D/g, "");
+      if (pin.length !== 4 || phone.length !== 10) {
+        alert("Ingresa tu PIN de 4 dígitos y tu WhatsApp de 10 dígitos.");
         return;
       }
 
-      const text =
-        '*' + currentEsimName + '*\n' +
-        '*CANTIDAD : ' + qty + '*\n' +
-        '*PRECIO: ' + currentEsimPrice + '*';
+      activeClientPin = pin;
+      activeClientPhone = phone;
+      selectedOrderId = null;
 
-      const url = 'https://wa.me/573104141805?text=' + encodeURIComponent(text);
-      closeEsimBox();
-      window.open(url, '_blank', 'noopener,noreferrer');
+      document.getElementById("esimClientLoginForm").style.display = "none";
+      document.getElementById("esimClientOrdersView").style.display = "block";
+      document.getElementById("esimClientOrdersList").innerHTML =
+        '<p style="text-align:center; color:#64748b; font-size:13px;">Cargando tus órdenes E-SIM...</p>';
+
+      await fetchEsimClientOrders(true);
+      if (esimPollingInterval) clearInterval(esimPollingInterval);
+      esimPollingInterval = setInterval(() => fetchEsimClientOrders(false), 7000);
     }
 
-    document.addEventListener('keydown', (e) => {
-      if (e.key === 'Escape') closeEsimBox();
+    function seleccionarOrdenEsim(numeroOrden) {
+      selectedOrderId = numeroOrden;
+      renderEsimHistorial();
+    }
+
+    function volverAlListadoEsim() {
+      selectedOrderId = null;
+      renderEsimHistorial();
+    }
+
+    function abrirQrAmpliadoDesdeOrden(numeroOrden) {
+      const orden = esimHistorialCache.find(o => o.numero_orden === numeroOrden);
+      if (!orden || !orden.qr_url) return;
+      document.getElementById("qrZoomImg").src = orden.qr_url;
+      document.getElementById("qrZoomNumber").textContent = orden.numero_esim ? ("Número E-SIM: " + orden.numero_esim) : "";
+      document.getElementById("qrZoomOverlay").classList.add("open");
+    }
+
+    function copiarNumeroDesdeOrden(numeroOrden) {
+      const orden = esimHistorialCache.find(o => o.numero_orden === numeroOrden);
+      if (!orden || !orden.numero_esim) return;
+      copyText(orden.numero_esim, "Número E-SIM");
+    }
+
+    function closeQrZoom() {
+      document.getElementById("qrZoomOverlay").classList.remove("open");
+    }
+
+    function escapeHtml(str) {
+      return String(str || "")
+        .replace(/&/g, "&amp;")
+        .replace(/</g, "&lt;")
+        .replace(/>/g, "&gt;")
+        .replace(/"/g, "&quot;");
+    }
+
+    function renderEsimHistorial() {
+      const detailWrap = document.getElementById("esimExpandedDetail");
+      const listWrap = document.getElementById("esimClientOrdersList");
+      const countBadge = document.getElementById("esimOrdersCountBadge");
+
+      countBadge.textContent = `${esimHistorialCache.length} ${esimHistorialCache.length === 1 ? "orden" : "órdenes"}`;
+
+      const ordenSeleccionada = selectedOrderId
+        ? esimHistorialCache.find(o => o.numero_orden === selectedOrderId) || null
+        : null;
+
+      if (ordenSeleccionada) {
+        const tieneQr = Boolean(ordenSeleccionada.qr_url);
+        const tieneNum = Boolean(ordenSeleccionada.numero_esim);
+        detailWrap.innerHTML = `
+          <div class="esim-expanded-box">
+            <div class="esim-expanded-header">
+              <div>
+                <div style="font-size:14px; font-weight:900; color:#065f46;">✅ ${escapeHtml(ordenSeleccionada.numero_orden)} · ${escapeHtml(ordenSeleccionada.operador)}</div>
+                <div style="font-size:11.5px; color:#047857; font-weight:700;">Estado: ${escapeHtml(ordenSeleccionada.estado || "Pendiente")}</div>
+              </div>
+              <button type="button" class="esim-back-btn" onclick="volverAlListadoEsim()">← Atrás (Todas las órdenes)</button>
+            </div>
+
+            <div class="esim-number-row">
+              <div>
+                <div style="font-size:10.5px; font-weight:800; color:#64748b; text-transform:uppercase;">Número del QR / Línea</div>
+                <div class="esim-number-val">${tieneNum ? escapeHtml(ordenSeleccionada.numero_esim) : "Pendiente de asignar"}</div>
+              </div>
+              ${tieneNum ? `<button type="button" class="esim-copy-num-btn" data-ord="${escapeHtml(ordenSeleccionada.numero_orden)}" onclick="copiarNumeroDesdeOrden(this.dataset.ord)">Copiar</button>` : ""}
+            </div>
+
+            <div class="esim-qr-frame">
+              ${tieneQr
+                ? `<img src="${escapeHtml(ordenSeleccionada.qr_url)}" alt="QR ${escapeHtml(ordenSeleccionada.numero_orden)}" data-ord="${escapeHtml(ordenSeleccionada.numero_orden)}" onclick="abrirQrAmpliadoDesdeOrden(this.dataset.ord)" />
+                   <div style="font-size:11px; color:#64748b; margin-top:6px;">Toca el QR para ampliarlo</div>`
+                : `<div style="padding:18px; font-size:12.5px; color:#64748b; font-weight:700;">Aún no se ha cargado la imagen/enlace del QR para esta orden.</div>`}
+            </div>
+          </div>
+        `;
+      } else {
+        detailWrap.innerHTML = "";
+      }
+
+      if (esimHistorialCache.length === 0) {
+        listWrap.innerHTML = '<p style="text-align:center; color:#64748b; font-size:13px; padding:20px;">No tienes pedidos de E-SIM registrados aún.</p>';
+        return;
+      }
+
+      let html = "";
+      esimHistorialCache.forEach(o => {
+        const estadoClass = String(o.estado || "Pendiente").replace(/\s+/g, "-");
+        const pagoActual = o.pago === "Pagado" ? "Pagado" : "No Pagado";
+        const pagoClass = pagoActual === "Pagado" ? "pagado" : "no-pagado";
+        const entregaLista = Boolean(o.qr_url || o.numero_esim) && o.estado === "Exitoso";
+        const fecha = o.fecha ? new Date(o.fecha + "Z").toLocaleString("es-CO", { timeZone: "America/Bogota" }) : "";
+
+        html += `
+          <div class="client-order-card ${escapeHtml(estadoClass)}" data-ord="${escapeHtml(o.numero_orden)}" onclick="seleccionarOrdenEsim(this.dataset.ord)">
+            <div class="client-order-top">
+              <span class="client-order-id">${escapeHtml(o.numero_orden)}</span>
+              <div class="client-badges-wrap">
+                <span class="client-pay-badge ${pagoClass}">${pagoActual}</span>
+                <span class="client-badge ${escapeHtml(estadoClass)}">${escapeHtml(o.estado || "Pendiente")}</span>
+              </div>
+            </div>
+            <div class="client-order-details">
+              <div><strong>Operador:</strong> ${escapeHtml(o.operador)} (${escapeHtml(o.cantidad || 1)} und)</div>
+              <div><strong>Total:</strong> ${escapeHtml(o.precio)}</div>
+              ${o.numero_esim ? `<div><strong>Número QR:</strong> <span style="font-family:monospace; font-weight:800; color:#065f46;">${escapeHtml(o.numero_esim)}</span></div>` : ""}
+              ${entregaLista ? `<div class="esim-ready-tag">📲 E-SIM lista — Toca para abrir QR y número</div>` : `<div style="font-size:11px; color:#64748b; margin-top:4px;">Toca para ver detalle de la orden</div>`}
+              ${fecha ? `<div style="font-size:11px; color:#94a3b8; margin-top:4px;">Solicitado: ${escapeHtml(fecha)}</div>` : ""}
+            </div>
+          </div>
+        `;
+      });
+      listWrap.innerHTML = html;
+    }
+
+    async function fetchEsimClientOrders(esPrimeraCarga = false) {
+      try {
+        const res = await fetch(`${WORKER_URL}?action=get_client_esim_orders&pin=${activeClientPin}&celular=${activeClientPhone}`);
+        const data = await res.json();
+        if (!data.success) return;
+
+        const lista = Array.isArray(data.ordenes) ? [...data.ordenes] : [];
+        lista.sort((a, b) => {
+          if (typeof a.id === "number" && typeof b.id === "number" && a.id !== b.id) return b.id - a.id;
+          return (new Date(b.fecha || 0).getTime() || 0) - (new Date(a.fecha || 0).getTime() || 0);
+        });
+
+        esimHistorialCache = lista;
+
+        const entregadaReciente = lista.find(o => o.estado === "Exitoso" && (o.qr_url || o.numero_esim));
+        if (entregadaReciente) {
+          const key = `${entregadaReciente.numero_orden}|${entregadaReciente.qr_url || ""}|${entregadaReciente.numero_esim || ""}`;
+          if (key !== lastDeliveredOrderKey) {
+            lastDeliveredOrderKey = key;
+            selectedOrderId = entregadaReciente.numero_orden;
+            if (!esPrimeraCarga) {
+              showToast("¡Tu E-SIM " + entregadaReciente.numero_orden + " fue entregada!");
+            }
+          }
+        }
+
+        renderEsimHistorial();
+      } catch (e) {
+        if (esPrimeraCarga) {
+          document.getElementById("esimClientOrdersList").innerHTML =
+            '<p style="text-align:center; color:#dc2626; font-size:13px;">Error al consultar órdenes E-SIM.</p>';
+        }
+      }
+    }
+
+    document.addEventListener("keydown", (e) => {
+      if (e.key === "Escape") {
+        closeEsimBox();
+        closeRegisterBox();
+        closeEsimClientPanel();
+        closeQrZoom();
+      }
     });
 
     function handleLogoError(img) {
-      img.style.display = 'none';
+      img.style.display = "none";
       const wrap = img.parentElement;
       wrap.innerHTML = '<div class="avatar-fallback"><div class="logo-badge"><span class="logo-zona">Zona</span><span class="logo-gsm">GSM</span></div></div>';
     }
     function handleImgError(img, name, bgClass) {
-      const c = img.parentElement; img.style.display = 'none';
-      const d = document.createElement('div'); d.className = 'operator-badge-fallback ' + bgClass; d.textContent = name; c.appendChild(d);
+      const c = img.parentElement;
+      img.style.display = "none";
+      const d = document.createElement("div");
+      d.className = "operator-badge-fallback " + bgClass;
+      d.textContent = name;
+      c.appendChild(d);
+    }
+    function copyFromAttr(el) {
+      copyText(el.dataset.copy || "", el.dataset.label || "Dato");
     }
     function copyText(text, label) {
       if (navigator.clipboard && window.isSecureContext) {
-        navigator.clipboard.writeText(text).then(() => showToast(label + ' copiado')).catch(() => fallbackCopy(text, label));
+        navigator.clipboard.writeText(text).then(() => showToast(label + " copiado")).catch(() => fallbackCopy(text, label));
       } else fallbackCopy(text, label);
     }
     function fallbackCopy(text, label) {
-      const ta = document.createElement('textarea'); ta.value = text; ta.style.position = 'fixed'; ta.style.left = '-9999px';
-      document.body.appendChild(ta); ta.focus(); ta.select();
-      try { document.execCommand('copy'); showToast(label + ' copiado'); } catch (e) { showToast('No se pudo copiar'); }
+      const ta = document.createElement("textarea");
+      ta.value = text;
+      ta.style.position = "fixed";
+      ta.style.left = "-9999px";
+      document.body.appendChild(ta);
+      ta.focus();
+      ta.select();
+      try { document.execCommand("copy"); showToast(label + " copiado"); } catch (e) { showToast("No se pudo copiar"); }
       document.body.removeChild(ta);
     }
     function showToast(msg) {
-      const t = document.getElementById('toast'); t.textContent = msg; t.classList.add('show');
-      setTimeout(() => t.classList.remove('show'), 2400);
+      const t = document.getElementById("toast");
+      t.textContent = msg;
+      t.classList.add("show");
+      setTimeout(() => t.classList.remove("show"), 2400);
     }
     function sharePage() {
-      if (navigator.share) navigator.share({ title: 'Zona GSM — E-SIM Colombia', url: window.location.href }).catch(() => copyText(window.location.href, 'Enlace'));
-      else copyText(window.location.href, 'Enlace');
+      if (navigator.share) navigator.share({ title: "Zona GSM — E-SIM Colombia", url: window.location.href }).catch(() => copyText(window.location.href, "Enlace"));
+      else copyText(window.location.href, "Enlace");
     }
   </script>
 </body>
