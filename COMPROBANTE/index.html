@@ -3,165 +3,451 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Plomeros Al Destape</title>
+    <title>Plomeros Al Destape | Servicio Profesional 24/7</title>
+    <!-- Fuente de Google para un look profesional -->
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;800;900&display=swap" rel="stylesheet">
     <style>
-        /* Estilos generales para centrar la tarjeta */
-        body {
-            display: flex;
-            justify-content: center;
-            align-items: center;
-            min-height: 100vh;
-            background-color: #1a1a1a; /* Fondo oscuro para resaltar la tarjeta */
-            margin: 0;
-            font-family: 'Arial', sans-serif;
+        /* --- VARIABLES DE COLOR --- */
+        :root {
+            --azul-primario: #0284c7;
+            --azul-oscuro: #0369a1;
+            --celeste-claro: #e0f2fe;
+            --gris-oscuro: #1e293b;
+            --gris-texto: #475569;
+            --blanco: #ffffff;
+            --whatsapp: #25d366;
         }
 
-        /* Contenedor principal de la tarjeta */
-        .card {
-            background-color: #bce4f4; /* Color de fondo celeste claro */
-            width: 100%;
-            max-width: 550px;
-            padding: 25px 40px;
-            border-radius: 4px;
-            display: flex;
+        /* --- ESTILOS GENERALES --- */
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: 'Inter', sans-serif;
+        }
+
+        body {
+            background-color: var(--blanco);
+            color: var(--gris-texto);
+            line-height: 1.6;
+        }
+
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 0 20px;
+        }
+
+        /* --- BOTONES --- */
+        .btn {
+            display: inline-flex;
             align-items: center;
             justify-content: center;
+            padding: 12px 24px;
+            border-radius: 8px;
+            font-weight: 600;
+            text-decoration: none;
+            transition: all 0.3s ease;
+            cursor: pointer;
+            border: none;
+            font-size: 16px;
+        }
+
+        .btn-primary {
+            background-color: var(--azul-primario);
+            color: var(--blanco);
+        }
+
+        .btn-primary:hover {
+            background-color: var(--azul-oscuro);
+        }
+
+        .btn-whatsapp {
+            background-color: var(--whatsapp);
+            color: var(--blanco);
+            margin-left: 10px;
+        }
+
+        .btn-whatsapp:hover {
+            background-color: #1ebd53;
+        }
+
+        /* --- HEADER (MENÚ) --- */
+        header {
+            background-color: var(--blanco);
+            box-shadow: 0 2px 10px rgba(0,0,0,0.05);
+            position: sticky;
+            top: 0;
+            z-index: 100;
+        }
+
+        .nav-container {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            height: 80px;
+        }
+
+        .logo-nav {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            text-decoration: none;
+            color: var(--gris-oscuro);
+            font-weight: 900;
+            font-size: 20px;
+            text-transform: uppercase;
+            letter-spacing: -0.5px;
+        }
+
+        .nav-logo-icon {
+            width: 35px;
+            height: 40px;
+            fill: var(--azul-primario);
+        }
+
+        nav ul {
+            display: flex;
+            list-style: none;
             gap: 30px;
-            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.5);
+        }
+
+        nav a {
+            text-decoration: none;
+            color: var(--gris-texto);
+            font-weight: 600;
+            transition: color 0.3s;
+        }
+
+        nav a:hover {
+            color: var(--azul-primario);
+        }
+
+        /* --- HERO (SECCIÓN PRINCIPAL) --- */
+        .hero {
+            background: linear-gradient(135deg, var(--celeste-claro) 0%, var(--blanco) 100%);
+            padding: 80px 0;
             position: relative;
             overflow: hidden;
-            
-            /* Efecto de gotas de agua de fondo */
-            background-image: 
-                radial-gradient(circle at 20% 30%, rgba(255,255,255,0.6) 2px, transparent 3px),
-                radial-gradient(circle at 80% 10%, rgba(255,255,255,0.7) 3px, transparent 4px),
-                radial-gradient(circle at 50% 80%, rgba(255,255,255,0.5) 2px, transparent 3px),
-                radial-gradient(circle at 10% 80%, rgba(255,255,255,0.6) 4px, transparent 5px),
-                radial-gradient(circle at 90% 60%, rgba(255,255,255,0.7) 3px, transparent 4px),
-                radial-gradient(circle at 30% 50%, rgba(255,255,255,0.5) 1.5px, transparent 2.5px),
-                radial-gradient(circle at 70% 90%, rgba(255,255,255,0.6) 2.5px, transparent 3.5px);
-            background-size: 150px 150px; /* Tamaño del patrón de gotas */
         }
 
-        /* Contenedor del Logo (Gota + Llave) */
-        .logo-container {
+        /* Efecto de gotas de agua en el fondo */
+        .hero::before {
+            content: '';
+            position: absolute;
+            top: 0; left: 0; right: 0; bottom: 0;
+            background-image: radial-gradient(var(--azul-primario) 1px, transparent 1px);
+            background-size: 40px 40px;
+            opacity: 0.05;
+            z-index: 0;
+        }
+
+        .hero-content {
             position: relative;
-            width: 100px;
-            height: 130px;
-            flex-shrink: 0;
+            z-index: 1;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            gap: 40px;
+        }
+
+        .hero-text {
+            flex: 1;
+        }
+
+        .hero-badge {
+            display: inline-block;
+            background-color: rgba(2, 132, 199, 0.1);
+            color: var(--azul-oscuro);
+            padding: 5px 15px;
+            border-radius: 20px;
+            font-weight: 600;
+            font-size: 14px;
+            margin-bottom: 20px;
+        }
+
+        .hero-text h1 {
+            font-size: 48px;
+            font-weight: 900;
+            color: var(--gris-oscuro);
+            line-height: 1.1;
+            margin-bottom: 20px;
+        }
+
+        .hero-text h1 span {
+            color: var(--azul-primario);
+        }
+
+        .hero-text p {
+            font-size: 18px;
+            margin-bottom: 30px;
+            max-width: 500px;
+        }
+
+        .hero-image {
+            flex: 1;
             display: flex;
             justify-content: center;
+        }
+
+        /* Tarjeta visual en el Hero */
+        .hero-card {
+            background: var(--blanco);
+            padding: 40px;
+            border-radius: 20px;
+            box-shadow: 0 20px 40px rgba(0,0,0,0.1);
+            text-align: center;
+            max-width: 350px;
+            border-top: 5px solid var(--azul-primario);
+        }
+
+        .hero-logo-container {
+            position: relative;
+            width: 120px;
+            height: 150px;
+            margin: 0 auto 20px;
+        }
+
+        .hero-card h3 {
+            color: var(--gris-oscuro);
+            font-size: 24px;
+            font-weight: 800;
+            margin-bottom: 5px;
+        }
+
+        .hero-card .phone {
+            font-size: 22px;
+            font-weight: 700;
+            color: var(--azul-primario);
+            display: flex;
             align-items: center;
+            justify-content: center;
+            gap: 8px;
+            margin-top: 15px;
         }
 
-        /* La Gota de agua */
-        .water-drop {
-            width: 100%;
-            height: 100%;
-            fill: #2196d3; /* Azul de la gota */
-            filter: drop-shadow(0px 4px 6px rgba(0,0,0,0.1));
+        /* --- SERVICIOS --- */
+        .servicios {
+            padding: 80px 0;
+            background-color: var(--blanco);
         }
 
-        /* La Llave Inglesa */
-        .wrench {
-            position: absolute;
+        .section-title {
+            text-align: center;
+            margin-bottom: 50px;
+        }
+
+        .section-title h2 {
+            font-size: 36px;
+            color: var(--gris-oscuro);
+            font-weight: 800;
+        }
+
+        .section-title p {
+            font-size: 18px;
+            max-width: 600px;
+            margin: 10px auto 0;
+        }
+
+        .grid-servicios {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: 30px;
+        }
+
+        .card-servicio {
+            background: var(--blanco);
+            border: 1px solid #e2e8f0;
+            border-radius: 12px;
+            padding: 30px;
+            transition: transform 0.3s, box-shadow 0.3s;
+        }
+
+        .card-servicio:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 10px 25px rgba(0,0,0,0.08);
+            border-color: var(--azul-primario);
+        }
+
+        .icon-servicio {
             width: 50px;
             height: 50px;
-            fill: #ffffff; /* Blanca */
-            top: 50%;
-            left: 50%;
-            transform: translate(-50%, -45%) rotate(45deg); /* Centrada y rotada */
-        }
-
-        /* Contenedor del Texto */
-        .text-container {
-            display: flex;
-            flex-direction: column;
-            justify-content: center;
-        }
-
-        /* Título principal */
-        .title {
-            font-size: 32px;
-            font-weight: 900;
-            color: #3c464c; /* Gris oscuro */
-            line-height: 1.05;
-            letter-spacing: 0.5px;
-            margin: 0;
-            text-transform: uppercase;
-        }
-
-        /* Número de teléfono */
-        .phone-container {
+            background-color: var(--celeste-claro);
+            color: var(--azul-primario);
+            border-radius: 10px;
             display: flex;
             align-items: center;
-            margin-top: 12px;
-            gap: 8px;
+            justify-content: center;
+            margin-bottom: 20px;
+            font-size: 24px;
         }
 
-        /* Ícono del teléfono */
-        .phone-icon {
-            width: 18px;
-            height: 18px;
-            fill: #3c464c;
+        .card-servicio h3 {
+            font-size: 20px;
+            color: var(--gris-oscuro);
+            margin-bottom: 10px;
         }
 
-        /* Texto del teléfono */
-        .phone-number {
-            font-size: 18px;
-            font-weight: 700;
-            color: #3c464c;
-            letter-spacing: 0.5px;
+        /* --- FOOTER --- */
+        footer {
+            background-color: var(--gris-oscuro);
+            color: var(--blanco);
+            padding: 50px 0 20px;
+            text-align: center;
         }
 
-        /* Ajustes para pantallas de móviles */
-        @media (max-width: 500px) {
-            .card {
+        footer h2 {
+            font-size: 28px;
+            margin-bottom: 10px;
+        }
+
+        footer p {
+            color: #94a3b8;
+            margin-bottom: 30px;
+        }
+
+        .footer-bottom {
+            border-top: 1px solid #334155;
+            padding-top: 20px;
+            margin-top: 40px;
+            font-size: 14px;
+            color: #64748b;
+        }
+
+        /* --- RESPONSIVE (CELULARES) --- */
+        @media (max-width: 768px) {
+            .nav-container nav ul {
+                display: none; /* Ocultar menú en móviles para simplificar */
+            }
+            .hero-content {
                 flex-direction: column;
                 text-align: center;
-                padding: 30px 20px;
-                gap: 15px;
-                margin: 15px;
             }
-            .phone-container {
-                justify-content: center;
+            .hero-text h1 {
+                font-size: 36px;
             }
-            .title {
-                font-size: 26px;
+            .hero-text p {
+                margin: 0 auto 30px;
+            }
+            .hero-buttons {
+                display: flex;
+                flex-direction: column;
+                gap: 10px;
+            }
+            .btn-whatsapp {
+                margin-left: 0;
             }
         }
     </style>
 </head>
 <body>
 
-    <div class="card">
-        
-        <!-- Logo: Gota y Llave -->
-        <div class="logo-container">
-            <!-- SVG de la Gota -->
-            <svg class="water-drop" viewBox="0 0 100 130" xmlns="http://www.w3.org/2000/svg">
-                <path d="M50 0 C50 0 0 60 0 85 C0 112.6 22.4 130 50 130 C77.6 130 100 112.6 100 85 C100 60 50 0 50 0 Z" />
-            </svg>
-            <!-- SVG de la Llave Inglesa -->
-            <svg class="wrench" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
-                <path d="M13.7 2.3c-1.4-.6-3-.6-4.4 0L7.9 3.7l2.1 2.1-1.4 1.4-2.1-2.1L5.1 6.5c-.6 1.4-.6 3 0 4.4l.3.8L2 15.2v4h4l3.5-3.5.8.3c1.4.6 3 .6 4.4 0l1.4-1.4-2.1-2.1 1.4-1.4 2.1 2.1 1.4-1.4c.6-1.4.6-3 0-4.4l-.3-.8L21.9 4v-4h-4l-3.5 3.5-.7-.2z"/>
-            </svg>
-        </div>
-
-        <!-- Textos -->
-        <div class="text-container">
-            <h1 class="title">PLOMEROS<br>AL DESTAPE</h1>
-            
-            <div class="phone-container">
-                <!-- SVG Ícono de Teléfono -->
-                <svg class="phone-icon" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
-                    <path d="M20.01 15.38c-1.23 0-2.42-.2-3.53-.56-.35-.12-.74-.03-1.01.24l-1.57 1.97c-2.83-1.35-5.48-3.9-6.89-6.83l1.95-1.66c.27-.28.35-.67.24-1.02-.37-1.11-.56-2.3-.56-3.53 0-.54-.45-.99-.99-.99H4.19C3.65 3 3 3.24 3 3.99 3 13.28 10.73 21 20.03 21c.71 0 .99-.63.99-1.18v-3.45c0-.54-.45-.99-.99-.99z"/>
+    <!-- HEADER -->
+    <header>
+        <div class="container nav-container">
+            <a href="#" class="logo-nav">
+                <!-- Logo SVG -->
+                <svg class="nav-logo-icon" viewBox="0 0 100 130" xmlns="http://www.w3.org/2000/svg">
+                    <path d="M50 0 C50 0 0 60 0 85 C0 112.6 22.4 130 50 130 C77.6 130 100 112.6 100 85 C100 60 50 0 50 0 Z" />
                 </svg>
-                <span class="phone-number">300 302 8182</span>
+                Plomeros Al Destape
+            </a>
+            <nav>
+                <ul>
+                    <li><a href="#">Inicio</a></li>
+                    <li><a href="#servicios">Servicios</a></li>
+                    <li><a href="#nosotros">Nosotros</a></li>
+                    <li><a href="#contacto">Contacto</a></li>
+                </ul>
+            </nav>
+            <a href="tel:3003028182" class="btn btn-primary">Llamar Ahora</a>
+        </div>
+    </header>
+
+    <!-- SECCIÓN PRINCIPAL (HERO) -->
+    <section class="hero">
+        <div class="container hero-content">
+            <div class="hero-text">
+                <span class="hero-badge">Servicio 24/7 en tu zona</span>
+                <h1>Expertos en <span>Destape</span> y Plomería General</h1>
+                <p>¿Inodoros tapados, fugas de agua o tuberías obstruidas? Solucionamos tu problema rápido, limpio y con garantía por escrito.</p>
+                <div class="hero-buttons">
+                    <a href="tel:3003028182" class="btn btn-primary">
+                        📞 300 302 8182
+                    </a>
+                    <a href="https://wa.me/573003028182" class="btn btn-whatsapp">
+                        Escribir por WhatsApp
+                    </a>
+                </div>
+            </div>
+            <div class="hero-image">
+                <!-- Recreación de la tarjeta como elemento visual -->
+                <div class="hero-card">
+                    <div class="hero-logo-container">
+                        <svg style="width:100%; height:100%; fill:var(--azul-primario);" viewBox="0 0 100 130" xmlns="http://www.w3.org/2000/svg">
+                            <path d="M50 0 C50 0 0 60 0 85 C0 112.6 22.4 130 50 130 C77.6 130 100 112.6 100 85 C100 60 50 0 50 0 Z" />
+                        </svg>
+                        <svg style="position:absolute; width:50px; height:50px; fill:white; top:50%; left:50%; transform:translate(-50%, -45%) rotate(45deg);" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
+                            <path d="M13.7 2.3c-1.4-.6-3-.6-4.4 0L7.9 3.7l2.1 2.1-1.4 1.4-2.1-2.1L5.1 6.5c-.6 1.4-.6 3 0 4.4l.3.8L2 15.2v4h4l3.5-3.5.8.3c1.4.6 3 .6 4.4 0l1.4-1.4-2.1-2.1 1.4-1.4 2.1 2.1 1.4-1.4c.6-1.4.6-3 0-4.4l-.3-.8L21.9 4v-4h-4l-3.5 3.5-.7-.2z"/>
+                        </svg>
+                    </div>
+                    <h3>PLOMEROS</h3>
+                    <h3 style="margin-top: -5px;">AL DESTAPE</h3>
+                    <div class="phone">
+                        <svg style="width:20px; height:20px; fill:var(--azul-primario);" viewBox="0 0 24 24"><path d="M20.01 15.38c-1.23 0-2.42-.2-3.53-.56-.35-.12-.74-.03-1.01.24l-1.57 1.97c-2.83-1.35-5.48-3.9-6.89-6.83l1.95-1.66c.27-.28.35-.67.24-1.02-.37-1.11-.56-2.3-.56-3.53 0-.54-.45-.99-.99-.99H4.19C3.65 3 3 3.24 3 3.99 3 13.28 10.73 21 20.03 21c.71 0 .99-.63.99-1.18v-3.45c0-.54-.45-.99-.99-.99z"/></svg>
+                        300 302 8182
+                    </div>
+                </div>
             </div>
         </div>
+    </section>
 
-    </div>
+    <!-- SECCIÓN DE SERVICIOS -->
+    <section id="servicios" class="servicios">
+        <div class="container">
+            <div class="section-title">
+                <h2>Nuestros Servicios</h2>
+                <p>Contamos con el equipo profesional y la tecnología necesaria para resolver cualquier emergencia.</p>
+            </div>
+            
+            <div class="grid-servicios">
+                <!-- Servicio 1 -->
+                <div class="card-servicio">
+                    <div class="icon-servicio">🚽</div>
+                    <h3>Destape de Cañerías</h3>
+                    <p>Desobstrucción de tuberías, desagües e inodoros utilizando sonda eléctrica y máquinas de hidrojet. No rompemos paredes.</p>
+                </div>
+                <!-- Servicio 2 -->
+                <div class="card-servicio">
+                    <div class="icon-servicio">🔍</div>
+                    <h3>Detección de Fugas</h3>
+                    <p>Encontramos fugas de agua ocultas de forma rápida y precisa sin causar daños innecesarios en tu hogar o negocio.</p>
+                </div>
+                <!-- Servicio 3 -->
+                <div class="card-servicio">
+                    <div class="icon-servicio">🔧</div>
+                    <h3>Plomería General</h3>
+                    <p>Reparación e instalación de grifos, sanitarios, tuberías, calentadores y mantenimiento preventivo en general.</p>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- FOOTER / CONTACTO -->
+    <footer id="contacto">
+        <div class="container">
+            <h2>¿Necesitas un plomero urgente?</h2>
+            <p>Estamos disponibles para atenderte de inmediato. Llámanos o escríbenos.</p>
+            <div style="display: flex; justify-content: center; gap: 15px; flex-wrap: wrap;">
+                <a href="tel:3003028182" class="btn btn-primary">Llamar al 300 302 8182</a>
+                <a href="https://wa.me/573003028182" class="btn btn-whatsapp">WhatsApp</a>
+            </div>
+            
+            <div class="footer-bottom">
+                <p>&copy; 2024 Plomeros Al Destape. Todos los derechos reservados.</p>
+            </div>
+        </div>
+    </footer>
 
 </body>
 </html>
