@@ -1236,54 +1236,82 @@
         const res = await fetch(`${WORKER_URL}?action=get_client_orders&pin=${activeClientPin}&celular=${activeClientPhone}`);
         const data = await res.json();
 
-        if (data.success) {
-          const historial = Array.isArray(data.ordenes) ? [...data.ordenes] : [];
-          historial.sort((a, b) => {
-            if (typeof a.id === 'number' && typeof b.id === 'number' && a.id !== b.id) {
-              return b.id - a.id;
+        let historial = [];
+        if (data.success && Array.isArray(data.ordenes)) {
+          historial = [...data.ordenes];
+        }
+
+        // Respaldo: consultar todas las órdenes y filtrar las de este número o PIN para asegurar el historial completo
+        try {
+          const resAll = await fetch(`${WORKER_URL}?action=get_orders`);
+          const dataAll = await resAll.json();
+          if (dataAll.success && Array.isArray(dataAll.ordenes)) {
+            const coinciden = dataAll.ordenes.filter(o =>
+              (activeClientPhone && String(o.celular || '') === String(activeClientPhone)) ||
+              (activeClientPin && String(o.pin || '') === String(activeClientPin))
+            );
+            if (coinciden.length > historial.length) {
+              historial = [...coinciden];
+            } else if (coinciden.length > 0) {
+              const mapaPorOrden = new Map();
+              historial.forEach(item => mapaPorOrden.set(item.numero_orden, item));
+              coinciden.forEach(item => {
+                const prev = mapaPorOrden.get(item.numero_orden) || {};
+                mapaPorOrden.set(item.numero_orden, { ...prev, ...item });
+              });
+              historial = Array.from(mapaPorOrden.values());
             }
-            const tb = new Date(b.fecha || 0).getTime() || 0;
-            const ta = new Date(a.fecha || 0).getTime() || 0;
-            return tb - ta;
-          });
-
-          countBadge.textContent = `${historial.length} ${historial.length === 1 ? 'pedido' : 'pedidos'}`;
-
-          if (historial.length === 0) {
-            ordersList.innerHTML = '<p style="text-align:center; color:#64748b; font-size:13px; padding: 20px;">No tienes pedidos registrados aún.</p>';
-            return;
           }
+        } catch (e) {}
 
-          let html = '';
-          historial.forEach(o => {
-            const estadoClass = String(o.estado || 'Pendiente').replace(/\s+/g, '-');
-            const estadoPago = resolverEstadoPagoCliente(o);
-            const pagoClass = estadoPago === 'Pagado' ? 'pagado' : 'no-pagado';
-            const fecha = new Date(o.fecha + "Z").toLocaleString('es-CO', { timeZone: 'America/Bogota' });
+        if (!data.success && historial.length === 0) {
+          ordersList.innerHTML = `<p style="text-align:center; color:#dc2626; font-size:13px;">Error: ${data.error || 'No se pudo consultar el historial'}</p>`;
+          return;
+        }
 
-            html += `
-              <div class="client-order-card ${estadoClass}">
-                <div class="client-order-top">
-                  <span class="client-order-id">${o.numero_orden}</span>
-                  <div class="client-badges-wrap">
-                    <span class="client-pay-badge ${pagoClass}">${estadoPago}</span>
-                    <span class="client-badge ${estadoClass}">${o.estado}</span>
-                  </div>
-                </div>
-                <div class="client-order-details">
-                  <div><strong>Servicio:</strong> No Registro ${o.operador}</div>
-                  <div><strong>IMEI:</strong> ${o.imei}</div>
-                  <div><strong>Precio:</strong> ${o.precio}</div>
-                  <div><strong>Pago:</strong> ${estadoPago}</div>
-                  <div style="font-size: 11px; color: #94a3b8; margin-top: 5px;">Solicitado el: ${fecha}</div>
+        historial.sort((a, b) => {
+          if (typeof a.id === 'number' && typeof b.id === 'number' && a.id !== b.id) {
+            return b.id - a.id;
+          }
+          const tb = new Date(b.fecha || 0).getTime() || 0;
+          const ta = new Date(a.fecha || 0).getTime() || 0;
+          return tb - ta;
+        });
+
+        countBadge.textContent = `${historial.length} ${historial.length === 1 ? 'pedido' : 'pedidos'}`;
+
+        if (historial.length === 0) {
+          ordersList.innerHTML = '<p style="text-align:center; color:#64748b; font-size:13px; padding: 20px;">No tienes pedidos registrados aún.</p>';
+          return;
+        }
+
+        let html = '';
+        historial.forEach(o => {
+          const estadoClass = String(o.estado || 'Pendiente').replace(/\s+/g, '-');
+          const estadoPago = resolverEstadoPagoCliente(o);
+          const pagoClass = estadoPago === 'Pagado' ? 'pagado' : 'no-pagado';
+          const fecha = new Date(o.fecha + "Z").toLocaleString('es-CO', { timeZone: 'America/Bogota' });
+
+          html += `
+            <div class="client-order-card ${estadoClass}">
+              <div class="client-order-top">
+                <span class="client-order-id">${o.numero_orden}</span>
+                <div class="client-badges-wrap">
+                  <span class="client-pay-badge ${pagoClass}">${estadoPago}</span>
+                  <span class="client-badge ${estadoClass}">${o.estado}</span>
                 </div>
               </div>
-            `;
-          });
-          ordersList.innerHTML = html;
-        } else {
-          ordersList.innerHTML = `<p style="text-align:center; color:#dc2626; font-size:13px;">Error: ${data.error}</p>`;
-        }
+              <div class="client-order-details">
+                <div><strong>Servicio:</strong> No Registro ${o.operador}</div>
+                <div><strong>IMEI:</strong> ${o.imei}</div>
+                <div><strong>Precio:</strong> ${o.precio}</div>
+                <div><strong>Pago:</strong> ${estadoPago}</div>
+                <div style="font-size: 11px; color: #94a3b8; margin-top: 5px;">Solicitado el: ${fecha}</div>
+              </div>
+            </div>
+          `;
+        });
+        ordersList.innerHTML = html;
       } catch (err) {
         ordersList.innerHTML = '<p style="text-align:center; color:#dc2626; font-size:13px;">Error de conexión. Verifica tus datos.</p>';
       }
