@@ -45,7 +45,12 @@
 
     .content-box { padding: 0 18px; }
     h1 { font-size: 24px; font-weight: 800; color: #0f172a; margin-bottom: 8px; }
-    .bio { font-size: 14px; line-height: 1.45; color: #334155; max-width: 340px; margin: 0 auto 22px; }
+    .bio { font-size: 14px; line-height: 1.45; color: #334155; max-width: 340px; margin: 0 auto 10px; }
+
+    /* BOTÓN DE CONSULTAR PEDIDO */
+    .track-order-btn { margin-bottom: 22px; padding: 10px 20px; background: #0f172a; color: white; border: none; border-radius: 8px; font-size: 13px; font-weight: 700; cursor: pointer; display: inline-flex; align-items: center; gap: 6px; transition: background 0.2s; }
+    .track-order-btn:hover { background: #334155; }
+
     @keyframes subtleHop { 0%, 78%, 100% { transform: translateY(0); } 84% { transform: translateY(-5px); } 90% { transform: translateY(0); } 94% { transform: translateY(-2px); } }
     .socials { display: flex; justify-content: center; align-items: flex-start; gap: 10px; margin-bottom: 26px; }
     .social-item { display: flex; flex-direction: column; align-items: center; text-decoration: none; background: none; border: none; cursor: pointer; width: 64px; animation: subtleHop 5s ease-in-out infinite; }
@@ -97,7 +102,7 @@
     /* --- MODALES Y FORMULARIOS NUEVOS --- */
     .imei-overlay { position: fixed; inset: 0; background: rgba(15, 23, 42, 0.55); backdrop-filter: blur(4px); -webkit-backdrop-filter: blur(4px); display: none; align-items: center; justify-content: center; padding: 18px; z-index: 10001; }
     .imei-overlay.open { display: flex; }
-    .imei-box { width: 100%; max-width: 390px; background: #ffffff; border-radius: 22px; padding: 18px; box-shadow: 0 18px 40px rgba(15, 23, 42, 0.22); text-align: left; }
+    .imei-box { width: 100%; max-width: 390px; background: #ffffff; border-radius: 22px; padding: 18px; box-shadow: 0 18px 40px rgba(15, 23, 42, 0.22); text-align: left; max-height: 90vh; overflow-y: auto; }
     
     .imei-box-top { display: flex; align-items: center; justify-content: space-between; gap: 10px; margin-bottom: 12px; }
     .imei-op-head { display: flex; align-items: center; gap: 10px; min-width: 0; }
@@ -156,6 +161,24 @@
     .pin-msg.error { color: #dc2626; }
     .pin-msg.success { color: #059669; }
 
+    /* --- ESTILOS PARA EL MODAL DE PEDIDOS DEL CLIENTE --- */
+    .client-order-card { background: #f8fafc; border: 1px solid #e2e8f0; border-radius: 12px; padding: 15px; margin-bottom: 10px; border-left: 5px solid #cbd5e1; }
+    .client-order-card.Pendiente { border-left-color: #f59e0b; }
+    .client-order-card.En-Proceso { border-left-color: #3b82f6; }
+    .client-order-card.Exitoso { border-left-color: #10b981; }
+    
+    .client-order-top { display: flex; justify-content: space-between; align-items: center; margin-bottom: 8px; }
+    .client-order-id { font-weight: 800; font-size: 14px; color: #0f172a; }
+    .client-badge { padding: 3px 8px; border-radius: 99px; font-size: 10px; font-weight: 700; text-transform: uppercase; }
+    .client-badge.Pendiente { background: #fef3c7; color: #d97706; }
+    .client-badge.En-Proceso { background: #e0f2fe; color: #0284c7; }
+    .client-badge.Exitoso { background: #dcfce7; color: #16a34a; }
+    
+    .client-order-details { font-size: 13px; color: #475569; line-height: 1.5; }
+    .client-order-details strong { color: #0f172a; }
+
+    @keyframes pulse { 0% { opacity: 1; } 50% { opacity: 0.4; } 100% { opacity: 1; } }
+
     .toast { position: fixed; bottom: 24px; left: 50%; transform: translateX(-50%) translateY(20px); background: #0f172a; color: #ffffff; padding: 10px 18px; border-radius: 999px; font-size: 13px; font-weight: 600; opacity: 0; pointer-events: none; transition: opacity 0.25s ease, transform 0.25s ease; box-shadow: 0 8px 20px rgba(0, 0, 0, 0.2); z-index: 10002; }
     .toast.show { opacity: 1; transform: translateX(-50%) translateY(0); }
   </style>
@@ -199,6 +222,11 @@
     <div class="content-box">
       <h1>Zona GSM</h1>
       <p class="bio">Solución de No Registro por IMEI en Colombia. Proceso rápido y garantizado.</p>
+      
+      <!-- NUEVO BOTÓN PARA CONSULTAR PEDIDO -->
+      <button class="track-order-btn" onclick="openClientPanel()">
+        🔍 Consultar estado de mi pedido
+      </button>
 
       <div class="socials">
         <a class="social-item" href="https://wa.me/573104141805" target="_blank" rel="noopener noreferrer" aria-label="Soporte 1 por WhatsApp">
@@ -434,10 +462,50 @@
     </div>
   </div>
 
+  <!-- NUEVO MODAL: CONSULTA DE PEDIDOS DEL CLIENTE -->
+  <div id="clientPanelOverlay" class="imei-overlay" onclick="closeClientPanelOutside(event)">
+    <div class="imei-box" style="max-width: 420px;">
+      
+      <div class="imei-box-top">
+        <div class="imei-op-head">
+          <div>
+            <div class="imei-box-title" style="font-size: 18px;">Consultar Pedidos</div>
+            <div class="imei-badges" style="margin-top: 2px;">
+              <span style="font-size: 11px; color: #64748b; font-weight: 600;">Ingresa tus datos para ver el estado</span>
+            </div>
+          </div>
+        </div>
+        <button type="button" class="imei-close" onclick="closeClientPanel()" aria-label="Cerrar">&times;</button>
+      </div>
+
+      <!-- Formulario de Login del Cliente -->
+      <div id="clientLoginForm">
+        <div class="input-group">
+          <label>Tu PIN de 4 dígitos:</label>
+          <input id="clientPinInput" class="pin-input" type="text" maxlength="4" inputmode="numeric" placeholder="••••">
+        </div>
+        <div class="input-group">
+          <label>Número de WhatsApp (10 dígitos):</label>
+          <input id="clientPhoneInput" type="tel" inputmode="numeric" maxlength="10" placeholder="Ej: 3104141805" style="width: 100%; padding: 10px; border-radius: 12px; border: 2px solid #cbd5e1; font-size: 14px; font-weight: 700; outline: none; text-align: center;">
+        </div>
+        <button class="imei-send-btn" onclick="loginClientPanel()" style="background: #0f172a;">Consultar Mis Pedidos</button>
+      </div>
+
+      <!-- Lista de Pedidos (oculta al inicio) -->
+      <div id="clientOrdersView" style="display: none;">
+        <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 15px;">
+          <span style="font-size: 12px; font-weight: 700; color: #10b981; animation: pulse 1.5s infinite;">● En vivo</span>
+          <button onclick="logoutClientPanel()" style="background: none; border: none; color: #64748b; font-size: 12px; font-weight: 700; cursor: pointer; text-decoration: underline;">Volver a consultar</button>
+        </div>
+        <div id="clientOrdersList" style="max-height: 50vh; overflow-y: auto; padding-right: 5px;"></div>
+      </div>
+
+    </div>
+  </div>
+
   <div id="toast" class="toast">Copiado</div>
 
   <script>
-    // Base de datos en memoria (se llena al registrar o consultar)
     let dbClientes = [
       { pin: '1234', celular: '3104141805', nombre: 'Cliente de Prueba' }
     ];
@@ -452,6 +520,11 @@
     let lastAutoCompleted14 = '';
     let qrScannerInstance = null;
     let qrIsRunning = false;
+
+    // Variables para el panel del cliente
+    let clientPollingInterval = null;
+    let activeClientPin = '';
+    let activeClientPhone = '';
 
     window.addEventListener('DOMContentLoaded', () => {
       setTimeout(() => {
@@ -568,7 +641,6 @@
       }
     }
 
-    // FUNCIÓN ACTUALIZADA: Guarda el cliente en la base de datos real
     async function registerNewPin() {
       const pin = document.getElementById('newPinInput').value.replace(/\D/g, '');
       const cel = document.getElementById('newPhoneInput').value.replace(/\D/g, '');
@@ -584,7 +656,6 @@
       boton.disabled = true;
 
       try {
-        // Enviamos los datos al Worker para que se guarden en D1
         const res = await fetch("https://telegram-zonagsm.zonagsm023.workers.dev", {
           method: 'POST',
           headers: { 'Content-Type': 'application/json' },
@@ -599,7 +670,6 @@
         const result = await res.json();
 
         if (result.success) {
-          // Si se guardó, actualizamos la memoria local para que la web funcione fluido
           dbClientes.push({ pin: pin, celular: cel, nombre: nombre });
           
           document.getElementById('registerOverlay').classList.remove('open');
@@ -943,7 +1013,7 @@
 
         if (result.success) {
           await closeImeiBox();
-          showToast('¡Solicitud enviada a Telegram con éxito!');
+          showToast('¡Solicitud enviada! Revisa tu estado en el botón azul.');
         } else {
           throw new Error(result.error || 'Error desconocido');
         }
@@ -956,10 +1026,112 @@
       }
     }
 
+    /* --- LÓGICA DEL PANEL DEL CLIENTE (NUEVO) --- */
+    function openClientPanel() {
+      document.getElementById('clientPanelOverlay').classList.add('open');
+      document.getElementById('clientLoginForm').style.display = 'block';
+      document.getElementById('clientOrdersView').style.display = 'none';
+      document.getElementById('clientPinInput').value = '';
+      document.getElementById('clientPhoneInput').value = '';
+    }
+
+    function closeClientPanel() {
+      document.getElementById('clientPanelOverlay').classList.remove('open');
+      if (clientPollingInterval) {
+        clearInterval(clientPollingInterval);
+        clientPollingInterval = null;
+      }
+    }
+
+    function closeClientPanelOutside(e) {
+      if (e.target.id === 'clientPanelOverlay') {
+        closeClientPanel();
+      }
+    }
+
+    function logoutClientPanel() {
+      document.getElementById('clientOrdersView').style.display = 'none';
+      document.getElementById('clientLoginForm').style.display = 'block';
+      if (clientPollingInterval) {
+        clearInterval(clientPollingInterval);
+        clientPollingInterval = null;
+      }
+    }
+
+    async function loginClientPanel() {
+      const pin = document.getElementById('clientPinInput').value.replace(/\D/g, '');
+      const phone = document.getElementById('clientPhoneInput').value.replace(/\D/g, '');
+
+      if (pin.length !== 4 || phone.length !== 10) {
+        alert("Por favor ingresa un PIN de 4 dígitos y un celular de 10 dígitos.");
+        return;
+      }
+
+      activeClientPin = pin;
+      activeClientPhone = phone;
+
+      const loginForm = document.getElementById('clientLoginForm');
+      const ordersView = document.getElementById('clientOrdersView');
+      const ordersList = document.getElementById('clientOrdersList');
+
+      loginForm.style.display = 'none';
+      ordersView.style.display = 'block';
+      ordersList.innerHTML = '<p style="text-align:center; color:#64748b; font-size:13px;">Cargando pedidos...</p>';
+
+      // Cargar inmediatamente
+      await fetchClientOrders();
+
+      // Empezar a actualizar cada 10 segundos
+      if (clientPollingInterval) clearInterval(clientPollingInterval);
+      clientPollingInterval = setInterval(fetchClientOrders, 10000);
+    }
+
+    async function fetchClientOrders() {
+      const ordersList = document.getElementById('clientOrdersList');
+      try {
+        const res = await fetch(`https://telegram-zonagsm.zonagsm023.workers.dev?action=get_client_orders&pin=${activeClientPin}&celular=${activeClientPhone}`);
+        const data = await res.json();
+
+        if (data.success) {
+          if (data.ordenes.length === 0) {
+            ordersList.innerHTML = '<p style="text-align:center; color:#64748b; font-size:13px; padding: 20px;">No tienes pedidos registrados aún.</p>';
+            return;
+          }
+
+          let html = '';
+          data.ordenes.forEach(o => {
+            const estadoClass = o.estado.replace(' ', '-');
+            const fecha = new Date(o.fecha + "Z").toLocaleString('es-CO', { timeZone: 'America/Bogota' });
+            
+            html += `
+              <div class="client-order-card ${estadoClass}">
+                <div class="client-order-top">
+                  <span class="client-order-id">${o.numero_orden}</span>
+                  <span class="client-badge ${estadoClass}">${o.estado}</span>
+                </div>
+                <div class="client-order-details">
+                  <div><strong>Servicio:</strong> No Registro ${o.operador}</div>
+                  <div><strong>IMEI:</strong> ${o.imei}</div>
+                  <div><strong>Precio:</strong> ${o.precio}</div>
+                  <div style="font-size: 11px; color: #94a3b8; margin-top: 5px;">Solicitado el: ${fecha}</div>
+                </div>
+              </div>
+            `;
+          });
+          ordersList.innerHTML = html;
+        } else {
+          ordersList.innerHTML = `<p style="text-align:center; color:#dc2626; font-size:13px;">Error: ${data.error}</p>`;
+        }
+      } catch (err) {
+        ordersList.innerHTML = '<p style="text-align:center; color:#dc2626; font-size:13px;">Error de conexión. Verifica tus datos.</p>';
+      }
+    }
+
     document.addEventListener('keydown', (e) => {
       if (e.key === 'Escape') {
         closeImeiBox();
         closeRegisterBox();
+        closeClientPanel();
       }
     });
 
