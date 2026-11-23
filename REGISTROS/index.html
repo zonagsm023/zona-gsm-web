@@ -4,8 +4,6 @@
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <title>Zona GSM — No Registro Colombia</title>
-  <meta name="description" content="Solución de No Registro por IMEI en Colombia para Tigo, Claro, Virgin, WOM, Movistar, Móvil Éxito y ETB. Proceso rápido y garantizado." />
-  <link rel="canonical" href="https://registros.zonagsm.site/" />
   <link rel="icon" type="image/png" href="logo.png" />
 
   <script src="https://unpkg.com/html5-qrcode@2.3.8/html5-qrcode.min.js"></script>
@@ -47,7 +45,6 @@
     h1 { font-size: 24px; font-weight: 800; color: #0f172a; margin-bottom: 8px; }
     .bio { font-size: 14px; line-height: 1.45; color: #334155; max-width: 340px; margin: 0 auto 10px; }
 
-    /* BOTÓN DE CONSULTAR PEDIDO */
     .track-order-btn { margin-bottom: 22px; padding: 10px 20px; background: #0f172a; color: white; border: none; border-radius: 8px; font-size: 13px; font-weight: 700; cursor: pointer; display: inline-flex; align-items: center; gap: 6px; transition: background 0.2s; }
     .track-order-btn:hover { background: #334155; }
 
@@ -166,14 +163,12 @@
     .client-order-card.Pendiente { border-left-color: #f59e0b; }
     .client-order-card.En-Proceso { border-left-color: #3b82f6; }
     .client-order-card.Exitoso { border-left-color: #10b981; }
-    
     .client-order-top { display: flex; justify-content: space-between; align-items: center; margin-bottom: 8px; }
     .client-order-id { font-weight: 800; font-size: 14px; color: #0f172a; }
     .client-badge { padding: 3px 8px; border-radius: 99px; font-size: 10px; font-weight: 700; text-transform: uppercase; }
     .client-badge.Pendiente { background: #fef3c7; color: #d97706; }
     .client-badge.En-Proceso { background: #e0f2fe; color: #0284c7; }
     .client-badge.Exitoso { background: #dcfce7; color: #16a34a; }
-    
     .client-order-details { font-size: 13px; color: #475569; line-height: 1.5; }
     .client-order-details strong { color: #0f172a; }
 
@@ -223,7 +218,6 @@
       <h1>Zona GSM</h1>
       <p class="bio">Solución de No Registro por IMEI en Colombia. Proceso rápido y garantizado.</p>
       
-      <!-- NUEVO BOTÓN PARA CONSULTAR PEDIDO -->
       <button class="track-order-btn" onclick="openClientPanel()">
         🔍 Consultar estado de mi pedido
       </button>
@@ -348,7 +342,7 @@
     </div>
   </main>
 
-  <!-- MODAL PRINCIPAL: TODO EN UNA SOLA VENTANA -->
+  <!-- MODAL PRINCIPAL -->
   <div id="imeiOverlay" class="imei-overlay" onclick="closeImeiOutside(event)">
     <div class="imei-box" role="dialog" aria-modal="true" aria-labelledby="imeiTitle">
       
@@ -373,14 +367,12 @@
 
       <form onsubmit="sendImeiWa(event)">
         
-        <!-- CAMPO DEL PIN -->
         <div class="input-group">
           <label>Tu PIN de 4 dígitos:</label>
           <input id="mainPinInput" class="pin-input" type="text" maxlength="4" inputmode="numeric" placeholder="••••" oninput="checkPin(this.value)">
           <div id="pinMessage" class="pin-msg"></div>
         </div>
 
-        <!-- CAMPO DE VERIFICACIÓN DE CELULAR (Oculto por defecto) -->
         <div id="phoneVerifyGroup" class="input-group" style="display: none;">
           <label>Confirma tu Número de WhatsApp:</label>
           <input id="verifyPhoneInput" type="tel" inputmode="numeric" maxlength="10" placeholder="Ej: 3104141805" style="width: 100%; padding: 10px; border-radius: 12px; border: 2px solid #cbd5e1; font-size: 14px; font-weight: 700; outline: none;" oninput="verifyPhone(this.value)">
@@ -399,6 +391,21 @@
 
         <div id="simLineWrap" class="sim-line-wrap">
           <input id="simLineField" class="sim-line-input" type="tel" inputmode="numeric" maxlength="15" placeholder="Número de línea SIM" oninput="this.value = this.value.replace(/\D/g, '')" />
+        </div>
+
+        <!-- CANALES DE PAGO -->
+        <div style="background: #f8fafc; padding: 10px; border-radius: 12px; margin-top: 12px; border: 1px solid #e2e8f0;">
+          <p style="font-size: 12px; font-weight: 700; color: #334155; margin-bottom: 8px;">💳 Canales de Pago (Toca para copiar):</p>
+          <div style="display: flex; gap: 6px; flex-wrap: wrap;">
+            <button type="button" onclick="copyPayment('3246816788', 'Nequi')" style="flex: 1; padding: 8px; background: white; border: 1px solid #cbd5e1; border-radius: 8px; font-size: 11px; font-weight: bold; cursor: pointer;">Nequi: 3104141805</button>
+          </div>
+        </div>
+
+        <!-- SUBIR COMPROBANTE -->
+        <div class="input-group" style="margin-top: 12px;">
+          <label>Subir Comprobante de Pago:</label>
+          <input type="file" id="receiptInput" accept="image/*" style="width: 100%; padding: 10px; border: 1.5px dashed #cbd5e1; border-radius: 10px; background: #f8fafc; font-size: 13px;" onchange="previewReceipt(this)">
+          <img id="receiptPreview" style="display: none; max-width: 100%; margin-top: 10px; border-radius: 8px; max-height: 150px; object-fit: contain;">
         </div>
 
         <div id="qrReaderPanel" class="qr-reader-panel">
@@ -462,7 +469,7 @@
     </div>
   </div>
 
-  <!-- NUEVO MODAL: CONSULTA DE PEDIDOS DEL CLIENTE -->
+  <!-- MODAL: CONSULTA DE PEDIDOS DEL CLIENTE -->
   <div id="clientPanelOverlay" class="imei-overlay" onclick="closeClientPanelOutside(event)">
     <div class="imei-box" style="max-width: 420px;">
       
@@ -478,7 +485,6 @@
         <button type="button" class="imei-close" onclick="closeClientPanel()" aria-label="Cerrar">&times;</button>
       </div>
 
-      <!-- Formulario de Login del Cliente -->
       <div id="clientLoginForm">
         <div class="input-group">
           <label>Tu PIN de 4 dígitos:</label>
@@ -491,7 +497,6 @@
         <button class="imei-send-btn" onclick="loginClientPanel()" style="background: #0f172a;">Consultar Mis Pedidos</button>
       </div>
 
-      <!-- Lista de Pedidos (oculta al inicio) -->
       <div id="clientOrdersView" style="display: none;">
         <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 15px;">
           <span style="font-size: 12px; font-weight: 700; color: #10b981; animation: pulse 1.5s infinite;">● En vivo</span>
@@ -520,6 +525,9 @@
     let lastAutoCompleted14 = '';
     let qrScannerInstance = null;
     let qrIsRunning = false;
+    
+    // Variables para subir foto
+    let receiptBase64 = null;
 
     // Variables para el panel del cliente
     let clientPollingInterval = null;
@@ -532,6 +540,31 @@
         document.getElementById('mainContent').classList.add('visible');
       }, 1400);
     });
+
+    /* --- COPIAR CANALES DE PAGO --- */
+    function copyPayment(number, method) {
+      navigator.clipboard.writeText(number).then(() => {
+        showToast('Número de ' + method + ' copiado');
+      });
+    }
+
+    /* --- SUBIR COMPROBANTE --- */
+    function previewReceipt(input) {
+      const file = input.files[0];
+      if (file) {
+        const reader = new FileReader();
+        reader.onload = function(e) {
+          receiptBase64 = e.target.result;
+          const img = document.getElementById('receiptPreview');
+          img.src = receiptBase64;
+          img.style.display = 'block';
+        };
+        reader.readAsDataURL(file);
+      } else {
+        receiptBase64 = null;
+        document.getElementById('receiptPreview').style.display = 'none';
+      }
+    }
 
     /* --- LÓGICA DE PIN Y VERIFICACIÓN --- */
     function checkPin(val) {
@@ -894,6 +927,9 @@
       isClaroSelected = (currentOperator === 'CLARO');
       claroMode = 'imei';
       lastAutoCompleted14 = '';
+      receiptBase64 = null; // Resetear foto
+      document.getElementById('receiptPreview').style.display = 'none';
+      document.getElementById('receiptInput').value = '';
 
       const logoWrap = document.getElementById('imeiLogoWrap');
       logoWrap.className = 'imei-op-logo ' + bgClass;
@@ -994,7 +1030,8 @@
         operador: currentOperator,
         simLine: needsSimLine ? simLine : null,
         imei: imei,
-        precio: currentPrice
+        precio: currentPrice,
+        comprobanteBase64: receiptBase64 // Enviamos la foto
       };
 
       const boton = document.querySelector('.imei-send-btn');
@@ -1026,7 +1063,7 @@
       }
     }
 
-    /* --- LÓGICA DEL PANEL DEL CLIENTE (NUEVO) --- */
+    /* --- LÓGICA DEL PANEL DEL CLIENTE --- */
     function openClientPanel() {
       document.getElementById('clientPanelOverlay').classList.add('open');
       document.getElementById('clientLoginForm').style.display = 'block';
@@ -1078,10 +1115,8 @@
       ordersView.style.display = 'block';
       ordersList.innerHTML = '<p style="text-align:center; color:#64748b; font-size:13px;">Cargando pedidos...</p>';
 
-      // Cargar inmediatamente
       await fetchClientOrders();
 
-      // Empezar a actualizar cada 10 segundos
       if (clientPollingInterval) clearInterval(clientPollingInterval);
       clientPollingInterval = setInterval(fetchClientOrders, 10000);
     }
