@@ -163,12 +163,14 @@
     .client-order-card.Pendiente { border-left-color: #f59e0b; }
     .client-order-card.En-Proceso { border-left-color: #3b82f6; }
     .client-order-card.Exitoso { border-left-color: #10b981; }
+    .client-order-card.Rechazado { border-left-color: #dc2626; background: #fef2f2; border-color: #fecaca; }
     .client-order-top { display: flex; justify-content: space-between; align-items: center; margin-bottom: 8px; }
     .client-order-id { font-weight: 800; font-size: 14px; color: #0f172a; }
     .client-badge { padding: 3px 8px; border-radius: 99px; font-size: 10px; font-weight: 700; text-transform: uppercase; }
     .client-badge.Pendiente { background: #fef3c7; color: #d97706; }
     .client-badge.En-Proceso { background: #e0f2fe; color: #0284c7; }
     .client-badge.Exitoso { background: #dcfce7; color: #16a34a; }
+    .client-badge.Rechazado { background: #fee2e2; color: #dc2626; border: 1px solid #fca5a5; }
     .client-order-details { font-size: 13px; color: #475569; line-height: 1.5; }
     .client-order-details strong { color: #0f172a; }
 
@@ -927,7 +929,7 @@
       isClaroSelected = (currentOperator === 'CLARO');
       claroMode = 'imei';
       lastAutoCompleted14 = '';
-      receiptBase64 = null; // Resetear foto
+      receiptBase64 = null;
       document.getElementById('receiptPreview').style.display = 'none';
       document.getElementById('receiptInput').value = '';
 
@@ -1031,7 +1033,7 @@
         simLine: needsSimLine ? simLine : null,
         imei: imei,
         precio: currentPrice,
-        comprobanteBase64: receiptBase64 // Enviamos la foto
+        comprobanteBase64: receiptBase64
       };
 
       const boton = document.querySelector('.imei-send-btn');
@@ -1135,7 +1137,7 @@
 
           let html = '';
           data.ordenes.forEach(o => {
-            const estadoClass = o.estado.replace(' ', '-');
+            const estadoClass = String(o.estado || 'Pendiente').replace(/\s+/g, '-');
             const fecha = new Date(o.fecha + "Z").toLocaleString('es-CO', { timeZone: 'America/Bogota' });
 
             html += `
