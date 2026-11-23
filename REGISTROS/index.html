@@ -513,9 +513,10 @@
   <div id="toast" class="toast">Copiado</div>
 
   <script>
-    let dbClientes = [
-      { pin: '1234', celular: '3104141805', nombre: 'Cliente de Prueba' }
-    ];
+    const WORKER_URL = "https://telegram-zonagsm.zonagsm023.workers.dev";
+
+    let dbClientesNube = [];
+    let clienteVerificado = null;
 
     let currentPin = '';
     let currentCelular = '';
@@ -537,11 +538,34 @@
     let activeClientPhone = '';
 
     window.addEventListener('DOMContentLoaded', () => {
+      cargarClientesDesdeNube();
       setTimeout(() => {
         document.getElementById('preloader').classList.add('hidden');
         document.getElementById('mainContent').classList.add('visible');
       }, 1400);
     });
+
+    async function cargarClientesDesdeNube() {
+      try {
+        const res = await fetch(`${WORKER_URL}?action=get_clients`);
+        const data = await res.json();
+        if (data.success && Array.isArray(data.clientes)) {
+          dbClientesNube = data.clientes;
+        }
+      } catch (err) {
+        console.error("No se pudieron cargar los clientes desde la nube:", err);
+      }
+    }
+
+    async function consultarClienteEnNube(pin, celular = null) {
+      await cargarClientesDesdeNube();
+      if (celular) {
+        return dbClientesNube.find(
+          c => String(c.pin) === String(pin) && String(c.celular) === String(celular)
+        ) || null;
+      }
+      return dbClientesNube.find(c => String(c.pin) === String(pin)) || null;
+    }
 
     /* --- COPIAR CANALES DE PAGO --- */
     function copyPayment(number, method) {
@@ -568,8 +592,8 @@
       }
     }
 
-    /* --- LÓGICA DE PIN Y VERIFICACIÓN --- */
-    function checkPin(val) {
+    /* --- LÓGICA DE PIN Y VERIFICACIÓN EN LA NUBE --- */
+    async function checkPin(val) {
       const input = document.getElementById('mainPinInput');
       const msg = document.getElementById('pinMessage');
       const verifyGroup = document.getElementById('phoneVerifyGroup');
@@ -577,28 +601,41 @@
 
       currentPin = val.replace(/\D/g, '');
       input.value = currentPin;
+      clienteVerificado = null;
+      currentCelular = '';
 
       if (currentPin.length === 4) {
-        const cliente = dbClientes.find(c => c.pin === currentPin);
-        if (cliente) {
-          input.classList.add('success');
-          input.classList.remove('error');
-          msg.textContent = '✓ PIN correcto. Confirma tu número.';
-          msg.className = 'pin-msg success';
-          input.blur();
+        msg.textContent = 'Verificando PIN en la nube...';
+        msg.className = 'pin-msg';
 
-          verifyGroup.style.display = 'flex';
-          verifyInput.value = '';
-          currentCelular = '';
-        } else {
-          input.classList.add('error');
-          input.classList.remove('success');
-          msg.textContent = '❌ PIN no encontrado. Registrate.';
+        try {
+          const cliente = await consultarClienteEnNube(currentPin);
+          if (String(input.value) !== currentPin) return;
+
+          if (cliente) {
+            input.classList.add('success');
+            input.classList.remove('error');
+            msg.textContent = '✓ PIN correcto. Confirma tu número.';
+            msg.className = 'pin-msg success';
+            input.blur();
+
+            verifyGroup.style.display = 'flex';
+            verifyInput.value = '';
+            document.getElementById('phoneVerifyMsg').textContent = '';
+            verifyInput.classList.remove('error', 'success');
+          } else {
+            input.classList.add('error');
+            input.classList.remove('success');
+            msg.textContent = '❌ PIN no encontrado. Regístrate.';
+            msg.className = 'pin-msg error';
+            verifyGroup.style.display = 'none';
+            setTimeout(() => {
+              document.getElementById('registerOverlay').classList.add('open');
+            }, 400);
+          }
+        } catch (err) {
+          msg.textContent = 'Error al verificar PIN. Intenta de nuevo.';
           msg.className = 'pin-msg error';
-          verifyGroup.style.display = 'none';
-          setTimeout(() => {
-            document.getElementById('registerOverlay').classList.add('open');
-          }, 500);
         }
       } else {
         input.classList.remove('success', 'error');
@@ -608,33 +645,44 @@
       }
     }
 
-    function verifyPhone(val) {
+    async function verifyPhone(val) {
       const input = document.getElementById('verifyPhoneInput');
       const msg = document.getElementById('phoneVerifyMsg');
       const num = val.replace(/\D/g, '');
       input.value = num;
+      clienteVerificado = null;
+      currentCelular = '';
 
       if (num.length === 10) {
-        const cliente = dbClientes.find(c => c.pin === currentPin);
-        if (cliente && cliente.celular === num) {
-          input.classList.add('success');
-          input.classList.remove('error');
-          msg.textContent = '✓ Identidad verificada';
-          msg.className = 'pin-msg success';
-          currentCelular = num;
-          input.blur();
-        } else {
-          input.classList.add('error');
-          input.classList.remove('success');
-          msg.textContent = '❌ Número incorrecto';
+        msg.textContent = 'Verificando número...';
+        msg.className = 'pin-msg';
+
+        try {
+          const cliente = await consultarClienteEnNube(currentPin, num);
+          if (String(input.value) !== num) return;
+
+          if (cliente) {
+            input.classList.add('success');
+            input.classList.remove('error');
+            msg.textContent = '✓ Identidad verificada (' + cliente.nombre + ')';
+            msg.className = 'pin-msg success';
+            clienteVerificado = cliente;
+            currentCelular = num;
+            input.blur();
+          } else {
+            input.classList.add('error');
+            input.classList.remove('success');
+            msg.textContent = '❌ Número incorrecto para este PIN';
+            msg.className = 'pin-msg error';
+          }
+        } catch (err) {
+          msg.textContent = 'Error al verificar número.';
           msg.className = 'pin-msg error';
-          currentCelular = '';
         }
       } else {
         input.classList.remove('success', 'error');
         msg.textContent = '';
         msg.className = 'pin-msg';
-        currentCelular = '';
       }
     }
 
@@ -649,25 +697,35 @@
       }
     }
 
-    function checkNewPin(val) {
+    async function checkNewPin(val) {
       const input = document.getElementById('newPinInput');
       const msg = document.getElementById('newPinMsg');
       const pin = val.replace(/\D/g, '');
       input.value = pin;
 
       if (pin.length === 4) {
-        const existe = dbClientes.some(c => c.pin === pin);
-        if (existe) {
-          input.classList.add('error');
-          input.classList.remove('success');
-          msg.textContent = '❌ Este PIN ya está en uso. Elige otro.';
+        msg.textContent = 'Revisando disponibilidad...';
+        msg.className = 'pin-msg';
+
+        try {
+          const existe = await consultarClienteEnNube(pin);
+          if (String(input.value) !== pin) return;
+
+          if (existe) {
+            input.classList.add('error');
+            input.classList.remove('success');
+            msg.textContent = '❌ Este PIN ya está en uso. Elige otro.';
+            msg.className = 'pin-msg error';
+          } else {
+            input.classList.add('success');
+            input.classList.remove('error');
+            msg.textContent = '✓ ¡PIN disponible!';
+            msg.className = 'pin-msg success';
+            input.blur();
+          }
+        } catch (err) {
+          msg.textContent = 'No se pudo comprobar el PIN.';
           msg.className = 'pin-msg error';
-        } else {
-          input.classList.add('success');
-          input.classList.remove('error');
-          msg.textContent = '✓ ¡PIN disponible!';
-          msg.className = 'pin-msg success';
-          input.blur();
         }
       } else {
         input.classList.remove('success', 'error');
@@ -691,7 +749,7 @@
       boton.disabled = true;
 
       try {
-        const res = await fetch("https://telegram-zonagsm.zonagsm023.workers.dev", {
+        const res = await fetch(WORKER_URL, {
           method: 'POST',
           headers: { 'Content-Type': 'application/json' },
           body: JSON.stringify({
@@ -705,11 +763,9 @@
         const result = await res.json();
 
         if (result.success) {
-          dbClientes.push({ pin: pin, celular: cel, nombre: nombre });
-
+          await cargarClientesDesdeNube();
           document.getElementById('registerOverlay').classList.remove('open');
           document.getElementById('successOverlay').classList.add('open');
-
           currentPin = pin;
           currentCelular = cel;
         } else {
@@ -930,6 +986,8 @@
       claroMode = 'imei';
       lastAutoCompleted14 = '';
       receiptBase64 = null;
+      clienteVerificado = null;
+      currentCelular = '';
       document.getElementById('receiptPreview').style.display = 'none';
       document.getElementById('receiptInput').value = '';
 
@@ -978,6 +1036,7 @@
       document.getElementById('qrToggleBtn').classList.remove('active');
 
       document.getElementById('imeiOverlay').classList.add('open');
+      cargarClientesDesdeNube();
     }
 
     async function closeImeiBox() {
@@ -992,56 +1051,57 @@
     async function sendImeiWa(e) {
       e.preventDefault();
 
-      const cliente = dbClientes.find(c => c.pin === currentPin);
-      if (!cliente || currentCelular !== cliente.celular) {
-        showToast('Debes verificar tu número de WhatsApp');
-        document.getElementById('verifyPhoneInput').focus();
-        return;
-      }
-
-      const input = document.getElementById('imeiField');
-      const simInput = document.getElementById('simLineField');
-      const needsSimLine = isClaroSelected && claroMode === 'imei';
-      const simLine = simInput.value.replace(/\D/g, '').trim();
-
-      if (needsSimLine && simLine.length < 7) {
-        showToast('Escribe el número de la línea SIM');
-        simInput.focus();
-        return;
-      }
-
-      let imei = input.value.replace(/\D/g, '');
-      if (imei.length === 14) {
-        imei = imei + computeImeiCheckDigit(imei);
-        input.value = imei;
-        updateImeiVisualState(imei);
-      }
-
-      if (!isValidImei15(imei)) {
-        showToast('Introduce un IMEI válido');
-        input.focus();
-        return;
-      }
-
-      const WORKER_URL = "https://telegram-zonagsm.zonagsm023.workers.dev";
-
-      const datosParaEnviar = {
-        nombre: cliente.nombre,
-        celular: cliente.celular,
-        pin: currentPin,
-        operador: currentOperator,
-        simLine: needsSimLine ? simLine : null,
-        imei: imei,
-        precio: currentPrice,
-        comprobanteBase64: receiptBase64
-      };
-
       const boton = document.querySelector('.imei-send-btn');
       const textoOriginal = boton.textContent;
-      boton.textContent = 'Enviando...';
+      boton.textContent = 'Verificando...';
       boton.disabled = true;
 
       try {
+        const cliente = await consultarClienteEnNube(currentPin, currentCelular);
+        if (!cliente || !currentCelular || String(cliente.celular) !== String(currentCelular)) {
+          showToast('Debes verificar tu PIN y número de WhatsApp');
+          document.getElementById('verifyPhoneInput').focus();
+          return;
+        }
+        clienteVerificado = cliente;
+
+        const input = document.getElementById('imeiField');
+        const simInput = document.getElementById('simLineField');
+        const needsSimLine = isClaroSelected && claroMode === 'imei';
+        const simLine = simInput.value.replace(/\D/g, '').trim();
+
+        if (needsSimLine && simLine.length < 7) {
+          showToast('Escribe el número de la línea SIM');
+          simInput.focus();
+          return;
+        }
+
+        let imei = input.value.replace(/\D/g, '');
+        if (imei.length === 14) {
+          imei = imei + computeImeiCheckDigit(imei);
+          input.value = imei;
+          updateImeiVisualState(imei);
+        }
+
+        if (!isValidImei15(imei)) {
+          showToast('Introduce un IMEI válido');
+          input.focus();
+          return;
+        }
+
+        const datosParaEnviar = {
+          nombre: clienteVerificado.nombre,
+          celular: clienteVerificado.celular,
+          pin: currentPin,
+          operador: currentOperator,
+          simLine: needsSimLine ? simLine : null,
+          imei: imei,
+          precio: currentPrice,
+          comprobanteBase64: receiptBase64
+        };
+
+        boton.textContent = 'Enviando...';
+
         const response = await fetch(WORKER_URL, {
           method: 'POST',
           headers: { 'Content-Type': 'application/json' },
@@ -1126,7 +1186,7 @@
     async function fetchClientOrders() {
       const ordersList = document.getElementById('clientOrdersList');
       try {
-        const res = await fetch(`https://telegram-zonagsm.zonagsm023.workers.dev?action=get_client_orders&pin=${activeClientPin}&celular=${activeClientPhone}`);
+        const res = await fetch(`${WORKER_URL}?action=get_client_orders&pin=${activeClientPin}&celular=${activeClientPhone}`);
         const data = await res.json();
 
         if (data.success) {
