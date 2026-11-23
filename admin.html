@@ -7,18 +7,18 @@
   <style>
     * { box-sizing: border-box; font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif; }
     body { background: #eef2f6; padding: 20px; color: #111827; margin: 0; }
-    
+
     /* Estilos del Login */
     .login-box { max-width: 320px; margin: 100px auto; background: white; padding: 30px; border-radius: 16px; box-shadow: 0 10px 25px rgba(0,0,0,0.05); text-align: center; }
     .login-box input { width: 100%; padding: 12px; margin-bottom: 15px; border: 1px solid #cbd5e1; border-radius: 8px; font-size: 16px; }
     .login-box button { width: 100%; padding: 12px; background: #c81d4e; color: white; border: none; border-radius: 8px; font-size: 16px; font-weight: bold; cursor: pointer; }
-    
+
     /* Estilos del Panel */
     .panel { display: none; max-width: 1200px; margin: 0 auto; }
     .header { display: flex; justify-content: space-between; align-items: center; margin-bottom: 20px; flex-wrap: wrap; gap: 10px; }
     .header h1 { font-size: 24px; color: #0f172a; margin: 0; }
     .btn-refresh { padding: 10px 20px; background: #0f172a; color: white; border: none; border-radius: 8px; cursor: pointer; font-weight: bold; }
-    
+
     /* Pestañas (Tabs) */
     .tabs { display: flex; gap: 10px; margin-bottom: 20px; border-bottom: 2px solid #cbd5e1; }
     .tab-btn { padding: 10px 20px; background: none; border: none; font-size: 16px; font-weight: 700; color: #64748b; cursor: pointer; border-bottom: 3px solid transparent; margin-bottom: -2px; transition: all 0.2s; }
@@ -30,13 +30,13 @@
     table { width: 100%; border-collapse: collapse; min-width: 800px; }
     th, td { padding: 12px 15px; text-align: left; border-bottom: 1px solid #e2e8f0; font-size: 14px; }
     th { background: #f8fafc; color: #475569; font-weight: 700; text-transform: uppercase; font-size: 12px; letter-spacing: 0.5px; }
-    
+
     /* Estados */
     .badge { padding: 4px 8px; border-radius: 999px; font-size: 12px; font-weight: 700; }
     .badge-Pendiente { background: #fef3c7; color: #d97706; }
     .badge-Proceso { background: #e0f2fe; color: #0284c7; }
     .badge-Exitoso { background: #dcfce7; color: #16a34a; }
-    
+
     /* Menú desplegable de acciones */
     select.estado-select { padding: 8px 12px; border-radius: 8px; border: 1px solid #cbd5e1; font-weight: 700; font-size: 13px; cursor: pointer; outline: none; background: #f8fafc; color: #334155; width: 100%; max-width: 150px; transition: all 0.2s; }
     select.estado-select:hover { background: #e2e8f0; }
@@ -67,7 +67,7 @@
       <button class="tab-btn active" id="tab-orders-btn" onclick="showTab('orders')">Órdenes</button>
       <button class="tab-btn" id="tab-clients-btn" onclick="showTab('clients')">Clientes Registrados</button>
     </div>
-    
+
     <!-- VISTA: ÓRDENES -->
     <div id="view-orders" class="table-container">
       <table>
@@ -80,12 +80,13 @@
             <th>Servicio</th>
             <th>IMEI</th>
             <th>Precio</th>
+            <th>Comprobante</th>
             <th>Estado</th>
             <th>Acciones</th>
           </tr>
         </thead>
         <tbody id="tablaOrdenes">
-          <tr><td colspan="9" style="text-align: center; padding: 30px;">Cargando datos...</td></tr>
+          <tr><td colspan="10" style="text-align: center; padding: 30px;">Cargando datos...</td></tr>
         </tbody>
       </table>
     </div>
@@ -135,7 +136,7 @@
       // Cambiar estilos de los botones
       document.getElementById('tab-orders-btn').classList.remove('active');
       document.getElementById('tab-clients-btn').classList.remove('active');
-      
+
       if (tabName === 'orders') {
         document.getElementById('tab-orders-btn').classList.add('active');
         document.getElementById('view-orders').classList.remove('hidden');
@@ -155,23 +156,23 @@
     // --- CARGAR ÓRDENES ---
     async function cargarOrdenes() {
       const tbody = document.getElementById('tablaOrdenes');
-      tbody.innerHTML = '<tr><td colspan="9" style="text-align: center; padding: 30px;">Cargando...</td></tr>';
+      tbody.innerHTML = '<tr><td colspan="10" style="text-align: center; padding: 30px;">Cargando...</td></tr>';
 
       try {
         const res = await fetch(WORKER_URL + "?action=get_orders");
         const data = await res.json();
-        
+
         if (data.success) {
           tbody.innerHTML = '';
           if (data.ordenes.length === 0) {
-            tbody.innerHTML = '<tr><td colspan="9" style="text-align: center; padding: 30px;">No hay órdenes registradas aún.</td></tr>';
+            tbody.innerHTML = '<tr><td colspan="10" style="text-align: center; padding: 30px;">No hay órdenes registradas aún.</td></tr>';
             return;
           }
 
           data.ordenes.forEach(o => {
             const tr = document.createElement('tr');
             const fecha = new Date(o.fecha + "Z").toLocaleString('es-CO', { timeZone: 'America/Bogota' });
-            
+
             let estadoClass = 'Pendiente';
             if (o.estado === 'En Proceso') estadoClass = 'Proceso';
             if (o.estado === 'Exitoso') estadoClass = 'Exitoso';
@@ -190,6 +191,11 @@
               <td>${o.operador}</td>
               <td style="font-family: monospace;">${o.imei}</td>
               <td><strong>${o.precio}</strong></td>
+              <td>
+                ${o.comprobante_url
+                  ? `<a href="${o.comprobante_url}" target="_blank" style="color: #2563eb; font-weight: bold; text-decoration: underline;">Ver Foto</a>`
+                  : 'Sin foto'}
+              </td>
               <td><span class="badge badge-${estadoClass}">${o.estado}</span></td>
               <td>
                 <select class="estado-select" onchange="cambiarEstado('${o.numero_orden}', this.value)">
@@ -203,7 +209,7 @@
           throw new Error(data.error);
         }
       } catch (err) {
-        tbody.innerHTML = `<tr><td colspan="9" style="text-align: center; color: red; padding: 30px;">Error: ${err.message}</td></tr>`;
+        tbody.innerHTML = `<tr><td colspan="10" style="text-align: center; color: red; padding: 30px;">Error: ${err.message}</td></tr>`;
       }
     }
 
@@ -215,7 +221,7 @@
       try {
         const res = await fetch(WORKER_URL + "?action=get_clients");
         const data = await res.json();
-        
+
         if (data.success) {
           tbody.innerHTML = '';
           if (data.clientes.length === 0) {
@@ -255,7 +261,7 @@
           })
         });
         const data = await res.json();
-        
+
         if (data.success) {
           cargarOrdenes(); // Recargar la tabla
         } else {
