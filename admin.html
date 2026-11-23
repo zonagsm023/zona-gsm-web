@@ -14,7 +14,7 @@
     .login-box button { width: 100%; padding: 12px; background: #c81d4e; color: white; border: none; border-radius: 8px; font-size: 16px; font-weight: bold; cursor: pointer; }
 
     /* Estilos del Panel */
-    .panel { display: none; max-width: 1200px; margin: 0 auto; }
+    .panel { display: none; max-width: 1280px; margin: 0 auto; }
     .header { display: flex; justify-content: space-between; align-items: center; margin-bottom: 20px; flex-wrap: wrap; gap: 10px; }
     .header-left { display: flex; align-items: center; gap: 12px; }
     .header h1 { font-size: 24px; color: #0f172a; margin: 0; }
@@ -33,28 +33,30 @@
     .filter-bar { display: flex; align-items: center; gap: 12px; padding: 14px 16px; background: white; border-bottom: 1px solid #e2e8f0; flex-wrap: wrap; }
     .filter-group { display: flex; align-items: center; gap: 8px; flex-wrap: wrap; }
     .filter-bar label { font-size: 13px; font-weight: 700; color: #334155; }
-    .filter-select { padding: 8px 12px; border-radius: 8px; border: 1px solid #cbd5e1; font-size: 13px; font-weight: 600; color: #0f172a; background: #f8fafc; min-width: 220px; outline: none; cursor: pointer; }
-    .search-input { padding: 8px 12px; border-radius: 8px; border: 1px solid #cbd5e1; font-size: 13px; font-weight: 600; color: #0f172a; background: #f8fafc; min-width: 240px; outline: none; transition: border-color 0.15s ease, background-color 0.15s ease; }
+    .filter-select { padding: 8px 12px; border-radius: 8px; border: 1px solid #cbd5e1; font-size: 13px; font-weight: 600; color: #0f172a; background: #f8fafc; min-width: 210px; outline: none; cursor: pointer; }
+    .search-input { padding: 8px 12px; border-radius: 8px; border: 1px solid #cbd5e1; font-size: 13px; font-weight: 600; color: #0f172a; background: #f8fafc; min-width: 220px; outline: none; transition: border-color 0.15s ease, background-color 0.15s ease; }
     .search-input:focus { border-color: #c81d4e; background: #ffffff; }
     .btn-clear { padding: 8px 12px; border-radius: 8px; border: 1px solid #cbd5e1; background: #ffffff; color: #475569; font-size: 12px; font-weight: 700; cursor: pointer; }
     .btn-clear:hover { background: #f1f5f9; color: #0f172a; }
 
     /* Tablas */
     .table-container { background: white; border-radius: 16px; box-shadow: 0 4px 15px rgba(0,0,0,0.05); overflow-x: auto; }
-    table { width: 100%; border-collapse: collapse; min-width: 800px; }
-    th, td { padding: 12px 15px; text-align: left; border-bottom: 1px solid #e2e8f0; font-size: 14px; }
+    table { width: 100%; border-collapse: collapse; min-width: 920px; }
+    th, td { padding: 12px 14px; text-align: left; border-bottom: 1px solid #e2e8f0; font-size: 14px; }
     th { background: #f8fafc; color: #475569; font-weight: 700; text-transform: uppercase; font-size: 12px; letter-spacing: 0.5px; }
 
     /* Estados */
-    .badge { padding: 4px 8px; border-radius: 999px; font-size: 12px; font-weight: 700; }
+    .badge { padding: 4px 8px; border-radius: 999px; font-size: 12px; font-weight: 700; display: inline-block; }
     .badge-Pendiente { background: #fef3c7; color: #d97706; }
     .badge-Proceso { background: #e0f2fe; color: #0284c7; }
     .badge-Exitoso { background: #dcfce7; color: #16a34a; }
     .badge-Rechazado { background: #fee2e2; color: #dc2626; }
+    .badge-Pagado { background: #dcfce7; color: #15803d; border: 1px solid #86efac; }
+    .badge-No-Pagado { background: #fef2f2; color: #b91c1c; border: 1px solid #fecaca; }
 
-    /* Menú desplegable de acciones */
-    select.estado-select { padding: 8px 12px; border-radius: 8px; border: 1px solid #cbd5e1; font-weight: 700; font-size: 13px; cursor: pointer; outline: none; background: #f8fafc; color: #334155; width: 100%; max-width: 150px; transition: all 0.2s; }
-    select.estado-select:hover { background: #e2e8f0; }
+    /* Menús desplegables de acciones */
+    select.estado-select, select.pago-select { padding: 7px 10px; border-radius: 8px; border: 1px solid #cbd5e1; font-weight: 700; font-size: 12.5px; cursor: pointer; outline: none; background: #f8fafc; color: #334155; width: 100%; max-width: 145px; transition: all 0.2s; }
+    select.estado-select:hover, select.pago-select:hover { background: #e2e8f0; }
 
     /* MODAL CENTRAL DE NUEVA ORDEN */
     .new-order-overlay { position: fixed; inset: 0; background: rgba(15, 23, 42, 0.65); backdrop-filter: blur(5px); -webkit-backdrop-filter: blur(5px); display: none; align-items: center; justify-content: center; padding: 20px; z-index: 9999; }
@@ -66,12 +68,14 @@
     .new-order-header h2 { margin: 0; font-size: 20px; font-weight: 900; letter-spacing: 0.2px; }
     .new-order-queue { background: rgba(255,255,255,0.2); padding: 4px 10px; border-radius: 999px; font-size: 12px; font-weight: 800; }
     .new-order-body { padding: 20px 22px; }
-    .order-detail-grid { background: #f8fafc; border: 1px solid #e2e8f0; border-radius: 14px; padding: 14px 16px; display: flex; flex-direction: column; gap: 10px; margin-bottom: 18px; }
+    .order-detail-grid { background: #f8fafc; border: 1px solid #e2e8f0; border-radius: 14px; padding: 14px 16px; display: flex; flex-direction: column; gap: 10px; margin-bottom: 16px; }
     .order-detail-row { display: flex; justify-content: space-between; align-items: center; gap: 12px; font-size: 14px; border-bottom: 1px dashed #e2e8f0; padding-bottom: 8px; }
     .order-detail-row:last-child { border-bottom: none; padding-bottom: 0; }
     .order-detail-label { color: #64748b; font-weight: 700; font-size: 12.5px; text-transform: uppercase; }
     .order-detail-value { color: #0f172a; font-weight: 800; text-align: right; word-break: break-all; }
     .order-detail-value.mono { font-family: monospace; font-size: 15px; background: #eef2f6; padding: 3px 8px; border-radius: 6px; }
+    .modal-pago-box { display: flex; align-items: center; justify-content: space-between; gap: 10px; background: #f8fafc; border: 1px solid #cbd5e1; border-radius: 12px; padding: 10px 14px; margin-bottom: 16px; }
+    .modal-pago-box label { font-size: 13px; font-weight: 800; color: #334155; }
     .new-order-actions { display: grid; grid-template-columns: 1fr 1fr; gap: 10px; }
     .btn-modal-accept { grid-column: 1 / -1; padding: 13px; border: none; border-radius: 12px; background: #0284c7; color: #ffffff; font-size: 15px; font-weight: 800; cursor: pointer; transition: background 0.15s; }
     .btn-modal-accept:hover { background: #0369a1; }
@@ -120,6 +124,14 @@
           </select>
         </div>
         <div class="filter-group">
+          <label for="filtroPago">Pago:</label>
+          <select id="filtroPago" class="filter-select" style="min-width: 150px;" onchange="aplicarFiltroCliente()">
+            <option value="">Todos</option>
+            <option value="Pagado">Pagado</option>
+            <option value="No Pagado">No Pagado</option>
+          </select>
+        </div>
+        <div class="filter-group">
           <label for="buscadorOrdenes">Buscar:</label>
           <input type="text" id="buscadorOrdenes" class="search-input" placeholder="N° orden, teléfono, IMEI o cliente..." oninput="aplicarFiltroCliente()">
         </div>
@@ -136,12 +148,13 @@
             <th>IMEI</th>
             <th>Precio</th>
             <th>Comprobante</th>
+            <th>Pago</th>
             <th>Estado</th>
             <th>Acciones</th>
           </tr>
         </thead>
         <tbody id="tablaOrdenes">
-          <tr><td colspan="10" style="text-align: center; padding: 30px;">Cargando datos...</td></tr>
+          <tr><td colspan="11" style="text-align: center; padding: 30px;">Cargando datos...</td></tr>
         </tbody>
       </table>
     </div>
@@ -169,10 +182,17 @@
     <div class="new-order-modal" role="dialog" aria-modal="true" aria-labelledby="newOrderModalTitle">
       <div class="new-order-header">
         <h2 id="newOrderModalTitle">🔔 ¡Nueva Orden Recibida!</h2>
-        <span id="newOrderQueueBadge" class="new-order-queue">1 pendiente</span>
+        <span id="newOrderQueueBadge" class="new-order-queue">1 nueva</span>
       </div>
       <div class="new-order-body">
         <div id="newOrderDetails" class="order-detail-grid"></div>
+        <div class="modal-pago-box">
+          <label for="modalPagoSelect">Estado del pago:</label>
+          <select id="modalPagoSelect" class="pago-select" onchange="cambiarPago(ordenActualModal.numero_orden, this.value)">
+            <option value="No Pagado">No Pagado</option>
+            <option value="Pagado">Pagado</option>
+          </select>
+        </div>
         <div class="new-order-actions">
           <button type="button" id="btnModalAccept" class="btn-modal-accept" onclick="procesarOrdenModal('En Proceso')">
             ✅ Aceptar y poner En Proceso
@@ -191,12 +211,39 @@
   <script>
     const WORKER_URL = "https://telegram-zonagsm.zonagsm023.workers.dev";
     const SEEN_ORDERS_KEY = "zg_admin_seen_orders";
+    const PAYMENT_STATE_KEY = "zg_admin_payment_states";
 
     let ordenesCache = [];
     let clientesCache = [];
     let colaNuevasOrdenes = [];
     let ordenActualModal = null;
     let adminPollingTimer = null;
+
+    function getEstadosPagoLocales() {
+      try {
+        return JSON.parse(localStorage.getItem(PAYMENT_STATE_KEY) || "{}");
+      } catch (e) {
+        return {};
+      }
+    }
+
+    function guardarEstadoPagoLocal(numeroOrden, estadoPago) {
+      if (!numeroOrden) return;
+      const mapa = getEstadosPagoLocales();
+      mapa[numeroOrden] = estadoPago;
+      localStorage.setItem(PAYMENT_STATE_KEY, JSON.stringify(mapa));
+    }
+
+    function resolverEstadoPago(orden) {
+      if (orden.pago === 'Pagado' || orden.pago === 'No Pagado') {
+        return orden.pago;
+      }
+      const mapa = getEstadosPagoLocales();
+      if (orden.numero_orden && mapa[orden.numero_orden]) {
+        return mapa[orden.numero_orden];
+      }
+      return orden.comprobante_url ? 'Pagado' : 'No Pagado';
+    }
 
     function getOrdenesVistas() {
       try {
@@ -305,6 +352,7 @@
 
     function limpiarFiltroCliente() {
       document.getElementById('filtroCliente').value = '';
+      document.getElementById('filtroPago').value = '';
       document.getElementById('buscadorOrdenes').value = '';
       renderOrdenes(ordenesCache);
     }
@@ -312,7 +360,6 @@
     function evaluarNuevasOrdenes(lista) {
       const vistas = getOrdenesVistas();
       if (vistas.length === 0 && lista.length > 0) {
-        // Primera carga: registrar las existentes para avisar solo sobre las nuevas que lleguen
         lista.forEach(o => marcarOrdenComoVista(o.numero_orden));
         return;
       }
@@ -345,10 +392,13 @@
 
       ordenActualModal = colaNuevasOrdenes[0];
       const o = ordenActualModal;
+      const estadoPagoActual = resolverEstadoPago(o);
       const fecha = new Date(o.fecha + "Z").toLocaleString('es-CO', { timeZone: 'America/Bogota' });
 
       document.getElementById('newOrderQueueBadge').textContent =
         colaNuevasOrdenes.length > 1 ? `${colaNuevasOrdenes.length} nuevas` : '1 nueva';
+
+      document.getElementById('modalPagoSelect').value = estadoPagoActual;
 
       document.getElementById('newOrderDetails').innerHTML = `
         <div class="order-detail-row">
@@ -409,6 +459,8 @@
 
       try {
         const numeroOrden = ordenActualModal.numero_orden;
+        const pagoSeleccionado = document.getElementById('modalPagoSelect').value;
+        guardarEstadoPagoLocal(numeroOrden, pagoSeleccionado);
         await cambiarEstado(numeroOrden, nuevoEstado);
         marcarOrdenComoVista(numeroOrden);
         colaNuevasOrdenes.shift();
@@ -422,15 +474,21 @@
     function renderOrdenes(lista) {
       const tbody = document.getElementById('tablaOrdenes');
       const filtroVal = document.getElementById('filtroCliente').value;
+      const filtroPagoVal = document.getElementById('filtroPago').value;
       const textoBusqueda = String(document.getElementById('buscadorOrdenes').value || '').trim().toLowerCase();
 
-      let filtradas = lista;
+      let filtradas = lista.map(o => ({ ...o, _pago: resolverEstadoPago(o) }));
+
       if (filtroVal) {
         const [pinSel, celSel] = filtroVal.split('||');
         filtradas = filtradas.filter(o =>
           (pinSel && String(o.pin || '') === pinSel) ||
           (celSel && String(o.celular || '') === celSel)
         );
+      }
+
+      if (filtroPagoVal) {
+        filtradas = filtradas.filter(o => o._pago === filtroPagoVal);
       }
 
       if (textoBusqueda) {
@@ -444,13 +502,15 @@
 
       tbody.innerHTML = '';
       if (filtradas.length === 0) {
-        tbody.innerHTML = '<tr><td colspan="10" style="text-align: center; padding: 30px;">No hay órdenes para este filtro.</td></tr>';
+        tbody.innerHTML = '<tr><td colspan="11" style="text-align: center; padding: 30px;">No hay órdenes para este filtro.</td></tr>';
         return;
       }
 
       filtradas.forEach(o => {
         const tr = document.createElement('tr');
         const fecha = new Date(o.fecha + "Z").toLocaleString('es-CO', { timeZone: 'America/Bogota' });
+        const pagoActual = o._pago;
+        const pagoBadgeClass = pagoActual === 'Pagado' ? 'badge-Pagado' : 'badge-No-Pagado';
 
         let estadoClass = 'Pendiente';
         if (o.estado === 'En Proceso') estadoClass = 'Proceso';
@@ -462,6 +522,11 @@
           <option value="En Proceso" ${o.estado === 'En Proceso' ? 'selected' : ''}>En Proceso</option>
           <option value="Exitoso" ${o.estado === 'Exitoso' ? 'selected' : ''}>Exitoso</option>
           <option value="Rechazado" ${o.estado === 'Rechazado' ? 'selected' : ''}>Rechazado</option>
+        `;
+
+        const pagoOptions = `
+          <option value="Pagado" ${pagoActual === 'Pagado' ? 'selected' : ''}>Pagado</option>
+          <option value="No Pagado" ${pagoActual === 'No Pagado' ? 'selected' : ''}>No Pagado</option>
         `;
 
         tr.innerHTML = `
@@ -477,6 +542,14 @@
               ? `<a href="${o.comprobante_url}" target="_blank" style="color: #2563eb; font-weight: bold; text-decoration: underline;">Ver Foto</a>`
               : 'Sin foto'}
           </td>
+          <td>
+            <div style="display:flex; flex-direction:column; gap:5px; align-items:flex-start;">
+              <span class="badge ${pagoBadgeClass}">${pagoActual}</span>
+              <select class="pago-select" onchange="cambiarPago('${o.numero_orden}', this.value)">
+                ${pagoOptions}
+              </select>
+            </div>
+          </td>
           <td><span class="badge badge-${estadoClass}">${o.estado}</span></td>
           <td>
             <select class="estado-select" onchange="cambiarEstado('${o.numero_orden}', this.value)">
@@ -488,11 +561,32 @@
       });
     }
 
+    async function cambiarPago(numeroOrden, nuevoPago) {
+      guardarEstadoPagoLocal(numeroOrden, nuevoPago);
+      ordenesCache = ordenesCache.map(o =>
+        o.numero_orden === numeroOrden ? { ...o, pago: nuevoPago } : o
+      );
+      renderOrdenes(ordenesCache);
+
+      try {
+        await fetch(WORKER_URL, {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({
+            action: 'update_payment',
+            numero_orden: numeroOrden,
+            pago: nuevoPago,
+            admin_token: 'admin'
+          })
+        });
+      } catch (err) {}
+    }
+
     // --- CARGAR ÓRDENES ---
     async function cargarOrdenes(silencioso = false) {
       const tbody = document.getElementById('tablaOrdenes');
       if (!silencioso && ordenesCache.length === 0) {
-        tbody.innerHTML = '<tr><td colspan="10" style="text-align: center; padding: 30px;">Cargando...</td></tr>';
+        tbody.innerHTML = '<tr><td colspan="11" style="text-align: center; padding: 30px;">Cargando...</td></tr>';
       }
 
       try {
@@ -508,7 +602,7 @@
         }
       } catch (err) {
         if (!silencioso) {
-          tbody.innerHTML = `<tr><td colspan="10" style="text-align: center; color: red; padding: 30px;">Error: ${err.message}</td></tr>`;
+          tbody.innerHTML = `<tr><td colspan="11" style="text-align: center; color: red; padding: 30px;">Error: ${err.message}</td></tr>`;
         }
       }
     }
