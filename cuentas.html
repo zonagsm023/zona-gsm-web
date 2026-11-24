@@ -1146,8 +1146,8 @@
       </div>
     </div>
 
-    <form class="ai-input-bar" onsubmit="handleAiChatSubmit(event)">
-      <textarea id="aiPromptInput" rows="2" placeholder="Escribe aquí lo que deseas agregar o editar..."></textarea>
+    <form id="aiChatForm" class="ai-input-bar" onsubmit="handleAiChatSubmit(event)">
+      <textarea id="aiPromptInput" rows="2" placeholder="Escribe aquí y presiona Enter..." onkeydown="handleAiInputKeydown(event)"></textarea>
       <button type="submit" id="aiSendBtn" class="btn-primary">Enviar</button>
     </form>
   </aside>
@@ -1167,6 +1167,7 @@
     let usdtRate = 4200;
     let selectedClientKey = '';
     let syncTimer = null;
+    let aiChatHistory = [];
 
     const VIEW_META = {
       consolidado: { title: 'Consolidado Global', sub: 'Movimientos en COP · Semana, Mes y Total Global' },
@@ -2114,115 +2115,16 @@
       box.scrollTop = box.scrollHeight;
     }
 
-    function parseInstructionToPayload(text) {
-      const raw = String(text || '').trim();
-      const lower = raw.toLowerCase();
-
-      let canal = 'EFECTIVO';
-      if (/\bnequi\b/.test(lower)) canal = 'NEQUI';
-      else if (/\bbancolombia\b|\bbanco\b/.test(lower)) canal = 'BANCOLOMBIA';
-      else if (/\busdt\b|\bbinance\b|\bcripto\b/.test(lower)) canal = 'USDT_CRIPTO';
-
-      const copMatches = Array.from(raw.matchAll(/\$?\s*(\d{1,3}(?:[.,]\d{3})+|\d{3,})\s*(?:cop|pesos)?/gi))
-        .map(m => Number(String(m[1]).replace(/\./g, '').replace(/,/g, '')))
-        .filter(n => n > 0);
-
-      const isCashFlow = /\b(gasto|gaste|salida|retiro|pague|pagué|entrada|ingrese|ingresó|recibi|recibí|comida|renta|crédito|credito|transferencia)\b/.test(lower)
-        && !/\b(orden|imei|e-?sim|no\s*registro|servicio|frp|mdm|bypass|unlock)\b/.test(lower);
-
-      if (isCashFlow) {
-        const isEntrada = /\b(entrada|ingrese|ingresó|recibi|recibí|abono|cobro\s*extra)\b/.test(lower);
-        const tipo = isEntrada ? 'ENTRADA' : 'SALIDA';
-        const conceptoLimpio = raw
-          .replace(/\b(registra|registrate|anota|agrega|pon|crea|una|un|salida|gasto|entrada|de|en|por|pesos|cop|\$)\b/gi, ' ')
-          .replace(/\b(efectivo|nequi|bancolombia|banco|usdt|binance|cripto)\b/gi, ' ')
-          .replace(/\b\d{1,3}(?:[.,]\d{3})+|\b\d{2,}\b/g, ' ')
-          .replace(/\s+/g, ' ')
-          .trim() || (isEntrada ? 'Entrada de dinero' : 'Gasto / salida');
-
-        return {
-          mode: 'create',
-          target: 'gasto',
-          fecha: new Date().toISOString().slice(0, 10),
-          tipo,
-          canal,
-          descripcion: conceptoLimpio,
-          monto: copMatches[0] || 0
-        };
+    function handleAiInputKeydown(ev) {
+      if (ev.key === 'Enter' && !ev.shiftKey) {
+        ev.preventDefault();
+        const form = document.getElementById('aiChatForm');
+        if (form && typeof form.requestSubmit === 'function') {
+          form.requestSubmit();
+        } else {
+          handleAiChatSubmit(ev);
+        }
       }
-
-      const idMatch = raw.match(/\b((?:ZG|ORD|ESIM|EXP)-[A-Za-z0-9_-]+)\b/i);
-      const existingRecord = idMatch
-        ? records.find(r =>
-            String(r.id).toLowerCase() === idMatch[1].toLowerCase() ||
-            String(r.detalle || '').toLowerCase().includes(idMatch[1].toLowerCase())
-          )
-        : records.find(r => {
-            const cli = String(r.cliente || '').toLowerCase().trim();
-            return cli && cli !== 'sin nombre' && lower.includes(cli) && (lower.includes('edita') || lower.includes('cambia') || lower.includes('marca') || lower.includes('actualiza'));
-          });
-
-      const isEdit = Boolean(existingRecord) || /\b(edita|editar|cambia|cambiar|actualiza|actualizar|marca|marcar)\b/.test(lower);
-
-      let pagado = existingRecord ? existingRecord.pagado : 'NO PAGADO';
-      if (/\bno\s*pagado\b|\bpendiente\b|\bdebe\b/.test(lower)) pagado = 'NO PAGADO';
-      else if (/\bpagado\b|\bpago\b|\bcobrado\b/.test(lower)) pagado = 'PAGADO';
-
-      let estado = existingRecord ? existingRecord.estado : 'EN PROCESO';
-      if (/\bexitoso\b|\blisto\b|\bcompletado\b/.test(lower)) estado = 'EXITOSO';
-      else if (/\brechazado\b|\bcancelado\b/.test(lower)) estado = 'RECHAZADO';
-      else if (/\ben\s*proceso\b|\bproceso\b/.test(lower)) estado = 'EN PROCESO';
-
-      let origen = existingRecord ? existingRecord.origen : 'SERVICIO';
-      if (/\be-?sim\b/.test(lower)) origen = 'E-SIM';
-      else if (/\bno\s*registro\b|\bimei\b/.test(lower)) origen = 'NO REGISTRO';
-      else if (/\bservicio\b|\bfrp\b|\bmdm\b|\bbypass\b|\bunlock\b/.test(lower)) origen = 'SERVICIO';
-
-      const usdtMatch = raw.match(/(\d+(?:[.,]\d+)?)\s*usdt/i);
-      const usdtVal = usdtMatch
-        ? parseFloat(usdtMatch[1].replace(',', '.'))
-        : (canal === 'USDT_CRIPTO' && copMatches[0] && usdtRate > 0
-            ? Number((copMatches[0] / usdtRate).toFixed(2))
-            : (existingRecord ? Number(existingRecord.usdt || 0) : 0));
-
-      let venta = existingRecord ? Number(existingRecord.venta || 0) : (copMatches[0] || 0);
-      let costo = existingRecord ? Number(existingRecord.costo || 0) : 0;
-      const costoMatch = raw.match(/\bcosto\s*\$?\s*(\d{1,3}(?:[.,]\d{3})+|\d+)/i);
-      if (costoMatch) {
-        costo = Number(String(costoMatch[1]).replace(/\./g, '').replace(/,/g, ''));
-      } else if (!isEdit && copMatches.length >= 2) {
-        venta = copMatches[0];
-        costo = copMatches[1];
-      }
-
-      const imeiMatch = raw.match(/\b(\d{14,16})\b/);
-      const telMatch = raw.match(/(?:\+?57\s*)?\b(3\d{9})\b/);
-      const cliMatch = raw.match(/\bcliente\s+([A-Za-zÁÉÍÓÚáéíóúñÑ\s]+?)(?=\s+(?:cel|celular|tel|whatsapp|imei|venta|costo|valor|por|en|nequi|bancolombia|efectivo|usdt|pagado|exitoso|\d)|$)/i);
-      const opMatch = raw.match(/\b(claro|tigo|wom|movistar|etb|virgin|xiaomi|samsung|honor|motorola|iphone|frp|mdm|bypass|unlock)\b/i);
-
-      const detalleBase = imeiMatch
-        ? `IMEI: ${imeiMatch[1]}`
-        : (existingRecord ? String(existingRecord.detalle || '').replace(/\s*·?\s*\[?(EFECTIVO|NEQUI|BANCOLOMBIA|USDT_CRIPTO)\]?\s*/gi, '').trim() : '');
-
-      const detalleFinal = detalleBase ? `${detalleBase} · [${canal}]` : `[${canal}]`;
-
-      return {
-        mode: isEdit && existingRecord ? 'update' : 'create',
-        target: 'movimiento',
-        id: existingRecord ? existingRecord.id : ('ZG-' + Date.now()),
-        origen,
-        fecha: existingRecord ? String(existingRecord.fecha || '').slice(0, 10) : new Date().toISOString().slice(0, 10),
-        cliente: cliMatch ? cliMatch[1].trim() : (existingRecord ? existingRecord.cliente : 'Cliente'),
-        telefono: telMatch ? telMatch[1] : (existingRecord ? (existingRecord.telefono || '') : ''),
-        operador: opMatch ? opMatch[1].toUpperCase() : (existingRecord ? existingRecord.operador : 'Servicio'),
-        detalle: detalleFinal,
-        costo,
-        venta,
-        moneda: canal === 'USDT_CRIPTO' ? 'USDT' : 'COP',
-        usdt: usdtVal,
-        estado,
-        pagado
-      };
     }
 
     async function handleAiChatSubmit(ev) {
@@ -2233,40 +2135,39 @@
       if (!text) return;
 
       appendAiMsg(esc(text), 'user');
+      aiChatHistory.push({ role: 'user', text });
       inp.value = '';
       btn.disabled = true;
 
       try {
-        const payload = parseInstructionToPayload(text);
         const res = await fetch(WORKER_URL, {
           method: 'POST',
           headers: { 'Content-Type': 'application/json' },
           body: JSON.stringify({
             action: 'ai_cuenta_cmd',
-            ...payload
+            prompt: text,
+            history: aiChatHistory.slice(-8),
+            contextRecords: records.slice(0, 20)
           })
         });
         const data = await res.json();
         if (!data.success) {
           throw new Error(data.error || 'No se pudo aplicar el cambio');
         }
-        await syncFromCloud(false);
-        if (payload.target === 'gasto') {
-          appendAiMsg(
-            `✅ ${payload.tipo === 'ENTRADA' ? 'Ingreso' : 'Gasto'} en <strong>${canalLabel(payload.canal)}</strong>: <strong>${esc(payload.descripcion)}</strong> · ${cop(payload.monto)}`,
-            'bot'
-          );
-        } else {
-          appendAiMsg(
-            `✅ ${payload.mode === 'update' ? 'Actualizado' : 'Creado'}: <strong>${esc(payload.cliente)}</strong> · ${esc(payload.origen)} (${esc(payload.operador)}) · ${cop(payload.venta)} · <strong>${esc(payload.pagado)}</strong> / <strong>${esc(payload.estado)}</strong>`,
-            'bot'
-          );
+
+        const botReply = data.reply || 'Listo.';
+        appendAiMsg(esc(botReply), 'bot');
+        aiChatHistory.push({ role: 'model', text: botReply });
+
+        if (data.action_type !== 'chat') {
+          await syncFromCloud(false);
+          toast('Sincronizado con D1');
         }
-        toast(payload.target === 'gasto' ? 'Movimiento guardado en D1' : (payload.mode === 'update' ? 'Orden editada en D1' : 'Orden creada en D1'));
       } catch (err) {
         appendAiMsg(`⚠️ Error: ${esc(err.message || 'No se pudo procesar')}`, 'bot');
       } finally {
         btn.disabled = false;
+        inp.focus();
       }
     }
 
