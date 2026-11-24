@@ -7,11 +7,11 @@
   <link rel="icon" type="image/jpeg" href="logo1.jpg" />
   <style>
     * { box-sizing: border-box; margin: 0; padding: 0; font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif; }
-    body { background: #f1f5f9; color: #0f172a; min-height: 100vh; display: flex; }
+    body { background: #f1f5f9; color: #0f172a; min-height: 100vh; display: flex; overflow-x: hidden; }
 
     /* --- SIDEBAR IZQUIERDO --- */
     .sidebar {
-      width: 245px;
+      width: 220px;
       background: linear-gradient(180deg, #5c0921 0%, #8a0f33 65%, #a6153f 100%);
       color: #ffffff;
       display: flex;
@@ -26,15 +26,15 @@
     }
 
     .brand-box {
-      padding: 20px 18px;
+      padding: 16px 14px;
       display: flex;
       align-items: center;
-      gap: 12px;
+      gap: 10px;
       border-bottom: 1px solid rgba(255, 255, 255, 0.14);
     }
     .brand-logo {
-      width: 42px;
-      height: 42px;
+      width: 38px;
+      height: 38px;
       border-radius: 50%;
       background: #ffffff;
       overflow: hidden;
@@ -44,14 +44,14 @@
       justify-content: center;
       font-weight: 900;
       color: #8a0f33;
-      font-size: 13px;
+      font-size: 12px;
     }
     .brand-logo img { width: 100%; height: 100%; object-fit: cover; display: block; }
-    .brand-title { font-size: 16px; font-weight: 900; letter-spacing: 0.2px; }
-    .brand-sub { font-size: 11px; opacity: 0.8; margin-top: 2px; }
+    .brand-title { font-size: 15px; font-weight: 900; letter-spacing: 0.2px; }
+    .brand-sub { font-size: 10.5px; opacity: 0.8; margin-top: 2px; }
 
     .nav-list {
-      padding: 14px 10px;
+      padding: 12px 8px;
       display: flex;
       flex-direction: column;
       gap: 4px;
@@ -62,10 +62,10 @@
       width: 100%;
       border: none;
       background: transparent;
-      color: rgba(255, 255, 255, 0.86);
-      padding: 10px 12px;
-      border-radius: 11px;
-      font-size: 13px;
+      color: rgba(255, 255, 255, 0.88);
+      padding: 9px 11px;
+      border-radius: 10px;
+      font-size: 12.5px;
       font-weight: 700;
       text-align: left;
       cursor: pointer;
@@ -78,7 +78,7 @@
     .nav-item.active { background: #ffffff; color: #8a0f33; font-weight: 800; box-shadow: 0 4px 12px rgba(0, 0, 0, 0.16); }
 
     .nav-count {
-      font-size: 10.5px;
+      font-size: 10px;
       font-weight: 800;
       padding: 2px 7px;
       border-radius: 999px;
@@ -88,9 +88,9 @@
     .nav-item.active .nav-count { background: #fce7ef; color: #8a0f33; }
 
     .sidebar-footer {
-      padding: 14px 16px;
+      padding: 12px 14px;
       border-top: 1px solid rgba(255, 255, 255, 0.14);
-      font-size: 11.5px;
+      font-size: 11px;
       opacity: 0.85;
     }
 
@@ -100,39 +100,41 @@
     .topbar {
       background: #ffffff;
       border-bottom: 1px solid #e2e8f0;
-      padding: 14px 22px;
+      padding: 12px 18px;
       display: flex;
       align-items: center;
       justify-content: space-between;
-      gap: 12px;
+      gap: 10px;
       position: sticky;
       top: 0;
       z-index: 20;
+      flex-wrap: wrap;
     }
-    .topbar-left { display: flex; align-items: center; gap: 12px; }
+    .topbar-left { display: flex; align-items: center; gap: 10px; min-width: 0; }
     .menu-toggle {
       display: none;
-      width: 38px;
-      height: 38px;
+      width: 36px;
+      height: 36px;
       border-radius: 10px;
       border: 1px solid #cbd5e1;
       background: #f8fafc;
       font-size: 18px;
       cursor: pointer;
     }
-    .page-title { font-size: 19px; font-weight: 900; color: #0f172a; }
-    .page-sub { font-size: 12px; color: #64748b; }
+    .page-title { font-size: 18px; font-weight: 900; color: #0f172a; }
+    .page-sub { font-size: 11.5px; color: #64748b; }
 
     .topbar-actions { display: flex; align-items: center; gap: 8px; flex-wrap: wrap; }
     .btn-primary {
       background: #c81d4e;
       color: #ffffff;
       border: none;
-      padding: 10px 15px;
-      border-radius: 11px;
-      font-size: 13px;
+      padding: 9px 14px;
+      border-radius: 10px;
+      font-size: 12.5px;
       font-weight: 800;
       cursor: pointer;
+      white-space: nowrap;
       transition: background 0.15s ease;
     }
     .btn-primary:hover { background: #a61840; }
@@ -140,27 +142,28 @@
       background: #ffffff;
       color: #0f172a;
       border: 1.5px solid #cbd5e1;
-      padding: 9px 13px;
-      border-radius: 11px;
-      font-size: 12.5px;
+      padding: 8px 12px;
+      border-radius: 10px;
+      font-size: 12px;
       font-weight: 800;
       cursor: pointer;
+      white-space: nowrap;
     }
     .btn-secondary:hover { background: #f8fafc; }
 
-    .content { padding: 20px 22px 48px; }
+    .content { padding: 16px 18px 44px; max-width: 100%; }
 
     /* --- SEPARACIÓN SEMANA / MES / GLOBAL --- */
     .period-strip {
       display: grid;
-      grid-template-columns: repeat(auto-fit, minmax(210px, 1fr));
-      gap: 12px;
-      margin-bottom: 16px;
+      grid-template-columns: repeat(auto-fit, minmax(195px, 1fr));
+      gap: 10px;
+      margin-bottom: 14px;
     }
     .period-box {
       background: #ffffff;
-      border-radius: 16px;
-      padding: 13px 16px;
+      border-radius: 14px;
+      padding: 12px 14px;
       border: 1px solid #e2e8f0;
       box-shadow: 0 3px 10px rgba(15, 23, 42, 0.03);
       cursor: pointer;
@@ -172,9 +175,9 @@
       box-shadow: 0 6px 16px rgba(200, 29, 78, 0.12);
       background: #fff9fb;
     }
-    .period-tag { font-size: 10.5px; font-weight: 800; text-transform: uppercase; color: #c81d4e; letter-spacing: 0.4px; }
-    .period-main { font-size: 18px; font-weight: 900; color: #0f172a; margin-top: 4px; }
-    .period-sub { font-size: 11.5px; color: #475569; margin-top: 3px; font-weight: 600; }
+    .period-tag { font-size: 10px; font-weight: 800; text-transform: uppercase; color: #c81d4e; letter-spacing: 0.4px; }
+    .period-main { font-size: 17px; font-weight: 900; color: #0f172a; margin-top: 3px; white-space: nowrap; }
+    .period-sub { font-size: 11px; color: #475569; margin-top: 2px; font-weight: 600; }
 
     .dup-banner {
       display: none;
@@ -182,9 +185,9 @@
       border: 1.5px solid #fca5a5;
       color: #991b1b;
       border-radius: 14px;
-      padding: 12px 15px;
-      margin-bottom: 14px;
-      font-size: 13px;
+      padding: 11px 14px;
+      margin-bottom: 12px;
+      font-size: 12.5px;
       font-weight: 700;
       align-items: center;
       justify-content: space-between;
@@ -200,19 +203,20 @@
     /* --- TARJETAS KPI --- */
     .kpi-grid {
       display: grid;
-      grid-template-columns: repeat(auto-fit, minmax(175px, 1fr));
-      gap: 12px;
-      margin-bottom: 18px;
+      grid-template-columns: repeat(auto-fit, minmax(150px, 1fr));
+      gap: 10px;
+      margin-bottom: 14px;
     }
     .kpi-card {
       background: #ffffff;
-      border-radius: 16px;
-      padding: 14px 16px;
+      border-radius: 14px;
+      padding: 12px 14px;
       border: 1px solid #e2e8f0;
       box-shadow: 0 3px 10px rgba(15, 23, 42, 0.03);
+      min-width: 0;
     }
-    .kpi-lbl { font-size: 11px; font-weight: 800; color: #64748b; text-transform: uppercase; letter-spacing: 0.4px; }
-    .kpi-val { font-size: 20px; font-weight: 900; color: #0f172a; margin-top: 6px; }
+    .kpi-lbl { font-size: 10px; font-weight: 800; color: #64748b; text-transform: uppercase; letter-spacing: 0.35px; }
+    .kpi-val { font-size: 16.5px; font-weight: 900; color: #0f172a; margin-top: 5px; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
     .kpi-val.green { color: #059669; }
     .kpi-val.red { color: #dc2626; }
     .kpi-val.amber { color: #d97706; }
@@ -221,31 +225,31 @@
     /* --- BARRA DE FILTROS --- */
     .toolbar {
       background: #ffffff;
-      border-radius: 16px;
-      padding: 12px 14px;
+      border-radius: 14px;
+      padding: 10px 12px;
       border: 1px solid #e2e8f0;
       display: flex;
-      gap: 10px;
+      gap: 8px;
       flex-wrap: wrap;
       align-items: center;
-      margin-bottom: 14px;
+      margin-bottom: 12px;
     }
     .search-input {
       flex: 1;
-      min-width: 210px;
-      padding: 9px 12px;
+      min-width: 180px;
+      padding: 8px 11px;
       border-radius: 10px;
       border: 1.5px solid #cbd5e1;
-      font-size: 13px;
+      font-size: 12.5px;
       font-weight: 600;
       outline: none;
     }
     .search-input:focus { border-color: #c81d4e; }
     .filter-select {
-      padding: 9px 12px;
+      padding: 8px 10px;
       border-radius: 10px;
       border: 1.5px solid #cbd5e1;
-      font-size: 12.5px;
+      font-size: 12px;
       font-weight: 700;
       background: #ffffff;
       color: #0f172a;
@@ -255,26 +259,26 @@
     /* --- TABLA DE CONTROL --- */
     .table-card {
       background: #ffffff;
-      border-radius: 18px;
+      border-radius: 16px;
       border: 1px solid #e2e8f0;
       box-shadow: 0 4px 14px rgba(15, 23, 42, 0.04);
       overflow: hidden;
     }
-    .table-wrap { overflow-x: auto; }
-    table { width: 100%; border-collapse: collapse; min-width: 900px; font-size: 12.5px; }
+    .table-wrap { overflow-x: auto; width: 100%; }
+    table { width: 100%; border-collapse: collapse; min-width: 720px; font-size: 12px; }
     thead th {
       background: #1e293b;
       color: #ffffff;
       text-align: left;
-      padding: 11px 12px;
-      font-size: 11px;
+      padding: 9px 9px;
+      font-size: 10px;
       font-weight: 800;
-      letter-spacing: 0.4px;
+      letter-spacing: 0.35px;
       text-transform: uppercase;
       white-space: nowrap;
     }
     tbody td {
-      padding: 10px 12px;
+      padding: 8px 9px;
       border-bottom: 1px solid #eef2f6;
       color: #1e293b;
       font-weight: 600;
@@ -282,32 +286,53 @@
     }
     tbody tr:hover { background: #f8fafc; }
 
+    /* Colores distintivos por servicio / origen */
     .tag-origin {
       display: inline-block;
-      padding: 3px 8px;
-      border-radius: 6px;
-      font-size: 10.5px;
-      font-weight: 800;
-      background: #f1f5f9;
-      color: #334155;
-    }
-    .tag-usdt {
-      display: inline-block;
-      padding: 2px 7px;
+      padding: 3px 7px;
       border-radius: 6px;
       font-size: 10px;
       font-weight: 800;
+      white-space: nowrap;
+    }
+    .tag-esim { background: #e0e7ff; color: #3730a3; border: 1px solid #c7d2fe; }
+    .tag-noreg { background: #ffe4e6; color: #9f1239; border: 1px solid #fecdd3; }
+    .tag-serv { background: #f3e8ff; color: #6b21a8; border: 1px solid #e9d5ff; }
+    .tag-usdt {
+      display: inline-block;
+      padding: 2px 6px;
+      border-radius: 6px;
+      font-size: 9.5px;
+      font-weight: 800;
       background: #fef3c7;
       color: #92400e;
+      border: 1px solid #fde68a;
       margin-top: 3px;
+      white-space: nowrap;
     }
+
+    .op-badge {
+      display: inline-block;
+      padding: 2px 7px;
+      border-radius: 6px;
+      font-size: 11px;
+      font-weight: 800;
+      background: #f1f5f9;
+      color: #0f172a;
+    }
+    .op-claro { background: #fee2e2; color: #b91c1c; }
+    .op-tigo { background: #dbeafe; color: #1d4ed8; }
+    .op-wom { background: #fae8ff; color: #86198f; }
+    .op-movistar { background: #e0f2fe; color: #0369a1; }
+
+    .num-nowrap { white-space: nowrap; }
 
     .pill {
       display: inline-flex;
       align-items: center;
-      padding: 4px 10px;
+      padding: 3px 8px;
       border-radius: 999px;
-      font-size: 10.5px;
+      font-size: 10px;
       font-weight: 800;
       cursor: pointer;
       border: none;
@@ -317,34 +342,35 @@
     .pill-proceso { background: #fef3c7; color: #b45309; }
     .pill-rechazado, .pill-nopagado { background: #fee2e2; color: #b91c1c; }
 
-    .row-actions { display: flex; gap: 6px; }
+    .row-actions { display: flex; gap: 4px; flex-wrap: nowrap; }
     .icon-btn {
-      padding: 5px 8px;
-      border-radius: 8px;
+      padding: 4px 7px;
+      border-radius: 7px;
       border: 1px solid #cbd5e1;
       background: #ffffff;
-      font-size: 11px;
+      font-size: 10.5px;
       font-weight: 800;
       cursor: pointer;
       color: #0f172a;
+      white-space: nowrap;
     }
     .icon-btn.del { border-color: #fecaca; background: #fef2f2; color: #dc2626; }
 
     /* --- DIRECTORIO DE CLIENTES Y DEUDAS --- */
     .cards-grid {
       display: grid;
-      grid-template-columns: repeat(auto-fill, minmax(260px, 1fr));
+      grid-template-columns: repeat(auto-fill, minmax(250px, 1fr));
       gap: 12px;
     }
     .info-card {
       background: #ffffff;
       border-radius: 16px;
-      padding: 15px;
+      padding: 14px;
       border: 1px solid #e2e8f0;
       box-shadow: 0 3px 10px rgba(15, 23, 42, 0.03);
     }
-    .info-card h3 { font-size: 15px; font-weight: 900; color: #0f172a; margin-bottom: 4px; }
-    .info-card p { font-size: 12.5px; color: #475569; margin-top: 3px; }
+    .info-card h3 { font-size: 14.5px; font-weight: 900; color: #0f172a; margin-bottom: 4px; }
+    .info-card p { font-size: 12px; color: #475569; margin-top: 3px; }
 
     /* --- MODAL DE REGISTRO --- */
     .modal-overlay {
@@ -414,7 +440,7 @@
     }
     .toast.show { opacity: 1; }
 
-    @media (max-width: 820px) {
+    @media (max-width: 900px) {
       .sidebar {
         position: fixed;
         left: 0;
@@ -564,7 +590,7 @@
             <option value="WEEK">Período: Esta Semana</option>
             <option value="MONTH">Período: Este Mes</option>
           </select>
-          <input id="searchInput" class="search-input" type="search" placeholder="Buscar por cliente, IMEI, operador o proceso..." oninput="renderAll()" />
+          <input id="searchInput" class="search-input" type="search" placeholder="Buscar cliente, IMEI, operador..." oninput="renderAll()" />
           <select id="filterPay" class="filter-select" onchange="renderAll()">
             <option value="ALL">Pago: Todos</option>
             <option value="PAGADO">Pagado</option>
@@ -576,10 +602,10 @@
             <option value="EXITOSO">Exitoso</option>
             <option value="RECHAZADO">Rechazado</option>
           </select>
-          <div style="display:flex;align-items:center;gap:6px;">
-            <label for="usdtRateInput" style="font-size:12px;font-weight:800;color:#92400e;">1 USDT =</label>
-            <input id="usdtRateInput" class="filter-select" type="number" min="1" step="10" value="4200" style="width:110px;" oninput="updateUsdtRate(this.value)" title="Tasa COP por 1 USDT" />
-            <span style="font-size:11.5px;font-weight:800;color:#64748b;">COP</span>
+          <div style="display:flex;align-items:center;gap:5px;">
+            <label for="usdtRateInput" style="font-size:11.5px;font-weight:800;color:#92400e;">1 USDT =</label>
+            <input id="usdtRateInput" class="filter-select" type="number" min="1" step="10" value="4200" style="width:92px;" oninput="updateUsdtRate(this.value)" title="Tasa COP por 1 USDT" />
+            <span style="font-size:11px;font-weight:800;color:#64748b;">COP</span>
           </div>
         </div>
 
@@ -588,16 +614,16 @@
             <table>
               <thead>
                 <tr>
-                  <th>Origen / Canal</th>
+                  <th>Servicio</th>
                   <th>Fecha</th>
                   <th>Cliente</th>
                   <th>Detalle / IMEI</th>
                   <th>Operador / Proceso</th>
                   <th>Estado</th>
-                  <th>Costo (COP)</th>
-                  <th>Venta (COP)</th>
-                  <th>USDT Binance</th>
-                  <th>Ganancia (COP)</th>
+                  <th>Costo</th>
+                  <th>Venta</th>
+                  <th>USDT</th>
+                  <th>Ganancia</th>
                   <th>Pago</th>
                   <th>Acciones</th>
                 </tr>
@@ -773,7 +799,7 @@
     let records = [];
     let expenses = [];
     let currentView = 'consolidado';
-    let currentPeriod = 'ALL'; // 'WEEK' | 'MONTH' | 'ALL'
+    let currentPeriod = 'ALL';
     let usdtRate = 4200;
     let syncTimer = null;
 
@@ -945,7 +971,8 @@
     }
 
     function cop(n) {
-      return '$' + Number(n || 0).toLocaleString('es-CO') + ' COP';
+      const val = Number(n || 0);
+      return '$' + val.toLocaleString('es-CO', { minimumFractionDigits: 0, maximumFractionDigits: 0 }) + ' COP';
     }
 
     function usdtFmt(n) {
@@ -954,6 +981,22 @@
 
     function esc(s) {
       return String(s || '').replace(/[&<>"']/g, m => ({ '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;', "'": '&#39;' }[m]));
+    }
+
+    function origenBadgeClass(origen) {
+      const o = String(origen || '').toUpperCase();
+      if (o.includes('E-SIM')) return 'tag-esim';
+      if (o.includes('NO REG')) return 'tag-noreg';
+      return 'tag-serv';
+    }
+
+    function operadorBadgeClass(op) {
+      const u = String(op || '').toUpperCase();
+      if (u.includes('CLARO')) return 'op-claro';
+      if (u.includes('TIGO')) return 'op-tigo';
+      if (u.includes('WOM')) return 'op-wom';
+      if (u.includes('MOVISTAR')) return 'op-movistar';
+      return '';
     }
 
     function getCategoryRecords() {
@@ -1041,18 +1084,18 @@
         return `
           <tr>
             <td>
-              <span class="tag-origin">${esc(r.origen)}</span>
-              ${isUsdt ? `<br><span class="tag-usdt">Binance USDT</span>` : ''}
+              <span class="tag-origin ${origenBadgeClass(r.origen)}">${esc(r.origen)}</span>
+              ${isUsdt ? `<br><span class="tag-usdt">USDT</span>` : ''}
             </td>
-            <td>${esc(r.fecha)}</td>
-            <td><strong>${esc(r.cliente)}</strong>${r.telefono ? `<br><span style="font-size:11px;color:#64748b;">${esc(r.telefono)}</span>` : ''}</td>
-            <td>${esc(r.detalle || '-')}</td>
-            <td>${esc(r.operador)}</td>
+            <td class="num-nowrap">${esc(r.fecha)}</td>
+            <td><strong>${esc(r.cliente)}</strong>${r.telefono ? `<br><span style="font-size:10.5px;color:#64748b;">${esc(r.telefono)}</span>` : ''}</td>
+            <td style="max-width:170px;word-break:break-word;">${esc(r.detalle || '-')}</td>
+            <td><span class="op-badge ${operadorBadgeClass(r.operador)}">${esc(r.operador)}</span></td>
             <td><button type="button" class="pill ${stClass}" onclick="cycleStatus('${r.id}')" title="Clic para cambiar estado">${esc(r.estado)}</button></td>
-            <td>${cop(r.costo)}</td>
-            <td><strong>${cop(r.venta)}</strong></td>
-            <td style="color:#b45309;font-weight:800;">${uVal > 0 ? usdtFmt(uVal) : '-'}</td>
-            <td style="color:#059669;font-weight:800;">${cop(gain)}</td>
+            <td class="num-nowrap">${cop(r.costo)}</td>
+            <td class="num-nowrap"><strong>${cop(r.venta)}</strong></td>
+            <td class="num-nowrap" style="color:#b45309;font-weight:800;">${uVal > 0 ? usdtFmt(uVal) : '-'}</td>
+            <td class="num-nowrap" style="color:#059669;font-weight:800;">${cop(gain)}</td>
             <td><button type="button" class="pill ${payClass}" onclick="togglePay('${r.id}')" title="Clic para cambiar pago">${esc(r.pagado)}</button></td>
             <td>
               <div class="row-actions">
