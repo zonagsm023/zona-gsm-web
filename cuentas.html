@@ -152,10 +152,10 @@
 
     .content { padding: 12px 15px 46px; max-width: 100%; }
 
-    /* --- CELDAS DE PERÍODO ESTILO PLANILLA --- */
+    /* --- CELDAS DE PERÍODO EN LÍNEA ESTILO PLANILLA --- */
     .period-strip {
       display: grid;
-      grid-template-columns: repeat(3, minmax(140px, 1fr));
+      grid-template-columns: repeat(3, minmax(0, 1fr));
       gap: 6px;
       margin-bottom: 8px;
     }
@@ -167,6 +167,7 @@
       cursor: pointer;
       text-align: left;
       transition: all 0.12s ease;
+      min-width: 0;
     }
     .period-box:hover { background: #f8fafc; }
     .period-box.selected {
@@ -174,9 +175,9 @@
       background: #eff6ff;
       box-shadow: inset 0 0 0 1px #1e3a8a;
     }
-    .period-tag { font-size: 9px; font-weight: 800; text-transform: uppercase; color: #475569; letter-spacing: 0.35px; }
+    .period-tag { font-size: 9px; font-weight: 800; text-transform: uppercase; color: #475569; letter-spacing: 0.35px; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
     .period-box.selected .period-tag { color: #1e3a8a; }
-    .period-main { font-size: 13px; font-weight: 900; color: #0f172a; margin-top: 2px; white-space: nowrap; }
+    .period-main { font-size: 13px; font-weight: 900; color: #0f172a; margin-top: 2px; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
     .period-sub { font-size: 10px; color: #64748b; margin-top: 1px; font-weight: 600; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
 
     .dup-banner {
@@ -200,23 +201,23 @@
     .view-section.active { display: block; animation: fadeIn 0.14s ease; }
     @keyframes fadeIn { from { opacity: 0; transform: translateY(2px); } to { opacity: 1; transform: translateY(0); } }
 
-    /* --- CELDAS KPI COMPACTAS ESTILO HOJA DE CÁLCULO --- */
+    /* --- CELDAS KPI EN LÍNEA ESTILO HOJA DE CÁLCULO --- */
     .kpi-grid {
       display: grid;
-      grid-template-columns: repeat(auto-fit, minmax(128px, 1fr));
+      grid-template-columns: repeat(7, minmax(0, 1fr));
       gap: 6px;
       margin-bottom: 8px;
     }
     .kpi-card {
       background: #ffffff;
       border-radius: 6px;
-      padding: 7px 9px;
+      padding: 7px 8px;
       border: 1px solid #cbd5e1;
       min-width: 0;
     }
     .kpi-card.alert-cell { background: #fef2f2; border-color: #fca5a5; }
-    .kpi-lbl { font-size: 9px; font-weight: 800; color: #475569; text-transform: uppercase; letter-spacing: 0.3px; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
-    .kpi-val { font-size: 13px; font-weight: 900; color: #0f172a; margin-top: 2px; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+    .kpi-lbl { font-size: 9px; font-weight: 800; color: #475569; text-transform: uppercase; letter-spacing: 0.25px; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+    .kpi-val { font-size: 12.5px; font-weight: 900; color: #0f172a; margin-top: 2px; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
     .kpi-val.green { color: #15803d; }
     .kpi-val.red { color: #b91c1c; }
     .kpi-val.amber { color: #b45309; }
@@ -595,6 +596,10 @@
     }
     .toast.show { opacity: 1; }
 
+    @media (max-width: 1220px) {
+      .kpi-grid { grid-template-columns: repeat(4, minmax(0, 1fr)); }
+    }
+
     @media (max-width: 1050px) {
       .split-grid { grid-template-columns: 1fr; }
       .audit-top-bar { grid-template-columns: 1fr 1fr; }
@@ -610,6 +615,7 @@
       .sidebar.open { transform: translateX(0); }
       .menu-toggle { display: inline-flex; align-items: center; justify-content: center; }
       .period-strip { grid-template-columns: 1fr; }
+      .kpi-grid { grid-template-columns: repeat(2, minmax(0, 1fr)); }
       .form-grid { grid-template-columns: 1fr; }
     }
   </style>
@@ -697,22 +703,22 @@
         <button type="button" class="icon-btn" onclick="hideDupBanner()">Cerrar</button>
       </div>
 
-      <!-- CELDAS DE PERÍODO ESTILO PLANILLA -->
+      <!-- CELDAS DE PERÍODO EN LÍNEA ESTILO PLANILLA -->
       <div class="period-strip">
         <button type="button" id="box-week" class="period-box" onclick="setPeriod('WEEK')">
           <div class="period-tag">Esta Semana</div>
           <div id="val-week" class="period-main">$0 COP</div>
-          <div id="sub-week" class="period-sub">0 reg · Ganancia $0 COP</div>
+          <div id="sub-week" class="period-sub">0 reg · Costo $0 · Cobrado $0 · Ganancia $0</div>
         </button>
         <button type="button" id="box-month" class="period-box" onclick="setPeriod('MONTH')">
           <div class="period-tag">Este Mes</div>
           <div id="val-month" class="period-main">$0 COP</div>
-          <div id="sub-month" class="period-sub">0 reg · Ganancia $0 COP</div>
+          <div id="sub-month" class="period-sub">0 reg · Costo $0 · Cobrado $0 · Ganancia $0</div>
         </button>
         <button type="button" id="box-all" class="period-box selected" onclick="setPeriod('ALL')">
           <div class="period-tag">Total Global</div>
           <div id="val-all" class="period-main">$0 COP</div>
-          <div id="sub-all" class="period-sub">0 reg · Ganancia $0 COP</div>
+          <div id="sub-all" class="period-sub">0 reg · Costo $0 · Cobrado $0 · Ganancia $0</div>
         </button>
       </div>
 
@@ -722,6 +728,10 @@
           <div class="kpi-card">
             <div class="kpi-lbl">Servicios</div>
             <div id="kpiCount" class="kpi-val">0</div>
+          </div>
+          <div class="kpi-card">
+            <div class="kpi-lbl">Costo Servicios</div>
+            <div id="kpiCost" class="kpi-val red">$0 COP</div>
           </div>
           <div class="kpi-card">
             <div class="kpi-lbl">Total Cobrado</div>
@@ -736,7 +746,7 @@
             <div id="kpiPending" class="kpi-val amber">0</div>
           </div>
           <div class="kpi-card">
-            <div class="kpi-lbl">Ganancia Neta</div>
+            <div class="kpi-lbl">Ganancia</div>
             <div id="kpiProfit" class="kpi-val green">$0 COP</div>
           </div>
           <div class="kpi-card">
@@ -821,6 +831,10 @@
           <div class="kpi-card">
             <div class="kpi-lbl">Con Saldo Pendiente</div>
             <div id="cliKpiWithDebt" class="kpi-val red">0</div>
+          </div>
+          <div class="kpi-card">
+            <div class="kpi-lbl">Al Día</div>
+            <div id="cliKpiUpToDate" class="kpi-val green">0</div>
           </div>
         </div>
 
@@ -945,6 +959,11 @@
             <div id="kpiTotalSpent" class="kpi-val red">$0 COP</div>
             <div class="kpi-sub">Salidas / Gastos</div>
           </div>
+          <div class="kpi-card">
+            <div class="kpi-lbl">Disponible Total</div>
+            <div id="kpiTotalAvailable" class="kpi-val green">$0 COP</div>
+            <div class="kpi-sub">Recibido - Gastado</div>
+          </div>
         </div>
 
         <div class="toolbar">
@@ -992,8 +1011,16 @@
             <div id="sumSales" class="kpi-val green">$0 COP</div>
           </div>
           <div class="kpi-card">
+            <div class="kpi-lbl">Costo Servicios</div>
+            <div id="sumServiceCost" class="kpi-val red">$0 COP</div>
+          </div>
+          <div class="kpi-card">
             <div class="kpi-lbl">Gastado</div>
             <div id="sumCosts" class="kpi-val red">$0 COP</div>
+          </div>
+          <div class="kpi-card">
+            <div class="kpi-lbl">Ganancia</div>
+            <div id="sumProfit" class="kpi-val green">$0 COP</div>
           </div>
           <div class="kpi-card">
             <div class="kpi-lbl">Balance Neto</div>
@@ -1002,6 +1029,10 @@
           <div class="kpi-card">
             <div class="kpi-lbl">USDT Binance</div>
             <div id="sumUsdt" class="kpi-val binance">0.00 USDT</div>
+          </div>
+          <div class="kpi-card">
+            <div class="kpi-lbl">Servicios</div>
+            <div id="sumCount" class="kpi-val">0</div>
           </div>
         </div>
         <div class="info-card">
@@ -1411,9 +1442,11 @@
       periods.forEach(p => {
         const subList = catList.filter(r => matchesPeriod(r.fecha, p.key));
         const sales = subList.reduce((s, r) => s + Number(r.venta || 0), 0);
-        const profit = subList.reduce((s, r) => s + (Number(r.venta || 0) - Number(r.costo || 0)), 0);
+        const cost = subList.reduce((s, r) => s + Number(r.costo || 0), 0);
+        const cobrado = subList.filter(r => r.pagado === 'PAGADO').reduce((s, r) => s + Number(r.venta || 0), 0);
+        const profit = sales - cost;
         document.getElementById(p.valId).textContent = cop(sales);
-        document.getElementById(p.subId).textContent = `${subList.length} reg · Ganancia ${cop(profit)}`;
+        document.getElementById(p.subId).textContent = `${subList.length} reg · Costo ${cop(cost)} · Cobrado ${cop(cobrado)} · Ganancia ${cop(profit)}`;
       });
     }
 
@@ -1432,6 +1465,7 @@
     function renderAll() {
       const baseList = getCategoryRecords().filter(r => matchesPeriod(r.fecha, currentPeriod));
 
+      const costTotal = baseList.reduce((s, r) => s + Number(r.costo || 0), 0);
       const paid = baseList.filter(r => r.pagado === 'PAGADO').reduce((s, r) => s + Number(r.venta || 0), 0);
       const unpaid = baseList.filter(r => r.pagado === 'NO PAGADO').reduce((s, r) => s + Number(r.venta || 0), 0);
       const pending = baseList.filter(r => r.estado === 'EN PROCESO').length;
@@ -1439,6 +1473,7 @@
       const usdtSum = baseList.reduce((s, r) => s + getRecordUsdt(r), 0);
 
       document.getElementById('kpiCount').textContent = baseList.length;
+      document.getElementById('kpiCost').textContent = cop(costTotal);
       document.getElementById('kpiPaid').textContent = cop(paid);
       document.getElementById('kpiUnpaid').textContent = cop(unpaid);
       document.getElementById('kpiPending').textContent = pending;
@@ -1797,6 +1832,7 @@
       const totalPaid = allGroups.reduce((s, c) => s + c.paid, 0);
       const totalDebt = allGroups.reduce((s, c) => s + c.debt, 0);
       const withDebt = allGroups.filter(c => c.debt > 0).length;
+      const upToDate = allGroups.filter(c => c.debt <= 0).length;
       const pct = totalFact > 0 ? ((totalPaid / totalFact) * 100).toFixed(1) : '0.0';
 
       document.getElementById('cliKpiCount').textContent = allGroups.length;
@@ -1805,6 +1841,7 @@
       document.getElementById('cliKpiDebt').textContent = cop(totalDebt);
       document.getElementById('cliKpiPct').textContent = pct + '%';
       document.getElementById('cliKpiWithDebt').textContent = withDebt;
+      document.getElementById('cliKpiUpToDate').textContent = upToDate;
 
       const dropdown = document.getElementById('clientDropdown');
       if (dropdown) {
@@ -1974,6 +2011,7 @@
 
       document.getElementById('kpiTotalReceived').textContent = cop(totalReceived);
       document.getElementById('kpiTotalSpent').textContent = cop(totalSpent);
+      document.getElementById('kpiTotalAvailable').textContent = cop(totalReceived - totalSpent);
 
       const paidRecordsInPeriod = records.filter(r => r.pagado === 'PAGADO' && matchesPeriod(r.fecha, currentPeriod));
       const list = expenses.filter(e => matchesPeriod(e.fecha, currentPeriod));
@@ -2029,14 +2067,18 @@
       const eList = expenses.filter(e => matchesPeriod(e.fecha, currentPeriod));
       const paidSales = rList.filter(r => r.pagado === 'PAGADO').reduce((s, r) => s + Number(r.venta || 0), 0);
       const costs = rList.reduce((s, r) => s + Number(r.costo || 0), 0);
+      const profit = rList.reduce((s, r) => s + (Number(r.venta || 0) - Number(r.costo || 0)), 0);
       const entradas = eList.filter(e => parseTipo(e.descripcion, e.monto) === 'ENTRADA').reduce((s, e) => s + Math.abs(Number(e.monto || 0)), 0);
       const salidas = eList.filter(e => parseTipo(e.descripcion, e.monto) !== 'ENTRADA').reduce((s, e) => s + Math.abs(Number(e.monto || 0)), 0);
       const usdtSum = rList.reduce((s, r) => s + getRecordUsdt(r), 0);
 
       document.getElementById('sumSales').textContent = cop(paidSales + entradas);
+      document.getElementById('sumServiceCost').textContent = cop(costs);
       document.getElementById('sumCosts').textContent = cop(costs + salidas);
+      document.getElementById('sumProfit').textContent = cop(profit);
       document.getElementById('sumNet').textContent = cop((paidSales + entradas) - (costs + salidas));
       document.getElementById('sumUsdt').textContent = usdtFmt(usdtSum);
+      document.getElementById('sumCount').textContent = rList.length;
     }
 
     function exportCsv() {
