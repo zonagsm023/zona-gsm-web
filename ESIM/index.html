@@ -884,10 +884,18 @@
       renderEsimHistorial();
     }
 
+    function obtenerEnlaceManual(valor) {
+      const limpio = String(valor || "").trim();
+      if (!limpio) return "";
+      if (/^https?:\/\//i.test(limpio)) return limpio;
+      return "";
+    }
+
     function abrirQrAmpliadoDesdeOrden(numeroOrden) {
       const orden = esimHistorialCache.find(o => o.numero_orden === numeroOrden);
-      if (!orden || !orden.qr_url) return;
-      document.getElementById("qrZoomImg").src = orden.qr_url;
+      const linkManual = orden ? obtenerEnlaceManual(orden.qr_url) : "";
+      if (!linkManual) return;
+      document.getElementById("qrZoomImg").src = linkManual;
       document.getElementById("qrZoomNumber").textContent = orden.numero_esim ? ("Número E-SIM: " + orden.numero_esim) : "";
       document.getElementById("qrZoomOverlay").classList.add("open");
     }
@@ -900,8 +908,9 @@
 
     function copiarLinkDesdeOrden(numeroOrden) {
       const orden = esimHistorialCache.find(o => o.numero_orden === numeroOrden);
-      if (!orden || !orden.qr_url) return;
-      copyText(orden.qr_url, "Enlace E-SIM");
+      const linkManual = orden ? obtenerEnlaceManual(orden.qr_url) : "";
+      if (!linkManual) return;
+      copyText(linkManual, "Enlace E-SIM");
     }
 
     function closeQrZoom() {
@@ -928,7 +937,8 @@
         : null;
 
       if (ordenSeleccionada) {
-        const tieneQr = Boolean(ordenSeleccionada.qr_url);
+        const linkManual = obtenerEnlaceManual(ordenSeleccionada.qr_url);
+        const tieneQr = Boolean(linkManual);
         const tieneNum = Boolean(ordenSeleccionada.numero_esim);
         detailWrap.innerHTML = `
           <div class="esim-expanded-box">
@@ -950,20 +960,20 @@
 
             <div class="esim-number-row" style="flex-direction:column; align-items:stretch; gap:8px;">
               <div style="display:flex; justify-content:space-between; align-items:center; gap:8px;">
-                <span style="font-size:10.5px; font-weight:800; color:#64748b; text-transform:uppercase;">Enlace de la E-SIM / QR</span>
+                <span style="font-size:10.5px; font-weight:800; color:#64748b; text-transform:uppercase;">Enlace proporcionado</span>
                 ${tieneQr ? `<button type="button" class="esim-copy-num-btn" data-ord="${escapeHtml(ordenSeleccionada.numero_orden)}" onclick="copiarLinkDesdeOrden(this.dataset.ord)">Copiar</button>` : ""}
               </div>
               <div style="font-family:monospace; font-size:12px; font-weight:700; color:#0f172a; word-break:break-all; background:#f8fafc; padding:8px; border-radius:8px; border:1px solid #e2e8f0;">
-                ${tieneQr ? escapeHtml(ordenSeleccionada.qr_url) : "Sin enlace asignado"}
+                ${tieneQr ? escapeHtml(linkManual) : "Sin enlace asignado"}
               </div>
-              ${tieneQr ? `<a href="${escapeHtml(ordenSeleccionada.qr_url)}" target="_blank" rel="noopener noreferrer" style="text-align:center; padding:7px 10px; border-radius:8px; background:#0f172a; color:#ffffff; font-size:12px; font-weight:800; text-decoration:none;">🔗 Abrir enlace aparte</a>` : ""}
+              ${tieneQr ? `<a href="${escapeHtml(linkManual)}" target="_blank" rel="noopener noreferrer" style="text-align:center; padding:7px 10px; border-radius:8px; background:#0f172a; color:#ffffff; font-size:12px; font-weight:800; text-decoration:none;">🔗 Abrir enlace aparte</a>` : ""}
             </div>
 
             <div class="esim-qr-frame">
               ${tieneQr
-                ? `<img src="${escapeHtml(ordenSeleccionada.qr_url)}" alt="QR ${escapeHtml(ordenSeleccionada.numero_orden)}" data-ord="${escapeHtml(ordenSeleccionada.numero_orden)}" onclick="abrirQrAmpliadoDesdeOrden(this.dataset.ord)" />
+                ? `<img src="${escapeHtml(linkManual)}" alt="QR ${escapeHtml(ordenSeleccionada.numero_orden)}" data-ord="${escapeHtml(ordenSeleccionada.numero_orden)}" onclick="abrirQrAmpliadoDesdeOrden(this.dataset.ord)" />
                    <div style="font-size:11px; color:#64748b; margin-top:6px;">Toca el QR para ampliarlo</div>`
-                : `<div style="padding:18px; font-size:12.5px; color:#64748b; font-weight:700;">Aún no se ha cargado la imagen/enlace del QR para esta orden.</div>`}
+                : `<div style="padding:18px; font-size:12.5px; color:#64748b; font-weight:700;">Aún no se ha cargado un enlace para esta orden.</div>`}
             </div>
           </div>
         `;
@@ -981,7 +991,8 @@
         const estadoClass = String(o.estado || "Pendiente").replace(/\s+/g, "-");
         const pagoActual = o.pago === "Pagado" ? "Pagado" : "No Pagado";
         const pagoClass = pagoActual === "Pagado" ? "pagado" : "no-pagado";
-        const entregaLista = Boolean(o.qr_url || o.numero_esim) && o.estado === "Exitoso";
+        const linkManual = obtenerEnlaceManual(o.qr_url);
+        const entregaLista = Boolean(linkManual || o.numero_esim) && o.estado === "Exitoso";
         const fecha = o.fecha ? new Date(o.fecha + "Z").toLocaleString("es-CO", { timeZone: "America/Bogota" }) : "";
 
         html += `
@@ -997,7 +1008,7 @@
               <div><strong>Operador:</strong> ${escapeHtml(o.operador)} (${escapeHtml(o.cantidad || 1)} und)</div>
               <div><strong>Total:</strong> ${escapeHtml(o.precio)}</div>
               ${o.numero_esim ? `<div><strong>Número QR:</strong> <span style="font-family:monospace; font-weight:800; color:#065f46;">${escapeHtml(o.numero_esim)}</span></div>` : ""}
-              ${o.qr_url ? `<div><strong>Enlace:</strong> <span style="font-family:monospace; font-size:11.5px; color:#0f172a; word-break:break-all;">${escapeHtml(o.qr_url)}</span></div>` : ""}
+              ${linkManual ? `<div><strong>Enlace:</strong> <span style="font-family:monospace; font-size:11.5px; color:#0f172a; word-break:break-all;">${escapeHtml(linkManual)}</span></div>` : ""}
               ${entregaLista ? `<div class="esim-ready-tag">📲 E-SIM lista — Toca para abrir QR, enlace y número</div>` : `<div style="font-size:11px; color:#64748b; margin-top:4px;">Toca para ver detalle de la orden</div>`}
               ${fecha ? `<div style="font-size:11px; color:#94a3b8; margin-top:4px;">Solicitado: ${escapeHtml(fecha)}</div>` : ""}
             </div>
@@ -1021,9 +1032,10 @@
 
         esimHistorialCache = lista;
 
-        const entregadaReciente = lista.find(o => o.estado === "Exitoso" && (o.qr_url || o.numero_esim));
+        const entregadaReciente = lista.find(o => o.estado === "Exitoso" && (obtenerEnlaceManual(o.qr_url) || o.numero_esim));
         if (entregadaReciente) {
-          const key = `${entregadaReciente.numero_orden}|${entregadaReciente.qr_url || ""}|${entregadaReciente.numero_esim || ""}`;
+          const linkReciente = obtenerEnlaceManual(entregadaReciente.qr_url);
+          const key = `${entregadaReciente.numero_orden}|${linkReciente}|${entregadaReciente.numero_esim || ""}`;
           if (key !== lastDeliveredOrderKey) {
             lastDeliveredOrderKey = key;
             selectedOrderId = entregadaReciente.numero_orden;
