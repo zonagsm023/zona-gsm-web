@@ -7,11 +7,11 @@
   <link rel="icon" type="image/jpeg" href="logo1.jpg" />
   <style>
     * { box-sizing: border-box; margin: 0; padding: 0; font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif; }
-    body { background: #f1f5f9; color: #0f172a; min-height: 100vh; display: flex; overflow-x: hidden; }
+    body { background: #f8fafc; color: #0f172a; min-height: 100vh; display: flex; overflow-x: hidden; font-variant-numeric: tabular-nums; }
 
     /* --- SIDEBAR IZQUIERDO --- */
     .sidebar {
-      width: 220px;
+      width: 215px;
       background: linear-gradient(180deg, #5c0921 0%, #8a0f33 65%, #a6153f 100%);
       color: #ffffff;
       display: flex;
@@ -26,15 +26,15 @@
     }
 
     .brand-box {
-      padding: 16px 14px;
+      padding: 14px;
       display: flex;
       align-items: center;
       gap: 10px;
       border-bottom: 1px solid rgba(255, 255, 255, 0.14);
     }
     .brand-logo {
-      width: 38px;
-      height: 38px;
+      width: 36px;
+      height: 36px;
       border-radius: 50%;
       background: #ffffff;
       overflow: hidden;
@@ -47,14 +47,14 @@
       font-size: 12px;
     }
     .brand-logo img { width: 100%; height: 100%; object-fit: cover; display: block; }
-    .brand-title { font-size: 15px; font-weight: 900; letter-spacing: 0.2px; }
-    .brand-sub { font-size: 10.5px; opacity: 0.8; margin-top: 2px; }
+    .brand-title { font-size: 14.5px; font-weight: 900; letter-spacing: 0.2px; }
+    .brand-sub { font-size: 10px; opacity: 0.8; margin-top: 1px; }
 
     .nav-list {
-      padding: 12px 8px;
+      padding: 10px 8px;
       display: flex;
       flex-direction: column;
-      gap: 4px;
+      gap: 3px;
       overflow-y: auto;
       flex: 1;
     }
@@ -63,24 +63,24 @@
       border: none;
       background: transparent;
       color: rgba(255, 255, 255, 0.88);
-      padding: 9px 11px;
-      border-radius: 10px;
-      font-size: 12.5px;
+      padding: 8px 10px;
+      border-radius: 9px;
+      font-size: 12px;
       font-weight: 700;
       text-align: left;
       cursor: pointer;
       display: flex;
       align-items: center;
       justify-content: space-between;
-      transition: all 0.15s ease;
+      transition: all 0.14s ease;
     }
     .nav-item:hover { background: rgba(255, 255, 255, 0.12); color: #ffffff; }
-    .nav-item.active { background: #ffffff; color: #8a0f33; font-weight: 800; box-shadow: 0 4px 12px rgba(0, 0, 0, 0.16); }
+    .nav-item.active { background: #ffffff; color: #8a0f33; font-weight: 800; box-shadow: 0 2px 8px rgba(0, 0, 0, 0.14); }
 
     .nav-count {
       font-size: 10px;
       font-weight: 800;
-      padding: 2px 7px;
+      padding: 1px 6px;
       border-radius: 999px;
       background: rgba(255, 255, 255, 0.18);
       color: #ffffff;
@@ -88,9 +88,9 @@
     .nav-item.active .nav-count { background: #fce7ef; color: #8a0f33; }
 
     .sidebar-footer {
-      padding: 12px 14px;
+      padding: 10px 14px;
       border-top: 1px solid rgba(255, 255, 255, 0.14);
-      font-size: 11px;
+      font-size: 10.5px;
       opacity: 0.85;
     }
 
@@ -100,7 +100,7 @@
     .topbar {
       background: #ffffff;
       border-bottom: 1px solid #e2e8f0;
-      padding: 12px 18px;
+      padding: 10px 16px;
       display: flex;
       align-items: center;
       justify-content: space-between;
@@ -113,81 +113,82 @@
     .topbar-left { display: flex; align-items: center; gap: 10px; min-width: 0; }
     .menu-toggle {
       display: none;
-      width: 36px;
-      height: 36px;
-      border-radius: 10px;
+      width: 34px;
+      height: 34px;
+      border-radius: 8px;
       border: 1px solid #cbd5e1;
       background: #f8fafc;
-      font-size: 18px;
+      font-size: 17px;
       cursor: pointer;
     }
-    .page-title { font-size: 18px; font-weight: 900; color: #0f172a; }
-    .page-sub { font-size: 11.5px; color: #64748b; }
+    .page-title { font-size: 17px; font-weight: 900; color: #0f172a; }
+    .page-sub { font-size: 11px; color: #64748b; }
 
-    .topbar-actions { display: flex; align-items: center; gap: 8px; flex-wrap: wrap; }
+    .topbar-actions { display: flex; align-items: center; gap: 7px; flex-wrap: wrap; }
     .btn-primary {
       background: #c81d4e;
       color: #ffffff;
       border: none;
-      padding: 9px 14px;
-      border-radius: 10px;
-      font-size: 12.5px;
+      padding: 8px 12px;
+      border-radius: 8px;
+      font-size: 12px;
       font-weight: 800;
       cursor: pointer;
       white-space: nowrap;
-      transition: background 0.15s ease;
+      transition: background 0.14s ease;
     }
     .btn-primary:hover { background: #a61840; }
     .btn-secondary {
       background: #ffffff;
       color: #0f172a;
-      border: 1.5px solid #cbd5e1;
-      padding: 8px 12px;
-      border-radius: 10px;
-      font-size: 12px;
-      font-weight: 800;
+      border: 1px solid #cbd5e1;
+      padding: 7px 11px;
+      border-radius: 8px;
+      font-size: 11.5px;
+      font-weight: 700;
       cursor: pointer;
       white-space: nowrap;
     }
     .btn-secondary:hover { background: #f8fafc; }
 
-    .content { padding: 16px 18px 44px; max-width: 100%; }
+    .content { padding: 14px 16px 40px; max-width: 100%; }
 
-    /* --- SEPARACIÓN SEMANA / MES / GLOBAL --- */
+    /* --- BURBUJAS COMPACTAS SEMANA / MES / GLOBAL (ESTILO PLANILLA MODERNA) --- */
     .period-strip {
       display: grid;
-      grid-template-columns: repeat(auto-fit, minmax(195px, 1fr));
-      gap: 10px;
-      margin-bottom: 14px;
+      grid-template-columns: repeat(3, minmax(150px, 1fr));
+      gap: 8px;
+      margin-bottom: 10px;
     }
     .period-box {
       background: #ffffff;
-      border-radius: 14px;
-      padding: 12px 14px;
+      border-radius: 10px;
+      padding: 8px 11px;
       border: 1px solid #e2e8f0;
-      box-shadow: 0 3px 10px rgba(15, 23, 42, 0.03);
       cursor: pointer;
       text-align: left;
-      transition: all 0.15s ease;
+      transition: all 0.12s ease;
     }
+    .period-box:hover { border-color: #cbd5e1; background: #fcfcfd; }
     .period-box.selected {
       border-color: #c81d4e;
-      box-shadow: 0 6px 16px rgba(200, 29, 78, 0.12);
-      background: #fff9fb;
+      background: #fff8fa;
+      box-shadow: inset 0 0 0 1px #c81d4e;
     }
-    .period-tag { font-size: 10px; font-weight: 800; text-transform: uppercase; color: #c81d4e; letter-spacing: 0.4px; }
-    .period-main { font-size: 17px; font-weight: 900; color: #0f172a; margin-top: 3px; white-space: nowrap; }
-    .period-sub { font-size: 11px; color: #475569; margin-top: 2px; font-weight: 600; }
+    .period-tag { font-size: 9.5px; font-weight: 800; text-transform: uppercase; color: #64748b; letter-spacing: 0.3px; }
+    .period-box.selected .period-tag { color: #c81d4e; }
+    .period-main { font-size: 14px; font-weight: 900; color: #0f172a; margin-top: 2px; white-space: nowrap; }
+    .period-sub { font-size: 10px; color: #64748b; margin-top: 1px; font-weight: 600; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
 
     .dup-banner {
       display: none;
       background: #fef2f2;
-      border: 1.5px solid #fca5a5;
+      border: 1px solid #fca5a5;
       color: #991b1b;
-      border-radius: 14px;
-      padding: 11px 14px;
-      margin-bottom: 12px;
-      font-size: 12.5px;
+      border-radius: 10px;
+      padding: 9px 12px;
+      margin-bottom: 10px;
+      font-size: 12px;
       font-weight: 700;
       align-items: center;
       justify-content: space-between;
@@ -197,89 +198,87 @@
 
     /* --- VISTAS SPA --- */
     .view-section { display: none; }
-    .view-section.active { display: block; animation: fadeIn 0.18s ease; }
-    @keyframes fadeIn { from { opacity: 0; transform: translateY(4px); } to { opacity: 1; transform: translateY(0); } }
+    .view-section.active { display: block; animation: fadeIn 0.15s ease; }
+    @keyframes fadeIn { from { opacity: 0; transform: translateY(3px); } to { opacity: 1; transform: translateY(0); } }
 
-    /* --- TARJETAS KPI --- */
+    /* --- BURBUJAS KPI COMPACTAS ESTILO EXCEL --- */
     .kpi-grid {
       display: grid;
-      grid-template-columns: repeat(auto-fit, minmax(150px, 1fr));
-      gap: 10px;
-      margin-bottom: 14px;
+      grid-template-columns: repeat(auto-fit, minmax(135px, 1fr));
+      gap: 8px;
+      margin-bottom: 10px;
     }
     .kpi-card {
       background: #ffffff;
-      border-radius: 14px;
-      padding: 12px 14px;
+      border-radius: 10px;
+      padding: 8px 11px;
       border: 1px solid #e2e8f0;
-      box-shadow: 0 3px 10px rgba(15, 23, 42, 0.03);
       min-width: 0;
     }
-    .kpi-lbl { font-size: 10px; font-weight: 800; color: #64748b; text-transform: uppercase; letter-spacing: 0.35px; }
-    .kpi-val { font-size: 16.5px; font-weight: 900; color: #0f172a; margin-top: 5px; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+    .kpi-lbl { font-size: 9.5px; font-weight: 800; color: #64748b; text-transform: uppercase; letter-spacing: 0.3px; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+    .kpi-val { font-size: 13.5px; font-weight: 900; color: #0f172a; margin-top: 3px; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
     .kpi-val.green { color: #059669; }
     .kpi-val.red { color: #dc2626; }
     .kpi-val.amber { color: #d97706; }
     .kpi-val.binance { color: #b45309; }
-    .kpi-sub { font-size: 11px; color: #64748b; font-weight: 700; margin-top: 2px; }
+    .kpi-sub { font-size: 10px; color: #64748b; font-weight: 600; margin-top: 1px; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
 
     /* --- BARRA DE FILTROS --- */
     .toolbar {
       background: #ffffff;
-      border-radius: 14px;
-      padding: 10px 12px;
+      border-radius: 10px;
+      padding: 8px 10px;
       border: 1px solid #e2e8f0;
       display: flex;
-      gap: 8px;
+      gap: 7px;
       flex-wrap: wrap;
       align-items: center;
-      margin-bottom: 12px;
+      margin-bottom: 10px;
     }
     .search-input {
       flex: 1;
-      min-width: 180px;
-      padding: 8px 11px;
-      border-radius: 10px;
-      border: 1.5px solid #cbd5e1;
-      font-size: 12.5px;
+      min-width: 170px;
+      padding: 7px 10px;
+      border-radius: 8px;
+      border: 1px solid #cbd5e1;
+      font-size: 12px;
       font-weight: 600;
       outline: none;
     }
     .search-input:focus { border-color: #c81d4e; }
     .filter-select {
-      padding: 8px 10px;
-      border-radius: 10px;
-      border: 1.5px solid #cbd5e1;
-      font-size: 12px;
+      padding: 7px 9px;
+      border-radius: 8px;
+      border: 1px solid #cbd5e1;
+      font-size: 11.5px;
       font-weight: 700;
       background: #ffffff;
       color: #0f172a;
       outline: none;
     }
 
-    /* --- TABLA DE CONTROL --- */
+    /* --- TABLA DE CONTROL ESTILO PLANILLA --- */
     .table-card {
       background: #ffffff;
-      border-radius: 16px;
+      border-radius: 12px;
       border: 1px solid #e2e8f0;
-      box-shadow: 0 4px 14px rgba(15, 23, 42, 0.04);
       overflow: hidden;
     }
     .table-wrap { overflow-x: auto; width: 100%; }
-    table { width: 100%; border-collapse: collapse; min-width: 720px; font-size: 12px; }
+    table { width: 100%; border-collapse: collapse; min-width: 720px; font-size: 11.5px; }
     thead th {
       background: #1e293b;
       color: #ffffff;
       text-align: left;
-      padding: 9px 9px;
-      font-size: 10px;
+      padding: 8px 8px;
+      font-size: 9.5px;
       font-weight: 800;
-      letter-spacing: 0.35px;
+      letter-spacing: 0.3px;
       text-transform: uppercase;
       white-space: nowrap;
     }
     tbody td {
-      padding: 8px 9px;
+      padding: 7px 8px;
       border-bottom: 1px solid #eef2f6;
       color: #1e293b;
       font-weight: 600;
@@ -287,12 +286,12 @@
     }
     tbody tr:hover { background: #f8fafc; }
 
-    /* Colores distintivos por servicio / origen */
+    /* Colores distintivos por servicio / origen / canal */
     .tag-origin {
       display: inline-block;
-      padding: 3px 7px;
-      border-radius: 6px;
-      font-size: 10px;
+      padding: 2px 6px;
+      border-radius: 5px;
+      font-size: 9.5px;
       font-weight: 800;
       white-space: nowrap;
     }
@@ -301,25 +300,28 @@
     .tag-serv { background: #f3e8ff; color: #6b21a8; border: 1px solid #e9d5ff; }
     .tag-usdt {
       display: inline-block;
-      padding: 2px 6px;
-      border-radius: 6px;
-      font-size: 9.5px;
+      padding: 1px 6px;
+      border-radius: 5px;
+      font-size: 9px;
       font-weight: 800;
       background: #fef3c7;
       color: #92400e;
       border: 1px solid #fde68a;
-      margin-top: 3px;
+      margin-top: 2px;
       white-space: nowrap;
     }
     .tag-entrada { background: #dcfce7; color: #15803d; border: 1px solid #86efac; }
     .tag-salida { background: #fee2e2; color: #b91c1c; border: 1px solid #fca5a5; }
     .tag-wallet { background: #f1f5f9; color: #0f172a; border: 1px solid #cbd5e1; }
+    .tag-nequi { background: #fae8ff; color: #86198f; border: 1px solid #f5d0fe; }
+    .tag-bancolombia { background: #fef9c3; color: #854d0e; border: 1px solid #fef08a; }
+    .tag-efectivo { background: #ecfdf5; color: #065f46; border: 1px solid #a7f3d0; }
 
     .op-badge {
       display: inline-block;
-      padding: 2px 7px;
-      border-radius: 6px;
-      font-size: 11px;
+      padding: 2px 6px;
+      border-radius: 5px;
+      font-size: 10.5px;
       font-weight: 800;
       background: #f1f5f9;
       color: #0f172a;
@@ -334,9 +336,9 @@
     .pill {
       display: inline-flex;
       align-items: center;
-      padding: 3px 8px;
+      padding: 2px 7px;
       border-radius: 999px;
-      font-size: 10px;
+      font-size: 9.5px;
       font-weight: 800;
       cursor: pointer;
       border: none;
@@ -348,11 +350,11 @@
 
     .row-actions { display: flex; gap: 4px; flex-wrap: nowrap; }
     .icon-btn {
-      padding: 4px 7px;
-      border-radius: 7px;
+      padding: 3px 6px;
+      border-radius: 6px;
       border: 1px solid #cbd5e1;
       background: #ffffff;
-      font-size: 10.5px;
+      font-size: 10px;
       font-weight: 800;
       cursor: pointer;
       color: #0f172a;
@@ -364,79 +366,77 @@
     .client-list {
       display: flex;
       flex-direction: column;
-      gap: 8px;
-      margin-bottom: 16px;
+      gap: 6px;
+      margin-bottom: 14px;
     }
     .client-row-card {
       background: #ffffff;
-      border-radius: 14px;
-      padding: 12px 15px;
+      border-radius: 10px;
+      padding: 9px 13px;
       border: 1px solid #e2e8f0;
       display: flex;
       align-items: center;
       justify-content: space-between;
-      gap: 12px;
+      gap: 10px;
       flex-wrap: wrap;
       cursor: pointer;
-      transition: all 0.14s ease;
+      transition: all 0.12s ease;
     }
     .client-row-card:hover { border-color: #c81d4e; background: #fffafb; }
-    .client-row-card.selected { border-color: #c81d4e; background: #fff5f8; box-shadow: 0 4px 14px rgba(200, 29, 78, 0.1); }
-    .client-row-main { display: flex; flex-direction: column; gap: 2px; min-width: 180px; }
-    .client-row-name { font-size: 14px; font-weight: 900; color: #0f172a; }
-    .client-row-meta { font-size: 11.5px; color: #64748b; font-weight: 600; }
-    .client-row-stats { display: flex; align-items: center; gap: 12px; flex-wrap: wrap; font-size: 12px; font-weight: 800; }
+    .client-row-card.selected { border-color: #c81d4e; background: #fff5f8; box-shadow: inset 0 0 0 1px #c81d4e; }
+    .client-row-main { display: flex; flex-direction: column; gap: 1px; min-width: 170px; }
+    .client-row-name { font-size: 13px; font-weight: 900; color: #0f172a; }
+    .client-row-meta { font-size: 10.5px; color: #64748b; font-weight: 600; }
+    .client-row-stats { display: flex; align-items: center; gap: 10px; flex-wrap: wrap; font-size: 11px; font-weight: 800; }
 
     .client-detail-panel {
       display: none;
       background: #ffffff;
-      border-radius: 18px;
-      padding: 16px 18px;
-      border: 2px solid #c81d4e;
-      box-shadow: 0 8px 24px rgba(15, 23, 42, 0.08);
-      margin-bottom: 16px;
+      border-radius: 12px;
+      padding: 13px 15px;
+      border: 1.5px solid #c81d4e;
+      margin-bottom: 12px;
     }
-    .client-detail-panel.open { display: block; animation: fadeIn 0.16s ease; }
+    .client-detail-panel.open { display: block; animation: fadeIn 0.14s ease; }
     .client-detail-head {
       display: flex;
       align-items: center;
       justify-content: space-between;
       gap: 10px;
       flex-wrap: wrap;
-      padding-bottom: 12px;
+      padding-bottom: 9px;
       border-bottom: 1px solid #e2e8f0;
-      margin-bottom: 12px;
+      margin-bottom: 10px;
     }
     .client-mini-kpis {
       display: grid;
-      grid-template-columns: repeat(auto-fit, minmax(135px, 1fr));
-      gap: 8px;
-      margin-bottom: 12px;
+      grid-template-columns: repeat(auto-fit, minmax(120px, 1fr));
+      gap: 7px;
+      margin-bottom: 10px;
     }
     .client-mini-kpi {
       background: #f8fafc;
       border: 1px solid #e2e8f0;
-      border-radius: 12px;
-      padding: 10px 12px;
+      border-radius: 9px;
+      padding: 7px 10px;
     }
-    .client-mini-kpi span { display: block; font-size: 10px; font-weight: 800; color: #64748b; text-transform: uppercase; }
-    .client-mini-kpi strong { display: block; font-size: 15px; font-weight: 900; margin-top: 3px; color: #0f172a; }
+    .client-mini-kpi span { display: block; font-size: 9.5px; font-weight: 800; color: #64748b; text-transform: uppercase; }
+    .client-mini-kpi strong { display: block; font-size: 13px; font-weight: 900; margin-top: 2px; color: #0f172a; }
 
-    /* --- DIRECTORIO DE DEUDAS / ENTRADAS Y SALIDAS --- */
+    /* --- TARJETAS DE INGRESOS Y GASTOS --- */
     .cards-grid {
       display: grid;
-      grid-template-columns: repeat(auto-fill, minmax(250px, 1fr));
-      gap: 12px;
+      grid-template-columns: repeat(auto-fill, minmax(225px, 1fr));
+      gap: 8px;
     }
     .info-card {
       background: #ffffff;
-      border-radius: 16px;
-      padding: 14px;
+      border-radius: 10px;
+      padding: 10px 12px;
       border: 1px solid #e2e8f0;
-      box-shadow: 0 3px 10px rgba(15, 23, 42, 0.03);
     }
-    .info-card h3 { font-size: 14.5px; font-weight: 900; color: #0f172a; margin-bottom: 4px; }
-    .info-card p { font-size: 12px; color: #475569; margin-top: 3px; }
+    .info-card h3 { font-size: 13px; font-weight: 800; color: #0f172a; margin-bottom: 2px; }
+    .info-card p { font-size: 11px; color: #64748b; margin-top: 2px; }
 
     /* --- MODAL DE REGISTRO --- */
     .modal-overlay {
@@ -453,27 +453,27 @@
     .modal-overlay.open { display: flex; }
     .modal-box {
       width: 100%;
-      max-width: 480px;
+      max-width: 470px;
       background: #ffffff;
-      border-radius: 22px;
-      padding: 20px;
+      border-radius: 16px;
+      padding: 18px;
       box-shadow: 0 20px 45px rgba(15, 23, 42, 0.25);
       max-height: 92vh;
       overflow-y: auto;
     }
-    .modal-head { display: flex; justify-content: space-between; align-items: center; margin-bottom: 14px; }
-    .modal-head h2 { font-size: 17px; font-weight: 900; }
-    .close-btn { width: 30px; height: 30px; border-radius: 50%; border: none; background: #f1f5f9; font-size: 18px; font-weight: 800; cursor: pointer; }
+    .modal-head { display: flex; justify-content: space-between; align-items: center; margin-bottom: 12px; }
+    .modal-head h2 { font-size: 16px; font-weight: 900; }
+    .close-btn { width: 28px; height: 28px; border-radius: 50%; border: none; background: #f1f5f9; font-size: 17px; font-weight: 800; cursor: pointer; }
 
-    .form-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 10px; }
-    .form-group { margin-bottom: 11px; }
-    .form-group label { display: block; font-size: 11px; font-weight: 800; color: #334155; text-transform: uppercase; margin-bottom: 5px; }
+    .form-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 9px; }
+    .form-group { margin-bottom: 9px; }
+    .form-group label { display: block; font-size: 10px; font-weight: 800; color: #334155; text-transform: uppercase; margin-bottom: 4px; }
     .form-control {
       width: 100%;
-      padding: 9px 11px;
-      border-radius: 10px;
-      border: 1.5px solid #cbd5e1;
-      font-size: 13px;
+      padding: 8px 10px;
+      border-radius: 8px;
+      border: 1px solid #cbd5e1;
+      font-size: 12.5px;
       font-weight: 700;
       color: #0f172a;
       outline: none;
@@ -491,13 +491,13 @@
 
     .toast {
       position: fixed;
-      bottom: 22px;
-      right: 22px;
+      bottom: 20px;
+      right: 20px;
       background: #0f172a;
       color: #ffffff;
-      padding: 10px 16px;
-      border-radius: 12px;
-      font-size: 12.5px;
+      padding: 9px 14px;
+      border-radius: 10px;
+      font-size: 12px;
       font-weight: 700;
       opacity: 0;
       pointer-events: none;
@@ -515,6 +515,7 @@
       }
       .sidebar.open { transform: translateX(0); }
       .menu-toggle { display: inline-flex; align-items: center; justify-content: center; }
+      .period-strip { grid-template-columns: 1fr; }
       .form-grid { grid-template-columns: 1fr; }
     }
   </style>
@@ -565,7 +566,7 @@
         <span id="badge-cli" class="nav-count">0</span>
       </button>
       <button type="button" class="nav-item" data-view="deudas" onclick="switchView('deudas', this)">
-        <span>Deudas / Gastos</span>
+        <span>Ingresos y Gastos</span>
       </button>
       <button type="button" class="nav-item" data-view="resumen" onclick="switchView('resumen', this)">
         <span>Resumen Semanal</span>
@@ -605,19 +606,19 @@
       <!-- SEPARACIÓN SEMANA / MES / GLOBAL (EN TODAS LAS VISTAS) -->
       <div class="period-strip">
         <button type="button" id="box-week" class="period-box" onclick="setPeriod('WEEK')">
-          <div class="period-tag">Esta Semana (COP)</div>
+          <div class="period-tag">Esta Semana</div>
           <div id="val-week" class="period-main">$0 COP</div>
-          <div id="sub-week" class="period-sub">0 registros · Ganancia $0 COP</div>
+          <div id="sub-week" class="period-sub">0 reg · Ganancia $0 COP</div>
         </button>
         <button type="button" id="box-month" class="period-box" onclick="setPeriod('MONTH')">
-          <div class="period-tag">Este Mes (COP)</div>
+          <div class="period-tag">Este Mes</div>
           <div id="val-month" class="period-main">$0 COP</div>
-          <div id="sub-month" class="period-sub">0 registros · Ganancia $0 COP</div>
+          <div id="sub-month" class="period-sub">0 reg · Ganancia $0 COP</div>
         </button>
         <button type="button" id="box-all" class="period-box selected" onclick="setPeriod('ALL')">
-          <div class="period-tag">Total Global (COP)</div>
+          <div class="period-tag">Total Global</div>
           <div id="val-all" class="period-main">$0 COP</div>
-          <div id="sub-all" class="period-sub">0 registros · Ganancia $0 COP</div>
+          <div id="sub-all" class="period-sub">0 reg · Ganancia $0 COP</div>
         </button>
       </div>
 
@@ -625,15 +626,15 @@
       <section id="view-records" class="view-section active">
         <div class="kpi-grid">
           <div class="kpi-card">
-            <div class="kpi-lbl">Total Servicios</div>
+            <div class="kpi-lbl">Servicios</div>
             <div id="kpiCount" class="kpi-val">0</div>
           </div>
           <div class="kpi-card">
-            <div class="kpi-lbl">Total Cobrado (COP)</div>
+            <div class="kpi-lbl">Cobrado</div>
             <div id="kpiPaid" class="kpi-val green">$0 COP</div>
           </div>
           <div class="kpi-card">
-            <div class="kpi-lbl">Por Cobrar (COP)</div>
+            <div class="kpi-lbl">Por Cobrar</div>
             <div id="kpiUnpaid" class="kpi-val red">$0 COP</div>
           </div>
           <div class="kpi-card">
@@ -641,11 +642,11 @@
             <div id="kpiPending" class="kpi-val amber">0</div>
           </div>
           <div class="kpi-card">
-            <div class="kpi-lbl">Ganancia Neta (COP)</div>
+            <div class="kpi-lbl">Ganancia Neta</div>
             <div id="kpiProfit" class="kpi-val green">$0 COP</div>
           </div>
           <div class="kpi-card">
-            <div class="kpi-lbl">Pagos USDT Binance</div>
+            <div class="kpi-lbl">USDT Binance</div>
             <div id="kpiUsdtTotal" class="kpi-val binance">0.00 USDT</div>
           </div>
         </div>
@@ -669,9 +670,9 @@
             <option value="RECHAZADO">Rechazado</option>
           </select>
           <div style="display:flex;align-items:center;gap:5px;">
-            <label for="usdtRateInput" style="font-size:11.5px;font-weight:800;color:#92400e;">1 USDT =</label>
-            <input id="usdtRateInput" class="filter-select" type="number" min="1" step="10" value="4200" style="width:92px;" oninput="updateUsdtRate(this.value)" title="Tasa COP por 1 USDT" />
-            <span style="font-size:11px;font-weight:800;color:#64748b;">COP</span>
+            <label for="usdtRateInput" style="font-size:11px;font-weight:800;color:#92400e;">1 USDT =</label>
+            <input id="usdtRateInput" class="filter-select" type="number" min="1" step="10" value="4200" style="width:86px;" oninput="updateUsdtRate(this.value)" title="Tasa COP por 1 USDT" />
+            <span style="font-size:10.5px;font-weight:800;color:#64748b;">COP</span>
           </div>
         </div>
 
@@ -684,7 +685,7 @@
                   <th>Fecha</th>
                   <th>Cliente</th>
                   <th>Detalle / IMEI</th>
-                  <th>Operador / Proceso</th>
+                  <th>Operador / Medio</th>
                   <th>Estado</th>
                   <th>Costo</th>
                   <th>Venta</th>
@@ -709,12 +710,11 @@
           <input id="clientSearch" class="search-input" type="search" placeholder="Filtrar cliente por nombre o WhatsApp..." oninput="renderClients()" />
         </div>
 
-        <!-- CUADRO INFORMATIVO DEL CLIENTE SELECCIONADO -->
         <div id="clientDetailPanel" class="client-detail-panel">
           <div class="client-detail-head">
             <div>
-              <div id="detailClientName" style="font-size:17px;font-weight:900;color:#0f172a;">Cliente</div>
-              <div id="detailClientPhone" style="font-size:12px;color:#64748b;font-weight:600;">WhatsApp: -</div>
+              <div id="detailClientName" style="font-size:16px;font-weight:900;color:#0f172a;">Cliente</div>
+              <div id="detailClientPhone" style="font-size:11.5px;color:#64748b;font-weight:600;">WhatsApp: -</div>
             </div>
             <div style="display:flex;align-items:center;gap:8px;flex-wrap:wrap;">
               <select id="detailClientFilter" class="filter-select" onchange="renderSelectedClientDetail()">
@@ -737,7 +737,7 @@
               <strong id="cKpiSuccessCount" style="color:#059669;">0</strong>
             </div>
             <div class="client-mini-kpi">
-              <span>Pagados (COP)</span>
+              <span>Pagados</span>
               <strong id="cKpiPaidCop" style="color:#059669;">$0 COP</strong>
             </div>
             <div class="client-mini-kpi">
@@ -753,10 +753,10 @@
                   <tr>
                     <th>Servicio</th>
                     <th>Fecha</th>
-                    <th>Operador / Proceso</th>
+                    <th>Operador / Medio</th>
                     <th>Detalle</th>
                     <th>Estado</th>
-                    <th>Valor (COP)</th>
+                    <th>Valor</th>
                     <th>Pago</th>
                     <th>Eliminar</th>
                   </tr>
@@ -767,54 +767,58 @@
           </div>
         </div>
 
-        <!-- LISTA DE CLIENTES -->
         <div id="clientsList" class="client-list"></div>
       </section>
 
-      <!-- VISTA 3: ENTRADAS Y SALIDAS DE DINERO + DISPONIBLE GLOBAL POR CANAL -->
+      <!-- VISTA 3: INGRESOS Y GASTOS (DINERO RECIBIDO, GASTADO Y DISPONIBLE POR CANAL) -->
       <section id="view-deudas" class="view-section">
         <div class="kpi-grid">
           <div class="kpi-card">
-            <div class="kpi-lbl">Disponible Efectivo (Global)</div>
+            <div class="kpi-lbl">Efectivo</div>
             <div id="balEfectivo" class="kpi-val green">$0 COP</div>
-            <div id="subEfectivo" class="kpi-sub">Pagos + Entradas - Salidas</div>
+            <div id="subEfectivo" class="kpi-sub">Recibido: $0</div>
           </div>
           <div class="kpi-card">
-            <div class="kpi-lbl">Disponible Nequi (Global)</div>
+            <div class="kpi-lbl">Nequi</div>
             <div id="balNequi" class="kpi-val green">$0 COP</div>
-            <div id="subNequi" class="kpi-sub">Pagos + Entradas - Salidas</div>
+            <div id="subNequi" class="kpi-sub">Recibido: $0</div>
           </div>
           <div class="kpi-card">
-            <div class="kpi-lbl">Disponible Bancolombia (Global)</div>
+            <div class="kpi-lbl">Bancolombia</div>
             <div id="balBancolombia" class="kpi-val green">$0 COP</div>
-            <div id="subBancolombia" class="kpi-sub">Pagos + Entradas - Salidas</div>
+            <div id="subBancolombia" class="kpi-sub">Recibido: $0</div>
           </div>
           <div class="kpi-card">
-            <div class="kpi-lbl">Disponible USDT / Cripto</div>
+            <div class="kpi-lbl">USDT / Cripto</div>
             <div id="balUsdtCripto" class="kpi-val binance">0.00 USDT</div>
-            <div id="balUsdtCopEq" class="kpi-sub">$0 COP aprox.</div>
+            <div id="balUsdtCopEq" class="kpi-sub">$0 COP</div>
           </div>
           <div class="kpi-card">
-            <div class="kpi-lbl">Entradas vs Salidas (Período)</div>
-            <div id="kpiExpensesTotal" class="kpi-val red">$0 COP</div>
-            <div id="subInOutPeriod" class="kpi-sub">Entradas $0 · Salidas $0</div>
+            <div class="kpi-lbl">Total Recibido (Global)</div>
+            <div id="kpiTotalReceived" class="kpi-val green">$0 COP</div>
+            <div class="kpi-sub">Pagos + Entradas</div>
+          </div>
+          <div class="kpi-card">
+            <div class="kpi-lbl">Total Gastado (Global)</div>
+            <div id="kpiTotalSpent" class="kpi-val red">$0 COP</div>
+            <div id="subInOutPeriod" class="kpi-sub">Salidas / Gastos</div>
           </div>
         </div>
 
         <div class="toolbar">
           <select id="expTipo" class="filter-select">
-            <option value="SALIDA">Salida / Gasto (-)</option>
-            <option value="ENTRADA">Entrada de Dinero (+)</option>
+            <option value="SALIDA">Dinero Gastado / Salida (-)</option>
+            <option value="ENTRADA">Dinero Recibido / Entrada (+)</option>
           </select>
           <select id="expCanal" class="filter-select">
             <option value="EFECTIVO">Efectivo</option>
             <option value="NEQUI">Nequi</option>
             <option value="BANCOLOMBIA">Bancolombia</option>
-            <option value="USDT_CRIPTO">USDT / Criptomonedas</option>
+            <option value="USDT_CRIPTO">USDT / Binance</option>
           </select>
-          <input id="expDesc" class="search-input" type="text" placeholder="Concepto (Ej. Pago cliente, recarga Nequi, compra USDT, gasto...)" />
-          <input id="expAmount" class="filter-select" type="number" min="0" step="100" placeholder="Valor COP $" style="width:140px;" />
-          <button type="button" class="btn-primary" onclick="addExpense()">Guardar Movimiento</button>
+          <input id="expDesc" class="search-input" type="text" placeholder="Concepto (Ej. Pago cliente, compra crédito, comida, transferencia...)" />
+          <input id="expAmount" class="filter-select" type="number" min="0" step="100" placeholder="Valor COP $" style="width:130px;" />
+          <button type="button" class="btn-primary" onclick="addExpense()">Guardar</button>
         </div>
 
         <div id="expensesGrid" class="cards-grid"></div>
@@ -824,16 +828,16 @@
       <section id="view-resumen" class="view-section">
         <div class="kpi-grid">
           <div class="kpi-card">
-            <div class="kpi-lbl">Ventas + Entradas (COP)</div>
-            <div id="sumSales" class="kpi-val">$0 COP</div>
+            <div class="kpi-lbl">Recibido (Ventas + Entradas)</div>
+            <div id="sumSales" class="kpi-val green">$0 COP</div>
           </div>
           <div class="kpi-card">
-            <div class="kpi-lbl">Costos + Salidas (COP)</div>
-            <div id="sumCosts" class="kpi-val">$0 COP</div>
+            <div class="kpi-lbl">Gastado (Costos + Salidas)</div>
+            <div id="sumCosts" class="kpi-val red">$0 COP</div>
           </div>
           <div class="kpi-card">
-            <div class="kpi-lbl">Ganancia Neta (COP)</div>
-            <div id="sumNet" class="kpi-val green">$0 COP</div>
+            <div class="kpi-lbl">Balance Neto</div>
+            <div id="sumNet" class="kpi-val">$0 COP</div>
           </div>
           <div class="kpi-card">
             <div class="kpi-lbl">Total USDT Binance</div>
@@ -843,7 +847,7 @@
         <div class="info-card">
           <h3>Respaldo y Portabilidad de Datos</h3>
           <p style="margin-top:6px;">Todos los registros se manejan en pesos colombianos (COP) con soporte para pagos en USDT por Binance, sincronizados con Cloudflare D1.</p>
-          <div style="display:flex;gap:8px;margin-top:12px;flex-wrap:wrap;">
+          <div style="display:flex;gap:8px;margin-top:10px;flex-wrap:wrap;">
             <button type="button" class="btn-secondary" onclick="exportJson()">Descargar Respaldo JSON</button>
             <label class="btn-secondary" style="cursor:pointer;">
               Cargar Respaldo JSON
@@ -892,9 +896,20 @@
           </div>
         </div>
 
-        <div class="form-group">
-          <label for="fOperador">Operador / Proceso</label>
-          <input id="fOperador" class="form-control" type="text" placeholder="Ej. Claro, Tigo, FRP Xiaomi, MDM Honor..." required />
+        <div class="form-grid">
+          <div class="form-group">
+            <label for="fOperador">Operador / Proceso</label>
+            <input id="fOperador" class="form-control" type="text" placeholder="Ej. Claro, Tigo, FRP..." required />
+          </div>
+          <div class="form-group">
+            <label for="fCanalPago">Banco / Medio de Pago</label>
+            <select id="fCanalPago" class="form-control" onchange="onModalCanalChange()">
+              <option value="EFECTIVO">Efectivo</option>
+              <option value="NEQUI">Nequi</option>
+              <option value="BANCOLOMBIA">Bancolombia</option>
+              <option value="USDT_CRIPTO">USDT / Binance</option>
+            </select>
+          </div>
         </div>
 
         <div class="form-group">
@@ -915,14 +930,14 @@
 
         <div class="form-grid">
           <div class="form-group">
-            <label for="fMoneda">Moneda / Canal de Pago</label>
+            <label for="fMoneda">Moneda</label>
             <select id="fMoneda" class="form-control" onchange="syncUsdtFromCop()">
-              <option value="COP">COP (Pesos Colombianos)</option>
+              <option value="COP">COP (Pesos)</option>
               <option value="USDT">USDT (Binance)</option>
             </select>
           </div>
           <div class="form-group">
-            <label for="fUsdt">Monto USDT (Binance)</label>
+            <label for="fUsdt">Monto USDT</label>
             <input id="fUsdt" class="form-control" type="number" min="0" step="0.01" value="0.00" placeholder="0.00" />
           </div>
         </div>
@@ -967,14 +982,14 @@
     let syncTimer = null;
 
     const VIEW_META = {
-      consolidado: { title: 'Consolidado Global', sub: 'Todos los movimientos en COP · Semana, Mes y Total Global' },
+      consolidado: { title: 'Consolidado Global', sub: 'Movimientos en COP · Semana, Mes y Total Global' },
       noregistros: { title: 'No Registros', sub: 'Control de registros IMEI por operador (COP)' },
       esim: { title: 'E-SIM', sub: 'Activaciones y ventas de líneas E-SIM (COP)' },
       servicios: { title: 'Servicios Técnicos', sub: 'FRP, MDM, Unlock, seriales y licencias (COP)' },
       binance: { title: 'USDT / Binance', sub: 'Movimientos pagados o calculados en USDT Binance' },
       enproceso: { title: 'En Proceso', sub: 'Trámites pendientes por finalizar' },
       clientes: { title: 'Directorio de Clientes', sub: 'Lista de clientes, historial global, exitosos, pagados y deudas' },
-      deudas: { title: 'Entradas, Salidas y Saldos', sub: 'Control de dinero de la empresa: pagos de clientes, entradas, salidas y disponible global' },
+      deudas: { title: 'Ingresos y Gastos', sub: 'Dinero recibido, gastado y disponible en Efectivo, Nequi, Bancolombia y USDT' },
       resumen: { title: 'Resumen Semanal', sub: 'Totales en COP y USDT por semana, mes y global' }
     };
 
@@ -1025,6 +1040,16 @@
       const usdtInput = document.getElementById('fUsdt');
       if (moneda === 'USDT' && usdtRate > 0) {
         usdtInput.value = (venta / usdtRate).toFixed(2);
+      }
+    }
+
+    function onModalCanalChange() {
+      const canal = document.getElementById('fCanalPago').value;
+      if (canal === 'USDT_CRIPTO') {
+        document.getElementById('fMoneda').value = 'USDT';
+        syncUsdtFromCop();
+      } else {
+        document.getElementById('fMoneda').value = 'COP';
       }
     }
 
@@ -1162,6 +1187,20 @@
       return '';
     }
 
+    function canalLabel(canal) {
+      if (canal === 'NEQUI') return 'Nequi';
+      if (canal === 'BANCOLOMBIA') return 'Bancolombia';
+      if (canal === 'USDT_CRIPTO') return 'USDT / Binance';
+      return 'Efectivo';
+    }
+
+    function canalBadgeClass(canal) {
+      if (canal === 'NEQUI') return 'tag-nequi';
+      if (canal === 'BANCOLOMBIA') return 'tag-bancolombia';
+      if (canal === 'USDT_CRIPTO') return 'tag-usdt';
+      return 'tag-efectivo';
+    }
+
     function getCategoryRecords() {
       return records.filter(r => {
         if (currentView === 'noregistros') return r.origen === 'NO REGISTRO';
@@ -1186,7 +1225,7 @@
         const sales = subList.reduce((s, r) => s + Number(r.venta || 0), 0);
         const profit = subList.reduce((s, r) => s + (Number(r.venta || 0) - Number(r.costo || 0)), 0);
         document.getElementById(p.valId).textContent = cop(sales);
-        document.getElementById(p.subId).textContent = `${subList.length} registros · Ganancia ${cop(profit)}`;
+        document.getElementById(p.subId).textContent = `${subList.length} reg · Ganancia ${cop(profit)}`;
       });
     }
 
@@ -1234,26 +1273,26 @@
 
       const tbody = document.getElementById('recordsTbody');
       if (!rows.length) {
-        tbody.innerHTML = '<tr><td colspan="12" style="text-align:center;padding:24px;color:#64748b;">No hay registros en este período o vista.</td></tr>';
+        tbody.innerHTML = '<tr><td colspan="12" style="text-align:center;padding:22px;color:#64748b;">No hay registros en este período o vista.</td></tr>';
         return;
       }
 
       tbody.innerHTML = rows.map(r => {
         const gain = Number(r.venta || 0) - Number(r.costo || 0);
         const uVal = getRecordUsdt(r);
-        const isUsdt = r.moneda === 'USDT' || uVal > 0;
+        const canal = detectRecordWallet(r);
         const stClass = r.estado === 'EXITOSO' ? 'pill-exitoso' : (r.estado === 'RECHAZADO' ? 'pill-rechazado' : 'pill-proceso');
         const payClass = r.pagado === 'PAGADO' ? 'pill-pagado' : 'pill-nopagado';
         return `
           <tr>
-            <td>
-              <span class="tag-origin ${origenBadgeClass(r.origen)}">${esc(r.origen)}</span>
-              ${isUsdt ? `<br><span class="tag-usdt">USDT</span>` : ''}
-            </td>
+            <td><span class="tag-origin ${origenBadgeClass(r.origen)}">${esc(r.origen)}</span></td>
             <td class="num-nowrap">${esc(r.fecha)}</td>
-            <td><strong>${esc(r.cliente)}</strong>${r.telefono ? `<br><span style="font-size:10.5px;color:#64748b;">${esc(r.telefono)}</span>` : ''}</td>
-            <td style="max-width:170px;word-break:break-word;">${esc(r.detalle || '-')}</td>
-            <td><span class="op-badge ${operadorBadgeClass(r.operador)}">${esc(r.operador)}</span></td>
+            <td><strong>${esc(r.cliente)}</strong>${r.telefono ? `<br><span style="font-size:10px;color:#64748b;">${esc(r.telefono)}</span>` : ''}</td>
+            <td style="max-width:165px;word-break:break-word;">${esc(r.detalle || '-')}</td>
+            <td class="num-nowrap">
+              <span class="op-badge ${operadorBadgeClass(r.operador)}">${esc(r.operador)}</span>
+              <br><span class="tag-origin ${canalBadgeClass(canal)}" style="margin-top:2px;">${canalLabel(canal)}</span>
+            </td>
             <td><button type="button" class="pill ${stClass}" onclick="cycleStatus('${r.id}')" title="Clic para cambiar estado">${esc(r.estado)}</button></td>
             <td class="num-nowrap">${cop(r.costo)}</td>
             <td class="num-nowrap"><strong>${cop(r.venta)}</strong></td>
@@ -1279,6 +1318,7 @@
       document.getElementById('fCliente').value = '';
       document.getElementById('fTelefono').value = '';
       document.getElementById('fOperador').value = '';
+      document.getElementById('fCanalPago').value = currentView === 'binance' ? 'USDT_CRIPTO' : 'EFECTIVO';
       document.getElementById('fDetalle').value = '';
       document.getElementById('fCosto').value = '0';
       document.getElementById('fVenta').value = '15000';
@@ -1301,6 +1341,11 @@
     async function saveRecord(e) {
       e.preventDefault();
       const id = document.getElementById('editId').value;
+      const canal = document.getElementById('fCanalPago').value;
+      const baseDetalle = document.getElementById('fDetalle').value.trim();
+      const detalleLimpio = baseDetalle.replace(/\s*·?\s*\[?(EFECTIVO|NEQUI|BANCOLOMBIA|USDT_CRIPTO)\]?\s*/gi, '').trim();
+      const detalleFinal = detalleLimpio ? `${detalleLimpio} · [${canal}]` : `[${canal}]`;
+
       const payload = {
         id: id || ('ZG-' + Date.now()),
         origen: document.getElementById('fOrigen').value,
@@ -1308,10 +1353,10 @@
         cliente: document.getElementById('fCliente').value.trim(),
         telefono: document.getElementById('fTelefono').value.trim(),
         operador: document.getElementById('fOperador').value.trim(),
-        detalle: document.getElementById('fDetalle').value.trim(),
+        detalle: detalleFinal,
         costo: Number(document.getElementById('fCosto').value) || 0,
         venta: Number(document.getElementById('fVenta').value) || 0,
-        moneda: document.getElementById('fMoneda').value,
+        moneda: canal === 'USDT_CRIPTO' ? 'USDT' : document.getElementById('fMoneda').value,
         usdt: Number(document.getElementById('fUsdt').value) || 0,
         estado: document.getElementById('fEstado').value,
         pagado: document.getElementById('fPagado').value
@@ -1380,7 +1425,8 @@
       document.getElementById('fCliente').value = r.cliente;
       document.getElementById('fTelefono').value = r.telefono || '';
       document.getElementById('fOperador').value = r.operador;
-      document.getElementById('fDetalle').value = r.detalle || '';
+      document.getElementById('fCanalPago').value = detectRecordWallet(r);
+      document.getElementById('fDetalle').value = String(r.detalle || '').replace(/\s*·?\s*\[?(EFECTIVO|NEQUI|BANCOLOMBIA|USDT_CRIPTO)\]?\s*/gi, '').trim();
       document.getElementById('fCosto').value = r.costo;
       document.getElementById('fVenta').value = r.venta;
       document.getElementById('fMoneda').value = r.moneda || (Number(r.usdt) > 0 ? 'USDT' : 'COP');
@@ -1427,7 +1473,7 @@
       records = records.map(r => r.id === id ? { ...r, pagado: nextPay } : r);
       saveLocalCache();
       renderCurrent();
-      toast(nextPay === 'PAGADO' ? 'Pago sumado a caja/cuentas' : 'Pago retirado de caja/cuentas');
+      toast(nextPay === 'PAGADO' ? 'Pagado: reflejado en Ingresos y Gastos' : 'Marcado No Pagado');
       try {
         await fetch(WORKER_URL, {
           method: 'POST',
@@ -1546,11 +1592,15 @@
       tbody.innerHTML = filteredItems.map(r => {
         const stClass = r.estado === 'EXITOSO' ? 'pill-exitoso' : (r.estado === 'RECHAZADO' ? 'pill-rechazado' : 'pill-proceso');
         const payClass = r.pagado === 'PAGADO' ? 'pill-pagado' : 'pill-nopagado';
+        const canal = detectRecordWallet(r);
         return `
           <tr>
             <td><span class="tag-origin ${origenBadgeClass(r.origen)}">${esc(r.origen)}</span></td>
             <td class="num-nowrap">${esc(r.fecha)}</td>
-            <td><span class="op-badge ${operadorBadgeClass(r.operador)}">${esc(r.operador)}</span></td>
+            <td class="num-nowrap">
+              <span class="op-badge ${operadorBadgeClass(r.operador)}">${esc(r.operador)}</span>
+              <br><span class="tag-origin ${canalBadgeClass(canal)}" style="margin-top:2px;">${canalLabel(canal)}</span>
+            </td>
             <td>${esc(r.detalle || '-')}</td>
             <td><span class="pill ${stClass}">${esc(r.estado)}</span></td>
             <td class="num-nowrap"><strong>${cop(r.venta)}</strong></td>
@@ -1604,8 +1654,8 @@
       const uVal = getRecordUsdt(r);
       if (r.moneda === 'USDT' || uVal > 0) return 'USDT_CRIPTO';
       const txt = `${r.operador || ''} ${r.detalle || ''}`.toUpperCase();
-      if (txt.includes('NEQUI')) return 'NEQUI';
-      if (txt.includes('BANCOLOMBIA') || txt.includes('BANCO')) return 'BANCOLOMBIA';
+      if (txt.includes('[NEQUI]') || txt.includes('NEQUI')) return 'NEQUI';
+      if (txt.includes('[BANCOLOMBIA]') || txt.includes('BANCOLOMBIA') || txt.includes('BANCO')) return 'BANCOLOMBIA';
       return 'EFECTIVO';
     }
 
@@ -1631,23 +1681,31 @@
     function computeGlobalBalances() {
       const balances = { EFECTIVO: 0, NEQUI: 0, BANCOLOMBIA: 0, USDT_CRIPTO: 0 };
       const clientPaidByWallet = { EFECTIVO: 0, NEQUI: 0, BANCOLOMBIA: 0, USDT_CRIPTO: 0 };
+      let totalReceived = 0;
+      let totalSpent = 0;
 
       records.filter(r => r.pagado === 'PAGADO').forEach(r => {
         const venta = Number(r.venta || 0);
         const wallet = detectRecordWallet(r);
         balances[wallet] += venta;
         clientPaidByWallet[wallet] += venta;
+        totalReceived += venta;
       });
 
       expenses.forEach(e => {
         const canal = parseCanal(e.descripcion);
         const tipo = parseTipo(e.descripcion, e.monto);
         const val = Math.abs(Number(e.monto || 0));
-        if (tipo === 'ENTRADA') balances[canal] += val;
-        else balances[canal] -= val;
+        if (tipo === 'ENTRADA') {
+          balances[canal] += val;
+          totalReceived += val;
+        } else {
+          balances[canal] -= val;
+          totalSpent += val;
+        }
       });
 
-      return { balances, clientPaidByWallet };
+      return { balances, clientPaidByWallet, totalReceived, totalSpent };
     }
 
     async function addExpense() {
@@ -1680,7 +1738,7 @@
       document.getElementById('expAmount').value = '';
       saveLocalCache();
       renderExpenses();
-      toast(tipo === 'ENTRADA' ? 'Entrada guardada en ' + canal : 'Salida guardada en ' + canal);
+      toast(tipo === 'ENTRADA' ? 'Entrada guardada en ' + canalLabel(canal) : 'Salida guardada en ' + canalLabel(canal));
     }
 
     async function deleteExpense(id) {
@@ -1698,46 +1756,42 @@
     }
 
     function renderExpenses() {
-      const { balances, clientPaidByWallet } = computeGlobalBalances();
+      const { balances, clientPaidByWallet, totalReceived, totalSpent } = computeGlobalBalances();
       document.getElementById('balEfectivo').textContent = cop(balances.EFECTIVO);
-      document.getElementById('subEfectivo').textContent = `Cobros clientes: ${cop(clientPaidByWallet.EFECTIVO)}`;
+      document.getElementById('subEfectivo').textContent = `Recibido: ${cop(clientPaidByWallet.EFECTIVO)}`;
 
       document.getElementById('balNequi').textContent = cop(balances.NEQUI);
-      document.getElementById('subNequi').textContent = `Cobros clientes: ${cop(clientPaidByWallet.NEQUI)}`;
+      document.getElementById('subNequi').textContent = `Recibido: ${cop(clientPaidByWallet.NEQUI)}`;
 
       document.getElementById('balBancolombia').textContent = cop(balances.BANCOLOMBIA);
-      document.getElementById('subBancolombia').textContent = `Cobros clientes: ${cop(clientPaidByWallet.BANCOLOMBIA)}`;
+      document.getElementById('subBancolombia').textContent = `Recibido: ${cop(clientPaidByWallet.BANCOLOMBIA)}`;
 
       const usdtUnits = usdtRate > 0 ? (balances.USDT_CRIPTO / usdtRate) : 0;
       document.getElementById('balUsdtCripto').textContent = usdtFmt(usdtUnits);
       document.getElementById('balUsdtCopEq').textContent = `${cop(balances.USDT_CRIPTO)} · Cobros: ${cop(clientPaidByWallet.USDT_CRIPTO)}`;
 
+      document.getElementById('kpiTotalReceived').textContent = cop(totalReceived);
+      document.getElementById('kpiTotalSpent').textContent = cop(totalSpent);
+
       const paidRecordsInPeriod = records.filter(r => r.pagado === 'PAGADO' && matchesPeriod(r.fecha, currentPeriod));
-      const cobrosPeriodo = paidRecordsInPeriod.reduce((s, r) => s + Number(r.venta || 0), 0);
-
       const list = expenses.filter(e => matchesPeriod(e.fecha, currentPeriod));
-      const entradasManuales = list.filter(e => parseTipo(e.descripcion, e.monto) === 'ENTRADA').reduce((s, e) => s + Math.abs(Number(e.monto || 0)), 0);
-      const salidasManuales = list.filter(e => parseTipo(e.descripcion, e.monto) !== 'ENTRADA').reduce((s, e) => s + Math.abs(Number(e.monto || 0)), 0);
-      const neto = (cobrosPeriodo + entradasManuales) - salidasManuales;
-
-      const netEl = document.getElementById('kpiExpensesTotal');
-      netEl.textContent = cop(neto);
-      netEl.className = 'kpi-val ' + (neto >= 0 ? 'green' : 'red');
-      document.getElementById('subInOutPeriod').textContent = `Entradas ${cop(cobrosPeriodo + entradasManuales)} · Salidas ${cop(salidasManuales)}`;
 
       const grid = document.getElementById('expensesGrid');
-      const paidCards = paidRecordsInPeriod.map(r => `
-        <div class="info-card">
-          <div style="display:flex;gap:6px;flex-wrap:wrap;margin-bottom:6px;">
-            <span class="tag-origin tag-entrada">PAGO CLIENTE (+)</span>
-            <span class="tag-origin tag-wallet">${detectRecordWallet(r).replace('_', ' / ')}</span>
+      const paidCards = paidRecordsInPeriod.map(r => {
+        const canal = detectRecordWallet(r);
+        return `
+          <div class="info-card">
+            <div style="display:flex;gap:5px;flex-wrap:wrap;margin-bottom:5px;">
+              <span class="tag-origin tag-entrada">RECIBIDO (+)</span>
+              <span class="tag-origin ${canalBadgeClass(canal)}">${canalLabel(canal)}</span>
+            </div>
+            <h3>${esc(r.cliente)} · ${esc(r.operador)}</h3>
+            <p>Fecha: ${esc(r.fecha)} · ${esc(r.origen)}</p>
+            <p style="color:#059669;font-weight:900;font-size:13.5px;margin-top:4px;">+${cop(r.venta)}</p>
+            <button type="button" class="icon-btn del" style="margin-top:7px;" onclick="deleteRecord('${r.id}')">Eliminar</button>
           </div>
-          <h3>${esc(r.cliente)} · ${esc(r.operador)}</h3>
-          <p>Fecha: ${esc(r.fecha)} · ${esc(r.origen)}</p>
-          <p style="color:#059669;font-weight:900;font-size:15px;">+${cop(r.venta)}</p>
-          <button type="button" class="icon-btn del" style="margin-top:8px;" onclick="deleteRecord('${r.id}')">Eliminar</button>
-        </div>
-      `);
+        `;
+      });
 
       const manualCards = list.map(e => {
         const tipo = parseTipo(e.descripcion, e.monto);
@@ -1746,23 +1800,23 @@
         const val = Math.abs(Number(e.monto || 0));
         return `
           <div class="info-card">
-            <div style="display:flex;gap:6px;flex-wrap:wrap;margin-bottom:6px;">
-              <span class="tag-origin ${tipo === 'ENTRADA' ? 'tag-entrada' : 'tag-salida'}">${tipo === 'ENTRADA' ? 'ENTRADA (+)' : 'SALIDA (-)'}</span>
-              <span class="tag-origin tag-wallet">${canal.replace('_', ' / ')}</span>
+            <div style="display:flex;gap:5px;flex-wrap:wrap;margin-bottom:5px;">
+              <span class="tag-origin ${tipo === 'ENTRADA' ? 'tag-entrada' : 'tag-salida'}">${tipo === 'ENTRADA' ? 'RECIBIDO (+)' : 'GASTADO (-)'}</span>
+              <span class="tag-origin ${canalBadgeClass(canal)}">${canalLabel(canal)}</span>
             </div>
             <h3>${esc(concepto)}</h3>
             <p>Fecha: ${esc(e.fecha)}</p>
-            <p style="color:${tipo === 'ENTRADA' ? '#059669' : '#dc2626'};font-weight:900;font-size:15px;">
+            <p style="color:${tipo === 'ENTRADA' ? '#059669' : '#dc2626'};font-weight:900;font-size:13.5px;margin-top:4px;">
               ${tipo === 'ENTRADA' ? '+' : '-'}${cop(val)}
             </p>
-            <button type="button" class="icon-btn del" style="margin-top:8px;" onclick="deleteExpense('${e.id}')">Eliminar</button>
+            <button type="button" class="icon-btn del" style="margin-top:7px;" onclick="deleteExpense('${e.id}')">Eliminar</button>
           </div>
         `;
       });
 
       const allCards = [...paidCards, ...manualCards];
       if (!allCards.length) {
-        grid.innerHTML = '<div class="info-card"><p>Sin entradas o salidas en este período.</p></div>';
+        grid.innerHTML = '<div class="info-card"><p>Sin movimientos de dinero en este período.</p></div>';
         return;
       }
       grid.innerHTML = allCards.join('');
@@ -1771,15 +1825,15 @@
     function renderSummary() {
       const rList = records.filter(r => matchesPeriod(r.fecha, currentPeriod));
       const eList = expenses.filter(e => matchesPeriod(e.fecha, currentPeriod));
-      const sales = rList.reduce((s, r) => s + Number(r.venta || 0), 0);
+      const paidSales = rList.filter(r => r.pagado === 'PAGADO').reduce((s, r) => s + Number(r.venta || 0), 0);
       const costs = rList.reduce((s, r) => s + Number(r.costo || 0), 0);
       const entradas = eList.filter(e => parseTipo(e.descripcion, e.monto) === 'ENTRADA').reduce((s, e) => s + Math.abs(Number(e.monto || 0)), 0);
       const salidas = eList.filter(e => parseTipo(e.descripcion, e.monto) !== 'ENTRADA').reduce((s, e) => s + Math.abs(Number(e.monto || 0)), 0);
       const usdtSum = rList.reduce((s, r) => s + getRecordUsdt(r), 0);
 
-      document.getElementById('sumSales').textContent = cop(sales + entradas);
+      document.getElementById('sumSales').textContent = cop(paidSales + entradas);
       document.getElementById('sumCosts').textContent = cop(costs + salidas);
-      document.getElementById('sumNet').textContent = cop((sales + entradas) - (costs + salidas));
+      document.getElementById('sumNet').textContent = cop((paidSales + entradas) - (costs + salidas));
       document.getElementById('sumUsdt').textContent = usdtFmt(usdtSum);
     }
 
