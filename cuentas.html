@@ -11,7 +11,7 @@
 
     /* --- SIDEBAR IZQUIERDO --- */
     .sidebar {
-      width: 215px;
+      width: 210px;
       background: linear-gradient(180deg, #5c0921 0%, #8a0f33 65%, #a6153f 100%);
       color: #ffffff;
       display: flex;
@@ -22,19 +22,19 @@
       top: 0;
       height: 100vh;
       z-index: 40;
-      transition: transform 0.25s ease;
+      transition: transform 0.22s ease;
     }
 
     .brand-box {
-      padding: 14px;
+      padding: 13px 14px;
       display: flex;
       align-items: center;
       gap: 10px;
       border-bottom: 1px solid rgba(255, 255, 255, 0.14);
     }
     .brand-logo {
-      width: 36px;
-      height: 36px;
+      width: 34px;
+      height: 34px;
       border-radius: 50%;
       background: #ffffff;
       overflow: hidden;
@@ -44,11 +44,11 @@
       justify-content: center;
       font-weight: 900;
       color: #8a0f33;
-      font-size: 12px;
+      font-size: 11px;
     }
     .brand-logo img { width: 100%; height: 100%; object-fit: cover; display: block; }
-    .brand-title { font-size: 14.5px; font-weight: 900; letter-spacing: 0.2px; }
-    .brand-sub { font-size: 10px; opacity: 0.8; margin-top: 1px; }
+    .brand-title { font-size: 14px; font-weight: 900; letter-spacing: 0.2px; }
+    .brand-sub { font-size: 10px; opacity: 0.82; margin-top: 1px; }
 
     .nav-list {
       padding: 10px 8px;
@@ -64,7 +64,7 @@
       background: transparent;
       color: rgba(255, 255, 255, 0.88);
       padding: 8px 10px;
-      border-radius: 9px;
+      border-radius: 8px;
       font-size: 12px;
       font-weight: 700;
       text-align: left;
@@ -72,10 +72,10 @@
       display: flex;
       align-items: center;
       justify-content: space-between;
-      transition: all 0.14s ease;
+      transition: all 0.12s ease;
     }
     .nav-item:hover { background: rgba(255, 255, 255, 0.12); color: #ffffff; }
-    .nav-item.active { background: #ffffff; color: #8a0f33; font-weight: 800; box-shadow: 0 2px 8px rgba(0, 0, 0, 0.14); }
+    .nav-item.active { background: #ffffff; color: #8a0f33; font-weight: 800; }
 
     .nav-count {
       font-size: 10px;
@@ -99,8 +99,8 @@
 
     .topbar {
       background: #ffffff;
-      border-bottom: 1px solid #e2e8f0;
-      padding: 10px 16px;
+      border-bottom: 1px solid #cbd5e1;
+      padding: 9px 15px;
       display: flex;
       align-items: center;
       justify-content: space-between;
@@ -115,69 +115,68 @@
       display: none;
       width: 34px;
       height: 34px;
-      border-radius: 8px;
+      border-radius: 7px;
       border: 1px solid #cbd5e1;
       background: #f8fafc;
       font-size: 17px;
       cursor: pointer;
     }
-    .page-title { font-size: 17px; font-weight: 900; color: #0f172a; }
+    .page-title { font-size: 16px; font-weight: 900; color: #0f172a; }
     .page-sub { font-size: 11px; color: #64748b; }
 
-    .topbar-actions { display: flex; align-items: center; gap: 7px; flex-wrap: wrap; }
+    .topbar-actions { display: flex; align-items: center; gap: 6px; flex-wrap: wrap; }
     .btn-primary {
       background: #c81d4e;
       color: #ffffff;
       border: none;
-      padding: 8px 12px;
-      border-radius: 8px;
-      font-size: 12px;
+      padding: 7px 12px;
+      border-radius: 7px;
+      font-size: 11.5px;
       font-weight: 800;
       cursor: pointer;
       white-space: nowrap;
-      transition: background 0.14s ease;
     }
     .btn-primary:hover { background: #a61840; }
     .btn-secondary {
       background: #ffffff;
       color: #0f172a;
       border: 1px solid #cbd5e1;
-      padding: 7px 11px;
-      border-radius: 8px;
+      padding: 7px 10px;
+      border-radius: 7px;
       font-size: 11.5px;
       font-weight: 700;
       cursor: pointer;
       white-space: nowrap;
     }
-    .btn-secondary:hover { background: #f8fafc; }
+    .btn-secondary:hover { background: #f1f5f9; }
 
-    .content { padding: 14px 16px 40px; max-width: 100%; }
+    .content { padding: 12px 15px 38px; max-width: 100%; }
 
-    /* --- BURBUJAS COMPACTAS SEMANA / MES / GLOBAL (ESTILO PLANILLA MODERNA) --- */
+    /* --- CELDAS DE PERÍODO ESTILO PLANILLA --- */
     .period-strip {
       display: grid;
-      grid-template-columns: repeat(3, minmax(150px, 1fr));
-      gap: 8px;
-      margin-bottom: 10px;
+      grid-template-columns: repeat(3, minmax(140px, 1fr));
+      gap: 6px;
+      margin-bottom: 8px;
     }
     .period-box {
       background: #ffffff;
-      border-radius: 10px;
-      padding: 8px 11px;
-      border: 1px solid #e2e8f0;
+      border-radius: 6px;
+      padding: 7px 10px;
+      border: 1px solid #cbd5e1;
       cursor: pointer;
       text-align: left;
       transition: all 0.12s ease;
     }
-    .period-box:hover { border-color: #cbd5e1; background: #fcfcfd; }
+    .period-box:hover { background: #f8fafc; }
     .period-box.selected {
-      border-color: #c81d4e;
-      background: #fff8fa;
-      box-shadow: inset 0 0 0 1px #c81d4e;
+      border-color: #1e3a8a;
+      background: #eff6ff;
+      box-shadow: inset 0 0 0 1px #1e3a8a;
     }
-    .period-tag { font-size: 9.5px; font-weight: 800; text-transform: uppercase; color: #64748b; letter-spacing: 0.3px; }
-    .period-box.selected .period-tag { color: #c81d4e; }
-    .period-main { font-size: 14px; font-weight: 900; color: #0f172a; margin-top: 2px; white-space: nowrap; }
+    .period-tag { font-size: 9px; font-weight: 800; text-transform: uppercase; color: #475569; letter-spacing: 0.35px; }
+    .period-box.selected .period-tag { color: #1e3a8a; }
+    .period-main { font-size: 13px; font-weight: 900; color: #0f172a; margin-top: 2px; white-space: nowrap; }
     .period-sub { font-size: 10px; color: #64748b; margin-top: 1px; font-weight: 600; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
 
     .dup-banner {
@@ -185,10 +184,10 @@
       background: #fef2f2;
       border: 1px solid #fca5a5;
       color: #991b1b;
-      border-radius: 10px;
-      padding: 9px 12px;
-      margin-bottom: 10px;
-      font-size: 12px;
+      border-radius: 7px;
+      padding: 8px 11px;
+      margin-bottom: 8px;
+      font-size: 11.5px;
       font-weight: 700;
       align-items: center;
       justify-content: space-between;
@@ -198,129 +197,133 @@
 
     /* --- VISTAS SPA --- */
     .view-section { display: none; }
-    .view-section.active { display: block; animation: fadeIn 0.15s ease; }
-    @keyframes fadeIn { from { opacity: 0; transform: translateY(3px); } to { opacity: 1; transform: translateY(0); } }
+    .view-section.active { display: block; animation: fadeIn 0.14s ease; }
+    @keyframes fadeIn { from { opacity: 0; transform: translateY(2px); } to { opacity: 1; transform: translateY(0); } }
 
-    /* --- BURBUJAS KPI COMPACTAS ESTILO EXCEL --- */
+    /* --- CELDAS KPI COMPACTAS ESTILO HOJA DE CÁLCULO --- */
     .kpi-grid {
       display: grid;
-      grid-template-columns: repeat(auto-fit, minmax(135px, 1fr));
-      gap: 8px;
-      margin-bottom: 10px;
+      grid-template-columns: repeat(auto-fit, minmax(128px, 1fr));
+      gap: 6px;
+      margin-bottom: 8px;
     }
     .kpi-card {
       background: #ffffff;
-      border-radius: 10px;
-      padding: 8px 11px;
-      border: 1px solid #e2e8f0;
+      border-radius: 6px;
+      padding: 7px 9px;
+      border: 1px solid #cbd5e1;
       min-width: 0;
     }
-    .kpi-lbl { font-size: 9.5px; font-weight: 800; color: #64748b; text-transform: uppercase; letter-spacing: 0.3px; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
-    .kpi-val { font-size: 13.5px; font-weight: 900; color: #0f172a; margin-top: 3px; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
-    .kpi-val.green { color: #059669; }
-    .kpi-val.red { color: #dc2626; }
-    .kpi-val.amber { color: #d97706; }
-    .kpi-val.binance { color: #b45309; }
-    .kpi-sub { font-size: 10px; color: #64748b; font-weight: 600; margin-top: 1px; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+    .kpi-card.alert-cell { background: #fef2f2; border-color: #fca5a5; }
+    .kpi-lbl { font-size: 9px; font-weight: 800; color: #475569; text-transform: uppercase; letter-spacing: 0.3px; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+    .kpi-val { font-size: 13px; font-weight: 900; color: #0f172a; margin-top: 2px; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+    .kpi-val.green { color: #15803d; }
+    .kpi-val.red { color: #b91c1c; }
+    .kpi-val.amber { color: #b45309; }
+    .kpi-val.binance { color: #92400e; }
+    .kpi-sub { font-size: 9.5px; color: #64748b; font-weight: 600; margin-top: 1px; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
 
     /* --- BARRA DE FILTROS --- */
     .toolbar {
       background: #ffffff;
-      border-radius: 10px;
-      padding: 8px 10px;
-      border: 1px solid #e2e8f0;
+      border-radius: 6px;
+      padding: 7px 9px;
+      border: 1px solid #cbd5e1;
       display: flex;
-      gap: 7px;
+      gap: 6px;
       flex-wrap: wrap;
       align-items: center;
-      margin-bottom: 10px;
+      margin-bottom: 8px;
     }
     .search-input {
       flex: 1;
-      min-width: 170px;
-      padding: 7px 10px;
-      border-radius: 8px;
+      min-width: 165px;
+      padding: 6px 9px;
+      border-radius: 6px;
       border: 1px solid #cbd5e1;
-      font-size: 12px;
+      font-size: 11.5px;
       font-weight: 600;
       outline: none;
     }
-    .search-input:focus { border-color: #c81d4e; }
+    .search-input:focus { border-color: #1e3a8a; }
     .filter-select {
-      padding: 7px 9px;
-      border-radius: 8px;
+      padding: 6px 8px;
+      border-radius: 6px;
       border: 1px solid #cbd5e1;
-      font-size: 11.5px;
+      font-size: 11px;
       font-weight: 700;
       background: #ffffff;
       color: #0f172a;
       outline: none;
     }
 
-    /* --- TABLA DE CONTROL ESTILO PLANILLA --- */
+    /* --- TABLAS ESTILO PLANILLA / EXCEL --- */
     .table-card {
       background: #ffffff;
-      border-radius: 12px;
-      border: 1px solid #e2e8f0;
+      border-radius: 6px;
+      border: 1px solid #cbd5e1;
       overflow: hidden;
     }
     .table-wrap { overflow-x: auto; width: 100%; }
-    table { width: 100%; border-collapse: collapse; min-width: 720px; font-size: 11.5px; }
+    table { width: 100%; border-collapse: collapse; min-width: 680px; font-size: 11.5px; }
     thead th {
-      background: #1e293b;
+      background: #1e3a5f;
       color: #ffffff;
       text-align: left;
-      padding: 8px 8px;
+      padding: 7px 8px;
       font-size: 9.5px;
       font-weight: 800;
-      letter-spacing: 0.3px;
+      letter-spacing: 0.35px;
       text-transform: uppercase;
       white-space: nowrap;
+      border-right: 1px solid rgba(255, 255, 255, 0.14);
     }
+    thead th:last-child { border-right: none; }
     tbody td {
-      padding: 7px 8px;
-      border-bottom: 1px solid #eef2f6;
-      color: #1e293b;
+      padding: 6px 8px;
+      border-bottom: 1px solid #e2e8f0;
+      border-right: 1px solid #f1f5f9;
+      color: #0f172a;
       font-weight: 600;
       vertical-align: middle;
     }
+    tbody td:last-child { border-right: none; }
     tbody tr:hover { background: #f8fafc; }
+    tbody tr.selected-row { background: #eff6ff; }
+    .cell-debt { background: #fee2e2; color: #b91c1c; font-weight: 800; }
 
-    /* Colores distintivos por servicio / origen / canal */
+    /* Etiquetas compactas por servicio / canal */
     .tag-origin {
       display: inline-block;
       padding: 2px 6px;
-      border-radius: 5px;
+      border-radius: 4px;
       font-size: 9.5px;
       font-weight: 800;
       white-space: nowrap;
     }
-    .tag-esim { background: #e0e7ff; color: #3730a3; border: 1px solid #c7d2fe; }
-    .tag-noreg { background: #ffe4e6; color: #9f1239; border: 1px solid #fecdd3; }
-    .tag-serv { background: #f3e8ff; color: #6b21a8; border: 1px solid #e9d5ff; }
+    .tag-esim { background: #e0e7ff; color: #3730a3; }
+    .tag-noreg { background: #ffe4e6; color: #9f1239; }
+    .tag-serv { background: #f3e8ff; color: #6b21a8; }
     .tag-usdt {
       display: inline-block;
-      padding: 1px 6px;
-      border-radius: 5px;
+      padding: 1px 5px;
+      border-radius: 4px;
       font-size: 9px;
       font-weight: 800;
       background: #fef3c7;
       color: #92400e;
-      border: 1px solid #fde68a;
-      margin-top: 2px;
       white-space: nowrap;
     }
-    .tag-entrada { background: #dcfce7; color: #15803d; border: 1px solid #86efac; }
-    .tag-salida { background: #fee2e2; color: #b91c1c; border: 1px solid #fca5a5; }
-    .tag-wallet { background: #f1f5f9; color: #0f172a; border: 1px solid #cbd5e1; }
-    .tag-nequi { background: #fae8ff; color: #86198f; border: 1px solid #f5d0fe; }
-    .tag-bancolombia { background: #fef9c3; color: #854d0e; border: 1px solid #fef08a; }
-    .tag-efectivo { background: #ecfdf5; color: #065f46; border: 1px solid #a7f3d0; }
+    .tag-entrada { background: #dcfce7; color: #15803d; }
+    .tag-salida { background: #fee2e2; color: #b91c1c; }
+    .tag-nequi { background: #fae8ff; color: #86198f; }
+    .tag-bancolombia { background: #fef9c3; color: #854d0e; }
+    .tag-efectivo { background: #ecfdf5; color: #065f46; }
 
     .op-badge {
       display: inline-block;
       padding: 2px 6px;
-      border-radius: 5px;
+      border-radius: 4px;
       font-size: 10.5px;
       font-weight: 800;
       background: #f1f5f9;
@@ -337,21 +340,21 @@
       display: inline-flex;
       align-items: center;
       padding: 2px 7px;
-      border-radius: 999px;
+      border-radius: 4px;
       font-size: 9.5px;
       font-weight: 800;
       cursor: pointer;
       border: none;
       white-space: nowrap;
     }
-    .pill-exitoso, .pill-pagado { background: #dcfce7; color: #15803d; }
+    .pill-exitoso, .pill-pagado, .pill-aldia { background: #dcfce7; color: #15803d; }
     .pill-proceso { background: #fef3c7; color: #b45309; }
-    .pill-rechazado, .pill-nopagado { background: #fee2e2; color: #b91c1c; }
+    .pill-rechazado, .pill-nopagado, .pill-consaldo { background: #fee2e2; color: #b91c1c; }
 
     .row-actions { display: flex; gap: 4px; flex-wrap: nowrap; }
     .icon-btn {
       padding: 3px 6px;
-      border-radius: 6px;
+      border-radius: 4px;
       border: 1px solid #cbd5e1;
       background: #ffffff;
       font-size: 10px;
@@ -360,125 +363,112 @@
       color: #0f172a;
       white-space: nowrap;
     }
-    .icon-btn.del { border-color: #fecaca; background: #fef2f2; color: #dc2626; }
+    .icon-btn:hover { background: #f1f5f9; }
+    .icon-btn.del { border-color: #fca5a5; background: #fef2f2; color: #dc2626; }
 
-    /* --- CLIENTES EN LISTA + CUADRO INFORMATIVO --- */
-    .client-list {
-      display: flex;
-      flex-direction: column;
-      gap: 6px;
-      margin-bottom: 14px;
-    }
-    .client-row-card {
-      background: #ffffff;
-      border-radius: 10px;
-      padding: 9px 13px;
-      border: 1px solid #e2e8f0;
-      display: flex;
-      align-items: center;
-      justify-content: space-between;
-      gap: 10px;
-      flex-wrap: wrap;
-      cursor: pointer;
-      transition: all 0.12s ease;
-    }
-    .client-row-card:hover { border-color: #c81d4e; background: #fffafb; }
-    .client-row-card.selected { border-color: #c81d4e; background: #fff5f8; box-shadow: inset 0 0 0 1px #c81d4e; }
-    .client-row-main { display: flex; flex-direction: column; gap: 1px; min-width: 170px; }
-    .client-row-name { font-size: 13px; font-weight: 900; color: #0f172a; }
-    .client-row-meta { font-size: 10.5px; color: #64748b; font-weight: 600; }
-    .client-row-stats { display: flex; align-items: center; gap: 10px; flex-wrap: wrap; font-size: 11px; font-weight: 800; }
-
-    .client-detail-panel {
-      display: none;
-      background: #ffffff;
-      border-radius: 12px;
-      padding: 13px 15px;
-      border: 1.5px solid #c81d4e;
-      margin-bottom: 12px;
-    }
-    .client-detail-panel.open { display: block; animation: fadeIn 0.14s ease; }
-    .client-detail-head {
-      display: flex;
-      align-items: center;
-      justify-content: space-between;
-      gap: 10px;
-      flex-wrap: wrap;
-      padding-bottom: 9px;
-      border-bottom: 1px solid #e2e8f0;
-      margin-bottom: 10px;
-    }
-    .client-mini-kpis {
+    /* --- VISTA DIVIDIDA DE CLIENTES + AUDITORÍA (ESTILO PLANILLA) --- */
+    .split-grid {
       display: grid;
-      grid-template-columns: repeat(auto-fit, minmax(120px, 1fr));
-      gap: 7px;
-      margin-bottom: 10px;
+      grid-template-columns: minmax(340px, 1.15fr) minmax(320px, 1fr);
+      gap: 10px;
+      align-items: start;
     }
-    .client-mini-kpi {
-      background: #f8fafc;
-      border: 1px solid #e2e8f0;
-      border-radius: 9px;
+    .audit-box {
+      background: #ffffff;
+      border: 1px solid #cbd5e1;
+      border-radius: 6px;
+      overflow: hidden;
+    }
+    .audit-header {
+      background: #1e3a5f;
+      color: #ffffff;
       padding: 7px 10px;
+      font-size: 10px;
+      font-weight: 800;
+      text-transform: uppercase;
+      letter-spacing: 0.35px;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 8px;
     }
-    .client-mini-kpi span { display: block; font-size: 9.5px; font-weight: 800; color: #64748b; text-transform: uppercase; }
-    .client-mini-kpi strong { display: block; font-size: 13px; font-weight: 900; margin-top: 2px; color: #0f172a; }
+    .audit-top-bar {
+      display: grid;
+      grid-template-columns: 1fr repeat(4, auto);
+      gap: 6px;
+      padding: 8px;
+      background: #f8fafc;
+      border-bottom: 1px solid #cbd5e1;
+      align-items: center;
+    }
+    .audit-stat-cell {
+      background: #ffffff;
+      border: 1px solid #cbd5e1;
+      border-radius: 5px;
+      padding: 4px 8px;
+      text-align: center;
+      min-width: 68px;
+    }
+    .audit-stat-cell span { display: block; font-size: 8.5px; font-weight: 800; color: #64748b; text-transform: uppercase; }
+    .audit-stat-cell strong { display: block; font-size: 11.5px; font-weight: 900; color: #0f172a; margin-top: 1px; }
 
-    /* --- TARJETAS DE INGRESOS Y GASTOS --- */
+    /* --- TARJETAS COMPACTAS DE INGRESOS Y GASTOS --- */
     .cards-grid {
       display: grid;
-      grid-template-columns: repeat(auto-fill, minmax(225px, 1fr));
-      gap: 8px;
+      grid-template-columns: repeat(auto-fill, minmax(215px, 1fr));
+      gap: 6px;
+      margin-top: 8px;
     }
     .info-card {
       background: #ffffff;
-      border-radius: 10px;
-      padding: 10px 12px;
-      border: 1px solid #e2e8f0;
+      border-radius: 6px;
+      padding: 8px 10px;
+      border: 1px solid #cbd5e1;
     }
-    .info-card h3 { font-size: 13px; font-weight: 800; color: #0f172a; margin-bottom: 2px; }
-    .info-card p { font-size: 11px; color: #64748b; margin-top: 2px; }
+    .info-card h3 { font-size: 12px; font-weight: 800; color: #0f172a; margin-bottom: 2px; }
+    .info-card p { font-size: 10.5px; color: #64748b; margin-top: 1px; }
 
     /* --- MODAL DE REGISTRO --- */
     .modal-overlay {
       position: fixed;
       inset: 0;
-      background: rgba(15, 23, 42, 0.55);
-      backdrop-filter: blur(3px);
+      background: rgba(15, 23, 42, 0.5);
       display: none;
       align-items: center;
       justify-content: center;
-      padding: 16px;
+      padding: 14px;
       z-index: 100;
     }
     .modal-overlay.open { display: flex; }
     .modal-box {
       width: 100%;
-      max-width: 470px;
+      max-width: 460px;
       background: #ffffff;
-      border-radius: 16px;
-      padding: 18px;
-      box-shadow: 0 20px 45px rgba(15, 23, 42, 0.25);
+      border-radius: 10px;
+      padding: 16px;
+      border: 1px solid #cbd5e1;
+      box-shadow: 0 18px 40px rgba(15, 23, 42, 0.22);
       max-height: 92vh;
       overflow-y: auto;
     }
-    .modal-head { display: flex; justify-content: space-between; align-items: center; margin-bottom: 12px; }
-    .modal-head h2 { font-size: 16px; font-weight: 900; }
-    .close-btn { width: 28px; height: 28px; border-radius: 50%; border: none; background: #f1f5f9; font-size: 17px; font-weight: 800; cursor: pointer; }
+    .modal-head { display: flex; justify-content: space-between; align-items: center; margin-bottom: 10px; padding-bottom: 8px; border-bottom: 1px solid #e2e8f0; }
+    .modal-head h2 { font-size: 15px; font-weight: 900; }
+    .close-btn { width: 24px; height: 24px; border-radius: 5px; border: 1px solid #cbd5e1; background: #f8fafc; font-size: 15px; font-weight: 800; cursor: pointer; line-height: 1; }
 
-    .form-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 9px; }
-    .form-group { margin-bottom: 9px; }
-    .form-group label { display: block; font-size: 10px; font-weight: 800; color: #334155; text-transform: uppercase; margin-bottom: 4px; }
+    .form-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 8px; }
+    .form-group { margin-bottom: 8px; }
+    .form-group label { display: block; font-size: 9.5px; font-weight: 800; color: #475569; text-transform: uppercase; margin-bottom: 3px; }
     .form-control {
       width: 100%;
-      padding: 8px 10px;
-      border-radius: 8px;
+      padding: 7px 9px;
+      border-radius: 6px;
       border: 1px solid #cbd5e1;
-      font-size: 12.5px;
+      font-size: 12px;
       font-weight: 700;
       color: #0f172a;
       outline: none;
     }
-    .form-control:focus { border-color: #c81d4e; }
+    .form-control:focus { border-color: #1e3a8a; }
 
     .backdrop {
       display: none;
@@ -491,20 +481,25 @@
 
     .toast {
       position: fixed;
-      bottom: 20px;
-      right: 20px;
+      bottom: 18px;
+      right: 18px;
       background: #0f172a;
       color: #ffffff;
-      padding: 9px 14px;
-      border-radius: 10px;
-      font-size: 12px;
+      padding: 8px 13px;
+      border-radius: 7px;
+      font-size: 11.5px;
       font-weight: 700;
       opacity: 0;
       pointer-events: none;
-      transition: opacity 0.2s ease;
+      transition: opacity 0.18s ease;
       z-index: 200;
     }
     .toast.show { opacity: 1; }
+
+    @media (max-width: 1050px) {
+      .split-grid { grid-template-columns: 1fr; }
+      .audit-top-bar { grid-template-columns: 1fr 1fr; }
+    }
 
     @media (max-width: 900px) {
       .sidebar {
@@ -532,7 +527,7 @@
       </div>
       <div>
         <div class="brand-title">ZONA GSM</div>
-        <div class="brand-sub">Cuentas en COP · USDT</div>
+        <div class="brand-sub">Control · COP & USDT</div>
       </div>
     </div>
 
@@ -574,7 +569,7 @@
     </nav>
 
     <div class="sidebar-footer">
-      Valores base en COP · D1 Sincronizado
+      Base COP · D1 Sincronizado
     </div>
   </aside>
 
@@ -603,7 +598,7 @@
         <button type="button" class="icon-btn" onclick="hideDupBanner()">Cerrar</button>
       </div>
 
-      <!-- SEPARACIÓN SEMANA / MES / GLOBAL (EN TODAS LAS VISTAS) -->
+      <!-- CELDAS DE PERÍODO ESTILO PLANILLA -->
       <div class="period-strip">
         <button type="button" id="box-week" class="period-box" onclick="setPeriod('WEEK')">
           <div class="period-tag">Esta Semana</div>
@@ -630,11 +625,11 @@
             <div id="kpiCount" class="kpi-val">0</div>
           </div>
           <div class="kpi-card">
-            <div class="kpi-lbl">Cobrado</div>
+            <div class="kpi-lbl">Total Cobrado</div>
             <div id="kpiPaid" class="kpi-val green">$0 COP</div>
           </div>
           <div class="kpi-card">
-            <div class="kpi-lbl">Por Cobrar</div>
+            <div class="kpi-lbl">Total por Cobrar</div>
             <div id="kpiUnpaid" class="kpi-val red">$0 COP</div>
           </div>
           <div class="kpi-card">
@@ -669,9 +664,9 @@
             <option value="EXITOSO">Exitoso</option>
             <option value="RECHAZADO">Rechazado</option>
           </select>
-          <div style="display:flex;align-items:center;gap:5px;">
-            <label for="usdtRateInput" style="font-size:11px;font-weight:800;color:#92400e;">1 USDT =</label>
-            <input id="usdtRateInput" class="filter-select" type="number" min="1" step="10" value="4200" style="width:86px;" oninput="updateUsdtRate(this.value)" title="Tasa COP por 1 USDT" />
+          <div style="display:flex;align-items:center;gap:4px;">
+            <label for="usdtRateInput" style="font-size:10.5px;font-weight:800;color:#92400e;">1 USDT =</label>
+            <input id="usdtRateInput" class="filter-select" type="number" min="1" step="10" value="4200" style="width:82px;" oninput="updateUsdtRate(this.value)" title="Tasa COP por 1 USDT" />
             <span style="font-size:10.5px;font-weight:800;color:#64748b;">COP</span>
           </div>
         </div>
@@ -701,73 +696,121 @@
         </div>
       </section>
 
-      <!-- VISTA 2: CLIENTES EN LISTA + CUADRO INFORMATIVO -->
+      <!-- VISTA 2: CLIENTES EN PLANILLA DIVIDIDA + AUDITORÍA -->
       <section id="view-clientes" class="view-section">
-        <div class="toolbar">
-          <select id="clientDropdown" class="filter-select" style="min-width:220px;" onchange="onClientDropdownChange(this.value)">
-            <option value="">-- Seleccionar cliente en lista --</option>
-          </select>
-          <input id="clientSearch" class="search-input" type="search" placeholder="Filtrar cliente por nombre o WhatsApp..." oninput="renderClients()" />
+        <div class="kpi-grid">
+          <div class="kpi-card">
+            <div class="kpi-lbl">Total Clientes</div>
+            <div id="cliKpiCount" class="kpi-val">0</div>
+          </div>
+          <div class="kpi-card">
+            <div class="kpi-lbl">Facturación</div>
+            <div id="cliKpiFact" class="kpi-val">$0 COP</div>
+          </div>
+          <div class="kpi-card">
+            <div class="kpi-lbl">Total Cobrado</div>
+            <div id="cliKpiPaid" class="kpi-val green">$0 COP</div>
+          </div>
+          <div id="cliDebtCard" class="kpi-card alert-cell">
+            <div class="kpi-lbl">Total por Cobrar</div>
+            <div id="cliKpiDebt" class="kpi-val red">$0 COP</div>
+          </div>
+          <div class="kpi-card">
+            <div class="kpi-lbl">% Recaudado</div>
+            <div id="cliKpiPct" class="kpi-val">0.0%</div>
+          </div>
+          <div class="kpi-card">
+            <div class="kpi-lbl">Con Saldo Pendiente</div>
+            <div id="cliKpiWithDebt" class="kpi-val red">0</div>
+          </div>
         </div>
 
-        <div id="clientDetailPanel" class="client-detail-panel">
-          <div class="client-detail-head">
-            <div>
-              <div id="detailClientName" style="font-size:16px;font-weight:900;color:#0f172a;">Cliente</div>
-              <div id="detailClientPhone" style="font-size:11.5px;color:#64748b;font-weight:600;">WhatsApp: -</div>
-            </div>
-            <div style="display:flex;align-items:center;gap:8px;flex-wrap:wrap;">
-              <select id="detailClientFilter" class="filter-select" onchange="renderSelectedClientDetail()">
-                <option value="ALL">Ver: Todos sus servicios (Global)</option>
-                <option value="NO_PAGADO">Ver: Solo No Pagados (Lo que debe)</option>
-                <option value="PAGADO">Ver: Solo Pagados</option>
-                <option value="EXITOSO">Ver: Solo Exitosos</option>
-              </select>
-              <button type="button" class="close-btn" onclick="closeClientDetail()" title="Cerrar cuadro">&times;</button>
-            </div>
-          </div>
+        <div class="toolbar">
+          <span style="font-size:10.5px;font-weight:800;color:#475569;">FILTRAR POR ESTADO:</span>
+          <select id="clientStateFilter" class="filter-select" onchange="renderClients()">
+            <option value="ALL">TODOS</option>
+            <option value="CON_SALDO">CON SALDO</option>
+            <option value="AL_DIA">AL DÍA</option>
+          </select>
+          <input id="clientSearch" class="search-input" type="search" placeholder="Buscar cliente o WhatsApp..." oninput="renderClients()" />
+        </div>
 
-          <div class="client-mini-kpis">
-            <div class="client-mini-kpi">
-              <span>Servicios Global</span>
-              <strong id="cKpiTotalCount">0</strong>
-            </div>
-            <div class="client-mini-kpi">
-              <span>Exitosos</span>
-              <strong id="cKpiSuccessCount" style="color:#059669;">0</strong>
-            </div>
-            <div class="client-mini-kpi">
-              <span>Pagados</span>
-              <strong id="cKpiPaidCop" style="color:#059669;">$0 COP</strong>
-            </div>
-            <div class="client-mini-kpi">
-              <span>No Pagados / Debe</span>
-              <strong id="cKpiUnpaidCop" style="color:#dc2626;">$0 COP</strong>
-            </div>
-          </div>
-
+        <div class="split-grid">
+          <!-- IZQUIERDA: LISTA PRINCIPAL EN TABLA -->
           <div class="table-card">
             <div class="table-wrap">
-              <table style="min-width:650px;">
+              <table style="min-width:540px;">
                 <thead>
                   <tr>
-                    <th>Servicio</th>
+                    <th>Cliente</th>
+                    <th>Servicios</th>
+                    <th>Facturado</th>
+                    <th>Cobrado</th>
+                    <th>Saldo Pendiente</th>
+                    <th>% Cobrado</th>
+                    <th>Estado</th>
+                    <th>Acción</th>
+                  </tr>
+                </thead>
+                <tbody id="clientsTbody"></tbody>
+              </table>
+            </div>
+          </div>
+
+          <!-- DERECHA: CUADRO DE AUDITORÍA DEL CLIENTE -->
+          <div class="audit-box">
+            <div class="audit-header">
+              <span>🔍 Seleccionar cliente para auditar</span>
+              <select id="detailClientFilter" class="filter-select" style="padding:3px 6px;font-size:10px;" onchange="renderSelectedClientDetail()">
+                <option value="ALL">Todos</option>
+                <option value="NO_PAGADO">No Pagados (Debe)</option>
+                <option value="PAGADO">Pagados</option>
+                <option value="EXITOSO">Exitosos</option>
+              </select>
+            </div>
+
+            <div class="audit-top-bar">
+              <select id="clientDropdown" class="filter-select" style="width:100%;" onchange="onClientDropdownChange(this.value)">
+                <option value="">-- Seleccionar cliente --</option>
+              </select>
+              <div class="audit-stat-cell">
+                <span>Servicios</span>
+                <strong id="cKpiTotalCount">0</strong>
+              </div>
+              <div class="audit-stat-cell">
+                <span>Facturado</span>
+                <strong id="cKpiFactCop">$0</strong>
+              </div>
+              <div class="audit-stat-cell">
+                <span>Cobrado</span>
+                <strong id="cKpiPaidCop" style="color:#15803d;">$0</strong>
+              </div>
+              <div class="audit-stat-cell">
+                <span>Debe</span>
+                <strong id="cKpiUnpaidCop" style="color:#b91c1c;">$0</strong>
+              </div>
+            </div>
+
+            <div class="table-wrap">
+              <table style="min-width:480px;">
+                <thead>
+                  <tr>
                     <th>Fecha</th>
-                    <th>Operador / Medio</th>
-                    <th>Detalle</th>
+                    <th>Origen</th>
+                    <th>Operador / Proceso</th>
                     <th>Estado</th>
                     <th>Valor</th>
                     <th>Pago</th>
-                    <th>Eliminar</th>
+                    <th>Quitar</th>
                   </tr>
                 </thead>
-                <tbody id="clientServicesTbody"></tbody>
+                <tbody id="clientServicesTbody">
+                  <tr><td colspan="7" style="text-align:center;padding:18px;color:#64748b;">Selecciona un cliente para ver su historial y deudas.</td></tr>
+                </tbody>
               </table>
             </div>
           </div>
         </div>
-
-        <div id="clientsList" class="client-list"></div>
       </section>
 
       <!-- VISTA 3: INGRESOS Y GASTOS (DINERO RECIBIDO, GASTADO Y DISPONIBLE POR CANAL) -->
@@ -789,26 +832,26 @@
             <div id="subBancolombia" class="kpi-sub">Recibido: $0</div>
           </div>
           <div class="kpi-card">
-            <div class="kpi-lbl">USDT / Cripto</div>
+            <div class="kpi-lbl">USDT / Binance</div>
             <div id="balUsdtCripto" class="kpi-val binance">0.00 USDT</div>
             <div id="balUsdtCopEq" class="kpi-sub">$0 COP</div>
           </div>
           <div class="kpi-card">
-            <div class="kpi-lbl">Total Recibido (Global)</div>
+            <div class="kpi-lbl">Total Recibido</div>
             <div id="kpiTotalReceived" class="kpi-val green">$0 COP</div>
             <div class="kpi-sub">Pagos + Entradas</div>
           </div>
-          <div class="kpi-card">
-            <div class="kpi-lbl">Total Gastado (Global)</div>
+          <div class="kpi-card alert-cell">
+            <div class="kpi-lbl">Total Gastado</div>
             <div id="kpiTotalSpent" class="kpi-val red">$0 COP</div>
-            <div id="subInOutPeriod" class="kpi-sub">Salidas / Gastos</div>
+            <div class="kpi-sub">Salidas / Gastos</div>
           </div>
         </div>
 
         <div class="toolbar">
           <select id="expTipo" class="filter-select">
-            <option value="SALIDA">Dinero Gastado / Salida (-)</option>
-            <option value="ENTRADA">Dinero Recibido / Entrada (+)</option>
+            <option value="SALIDA">Dinero Gastado (-)</option>
+            <option value="ENTRADA">Dinero Recibido (+)</option>
           </select>
           <select id="expCanal" class="filter-select">
             <option value="EFECTIVO">Efectivo</option>
@@ -817,8 +860,26 @@
             <option value="USDT_CRIPTO">USDT / Binance</option>
           </select>
           <input id="expDesc" class="search-input" type="text" placeholder="Concepto (Ej. Pago cliente, compra crédito, comida, transferencia...)" />
-          <input id="expAmount" class="filter-select" type="number" min="0" step="100" placeholder="Valor COP $" style="width:130px;" />
+          <input id="expAmount" class="filter-select" type="number" min="0" step="100" placeholder="Valor COP $" style="width:125px;" />
           <button type="button" class="btn-primary" onclick="addExpense()">Guardar</button>
+        </div>
+
+        <div class="table-card">
+          <div class="table-wrap">
+            <table style="min-width:620px;">
+              <thead>
+                <tr>
+                  <th>Tipo</th>
+                  <th>Banco / Efectivo</th>
+                  <th>Fecha</th>
+                  <th>Concepto / Cliente</th>
+                  <th>Valor</th>
+                  <th>Acción</th>
+                </tr>
+              </thead>
+              <tbody id="cashTbody"></tbody>
+            </table>
+          </div>
         </div>
 
         <div id="expensesGrid" class="cards-grid"></div>
@@ -828,11 +889,11 @@
       <section id="view-resumen" class="view-section">
         <div class="kpi-grid">
           <div class="kpi-card">
-            <div class="kpi-lbl">Recibido (Ventas + Entradas)</div>
+            <div class="kpi-lbl">Recibido</div>
             <div id="sumSales" class="kpi-val green">$0 COP</div>
           </div>
           <div class="kpi-card">
-            <div class="kpi-lbl">Gastado (Costos + Salidas)</div>
+            <div class="kpi-lbl">Gastado</div>
             <div id="sumCosts" class="kpi-val red">$0 COP</div>
           </div>
           <div class="kpi-card">
@@ -840,14 +901,14 @@
             <div id="sumNet" class="kpi-val">$0 COP</div>
           </div>
           <div class="kpi-card">
-            <div class="kpi-lbl">Total USDT Binance</div>
+            <div class="kpi-lbl">USDT Binance</div>
             <div id="sumUsdt" class="kpi-val binance">0.00 USDT</div>
           </div>
         </div>
         <div class="info-card">
           <h3>Respaldo y Portabilidad de Datos</h3>
-          <p style="margin-top:6px;">Todos los registros se manejan en pesos colombianos (COP) con soporte para pagos en USDT por Binance, sincronizados con Cloudflare D1.</p>
-          <div style="display:flex;gap:8px;margin-top:10px;flex-wrap:wrap;">
+          <p style="margin-top:4px;">Todos los registros se manejan en pesos colombianos (COP) con soporte para pagos en USDT por Binance, sincronizados con Cloudflare D1.</p>
+          <div style="display:flex;gap:8px;margin-top:8px;flex-wrap:wrap;">
             <button type="button" class="btn-secondary" onclick="exportJson()">Descargar Respaldo JSON</button>
             <label class="btn-secondary" style="cursor:pointer;">
               Cargar Respaldo JSON
@@ -988,7 +1049,7 @@
       servicios: { title: 'Servicios Técnicos', sub: 'FRP, MDM, Unlock, seriales y licencias (COP)' },
       binance: { title: 'USDT / Binance', sub: 'Movimientos pagados o calculados en USDT Binance' },
       enproceso: { title: 'En Proceso', sub: 'Trámites pendientes por finalizar' },
-      clientes: { title: 'Directorio de Clientes', sub: 'Lista de clientes, historial global, exitosos, pagados y deudas' },
+      clientes: { title: 'Control Clientes', sub: 'Lista de clientes, saldos y auditoría de servicios' },
       deudas: { title: 'Ingresos y Gastos', sub: 'Dinero recibido, gastado y disponible en Efectivo, Nequi, Bancolombia y USDT' },
       resumen: { title: 'Resumen Semanal', sub: 'Totales en COP y USDT por semana, mes y global' }
     };
@@ -1273,7 +1334,7 @@
 
       const tbody = document.getElementById('recordsTbody');
       if (!rows.length) {
-        tbody.innerHTML = '<tr><td colspan="12" style="text-align:center;padding:22px;color:#64748b;">No hay registros en este período o vista.</td></tr>';
+        tbody.innerHTML = '<tr><td colspan="12" style="text-align:center;padding:20px;color:#64748b;">No hay registros en este período o vista.</td></tr>';
         return;
       }
 
@@ -1281,6 +1342,7 @@
         const gain = Number(r.venta || 0) - Number(r.costo || 0);
         const uVal = getRecordUsdt(r);
         const canal = detectRecordWallet(r);
+        const detalleTexto = String(r.detalle || '-').replace(/\s*·?\s*\[?(EFECTIVO|NEQUI|BANCOLOMBIA|USDT_CRIPTO)\]?\s*/gi, '').trim() || '-';
         const stClass = r.estado === 'EXITOSO' ? 'pill-exitoso' : (r.estado === 'RECHAZADO' ? 'pill-rechazado' : 'pill-proceso');
         const payClass = r.pagado === 'PAGADO' ? 'pill-pagado' : 'pill-nopagado';
         return `
@@ -1288,7 +1350,7 @@
             <td><span class="tag-origin ${origenBadgeClass(r.origen)}">${esc(r.origen)}</span></td>
             <td class="num-nowrap">${esc(r.fecha)}</td>
             <td><strong>${esc(r.cliente)}</strong>${r.telefono ? `<br><span style="font-size:10px;color:#64748b;">${esc(r.telefono)}</span>` : ''}</td>
-            <td style="max-width:165px;word-break:break-word;">${esc(r.detalle || '-')}</td>
+            <td style="max-width:165px;word-break:break-word;">${esc(detalleTexto)}</td>
             <td class="num-nowrap">
               <span class="op-badge ${operadorBadgeClass(r.operador)}">${esc(r.operador)}</span>
               <br><span class="tag-origin ${canalBadgeClass(canal)}" style="margin-top:2px;">${canalLabel(canal)}</span>
@@ -1296,8 +1358,8 @@
             <td><button type="button" class="pill ${stClass}" onclick="cycleStatus('${r.id}')" title="Clic para cambiar estado">${esc(r.estado)}</button></td>
             <td class="num-nowrap">${cop(r.costo)}</td>
             <td class="num-nowrap"><strong>${cop(r.venta)}</strong></td>
-            <td class="num-nowrap" style="color:#b45309;font-weight:800;">${uVal > 0 ? usdtFmt(uVal) : '-'}</td>
-            <td class="num-nowrap" style="color:#059669;font-weight:800;">${cop(gain)}</td>
+            <td class="num-nowrap" style="color:#92400e;font-weight:800;">${uVal > 0 ? usdtFmt(uVal) : '-'}</td>
+            <td class="num-nowrap" style="color:#15803d;font-weight:800;">${cop(gain)}</td>
             <td><button type="button" class="pill ${payClass}" onclick="togglePay('${r.id}')" title="Clic para cambiar pago">${esc(r.pagado)}</button></td>
             <td>
               <div class="row-actions">
@@ -1463,7 +1525,8 @@
       for (const item of targets) {
         await deleteRecord(item.id);
       }
-      if (selectedClientKey === clientKey) closeClientDetail();
+      if (selectedClientKey === clientKey) selectedClientKey = '';
+      renderClients();
     }
 
     async function togglePay(id) {
@@ -1545,35 +1608,30 @@
       selectClient(val);
     }
 
-    function closeClientDetail() {
-      selectedClientKey = '';
-      const sel = document.getElementById('clientDropdown');
-      if (sel) sel.value = '';
-      document.getElementById('clientDetailPanel').classList.remove('open');
-      renderClients();
-    }
-
     function renderSelectedClientDetail() {
-      const panel = document.getElementById('clientDetailPanel');
-      if (!selectedClientKey) {
-        panel.classList.remove('open');
-        return;
-      }
-
       const groups = getClientGroups();
+      if (!selectedClientKey && groups.length) {
+        selectedClientKey = groups[0].key;
+      }
+
       const client = groups.find(g => g.key === selectedClientKey);
+      const tbody = document.getElementById('clientServicesTbody');
+      const sel = document.getElementById('clientDropdown');
+      if (sel && client) sel.value = client.key;
+
       if (!client) {
-        panel.classList.remove('open');
+        document.getElementById('cKpiTotalCount').textContent = '0';
+        document.getElementById('cKpiFactCop').textContent = '$0';
+        document.getElementById('cKpiPaidCop').textContent = '$0';
+        document.getElementById('cKpiUnpaidCop').textContent = '$0';
+        tbody.innerHTML = '<tr><td colspan="7" style="text-align:center;padding:18px;color:#64748b;">No hay cliente seleccionado.</td></tr>';
         return;
       }
 
-      panel.classList.add('open');
-      document.getElementById('detailClientName').textContent = client.name;
-      document.getElementById('detailClientPhone').textContent = `WhatsApp: ${client.phone || 'No registrado'} · ${client.items.length} servicios en global`;
       document.getElementById('cKpiTotalCount').textContent = client.items.length;
-      document.getElementById('cKpiSuccessCount').textContent = client.successCount;
-      document.getElementById('cKpiPaidCop').textContent = cop(client.paid);
-      document.getElementById('cKpiUnpaidCop').textContent = cop(client.debt);
+      document.getElementById('cKpiFactCop').textContent = '$' + Number(client.total || 0).toLocaleString('es-CO');
+      document.getElementById('cKpiPaidCop').textContent = '$' + Number(client.paid || 0).toLocaleString('es-CO');
+      document.getElementById('cKpiUnpaidCop').textContent = '$' + Number(client.debt || 0).toLocaleString('es-CO');
 
       const filterMode = document.getElementById('detailClientFilter').value;
       const filteredItems = client.items.filter(r => {
@@ -1583,28 +1641,23 @@
         return true;
       });
 
-      const tbody = document.getElementById('clientServicesTbody');
       if (!filteredItems.length) {
-        tbody.innerHTML = '<tr><td colspan="8" style="text-align:center;padding:18px;color:#64748b;">No hay servicios para este filtro en este cliente.</td></tr>';
+        tbody.innerHTML = '<tr><td colspan="7" style="text-align:center;padding:16px;color:#64748b;">Sin movimientos para este filtro.</td></tr>';
         return;
       }
 
       tbody.innerHTML = filteredItems.map(r => {
         const stClass = r.estado === 'EXITOSO' ? 'pill-exitoso' : (r.estado === 'RECHAZADO' ? 'pill-rechazado' : 'pill-proceso');
         const payClass = r.pagado === 'PAGADO' ? 'pill-pagado' : 'pill-nopagado';
-        const canal = detectRecordWallet(r);
+        const detalleTexto = String(r.detalle || '').replace(/\s*·?\s*\[?(EFECTIVO|NEQUI|BANCOLOMBIA|USDT_CRIPTO)\]?\s*/gi, '').trim();
         return `
           <tr>
-            <td><span class="tag-origin ${origenBadgeClass(r.origen)}">${esc(r.origen)}</span></td>
             <td class="num-nowrap">${esc(r.fecha)}</td>
-            <td class="num-nowrap">
-              <span class="op-badge ${operadorBadgeClass(r.operador)}">${esc(r.operador)}</span>
-              <br><span class="tag-origin ${canalBadgeClass(canal)}" style="margin-top:2px;">${canalLabel(canal)}</span>
-            </td>
-            <td>${esc(r.detalle || '-')}</td>
+            <td><span class="tag-origin ${origenBadgeClass(r.origen)}">${esc(r.origen)}</span></td>
+            <td><strong>${esc(r.operador)}</strong>${detalleTexto ? `<br><span style="font-size:10px;color:#64748b;">${esc(detalleTexto)}</span>` : ''}</td>
             <td><span class="pill ${stClass}">${esc(r.estado)}</span></td>
             <td class="num-nowrap"><strong>${cop(r.venta)}</strong></td>
-            <td><button type="button" class="pill ${payClass}" onclick="togglePay('${r.id}')" title="Clic para cambiar pago">${esc(r.pagado)}</button></td>
+            <td><button type="button" class="pill ${payClass}" onclick="togglePay('${r.id}')">${esc(r.pagado)}</button></td>
             <td><button type="button" class="icon-btn del" onclick="deleteRecord('${r.id}')">X</button></td>
           </tr>
         `;
@@ -1613,41 +1666,63 @@
 
     function renderClients() {
       const allGroups = getClientGroups();
+      const totalFact = allGroups.reduce((s, c) => s + c.total, 0);
+      const totalPaid = allGroups.reduce((s, c) => s + c.paid, 0);
+      const totalDebt = allGroups.reduce((s, c) => s + c.debt, 0);
+      const withDebt = allGroups.filter(c => c.debt > 0).length;
+      const pct = totalFact > 0 ? ((totalPaid / totalFact) * 100).toFixed(1) : '0.0';
+
+      document.getElementById('cliKpiCount').textContent = allGroups.length;
+      document.getElementById('cliKpiFact').textContent = cop(totalFact);
+      document.getElementById('cliKpiPaid').textContent = cop(totalPaid);
+      document.getElementById('cliKpiDebt').textContent = cop(totalDebt);
+      document.getElementById('cliKpiPct').textContent = pct + '%';
+      document.getElementById('cliKpiWithDebt').textContent = withDebt;
+
       const dropdown = document.getElementById('clientDropdown');
       if (dropdown) {
-        dropdown.innerHTML = '<option value="">-- Seleccionar cliente en lista --</option>' +
-          allGroups.map(c => `<option value="${esc(c.key)}" ${c.key === selectedClientKey ? 'selected' : ''}>${esc(c.name)} (${c.items.length} · Debe ${cop(c.debt)})</option>`).join('');
+        dropdown.innerHTML = '<option value="">-- Seleccionar cliente --</option>' +
+          allGroups.map(c => `<option value="${esc(c.key)}" ${c.key === selectedClientKey ? 'selected' : ''}>${esc(c.name)}</option>`).join('');
       }
 
+      const stateFilter = document.getElementById('clientStateFilter').value;
       const q = (document.getElementById('clientSearch').value || '').toLowerCase().trim();
-      const list = allGroups.filter(c => !q || c.name.toLowerCase().includes(q) || c.phone.includes(q));
-      const container = document.getElementById('clientsList');
 
+      const list = allGroups.filter(c => {
+        if (stateFilter === 'CON_SALDO' && c.debt <= 0) return false;
+        if (stateFilter === 'AL_DIA' && c.debt > 0) return false;
+        if (q) {
+          const match = c.name.toLowerCase().includes(q) || c.phone.includes(q);
+          if (!match) return false;
+        }
+        return true;
+      });
+
+      const tbody = document.getElementById('clientsTbody');
       if (!list.length) {
-        container.innerHTML = '<div class="info-card"><p>No hay clientes registrados aún.</p></div>';
-        return;
+        tbody.innerHTML = '<tr><td colspan="8" style="text-align:center;padding:18px;color:#64748b;">No hay clientes para este filtro.</td></tr>';
+      } else {
+        tbody.innerHTML = list.map(c => {
+          const cPct = c.total > 0 ? ((c.paid / c.total) * 100).toFixed(1) : '100.0';
+          const hasDebt = c.debt > 0;
+          return `
+            <tr class="${c.key === selectedClientKey ? 'selected-row' : ''}" onclick="selectClient('${esc(c.key)}')" style="cursor:pointer;">
+              <td><strong>${esc(c.name)}</strong>${c.phone ? `<br><span style="font-size:10px;color:#64748b;">${esc(c.phone)}</span>` : ''}</td>
+              <td class="num-nowrap">${c.items.length}</td>
+              <td class="num-nowrap">${cop(c.total)}</td>
+              <td class="num-nowrap">${cop(c.paid)}</td>
+              <td class="num-nowrap ${hasDebt ? 'cell-debt' : ''}">${cop(c.debt)}</td>
+              <td class="num-nowrap">${cPct}%</td>
+              <td><span class="pill ${hasDebt ? 'pill-consaldo' : 'pill-aldia'}">${hasDebt ? 'CON SALDO' : 'AL DÍA'}</span></td>
+              <td onclick="event.stopPropagation();">
+                <button type="button" class="icon-btn del" onclick="deleteClientRecords('${esc(c.key)}', event)">X</button>
+              </td>
+            </tr>
+          `;
+        }).join('');
       }
 
-      container.innerHTML = list.map(c => `
-        <div class="client-row-card ${c.key === selectedClientKey ? 'selected' : ''}" onclick="selectClient('${esc(c.key)}')">
-          <div class="client-row-main">
-            <div class="client-row-name">${esc(c.name)}</div>
-            <div class="client-row-meta">WhatsApp: ${esc(c.phone || 'No registrado')} · ${c.items.length} servicios · ${c.successCount} exitosos</div>
-          </div>
-          <div class="client-row-stats">
-            <span>Facturado: ${cop(c.total)}</span>
-            <span style="color:#059669;">Pagado: ${cop(c.paid)}</span>
-            <span style="color:${c.debt > 0 ? '#dc2626' : '#059669'};">
-              ${c.debt > 0 ? 'Debe: ' + cop(c.debt) : 'Al día'}
-            </span>
-            <button type="button" class="icon-btn del" onclick="deleteClientRecords('${esc(c.key)}', event)">Eliminar</button>
-          </div>
-        </div>
-      `).join('');
-
-      if (selectedClientKey) {
-        renderSelectedClientDetail();
-      }
+      renderSelectedClientDetail();
     }
 
     function detectRecordWallet(r) {
@@ -1738,7 +1813,7 @@
       document.getElementById('expAmount').value = '';
       saveLocalCache();
       renderExpenses();
-      toast(tipo === 'ENTRADA' ? 'Entrada guardada en ' + canalLabel(canal) : 'Salida guardada en ' + canalLabel(canal));
+      toast(tipo === 'ENTRADA' ? 'Ingreso guardado en ' + canalLabel(canal) : 'Gasto guardado en ' + canalLabel(canal));
     }
 
     async function deleteExpense(id) {
@@ -1768,7 +1843,7 @@
 
       const usdtUnits = usdtRate > 0 ? (balances.USDT_CRIPTO / usdtRate) : 0;
       document.getElementById('balUsdtCripto').textContent = usdtFmt(usdtUnits);
-      document.getElementById('balUsdtCopEq').textContent = `${cop(balances.USDT_CRIPTO)} · Cobros: ${cop(clientPaidByWallet.USDT_CRIPTO)}`;
+      document.getElementById('balUsdtCopEq').textContent = `${cop(balances.USDT_CRIPTO)}`;
 
       document.getElementById('kpiTotalReceived').textContent = cop(totalReceived);
       document.getElementById('kpiTotalSpent').textContent = cop(totalSpent);
@@ -1776,50 +1851,50 @@
       const paidRecordsInPeriod = records.filter(r => r.pagado === 'PAGADO' && matchesPeriod(r.fecha, currentPeriod));
       const list = expenses.filter(e => matchesPeriod(e.fecha, currentPeriod));
 
+      const rows = [
+        ...paidRecordsInPeriod.map(r => ({
+          sortDate: String(r.fecha || ''),
+          tipo: 'ENTRADA',
+          canal: detectRecordWallet(r),
+          fecha: r.fecha,
+          concepto: `${r.cliente} · ${r.operador} (${r.origen})`,
+          monto: Number(r.venta || 0),
+          onDelete: `deleteRecord('${r.id}')`
+        })),
+        ...list.map(e => ({
+          sortDate: String(e.fecha || ''),
+          tipo: parseTipo(e.descripcion, e.monto),
+          canal: parseCanal(e.descripcion),
+          fecha: e.fecha,
+          concepto: cleanConceptText(e.descripcion),
+          monto: Math.abs(Number(e.monto || 0)),
+          onDelete: `deleteExpense('${e.id}')`
+        }))
+      ].sort((a, b) => b.sortDate.localeCompare(a.sortDate));
+
+      const tbody = document.getElementById('cashTbody');
       const grid = document.getElementById('expensesGrid');
-      const paidCards = paidRecordsInPeriod.map(r => {
-        const canal = detectRecordWallet(r);
-        return `
-          <div class="info-card">
-            <div style="display:flex;gap:5px;flex-wrap:wrap;margin-bottom:5px;">
-              <span class="tag-origin tag-entrada">RECIBIDO (+)</span>
-              <span class="tag-origin ${canalBadgeClass(canal)}">${canalLabel(canal)}</span>
-            </div>
-            <h3>${esc(r.cliente)} · ${esc(r.operador)}</h3>
-            <p>Fecha: ${esc(r.fecha)} · ${esc(r.origen)}</p>
-            <p style="color:#059669;font-weight:900;font-size:13.5px;margin-top:4px;">+${cop(r.venta)}</p>
-            <button type="button" class="icon-btn del" style="margin-top:7px;" onclick="deleteRecord('${r.id}')">Eliminar</button>
-          </div>
-        `;
-      });
 
-      const manualCards = list.map(e => {
-        const tipo = parseTipo(e.descripcion, e.monto);
-        const canal = parseCanal(e.descripcion);
-        const concepto = cleanConceptText(e.descripcion);
-        const val = Math.abs(Number(e.monto || 0));
-        return `
-          <div class="info-card">
-            <div style="display:flex;gap:5px;flex-wrap:wrap;margin-bottom:5px;">
-              <span class="tag-origin ${tipo === 'ENTRADA' ? 'tag-entrada' : 'tag-salida'}">${tipo === 'ENTRADA' ? 'RECIBIDO (+)' : 'GASTADO (-)'}</span>
-              <span class="tag-origin ${canalBadgeClass(canal)}">${canalLabel(canal)}</span>
-            </div>
-            <h3>${esc(concepto)}</h3>
-            <p>Fecha: ${esc(e.fecha)}</p>
-            <p style="color:${tipo === 'ENTRADA' ? '#059669' : '#dc2626'};font-weight:900;font-size:13.5px;margin-top:4px;">
-              ${tipo === 'ENTRADA' ? '+' : '-'}${cop(val)}
-            </p>
-            <button type="button" class="icon-btn del" style="margin-top:7px;" onclick="deleteExpense('${e.id}')">Eliminar</button>
-          </div>
-        `;
-      });
-
-      const allCards = [...paidCards, ...manualCards];
-      if (!allCards.length) {
-        grid.innerHTML = '<div class="info-card"><p>Sin movimientos de dinero en este período.</p></div>';
+      if (!rows.length) {
+        tbody.innerHTML = '<tr><td colspan="6" style="text-align:center;padding:18px;color:#64748b;">Sin movimientos de dinero en este período.</td></tr>';
+        grid.innerHTML = '';
         return;
       }
-      grid.innerHTML = allCards.join('');
+
+      tbody.innerHTML = rows.map(item => `
+        <tr>
+          <td><span class="tag-origin ${item.tipo === 'ENTRADA' ? 'tag-entrada' : 'tag-salida'}">${item.tipo === 'ENTRADA' ? 'RECIBIDO (+)' : 'GASTADO (-)'}</span></td>
+          <td><span class="tag-origin ${canalBadgeClass(item.canal)}">${canalLabel(item.canal)}</span></td>
+          <td class="num-nowrap">${esc(item.fecha)}</td>
+          <td><strong>${esc(item.concepto)}</strong></td>
+          <td class="num-nowrap" style="color:${item.tipo === 'ENTRADA' ? '#15803d' : '#b91c1c'};font-weight:900;">
+            ${item.tipo === 'ENTRADA' ? '+' : '-'}${cop(item.monto)}
+          </td>
+          <td><button type="button" class="icon-btn del" onclick="${item.onDelete}">Eliminar</button></td>
+        </tr>
+      `).join('');
+
+      grid.innerHTML = '';
     }
 
     function renderSummary() {
