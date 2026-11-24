@@ -150,7 +150,7 @@
     }
     .btn-secondary:hover { background: #f1f5f9; }
 
-    .content { padding: 12px 15px 38px; max-width: 100%; }
+    .content { padding: 12px 15px 46px; max-width: 100%; }
 
     /* --- CELDAS DE PERÍODO ESTILO PLANILLA --- */
     .period-strip {
@@ -478,6 +478,105 @@
       z-index: 30;
     }
     .backdrop.open { display: block; }
+
+    /* --- PANEL LATERAL DESPLEGABLE DE CHAT --- */
+    .ai-fab {
+      position: fixed;
+      right: 18px;
+      bottom: 58px;
+      z-index: 60;
+      background: #1e3a5f;
+      color: #ffffff;
+      border: none;
+      border-radius: 999px;
+      padding: 10px 15px;
+      font-size: 12px;
+      font-weight: 800;
+      cursor: pointer;
+      box-shadow: 0 8px 22px rgba(15, 23, 42, 0.25);
+    }
+    .ai-fab:hover { background: #0f172a; }
+
+    .ai-drawer {
+      position: fixed;
+      top: 0;
+      right: 0;
+      width: 370px;
+      max-width: 100vw;
+      height: 100vh;
+      background: #ffffff;
+      border-left: 1px solid #cbd5e1;
+      box-shadow: -10px 0 30px rgba(15, 23, 42, 0.16);
+      z-index: 80;
+      display: flex;
+      flex-direction: column;
+      transform: translateX(100%);
+      transition: transform 0.22s ease;
+    }
+    .ai-drawer.open { transform: translateX(0); }
+
+    .ai-drawer-head {
+      background: #1e3a5f;
+      color: #ffffff;
+      padding: 12px 14px;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 8px;
+    }
+    .ai-drawer-head h3 { font-size: 13.5px; font-weight: 900; }
+    .ai-drawer-head span { font-size: 10.5px; opacity: 0.85; display: block; }
+
+    .ai-messages {
+      flex: 1;
+      padding: 12px;
+      overflow-y: auto;
+      display: flex;
+      flex-direction: column;
+      gap: 8px;
+      background: #f8fafc;
+    }
+    .ai-msg {
+      padding: 9px 11px;
+      border-radius: 9px;
+      font-size: 11.5px;
+      line-height: 1.4;
+      font-weight: 600;
+      max-width: 92%;
+      word-break: break-word;
+    }
+    .ai-msg.user {
+      align-self: flex-end;
+      background: #1e3a5f;
+      color: #ffffff;
+    }
+    .ai-msg.bot {
+      align-self: flex-start;
+      background: #ffffff;
+      color: #0f172a;
+      border: 1px solid #cbd5e1;
+    }
+
+    .ai-input-bar {
+      padding: 10px;
+      border-top: 1px solid #cbd5e1;
+      background: #ffffff;
+      display: flex;
+      gap: 6px;
+    }
+    .ai-input-bar textarea {
+      flex: 1;
+      resize: none;
+      min-height: 40px;
+      max-height: 90px;
+      padding: 8px 10px;
+      border-radius: 7px;
+      border: 1px solid #cbd5e1;
+      font-size: 12px;
+      font-weight: 600;
+      outline: none;
+    }
+    .ai-input-bar textarea:focus { border-color: #1e3a8a; }
 
     .toast {
       position: fixed;
@@ -1025,6 +1124,32 @@
       </form>
     </div>
   </div>
+
+  <!-- CHAT LATERAL DESPLEGABLE -->
+  <button type="button" class="ai-fab" onclick="toggleAiDrawer()">💬 Asistente Web</button>
+
+  <aside id="aiDrawer" class="ai-drawer" aria-label="Chat de edición">
+    <div class="ai-drawer-head">
+      <div>
+        <h3>Asistente de Cuentas</h3>
+        <span>Crea o edita órdenes directo en D1</span>
+      </div>
+      <button type="button" class="close-btn" style="color:#0f172a;" onclick="toggleAiDrawer(false)">&times;</button>
+    </div>
+
+    <div id="aiMessages" class="ai-messages">
+      <div class="ai-msg bot">
+        Dime qué quieres crear o editar. Ejemplos:<br>
+        • <em>"Crea No Registro Tigo cliente Pedro 3104141805 IMEI 35888887664849 venta 25000 costo 10000 Nequi pagado exitoso"</em><br>
+        • <em>"Edita orden ORD-140W a pagado y exitoso por Bancolombia"</em>
+      </div>
+    </div>
+
+    <form class="ai-input-bar" onsubmit="handleAiChatSubmit(event)">
+      <textarea id="aiPromptInput" rows="2" placeholder="Escribe aquí lo que deseas agregar o editar..."></textarea>
+      <button type="submit" id="aiSendBtn" class="btn-primary">Enviar</button>
+    </form>
+  </aside>
 
   <div id="toast" class="toast">Listo</div>
 
@@ -1965,6 +2090,148 @@
         inp.value = '';
       };
       reader.readAsText(file);
+    }
+
+    function toggleAiDrawer(forceState) {
+      const drawer = document.getElementById('aiDrawer');
+      if (!drawer) return;
+      const next = typeof forceState === 'boolean' ? forceState : !drawer.classList.contains('open');
+      drawer.classList.toggle('open', next);
+      if (next) {
+        const inp = document.getElementById('aiPromptInput');
+        if (inp) inp.focus();
+      }
+    }
+
+    function appendAiMsg(text, who = 'bot') {
+      const box = document.getElementById('aiMessages');
+      if (!box) return;
+      const div = document.createElement('div');
+      div.className = `ai-msg ${who}`;
+      div.innerHTML = text;
+      box.appendChild(div);
+      box.scrollTop = box.scrollHeight;
+    }
+
+    function parseInstructionToPayload(text) {
+      const raw = String(text || '').trim();
+      const lower = raw.toLowerCase();
+
+      const idMatch = raw.match(/\b((?:ZG|ORD|ESIM|EXP)-[A-Za-z0-9_-]+)\b/i);
+      const existingRecord = idMatch
+        ? records.find(r =>
+            String(r.id).toLowerCase() === idMatch[1].toLowerCase() ||
+            String(r.detalle || '').toLowerCase().includes(idMatch[1].toLowerCase())
+          )
+        : records.find(r => {
+            const cli = String(r.cliente || '').toLowerCase().trim();
+            return cli && cli !== 'sin nombre' && lower.includes(cli) && (lower.includes('edita') || lower.includes('cambia') || lower.includes('marca') || lower.includes('actualiza'));
+          });
+
+      const isEdit = Boolean(existingRecord) || /\b(edita|editar|cambia|cambiar|actualiza|actualizar|marca|marcar)\b/.test(lower);
+
+      let canal = 'EFECTIVO';
+      if (/\bnequi\b/.test(lower)) canal = 'NEQUI';
+      else if (/\bbancolombia\b|\bbanco\b/.test(lower)) canal = 'BANCOLOMBIA';
+      else if (/\busdt\b|\bbinance\b|\bcripto\b/.test(lower)) canal = 'USDT_CRIPTO';
+
+      let pagado = existingRecord ? existingRecord.pagado : 'NO PAGADO';
+      if (/\bno\s*pagado\b|\bpendiente\b|\bdebe\b/.test(lower)) pagado = 'NO PAGADO';
+      else if (/\bpagado\b|\bpago\b|\bcobrado\b/.test(lower)) pagado = 'PAGADO';
+
+      let estado = existingRecord ? existingRecord.estado : 'EN PROCESO';
+      if (/\bexitoso\b|\blisto\b|\bcompletado\b/.test(lower)) estado = 'EXITOSO';
+      else if (/\brechazado\b|\bcancelado\b/.test(lower)) estado = 'RECHAZADO';
+      else if (/\ben\s*proceso\b|\bproceso\b/.test(lower)) estado = 'EN PROCESO';
+
+      let origen = existingRecord ? existingRecord.origen : 'SERVICIO';
+      if (/\be-?sim\b/.test(lower)) origen = 'E-SIM';
+      else if (/\bno\s*registro\b|\bimei\b/.test(lower)) origen = 'NO REGISTRO';
+      else if (/\bservicio\b|\bfrp\b|\bmdm\b|\bbypass\b|\bunlock\b/.test(lower)) origen = 'SERVICIO';
+
+      const copMatches = Array.from(raw.matchAll(/\$?\s*(\d{1,3}(?:[.,]\d{3})+|\d{4,})\s*(?:cop|pesos)?/gi))
+        .map(m => Number(String(m[1]).replace(/\./g, '').replace(/,/g, '')))
+        .filter(n => n > 0);
+
+      const usdtMatch = raw.match(/(\d+(?:[.,]\d+)?)\s*usdt/i);
+      const usdtVal = usdtMatch ? parseFloat(usdtMatch[1].replace(',', '.')) : (canal === 'USDT_CRIPTO' && copMatches[0] && usdtRate > 0 ? Number((copMatches[0] / usdtRate).toFixed(2)) : (existingRecord ? Number(existingRecord.usdt || 0) : 0));
+
+      let venta = existingRecord ? Number(existingRecord.venta || 0) : (copMatches[0] || 0);
+      let costo = existingRecord ? Number(existingRecord.costo || 0) : 0;
+      const costoMatch = raw.match(/\bcosto\s*\$?\s*(\d{1,3}(?:[.,]\d{3})+|\d+)/i);
+      if (costoMatch) {
+        costo = Number(String(costoMatch[1]).replace(/\./g, '').replace(/,/g, ''));
+      } else if (!isEdit && copMatches.length >= 2) {
+        venta = copMatches[0];
+        costo = copMatches[1];
+      }
+
+      const imeiMatch = raw.match(/\b(\d{14,16})\b/);
+      const telMatch = raw.match(/(?:\+?57\s*)?\b(3\d{9})\b/);
+      const cliMatch = raw.match(/\bcliente\s+([A-Za-zÁÉÍÓÚáéíóúñÑ\s]+?)(?=\s+(?:cel|celular|tel|whatsapp|imei|venta|costo|valor|por|en|nequi|bancolombia|efectivo|usdt|pagado|exitoso|\d)|$)/i);
+      const opMatch = raw.match(/\b(claro|tigo|wom|movistar|etb|virgin|xiaomi|samsung|honor|motorola|iphone|frp|mdm|bypass|unlock)\b/i);
+
+      const detalleBase = imeiMatch
+        ? `IMEI: ${imeiMatch[1]}`
+        : (existingRecord ? String(existingRecord.detalle || '').replace(/\s*·?\s*\[?(EFECTIVO|NEQUI|BANCOLOMBIA|USDT_CRIPTO)\]?\s*/gi, '').trim() : '');
+
+      const detalleFinal = detalleBase ? `${detalleBase} · [${canal}]` : `[${canal}]`;
+
+      return {
+        mode: isEdit && existingRecord ? 'update' : 'create',
+        target: 'movimiento',
+        id: existingRecord ? existingRecord.id : ('ZG-' + Date.now()),
+        origen,
+        fecha: existingRecord ? String(existingRecord.fecha || '').slice(0, 10) : new Date().toISOString().slice(0, 10),
+        cliente: cliMatch ? cliMatch[1].trim() : (existingRecord ? existingRecord.cliente : 'Cliente'),
+        telefono: telMatch ? telMatch[1] : (existingRecord ? (existingRecord.telefono || '') : ''),
+        operador: opMatch ? opMatch[1].toUpperCase() : (existingRecord ? existingRecord.operador : 'Servicio'),
+        detalle: detalleFinal,
+        costo,
+        venta,
+        moneda: canal === 'USDT_CRIPTO' ? 'USDT' : 'COP',
+        usdt: usdtVal,
+        estado,
+        pagado
+      };
+    }
+
+    async function handleAiChatSubmit(ev) {
+      ev.preventDefault();
+      const inp = document.getElementById('aiPromptInput');
+      const btn = document.getElementById('aiSendBtn');
+      const text = (inp.value || '').trim();
+      if (!text) return;
+
+      appendAiMsg(esc(text), 'user');
+      inp.value = '';
+      btn.disabled = true;
+
+      try {
+        const payload = parseInstructionToPayload(text);
+        const res = await fetch(WORKER_URL, {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({
+            action: 'ai_cuenta_cmd',
+            ...payload
+          })
+        });
+        const data = await res.json();
+        if (!data.success) {
+          throw new Error(data.error || 'No se pudo aplicar el cambio');
+        }
+        await syncFromCloud(false);
+        appendAiMsg(
+          `✅ ${payload.mode === 'update' ? 'Actualizado' : 'Creado'}: <strong>${esc(payload.cliente)}</strong> · ${esc(payload.origen)} (${esc(payload.operador)}) · ${cop(payload.venta)} · <strong>${esc(payload.pagado)}</strong> / <strong>${esc(payload.estado)}</strong>`,
+          'bot'
+        );
+        toast(payload.mode === 'update' ? 'Orden editada en D1' : 'Orden creada en D1');
+      } catch (err) {
+        appendAiMsg(`⚠️ Error: ${esc(err.message || 'No se pudo procesar')}`, 'bot');
+      } finally {
+        btn.disabled = false;
+      }
     }
 
     function toast(msg) {
