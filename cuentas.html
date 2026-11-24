@@ -150,6 +150,48 @@
 
     .content { padding: 20px 22px 48px; }
 
+    /* --- SEPARACIÓN SEMANA / MES / GLOBAL --- */
+    .period-strip {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(210px, 1fr));
+      gap: 12px;
+      margin-bottom: 16px;
+    }
+    .period-box {
+      background: #ffffff;
+      border-radius: 16px;
+      padding: 13px 16px;
+      border: 1px solid #e2e8f0;
+      box-shadow: 0 3px 10px rgba(15, 23, 42, 0.03);
+      cursor: pointer;
+      text-align: left;
+      transition: all 0.15s ease;
+    }
+    .period-box.selected {
+      border-color: #c81d4e;
+      box-shadow: 0 6px 16px rgba(200, 29, 78, 0.12);
+      background: #fff9fb;
+    }
+    .period-tag { font-size: 10.5px; font-weight: 800; text-transform: uppercase; color: #c81d4e; letter-spacing: 0.4px; }
+    .period-main { font-size: 18px; font-weight: 900; color: #0f172a; margin-top: 4px; }
+    .period-sub { font-size: 11.5px; color: #475569; margin-top: 3px; font-weight: 600; }
+
+    .dup-banner {
+      display: none;
+      background: #fef2f2;
+      border: 1.5px solid #fca5a5;
+      color: #991b1b;
+      border-radius: 14px;
+      padding: 12px 15px;
+      margin-bottom: 14px;
+      font-size: 13px;
+      font-weight: 700;
+      align-items: center;
+      justify-content: space-between;
+      gap: 10px;
+    }
+    .dup-banner.show { display: flex; }
+
     /* --- VISTAS SPA --- */
     .view-section { display: none; }
     .view-section.active { display: block; animation: fadeIn 0.18s ease; }
@@ -378,7 +420,7 @@
 
   <div id="mobileBackdrop" class="backdrop" onclick="toggleSidebar(false)"></div>
 
-  <!-- MENÚ LATERAL IZQUIERDO (SIN CAMBIAR DE URL) -->
+  <!-- MENÚ LATERAL IZQUIERDO -->
   <aside id="sidebar" class="sidebar">
     <div class="brand-box">
       <div class="brand-logo">
@@ -424,7 +466,7 @@
     </nav>
 
     <div class="sidebar-footer">
-      Panel interno · Zona GSM
+      D1 Sincronizado · Zona GSM
     </div>
   </aside>
 
@@ -435,18 +477,44 @@
         <button type="button" class="menu-toggle" onclick="toggleSidebar(true)" aria-label="Abrir menú">&#9776;</button>
         <div>
           <div id="topbarTitle" class="page-title">Consolidado Global</div>
-          <div id="topbarSub" class="page-sub">Vista general de movimientos, pagos y ganancias</div>
+          <div id="topbarSub" class="page-sub">Sincronizado con base de datos D1 · Semana, Mes y Total Global</div>
         </div>
       </div>
 
       <div class="topbar-actions">
+        <button type="button" class="btn-secondary" onclick="syncFromCloud(true)">🔄 Sincronizar D1</button>
         <button type="button" class="btn-secondary" onclick="exportCsv()">Exportar CSV</button>
         <button type="button" class="btn-primary" onclick="openModal()">+ Nuevo Registro</button>
       </div>
     </header>
 
     <main class="content">
-      <!-- VISTA 1: CONSOLIDADO (Y TABLA DINÁMICA PARA CATEGORÍAS) -->
+      <!-- AVISO DE DUPLICADO DETECTADO -->
+      <div id="dupBanner" class="dup-banner">
+        <span id="dupBannerText"></span>
+        <button type="button" class="icon-btn" onclick="hideDupBanner()">Cerrar</button>
+      </div>
+
+      <!-- SEPARACIÓN SEMANA / MES / TOTAL GLOBAL (EN TODAS LAS VISTAS) -->
+      <div class="period-strip">
+        <button type="button" id="box-week" class="period-box" onclick="setPeriod('WEEK')">
+          <div class="period-tag">Esta Semana</div>
+          <div id="val-week" class="period-main">$0</div>
+          <div id="sub-week" class="period-sub">0 registros · Ganancia $0</div>
+        </button>
+        <button type="button" id="box-month" class="period-box" onclick="setPeriod('MONTH')">
+          <div class="period-tag">Este Mes</div>
+          <div id="val-month" class="period-main">$0</div>
+          <div id="sub-month" class="period-sub">0 registros · Ganancia $0</div>
+        </button>
+        <button type="button" id="box-all" class="period-box selected" onclick="setPeriod('ALL')">
+          <div class="period-tag">Total Global</div>
+          <div id="val-all" class="period-main">$0</div>
+          <div id="sub-all" class="period-sub">0 registros · Ganancia $0</div>
+        </button>
+      </div>
+
+      <!-- VISTA 1: CONSOLIDADO Y CATEGORÍAS -->
       <section id="view-records" class="view-section active">
         <div class="kpi-grid">
           <div class="kpi-card">
@@ -472,6 +540,11 @@
         </div>
 
         <div class="toolbar">
+          <select id="filterPeriod" class="filter-select" onchange="setPeriod(this.value)">
+            <option value="ALL">Período: Total Global</option>
+            <option value="WEEK">Período: Esta Semana</option>
+            <option value="MONTH">Período: Este Mes</option>
+          </select>
           <input id="searchInput" class="search-input" type="search" placeholder="Buscar por cliente, IMEI, operador o proceso..." oninput="renderAll()" />
           <select id="filterPay" class="filter-select" onchange="renderAll()">
             <option value="ALL">Pago: Todos</option>
@@ -522,7 +595,7 @@
       <section id="view-deudas" class="view-section">
         <div class="kpi-grid">
           <div class="kpi-card">
-            <div class="kpi-lbl">Deudas / Gastos Registrados</div>
+            <div class="kpi-lbl">Deudas / Gastos (Período)</div>
             <div id="kpiExpensesTotal" class="kpi-val red">$0</div>
           </div>
         </div>
@@ -538,21 +611,21 @@
       <section id="view-resumen" class="view-section">
         <div class="kpi-grid">
           <div class="kpi-card">
-            <div class="kpi-lbl">Ventas Totales</div>
+            <div class="kpi-lbl">Ventas (Período)</div>
             <div id="sumSales" class="kpi-val">$0</div>
           </div>
           <div class="kpi-card">
-            <div class="kpi-lbl">Costos Totales</div>
+            <div class="kpi-lbl">Costos + Gastos (Período)</div>
             <div id="sumCosts" class="kpi-val">$0</div>
           </div>
           <div class="kpi-card">
-            <div class="kpi-lbl">Ganancia Acumulada</div>
+            <div class="kpi-lbl">Ganancia Neta (Período)</div>
             <div id="sumNet" class="kpi-val green">$0</div>
           </div>
         </div>
         <div class="info-card">
           <h3>Respaldo y Portabilidad de Datos</h3>
-          <p style="margin-top:6px;">Descarga una copia en JSON para llevar tus registros a otro dispositivo o restáurala aquí mismo cuando quieras.</p>
+          <p style="margin-top:6px;">Todos tus datos se guardan en Cloudflare D1 y se sincronizan entre PC y teléfono.</p>
           <div style="display:flex;gap:8px;margin-top:12px;flex-wrap:wrap;">
             <button type="button" class="btn-secondary" onclick="exportJson()">Descargar Respaldo JSON</button>
             <label class="btn-secondary" style="cursor:pointer;">
@@ -641,7 +714,7 @@
           </div>
         </div>
 
-        <button type="submit" class="btn-primary" style="width:100%;margin-top:6px;">Guardar Registro</button>
+        <button type="submit" id="btnSaveRecord" class="btn-primary" style="width:100%;margin-top:6px;">Guardar Registro</button>
       </form>
     </div>
   </div>
@@ -649,22 +722,25 @@
   <div id="toast" class="toast">Listo</div>
 
   <script>
+    const WORKER_URL = "https://telegram-zonagsm.zonagsm023.workers.dev";
     const KEY_RECORDS = 'zonagsm_panel_records_v1';
     const KEY_EXPENSES = 'zonagsm_panel_expenses_v1';
 
     let records = [];
     let expenses = [];
     let currentView = 'consolidado';
+    let currentPeriod = 'ALL'; // 'WEEK' | 'MONTH' | 'ALL'
+    let syncTimer = null;
 
     const VIEW_META = {
-      consolidado: { title: 'Consolidado Global', sub: 'Todos los movimientos de Zona GSM en tiempo real' },
+      consolidado: { title: 'Consolidado Global', sub: 'Todos los movimientos sincronizados · Semana, Mes y Total Global' },
       noregistros: { title: 'No Registros', sub: 'Control de registros IMEI por operador' },
       esim: { title: 'E-SIM', sub: 'Activaciones y ventas de líneas E-SIM' },
       servicios: { title: 'Servicios Técnicos', sub: 'FRP, MDM, Unlock, seriales y licencias' },
       enproceso: { title: 'En Proceso', sub: 'Trámites pendientes por finalizar' },
       clientes: { title: 'Directorio de Clientes', sub: 'Historial agrupado y saldos por cliente' },
       deudas: { title: 'Deudas y Gastos', sub: 'Control de costos operativos y pagos pendientes' },
-      resumen: { title: 'Resumen Semanal', sub: 'Totales acumulados y copias de seguridad' }
+      resumen: { title: 'Resumen Semanal', sub: 'Totales por semana, mes y global' }
     };
 
     window.addEventListener('DOMContentLoaded', () => {
@@ -675,12 +751,81 @@
         records = [];
         expenses = [];
       }
-      renderAll();
+      renderCurrent();
+      syncFromCloud(false);
+      syncTimer = setInterval(() => syncFromCloud(false), 12000);
     });
 
-    function saveStorage() {
+    function saveLocalCache() {
       localStorage.setItem(KEY_RECORDS, JSON.stringify(records));
       localStorage.setItem(KEY_EXPENSES, JSON.stringify(expenses));
+    }
+
+    async function syncFromCloud(showMsg = false) {
+      try {
+        const res = await fetch(`${WORKER_URL}?action=get_cuentas_data`);
+        const data = await res.json();
+        if (data.success) {
+          records = Array.isArray(data.movimientos) ? data.movimientos : [];
+          expenses = Array.isArray(data.gastos) ? data.gastos : [];
+          saveLocalCache();
+          renderCurrent();
+          if (showMsg) toast('Sincronizado con base de datos D1');
+        }
+      } catch (e) {
+        if (showMsg) toast('Sin conexión con D1, mostrando caché local');
+      }
+    }
+
+    function showDupAlert(text) {
+      const banner = document.getElementById('dupBanner');
+      document.getElementById('dupBannerText').textContent = '⚠️ Duplicado bloqueado: ' + text;
+      banner.classList.add('show');
+    }
+
+    function hideDupBanner() {
+      document.getElementById('dupBanner').classList.remove('show');
+    }
+
+    function isSameWeek(dateStr) {
+      if (!dateStr) return false;
+      const parts = String(dateStr).slice(0, 10).split('-').map(Number);
+      if (parts.length !== 3) return false;
+      const d = new Date(parts[0], parts[1] - 1, parts[2]);
+      const now = new Date();
+      const today = new Date(now.getFullYear(), now.getMonth(), now.getDate());
+      const dayOfWeek = today.getDay(); // 0=Dom, 1=Lun...
+      const diffToMonday = (dayOfWeek + 6) % 7;
+      const monday = new Date(today);
+      monday.setDate(today.getDate() - diffToMonday);
+      const sunday = new Date(monday);
+      sunday.setDate(monday.getDate() + 6);
+      sunday.setHours(23, 59, 59, 999);
+      return d >= monday && d <= sunday;
+    }
+
+    function isSameMonth(dateStr) {
+      if (!dateStr) return false;
+      const ym = String(dateStr).slice(0, 7);
+      const now = new Date();
+      const curYm = `${now.getFullYear()}-${String(now.getMonth() + 1).padStart(2, '0')}`;
+      return ym === curYm;
+    }
+
+    function matchesPeriod(dateStr, period = currentPeriod) {
+      if (period === 'WEEK') return isSameWeek(dateStr);
+      if (period === 'MONTH') return isSameMonth(dateStr);
+      return true;
+    }
+
+    function setPeriod(period) {
+      currentPeriod = period;
+      const sel = document.getElementById('filterPeriod');
+      if (sel) sel.value = period;
+      document.getElementById('box-week').classList.toggle('selected', period === 'WEEK');
+      document.getElementById('box-month').classList.toggle('selected', period === 'MONTH');
+      document.getElementById('box-all').classList.toggle('selected', period === 'ALL');
+      renderCurrent();
     }
 
     function toggleSidebar(open) {
@@ -698,22 +843,27 @@
       document.getElementById('topbarSub').textContent = meta.sub;
 
       document.querySelectorAll('.view-section').forEach(sec => sec.classList.remove('active'));
-
       if (view === 'clientes') {
         document.getElementById('view-clientes').classList.add('active');
-        renderClients();
       } else if (view === 'deudas') {
         document.getElementById('view-deudas').classList.add('active');
-        renderExpenses();
       } else if (view === 'resumen') {
         document.getElementById('view-resumen').classList.add('active');
-        renderSummary();
       } else {
         document.getElementById('view-records').classList.add('active');
-        renderAll();
       }
 
+      renderCurrent();
       toggleSidebar(false);
+    }
+
+    function renderCurrent() {
+      updateBadges();
+      updatePeriodStrip();
+      if (currentView === 'clientes') renderClients();
+      else if (currentView === 'deudas') renderExpenses();
+      else if (currentView === 'resumen') renderSummary();
+      else renderAll();
     }
 
     function money(n) {
@@ -724,13 +874,30 @@
       return String(s || '').replace(/[&<>"']/g, m => ({ '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;', "'": '&#39;' }[m]));
     }
 
-    function getViewFilteredRecords() {
+    function getCategoryRecords() {
       return records.filter(r => {
         if (currentView === 'noregistros') return r.origen === 'NO REGISTRO';
         if (currentView === 'esim') return r.origen === 'E-SIM';
         if (currentView === 'servicios') return r.origen === 'SERVICIO';
         if (currentView === 'enproceso') return r.estado === 'EN PROCESO';
         return true;
+      });
+    }
+
+    function updatePeriodStrip() {
+      const catList = getCategoryRecords();
+      const periods = [
+        { key: 'WEEK', valId: 'val-week', subId: 'sub-week' },
+        { key: 'MONTH', valId: 'val-month', subId: 'sub-month' },
+        { key: 'ALL', valId: 'val-all', subId: 'sub-all' },
+      ];
+
+      periods.forEach(p => {
+        const subList = catList.filter(r => matchesPeriod(r.fecha, p.key));
+        const sales = subList.reduce((s, r) => s + Number(r.venta || 0), 0);
+        const profit = subList.reduce((s, r) => s + (Number(r.venta || 0) - Number(r.costo || 0)), 0);
+        document.getElementById(p.valId).textContent = money(sales);
+        document.getElementById(p.subId).textContent = `${subList.length} registros · Ganancia ${money(profit)}`;
       });
     }
 
@@ -746,8 +913,7 @@
     }
 
     function renderAll() {
-      updateBadges();
-      const baseList = getViewFilteredRecords();
+      const baseList = getCategoryRecords().filter(r => matchesPeriod(r.fecha, currentPeriod));
 
       const paid = baseList.filter(r => r.pagado === 'PAGADO').reduce((s, r) => s + Number(r.venta || 0), 0);
       const unpaid = baseList.filter(r => r.pagado === 'NO PAGADO').reduce((s, r) => s + Number(r.venta || 0), 0);
@@ -776,7 +942,7 @@
 
       const tbody = document.getElementById('recordsTbody');
       if (!rows.length) {
-        tbody.innerHTML = '<tr><td colspan="11" style="text-align:center;padding:24px;color:#64748b;">No hay registros en esta vista todavía.</td></tr>';
+        tbody.innerHTML = '<tr><td colspan="11" style="text-align:center;padding:24px;color:#64748b;">No hay registros en este período o vista.</td></tr>';
         return;
       }
 
@@ -808,6 +974,7 @@
     }
 
     function openModal() {
+      hideDupBanner();
       document.getElementById('editId').value = '';
       document.getElementById('modalTitle').textContent = 'Nuevo Registro';
       document.getElementById('fFecha').value = new Date().toISOString().slice(0, 10);
@@ -831,11 +998,11 @@
       document.getElementById('recordModal').classList.remove('open');
     }
 
-    function saveRecord(e) {
+    async function saveRecord(e) {
       e.preventDefault();
       const id = document.getElementById('editId').value;
-      const item = {
-        id: id || 'ZG-' + Date.now(),
+      const payload = {
+        id: id || ('ZG-' + Date.now()),
         origen: document.getElementById('fOrigen').value,
         fecha: document.getElementById('fFecha').value,
         cliente: document.getElementById('fCliente').value.trim(),
@@ -848,26 +1015,67 @@
         pagado: document.getElementById('fPagado').value
       };
 
-      if (id) {
-        records = records.map(r => r.id === id ? item : r);
-        toast('Registro actualizado');
-      } else {
-        records.unshift(item);
-        toast('Registro guardado');
+      // Validación local rápida de duplicados antes de enviar
+      if (!id) {
+        const dup = records.find(r =>
+          String(r.origen || '').toLowerCase() === payload.origen.toLowerCase() &&
+          String(r.fecha || '').slice(0, 10) === payload.fecha &&
+          String(r.operador || '').toLowerCase() === payload.operador.toLowerCase() &&
+          String(r.detalle || '').toLowerCase() === payload.detalle.toLowerCase() &&
+          String(r.cliente || '').toLowerCase() === payload.cliente.toLowerCase()
+        );
+        if (dup) {
+          closeModal();
+          showDupAlert(`${dup.origen} · ${dup.operador}${dup.detalle ? ' (' + dup.detalle + ')' : ''} · Cliente: ${dup.cliente} · Fecha: ${dup.fecha}`);
+          return;
+        }
       }
 
-      saveStorage();
-      closeModal();
-      renderAll();
+      const btn = document.getElementById('btnSaveRecord');
+      btn.disabled = true;
+      btn.textContent = 'Guardando en D1...';
+
+      try {
+        const res = await fetch(WORKER_URL, {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({
+            action: id ? 'update_cuenta_movimiento' : 'create_cuenta_movimiento',
+            ...payload
+          })
+        });
+        const data = await res.json();
+
+        if (!data.success && (res.status === 409 || data.duplicate)) {
+          closeModal();
+          const ex = data.existing || payload;
+          showDupAlert(data.error || `${ex.origen} · ${ex.operador} · ${ex.cliente} · ${ex.fecha}`);
+          return;
+        }
+
+        if (!data.success) {
+          throw new Error(data.error || 'No se pudo guardar');
+        }
+
+        await syncFromCloud(false);
+        closeModal();
+        toast(id ? 'Registro actualizado en D1' : 'Registro guardado en D1');
+      } catch (err) {
+        toast('Error: ' + (err.message || 'No se pudo guardar'));
+      } finally {
+        btn.disabled = false;
+        btn.textContent = 'Guardar Registro';
+      }
     }
 
     function editRecord(id) {
+      hideDupBanner();
       const r = records.find(x => x.id === id);
       if (!r) return;
       document.getElementById('editId').value = r.id;
       document.getElementById('modalTitle').textContent = 'Editar Registro';
       document.getElementById('fOrigen').value = r.origen;
-      document.getElementById('fFecha').value = r.fecha;
+      document.getElementById('fFecha').value = String(r.fecha || '').slice(0, 10);
       document.getElementById('fCliente').value = r.cliente;
       document.getElementById('fTelefono').value = r.telefono || '';
       document.getElementById('fOperador').value = r.operador;
@@ -879,30 +1087,57 @@
       document.getElementById('recordModal').classList.add('open');
     }
 
-    function deleteRecord(id) {
+    async function deleteRecord(id) {
       records = records.filter(r => r.id !== id);
-      saveStorage();
-      renderAll();
+      saveLocalCache();
+      renderCurrent();
       toast('Registro eliminado');
+      try {
+        await fetch(WORKER_URL, {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({ action: 'delete_cuenta_movimiento', id })
+        });
+      } catch (e) {}
     }
 
-    function togglePay(id) {
-      records = records.map(r => r.id === id ? { ...r, pagado: r.pagado === 'PAGADO' ? 'NO PAGADO' : 'PAGADO' } : r);
-      saveStorage();
-      renderAll();
+    async function togglePay(id) {
+      const item = records.find(r => r.id === id);
+      if (!item) return;
+      const nextPay = item.pagado === 'PAGADO' ? 'NO PAGADO' : 'PAGADO';
+      records = records.map(r => r.id === id ? { ...r, pagado: nextPay } : r);
+      saveLocalCache();
+      renderCurrent();
+      try {
+        await fetch(WORKER_URL, {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({ action: 'update_cuenta_movimiento', ...item, pagado: nextPay })
+        });
+      } catch (e) {}
     }
 
-    function cycleStatus(id) {
+    async function cycleStatus(id) {
+      const item = records.find(r => r.id === id);
+      if (!item) return;
       const seq = ['EN PROCESO', 'EXITOSO', 'RECHAZADO'];
-      records = records.map(r => r.id === id ? { ...r, estado: seq[(seq.indexOf(r.estado) + 1) % seq.length] } : r);
-      saveStorage();
-      renderAll();
+      const nextSt = seq[(seq.indexOf(item.estado) + 1) % seq.length];
+      records = records.map(r => r.id === id ? { ...r, estado: nextSt } : r);
+      saveLocalCache();
+      renderCurrent();
+      try {
+        await fetch(WORKER_URL, {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({ action: 'update_cuenta_movimiento', ...item, estado: nextSt })
+        });
+      } catch (e) {}
     }
 
     function renderClients() {
       const q = (document.getElementById('clientSearch').value || '').toLowerCase().trim();
       const map = new Map();
-      records.forEach(r => {
+      records.filter(r => matchesPeriod(r.fecha, currentPeriod)).forEach(r => {
         const key = (r.cliente || 'Sin nombre').trim();
         if (!map.has(key)) map.set(key, { name: key, phone: r.telefono || '', total: 0, debt: 0, count: 0 });
         const c = map.get(key);
@@ -915,7 +1150,7 @@
       const list = Array.from(map.values()).filter(c => !q || c.name.toLowerCase().includes(q) || c.phone.includes(q));
       const grid = document.getElementById('clientsGrid');
       if (!list.length) {
-        grid.innerHTML = '<div class="info-card"><p>No hay clientes registrados aún.</p></div>';
+        grid.innerHTML = '<div class="info-card"><p>No hay clientes en este período.</p></div>';
         return;
       }
 
@@ -932,46 +1167,73 @@
       `).join('');
     }
 
-    function addExpense() {
+    async function addExpense() {
       const desc = document.getElementById('expDesc').value.trim();
       const amount = Number(document.getElementById('expAmount').value) || 0;
       if (!desc || amount <= 0) { toast('Escribe concepto y valor'); return; }
-      expenses.unshift({ id: 'EXP-' + Date.now(), date: new Date().toISOString().slice(0, 10), desc, amount });
+      const fecha = new Date().toISOString().slice(0, 10);
+
+      try {
+        const res = await fetch(WORKER_URL, {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({ action: 'create_cuenta_gasto', fecha, descripcion: desc, monto: amount })
+        });
+        const data = await res.json();
+        if (data.success && data.gasto) {
+          expenses.unshift(data.gasto);
+        } else {
+          expenses.unshift({ id: 'EXP-' + Date.now(), fecha, descripcion: desc, monto: amount });
+        }
+      } catch (e) {
+        expenses.unshift({ id: 'EXP-' + Date.now(), fecha, descripcion: desc, monto: amount });
+      }
+
       document.getElementById('expDesc').value = '';
       document.getElementById('expAmount').value = '';
-      saveStorage();
+      saveLocalCache();
       renderExpenses();
       toast('Gasto agregado');
     }
 
-    function deleteExpense(id) {
+    async function deleteExpense(id) {
       expenses = expenses.filter(x => x.id !== id);
-      saveStorage();
+      saveLocalCache();
       renderExpenses();
+      try {
+        await fetch(WORKER_URL, {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({ action: 'delete_cuenta_gasto', id })
+        });
+      } catch (e) {}
     }
 
     function renderExpenses() {
-      const total = expenses.reduce((s, e) => s + Number(e.amount || 0), 0);
+      const list = expenses.filter(e => matchesPeriod(e.fecha, currentPeriod));
+      const total = list.reduce((s, e) => s + Number(e.monto || 0), 0);
       document.getElementById('kpiExpensesTotal').textContent = money(total);
       const grid = document.getElementById('expensesGrid');
-      if (!expenses.length) {
-        grid.innerHTML = '<div class="info-card"><p>Sin gastos o deudas registradas.</p></div>';
+      if (!list.length) {
+        grid.innerHTML = '<div class="info-card"><p>Sin gastos o deudas en este período.</p></div>';
         return;
       }
-      grid.innerHTML = expenses.map(e => `
+      grid.innerHTML = list.map(e => `
         <div class="info-card">
-          <h3>${esc(e.desc)}</h3>
-          <p>Fecha: ${esc(e.date)}</p>
-          <p style="color:#dc2626;font-weight:900;font-size:15px;">${money(e.amount)}</p>
+          <h3>${esc(e.descripcion)}</h3>
+          <p>Fecha: ${esc(e.fecha)}</p>
+          <p style="color:#dc2626;font-weight:900;font-size:15px;">${money(e.monto)}</p>
           <button type="button" class="icon-btn del" style="margin-top:8px;" onclick="deleteExpense('${e.id}')">Eliminar</button>
         </div>
       `).join('');
     }
 
     function renderSummary() {
-      const sales = records.reduce((s, r) => s + Number(r.venta || 0), 0);
-      const costs = records.reduce((s, r) => s + Number(r.costo || 0), 0);
-      const exp = expenses.reduce((s, e) => s + Number(e.amount || 0), 0);
+      const rList = records.filter(r => matchesPeriod(r.fecha, currentPeriod));
+      const eList = expenses.filter(e => matchesPeriod(e.fecha, currentPeriod));
+      const sales = rList.reduce((s, r) => s + Number(r.venta || 0), 0);
+      const costs = rList.reduce((s, r) => s + Number(r.costo || 0), 0);
+      const exp = eList.reduce((s, e) => s + Number(e.monto || 0), 0);
       document.getElementById('sumSales').textContent = money(sales);
       document.getElementById('sumCosts').textContent = money(costs + exp);
       document.getElementById('sumNet').textContent = money(sales - costs - exp);
@@ -1001,14 +1263,29 @@
       const file = inp.files && inp.files[0];
       if (!file) return;
       const reader = new FileReader();
-      reader.onload = () => {
+      reader.onload = async () => {
         try {
           const data = JSON.parse(reader.result);
-          if (Array.isArray(data.records)) records = data.records;
-          if (Array.isArray(data.expenses)) expenses = data.expenses;
-          saveStorage();
-          renderAll();
-          toast('Respaldo restaurado');
+          if (Array.isArray(data.records)) {
+            for (const r of data.records) {
+              await fetch(WORKER_URL, {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify({ action: 'create_cuenta_movimiento', ...r })
+              });
+            }
+          }
+          if (Array.isArray(data.expenses)) {
+            for (const e of data.expenses) {
+              await fetch(WORKER_URL, {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify({ action: 'create_cuenta_gasto', ...e })
+              });
+            }
+          }
+          await syncFromCloud(false);
+          toast('Respaldo importado en D1');
         } catch (e) {
           toast('Archivo inválido');
         }
