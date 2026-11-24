@@ -356,7 +356,69 @@
     }
     .icon-btn.del { border-color: #fecaca; background: #fef2f2; color: #dc2626; }
 
-    /* --- DIRECTORIO DE CLIENTES Y DEUDAS --- */
+    /* --- CLIENTES EN LISTA + CUADRO INFORMATIVO --- */
+    .client-list {
+      display: flex;
+      flex-direction: column;
+      gap: 8px;
+      margin-bottom: 16px;
+    }
+    .client-row-card {
+      background: #ffffff;
+      border-radius: 14px;
+      padding: 12px 15px;
+      border: 1px solid #e2e8f0;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 12px;
+      flex-wrap: wrap;
+      cursor: pointer;
+      transition: all 0.14s ease;
+    }
+    .client-row-card:hover { border-color: #c81d4e; background: #fffafb; }
+    .client-row-card.selected { border-color: #c81d4e; background: #fff5f8; box-shadow: 0 4px 14px rgba(200, 29, 78, 0.1); }
+    .client-row-main { display: flex; flex-direction: column; gap: 2px; min-width: 180px; }
+    .client-row-name { font-size: 14px; font-weight: 900; color: #0f172a; }
+    .client-row-meta { font-size: 11.5px; color: #64748b; font-weight: 600; }
+    .client-row-stats { display: flex; align-items: center; gap: 14px; flex-wrap: wrap; font-size: 12px; font-weight: 800; }
+
+    .client-detail-panel {
+      display: none;
+      background: #ffffff;
+      border-radius: 18px;
+      padding: 16px 18px;
+      border: 2px solid #c81d4e;
+      box-shadow: 0 8px 24px rgba(15, 23, 42, 0.08);
+      margin-bottom: 16px;
+    }
+    .client-detail-panel.open { display: block; animation: fadeIn 0.16s ease; }
+    .client-detail-head {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 10px;
+      flex-wrap: wrap;
+      padding-bottom: 12px;
+      border-bottom: 1px solid #e2e8f0;
+      margin-bottom: 12px;
+    }
+    .client-mini-kpis {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(135px, 1fr));
+      gap: 8px;
+      margin-bottom: 12px;
+    }
+    .client-mini-kpi {
+      background: #f8fafc;
+      border: 1px solid #e2e8f0;
+      border-radius: 12px;
+      padding: 10px 12px;
+    }
+    .client-mini-kpi span { display: block; font-size: 10px; font-weight: 800; color: #64748b; text-transform: uppercase; }
+    .client-mini-kpi strong { display: block; font-size: 15px; font-weight: 900; margin-top: 3px; color: #0f172a; }
+
+    /* --- DIRECTORIO DE DEUDAS --- */
     .cards-grid {
       display: grid;
       grid-template-columns: repeat(auto-fill, minmax(250px, 1fr));
@@ -634,12 +696,74 @@
         </div>
       </section>
 
-      <!-- VISTA 2: CLIENTES -->
+      <!-- VISTA 2: CLIENTES EN LISTA + CUADRO INFORMATIVO -->
       <section id="view-clientes" class="view-section">
         <div class="toolbar">
-          <input id="clientSearch" class="search-input" type="search" placeholder="Buscar cliente por nombre o WhatsApp..." oninput="renderClients()" />
+          <select id="clientDropdown" class="filter-select" style="min-width:220px;" onchange="onClientDropdownChange(this.value)">
+            <option value="">-- Seleccionar cliente en lista --</option>
+          </select>
+          <input id="clientSearch" class="search-input" type="search" placeholder="Filtrar cliente por nombre o WhatsApp..." oninput="renderClients()" />
         </div>
-        <div id="clientsGrid" class="cards-grid"></div>
+
+        <!-- CUADRO INFORMATIVO DEL CLIENTE SELECCIONADO -->
+        <div id="clientDetailPanel" class="client-detail-panel">
+          <div class="client-detail-head">
+            <div>
+              <div id="detailClientName" style="font-size:17px;font-weight:900;color:#0f172a;">Cliente</div>
+              <div id="detailClientPhone" style="font-size:12px;color:#64748b;font-weight:600;">WhatsApp: -</div>
+            </div>
+            <div style="display:flex;align-items:center;gap:8px;flex-wrap:wrap;">
+              <select id="detailClientFilter" class="filter-select" onchange="renderSelectedClientDetail()">
+                <option value="ALL">Ver: Todos sus servicios (Global)</option>
+                <option value="NO_PAGADO">Ver: Solo No Pagados (Lo que debe)</option>
+                <option value="PAGADO">Ver: Solo Pagados</option>
+                <option value="EXITOSO">Ver: Solo Exitosos</option>
+              </select>
+              <button type="button" class="close-btn" onclick="closeClientDetail()" title="Cerrar cuadro">&times;</button>
+            </div>
+          </div>
+
+          <div class="client-mini-kpis">
+            <div class="client-mini-kpi">
+              <span>Servicios Global</span>
+              <strong id="cKpiTotalCount">0</strong>
+            </div>
+            <div class="client-mini-kpi">
+              <span>Exitosos</span>
+              <strong id="cKpiSuccessCount" style="color:#059669;">0</strong>
+            </div>
+            <div class="client-mini-kpi">
+              <span>Pagados (COP)</span>
+              <strong id="cKpiPaidCop" style="color:#059669;">$0 COP</strong>
+            </div>
+            <div class="client-mini-kpi">
+              <span>No Pagados / Debe</span>
+              <strong id="cKpiUnpaidCop" style="color:#dc2626;">$0 COP</strong>
+            </div>
+          </div>
+
+          <div class="table-card">
+            <div class="table-wrap">
+              <table style="min-width:620px;">
+                <thead>
+                  <tr>
+                    <th>Servicio</th>
+                    <th>Fecha</th>
+                    <th>Operador / Proceso</th>
+                    <th>Detalle</th>
+                    <th>Estado</th>
+                    <th>Valor (COP)</th>
+                    <th>Pago</th>
+                  </tr>
+                </thead>
+                <tbody id="clientServicesTbody"></tbody>
+              </table>
+            </div>
+          </div>
+        </div>
+
+        <!-- LISTA DE CLIENTES -->
+        <div id="clientsList" class="client-list"></div>
       </section>
 
       <!-- VISTA 3: DEUDAS Y GASTOS -->
@@ -801,6 +925,7 @@
     let currentView = 'consolidado';
     let currentPeriod = 'ALL';
     let usdtRate = 4200;
+    let selectedClientKey = '';
     let syncTimer = null;
 
     const VIEW_META = {
@@ -810,7 +935,7 @@
       servicios: { title: 'Servicios Técnicos', sub: 'FRP, MDM, Unlock, seriales y licencias (COP)' },
       binance: { title: 'USDT / Binance', sub: 'Movimientos pagados o calculados en USDT Binance' },
       enproceso: { title: 'En Proceso', sub: 'Trámites pendientes por finalizar' },
-      clientes: { title: 'Directorio de Clientes', sub: 'Historial agrupado y saldos en COP por cliente' },
+      clientes: { title: 'Directorio de Clientes', sub: 'Lista de clientes, historial global, exitosos, pagados y deudas' },
       deudas: { title: 'Deudas y Gastos', sub: 'Control de costos operativos en COP' },
       resumen: { title: 'Resumen Semanal', sub: 'Totales en COP y USDT por semana, mes y global' }
     };
@@ -1274,39 +1399,148 @@
       } catch (e) {}
     }
 
-    function renderClients() {
-      const q = (document.getElementById('clientSearch').value || '').toLowerCase().trim();
+    function getClientGroups() {
       const map = new Map();
-      records.filter(r => matchesPeriod(r.fecha, currentPeriod)).forEach(r => {
-        const key = (r.cliente || 'Sin nombre').trim();
-        if (!map.has(key)) map.set(key, { name: key, phone: r.telefono || '', total: 0, debt: 0, usdt: 0, count: 0 });
+      records.forEach(r => {
+        const rawName = (r.cliente || 'Sin nombre').trim() || 'Sin nombre';
+        const key = rawName.toLowerCase();
+        if (!map.has(key)) {
+          map.set(key, {
+            key,
+            name: rawName,
+            phone: r.telefono || '',
+            items: [],
+            total: 0,
+            paid: 0,
+            debt: 0,
+            successCount: 0,
+            unpaidCount: 0
+          });
+        }
         const c = map.get(key);
-        c.count += 1;
-        c.total += Number(r.venta || 0);
-        c.usdt += getRecordUsdt(r);
-        if (r.pagado === 'NO PAGADO') c.debt += Number(r.venta || 0);
+        const venta = Number(r.venta || 0);
+        c.items.push(r);
+        c.total += venta;
+        if (r.pagado === 'PAGADO') c.paid += venta;
+        else {
+          c.debt += venta;
+          c.unpaidCount += 1;
+        }
+        if (r.estado === 'EXITOSO') c.successCount += 1;
         if (!c.phone && r.telefono) c.phone = r.telefono;
       });
+      return Array.from(map.values());
+    }
 
-      const list = Array.from(map.values()).filter(c => !q || c.name.toLowerCase().includes(q) || c.phone.includes(q));
-      const grid = document.getElementById('clientsGrid');
-      if (!list.length) {
-        grid.innerHTML = '<div class="info-card"><p>No hay clientes en este período.</p></div>';
+    function selectClient(key) {
+      selectedClientKey = key || '';
+      const sel = document.getElementById('clientDropdown');
+      if (sel) sel.value = selectedClientKey;
+      renderSelectedClientDetail();
+      renderClients();
+    }
+
+    function onClientDropdownChange(val) {
+      selectClient(val);
+    }
+
+    function closeClientDetail() {
+      selectedClientKey = '';
+      const sel = document.getElementById('clientDropdown');
+      if (sel) sel.value = '';
+      document.getElementById('clientDetailPanel').classList.remove('open');
+      renderClients();
+    }
+
+    function renderSelectedClientDetail() {
+      const panel = document.getElementById('clientDetailPanel');
+      if (!selectedClientKey) {
+        panel.classList.remove('open');
         return;
       }
 
-      grid.innerHTML = list.map(c => `
-        <div class="info-card">
-          <h3>${esc(c.name)}</h3>
-          <p><strong>WhatsApp:</strong> ${esc(c.phone || 'No registrado')}</p>
-          <p><strong>Trabajos realizados:</strong> ${c.count}</p>
-          <p><strong>Facturado:</strong> ${cop(c.total)}</p>
-          ${c.usdt > 0 ? `<p style="color:#b45309;font-weight:800;">Binance: ${usdtFmt(c.usdt)}</p>` : ''}
-          <p style="color:${c.debt > 0 ? '#dc2626' : '#059669'};font-weight:800;">
-            ${c.debt > 0 ? 'Saldo pendiente: ' + cop(c.debt) : 'Al día en pagos'}
-          </p>
+      const groups = getClientGroups();
+      const client = groups.find(g => g.key === selectedClientKey);
+      if (!client) {
+        panel.classList.remove('open');
+        return;
+      }
+
+      panel.classList.add('open');
+      document.getElementById('detailClientName').textContent = client.name;
+      document.getElementById('detailClientPhone').textContent = `WhatsApp: ${client.phone || 'No registrado'} · ${client.items.length} servicios en global`;
+      document.getElementById('cKpiTotalCount').textContent = client.items.length;
+      document.getElementById('cKpiSuccessCount').textContent = client.successCount;
+      document.getElementById('cKpiPaidCop').textContent = cop(client.paid);
+      document.getElementById('cKpiUnpaidCop').textContent = cop(client.debt);
+
+      const filterMode = document.getElementById('detailClientFilter').value;
+      const filteredItems = client.items.filter(r => {
+        if (filterMode === 'NO_PAGADO') return r.pagado !== 'PAGADO';
+        if (filterMode === 'PAGADO') return r.pagado === 'PAGADO';
+        if (filterMode === 'EXITOSO') return r.estado === 'EXITOSO';
+        return true;
+      });
+
+      const tbody = document.getElementById('clientServicesTbody');
+      if (!filteredItems.length) {
+        tbody.innerHTML = '<tr><td colspan="7" style="text-align:center;padding:18px;color:#64748b;">No hay servicios para este filtro en este cliente.</td></tr>';
+        return;
+      }
+
+      tbody.innerHTML = filteredItems.map(r => {
+        const stClass = r.estado === 'EXITOSO' ? 'pill-exitoso' : (r.estado === 'RECHAZADO' ? 'pill-rechazado' : 'pill-proceso');
+        const payClass = r.pagado === 'PAGADO' ? 'pill-pagado' : 'pill-nopagado';
+        return `
+          <tr>
+            <td><span class="tag-origin ${origenBadgeClass(r.origen)}">${esc(r.origen)}</span></td>
+            <td class="num-nowrap">${esc(r.fecha)}</td>
+            <td><span class="op-badge ${operadorBadgeClass(r.operador)}">${esc(r.operador)}</span></td>
+            <td>${esc(r.detalle || '-')}</td>
+            <td><span class="pill ${stClass}">${esc(r.estado)}</span></td>
+            <td class="num-nowrap"><strong>${cop(r.venta)}</strong></td>
+            <td><button type="button" class="pill ${payClass}" onclick="togglePay('${r.id}')" title="Clic para cambiar pago">${esc(r.pagado)}</button></td>
+          </tr>
+        `;
+      }).join('');
+    }
+
+    function renderClients() {
+      const allGroups = getClientGroups();
+      const dropdown = document.getElementById('clientDropdown');
+      if (dropdown) {
+        dropdown.innerHTML = '<option value="">-- Seleccionar cliente en lista --</option>' +
+          allGroups.map(c => `<option value="${esc(c.key)}" ${c.key === selectedClientKey ? 'selected' : ''}>${esc(c.name)} (${c.items.length} · Debe ${cop(c.debt)})</option>`).join('');
+      }
+
+      const q = (document.getElementById('clientSearch').value || '').toLowerCase().trim();
+      const list = allGroups.filter(c => !q || c.name.toLowerCase().includes(q) || c.phone.includes(q));
+      const container = document.getElementById('clientsList');
+
+      if (!list.length) {
+        container.innerHTML = '<div class="info-card"><p>No hay clientes registrados aún.</p></div>';
+        return;
+      }
+
+      container.innerHTML = list.map(c => `
+        <div class="client-row-card ${c.key === selectedClientKey ? 'selected' : ''}" onclick="selectClient('${esc(c.key)}')">
+          <div class="client-row-main">
+            <div class="client-row-name">${esc(c.name)}</div>
+            <div class="client-row-meta">WhatsApp: ${esc(c.phone || 'No registrado')} · ${c.items.length} servicios · ${c.successCount} exitosos</div>
+          </div>
+          <div class="client-row-stats">
+            <span>Facturado: ${cop(c.total)}</span>
+            <span style="color:#059669;">Pagado: ${cop(c.paid)}</span>
+            <span style="color:${c.debt > 0 ? '#dc2626' : '#059669'};">
+              ${c.debt > 0 ? 'Debe: ' + cop(c.debt) : 'Al día'}
+            </span>
+          </div>
         </div>
       `).join('');
+
+      if (selectedClientKey) {
+        renderSelectedClientDetail();
+      }
     }
 
     async function addExpense() {
