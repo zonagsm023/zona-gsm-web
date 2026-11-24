@@ -216,6 +216,7 @@
     .kpi-val.green { color: #059669; }
     .kpi-val.red { color: #dc2626; }
     .kpi-val.amber { color: #d97706; }
+    .kpi-val.binance { color: #b45309; }
 
     /* --- BARRA DE FILTROS --- */
     .toolbar {
@@ -260,7 +261,7 @@
       overflow: hidden;
     }
     .table-wrap { overflow-x: auto; }
-    table { width: 100%; border-collapse: collapse; min-width: 860px; font-size: 12.5px; }
+    table { width: 100%; border-collapse: collapse; min-width: 900px; font-size: 12.5px; }
     thead th {
       background: #1e293b;
       color: #ffffff;
@@ -289,6 +290,16 @@
       font-weight: 800;
       background: #f1f5f9;
       color: #334155;
+    }
+    .tag-usdt {
+      display: inline-block;
+      padding: 2px 7px;
+      border-radius: 6px;
+      font-size: 10px;
+      font-weight: 800;
+      background: #fef3c7;
+      color: #92400e;
+      margin-top: 3px;
     }
 
     .pill {
@@ -428,7 +439,7 @@
       </div>
       <div>
         <div class="brand-title">ZONA GSM</div>
-        <div class="brand-sub">Control de Cuentas</div>
+        <div class="brand-sub">Cuentas en COP · USDT</div>
       </div>
     </div>
 
@@ -449,6 +460,10 @@
         <span>Servicios</span>
         <span id="badge-serv" class="nav-count">0</span>
       </button>
+      <button type="button" class="nav-item" data-view="binance" onclick="switchView('binance', this)">
+        <span>USDT / Binance</span>
+        <span id="badge-usdt" class="nav-count">0</span>
+      </button>
       <button type="button" class="nav-item" data-view="enproceso" onclick="switchView('enproceso', this)">
         <span>En Proceso</span>
         <span id="badge-proc" class="nav-count">0</span>
@@ -466,7 +481,7 @@
     </nav>
 
     <div class="sidebar-footer">
-      D1 Sincronizado · Zona GSM
+      Valores base en COP · D1 Sincronizado
     </div>
   </aside>
 
@@ -477,7 +492,7 @@
         <button type="button" class="menu-toggle" onclick="toggleSidebar(true)" aria-label="Abrir menú">&#9776;</button>
         <div>
           <div id="topbarTitle" class="page-title">Consolidado Global</div>
-          <div id="topbarSub" class="page-sub">Sincronizado con base de datos D1 · Semana, Mes y Total Global</div>
+          <div id="topbarSub" class="page-sub">Valores en Pesos Colombianos (COP) · Semana, Mes y Total Global</div>
         </div>
       </div>
 
@@ -495,26 +510,26 @@
         <button type="button" class="icon-btn" onclick="hideDupBanner()">Cerrar</button>
       </div>
 
-      <!-- SEPARACIÓN SEMANA / MES / TOTAL GLOBAL (EN TODAS LAS VISTAS) -->
+      <!-- SEPARACIÓN SEMANA / MES / GLOBAL (EN TODAS LAS VISTAS) -->
       <div class="period-strip">
         <button type="button" id="box-week" class="period-box" onclick="setPeriod('WEEK')">
-          <div class="period-tag">Esta Semana</div>
-          <div id="val-week" class="period-main">$0</div>
-          <div id="sub-week" class="period-sub">0 registros · Ganancia $0</div>
+          <div class="period-tag">Esta Semana (COP)</div>
+          <div id="val-week" class="period-main">$0 COP</div>
+          <div id="sub-week" class="period-sub">0 registros · Ganancia $0 COP</div>
         </button>
         <button type="button" id="box-month" class="period-box" onclick="setPeriod('MONTH')">
-          <div class="period-tag">Este Mes</div>
-          <div id="val-month" class="period-main">$0</div>
-          <div id="sub-month" class="period-sub">0 registros · Ganancia $0</div>
+          <div class="period-tag">Este Mes (COP)</div>
+          <div id="val-month" class="period-main">$0 COP</div>
+          <div id="sub-month" class="period-sub">0 registros · Ganancia $0 COP</div>
         </button>
         <button type="button" id="box-all" class="period-box selected" onclick="setPeriod('ALL')">
-          <div class="period-tag">Total Global</div>
-          <div id="val-all" class="period-main">$0</div>
-          <div id="sub-all" class="period-sub">0 registros · Ganancia $0</div>
+          <div class="period-tag">Total Global (COP)</div>
+          <div id="val-all" class="period-main">$0 COP</div>
+          <div id="sub-all" class="period-sub">0 registros · Ganancia $0 COP</div>
         </button>
       </div>
 
-      <!-- VISTA 1: CONSOLIDADO Y CATEGORÍAS -->
+      <!-- VISTA 1: CONSOLIDADO, CATEGORÍAS Y USDT / BINANCE -->
       <section id="view-records" class="view-section active">
         <div class="kpi-grid">
           <div class="kpi-card">
@@ -522,20 +537,24 @@
             <div id="kpiCount" class="kpi-val">0</div>
           </div>
           <div class="kpi-card">
-            <div class="kpi-lbl">Total Cobrado</div>
-            <div id="kpiPaid" class="kpi-val green">$0</div>
+            <div class="kpi-lbl">Total Cobrado (COP)</div>
+            <div id="kpiPaid" class="kpi-val green">$0 COP</div>
           </div>
           <div class="kpi-card">
-            <div class="kpi-lbl">Por Cobrar</div>
-            <div id="kpiUnpaid" class="kpi-val red">$0</div>
+            <div class="kpi-lbl">Por Cobrar (COP)</div>
+            <div id="kpiUnpaid" class="kpi-val red">$0 COP</div>
           </div>
           <div class="kpi-card">
             <div class="kpi-lbl">En Proceso</div>
             <div id="kpiPending" class="kpi-val amber">0</div>
           </div>
           <div class="kpi-card">
-            <div class="kpi-lbl">Ganancia Neta</div>
-            <div id="kpiProfit" class="kpi-val green">$0</div>
+            <div class="kpi-lbl">Ganancia Neta (COP)</div>
+            <div id="kpiProfit" class="kpi-val green">$0 COP</div>
+          </div>
+          <div class="kpi-card">
+            <div class="kpi-lbl">Pagos USDT Binance</div>
+            <div id="kpiUsdtTotal" class="kpi-val binance">0.00 USDT</div>
           </div>
         </div>
 
@@ -557,6 +576,11 @@
             <option value="EXITOSO">Exitoso</option>
             <option value="RECHAZADO">Rechazado</option>
           </select>
+          <div style="display:flex;align-items:center;gap:6px;">
+            <label for="usdtRateInput" style="font-size:12px;font-weight:800;color:#92400e;">1 USDT =</label>
+            <input id="usdtRateInput" class="filter-select" type="number" min="1" step="10" value="4200" style="width:110px;" oninput="updateUsdtRate(this.value)" title="Tasa COP por 1 USDT" />
+            <span style="font-size:11.5px;font-weight:800;color:#64748b;">COP</span>
+          </div>
         </div>
 
         <div class="table-card">
@@ -564,15 +588,16 @@
             <table>
               <thead>
                 <tr>
-                  <th>Origen</th>
+                  <th>Origen / Canal</th>
                   <th>Fecha</th>
                   <th>Cliente</th>
                   <th>Detalle / IMEI</th>
                   <th>Operador / Proceso</th>
                   <th>Estado</th>
-                  <th>Costo</th>
-                  <th>Venta</th>
-                  <th>Ganancia</th>
+                  <th>Costo (COP)</th>
+                  <th>Venta (COP)</th>
+                  <th>USDT Binance</th>
+                  <th>Ganancia (COP)</th>
                   <th>Pago</th>
                   <th>Acciones</th>
                 </tr>
@@ -595,13 +620,13 @@
       <section id="view-deudas" class="view-section">
         <div class="kpi-grid">
           <div class="kpi-card">
-            <div class="kpi-lbl">Deudas / Gastos (Período)</div>
-            <div id="kpiExpensesTotal" class="kpi-val red">$0</div>
+            <div class="kpi-lbl">Deudas / Gastos (COP)</div>
+            <div id="kpiExpensesTotal" class="kpi-val red">$0 COP</div>
           </div>
         </div>
         <div class="toolbar">
           <input id="expDesc" class="search-input" type="text" placeholder="Concepto (Ej. Créditos servidor, renta herramienta, gasto...)" />
-          <input id="expAmount" class="filter-select" type="number" placeholder="Valor $" style="width:140px;" />
+          <input id="expAmount" class="filter-select" type="number" placeholder="Valor COP $" style="width:150px;" />
           <button type="button" class="btn-primary" onclick="addExpense()">Agregar Gasto / Deuda</button>
         </div>
         <div id="expensesGrid" class="cards-grid"></div>
@@ -611,21 +636,25 @@
       <section id="view-resumen" class="view-section">
         <div class="kpi-grid">
           <div class="kpi-card">
-            <div class="kpi-lbl">Ventas (Período)</div>
-            <div id="sumSales" class="kpi-val">$0</div>
+            <div class="kpi-lbl">Ventas (COP)</div>
+            <div id="sumSales" class="kpi-val">$0 COP</div>
           </div>
           <div class="kpi-card">
-            <div class="kpi-lbl">Costos + Gastos (Período)</div>
-            <div id="sumCosts" class="kpi-val">$0</div>
+            <div class="kpi-lbl">Costos + Gastos (COP)</div>
+            <div id="sumCosts" class="kpi-val">$0 COP</div>
           </div>
           <div class="kpi-card">
-            <div class="kpi-lbl">Ganancia Neta (Período)</div>
-            <div id="sumNet" class="kpi-val green">$0</div>
+            <div class="kpi-lbl">Ganancia Neta (COP)</div>
+            <div id="sumNet" class="kpi-val green">$0 COP</div>
+          </div>
+          <div class="kpi-card">
+            <div class="kpi-lbl">Total USDT Binance</div>
+            <div id="sumUsdt" class="kpi-val binance">0.00 USDT</div>
           </div>
         </div>
         <div class="info-card">
           <h3>Respaldo y Portabilidad de Datos</h3>
-          <p style="margin-top:6px;">Todos tus datos se guardan en Cloudflare D1 y se sincronizan entre PC y teléfono.</p>
+          <p style="margin-top:6px;">Todos los registros se manejan en pesos colombianos (COP) con soporte para pagos en USDT por Binance, sincronizados con Cloudflare D1.</p>
           <div style="display:flex;gap:8px;margin-top:12px;flex-wrap:wrap;">
             <button type="button" class="btn-secondary" onclick="exportJson()">Descargar Respaldo JSON</button>
             <label class="btn-secondary" style="cursor:pointer;">
@@ -687,12 +716,26 @@
 
         <div class="form-grid">
           <div class="form-group">
-            <label for="fCosto">Costo ($)</label>
+            <label for="fCosto">Costo (COP $)</label>
             <input id="fCosto" class="form-control" type="number" min="0" step="100" value="0" />
           </div>
           <div class="form-group">
-            <label for="fVenta">Venta ($)</label>
-            <input id="fVenta" class="form-control" type="number" min="0" step="100" value="15000" required />
+            <label for="fVenta">Venta (COP $)</label>
+            <input id="fVenta" class="form-control" type="number" min="0" step="100" value="15000" required oninput="syncUsdtFromCop()" />
+          </div>
+        </div>
+
+        <div class="form-grid">
+          <div class="form-group">
+            <label for="fMoneda">Moneda / Canal de Pago</label>
+            <select id="fMoneda" class="form-control" onchange="syncUsdtFromCop()">
+              <option value="COP">COP (Pesos Colombianos)</option>
+              <option value="USDT">USDT (Binance)</option>
+            </select>
+          </div>
+          <div class="form-group">
+            <label for="fUsdt">Monto USDT (Binance)</label>
+            <input id="fUsdt" class="form-control" type="number" min="0" step="0.01" value="0.00" placeholder="0.00" />
           </div>
         </div>
 
@@ -725,32 +768,40 @@
     const WORKER_URL = "https://telegram-zonagsm.zonagsm023.workers.dev";
     const KEY_RECORDS = 'zonagsm_panel_records_v1';
     const KEY_EXPENSES = 'zonagsm_panel_expenses_v1';
+    const KEY_USDT_RATE = 'zonagsm_usdt_rate_v1';
 
     let records = [];
     let expenses = [];
     let currentView = 'consolidado';
     let currentPeriod = 'ALL'; // 'WEEK' | 'MONTH' | 'ALL'
+    let usdtRate = 4200;
     let syncTimer = null;
 
     const VIEW_META = {
-      consolidado: { title: 'Consolidado Global', sub: 'Todos los movimientos sincronizados · Semana, Mes y Total Global' },
-      noregistros: { title: 'No Registros', sub: 'Control de registros IMEI por operador' },
-      esim: { title: 'E-SIM', sub: 'Activaciones y ventas de líneas E-SIM' },
-      servicios: { title: 'Servicios Técnicos', sub: 'FRP, MDM, Unlock, seriales y licencias' },
+      consolidado: { title: 'Consolidado Global', sub: 'Todos los movimientos en COP · Semana, Mes y Total Global' },
+      noregistros: { title: 'No Registros', sub: 'Control de registros IMEI por operador (COP)' },
+      esim: { title: 'E-SIM', sub: 'Activaciones y ventas de líneas E-SIM (COP)' },
+      servicios: { title: 'Servicios Técnicos', sub: 'FRP, MDM, Unlock, seriales y licencias (COP)' },
+      binance: { title: 'USDT / Binance', sub: 'Movimientos pagados o calculados en USDT Binance' },
       enproceso: { title: 'En Proceso', sub: 'Trámites pendientes por finalizar' },
-      clientes: { title: 'Directorio de Clientes', sub: 'Historial agrupado y saldos por cliente' },
-      deudas: { title: 'Deudas y Gastos', sub: 'Control de costos operativos y pagos pendientes' },
-      resumen: { title: 'Resumen Semanal', sub: 'Totales por semana, mes y global' }
+      clientes: { title: 'Directorio de Clientes', sub: 'Historial agrupado y saldos en COP por cliente' },
+      deudas: { title: 'Deudas y Gastos', sub: 'Control de costos operativos en COP' },
+      resumen: { title: 'Resumen Semanal', sub: 'Totales en COP y USDT por semana, mes y global' }
     };
 
     window.addEventListener('DOMContentLoaded', () => {
       try {
         records = JSON.parse(localStorage.getItem(KEY_RECORDS) || '[]');
         expenses = JSON.parse(localStorage.getItem(KEY_EXPENSES) || '[]');
+        const savedRate = Number(localStorage.getItem(KEY_USDT_RATE));
+        if (savedRate > 0) usdtRate = savedRate;
       } catch (e) {
         records = [];
         expenses = [];
       }
+      const rateEl = document.getElementById('usdtRateInput');
+      if (rateEl) rateEl.value = usdtRate;
+
       renderCurrent();
       syncFromCloud(false);
       syncTimer = setInterval(() => syncFromCloud(false), 12000);
@@ -759,6 +810,33 @@
     function saveLocalCache() {
       localStorage.setItem(KEY_RECORDS, JSON.stringify(records));
       localStorage.setItem(KEY_EXPENSES, JSON.stringify(expenses));
+      localStorage.setItem(KEY_USDT_RATE, String(usdtRate));
+    }
+
+    function updateUsdtRate(val) {
+      const n = Number(val);
+      if (n > 0) {
+        usdtRate = n;
+        saveLocalCache();
+        renderCurrent();
+      }
+    }
+
+    function getRecordUsdt(r) {
+      if (Number(r.usdt) > 0) return Number(r.usdt);
+      if (r.moneda === 'USDT' && Number(r.venta) > 0 && usdtRate > 0) {
+        return Number(r.venta) / usdtRate;
+      }
+      return 0;
+    }
+
+    function syncUsdtFromCop() {
+      const moneda = document.getElementById('fMoneda').value;
+      const venta = Number(document.getElementById('fVenta').value) || 0;
+      const usdtInput = document.getElementById('fUsdt');
+      if (moneda === 'USDT' && usdtRate > 0) {
+        usdtInput.value = (venta / usdtRate).toFixed(2);
+      }
     }
 
     async function syncFromCloud(showMsg = false) {
@@ -794,7 +872,7 @@
       const d = new Date(parts[0], parts[1] - 1, parts[2]);
       const now = new Date();
       const today = new Date(now.getFullYear(), now.getMonth(), now.getDate());
-      const dayOfWeek = today.getDay(); // 0=Dom, 1=Lun...
+      const dayOfWeek = today.getDay();
       const diffToMonday = (dayOfWeek + 6) % 7;
       const monday = new Date(today);
       monday.setDate(today.getDate() - diffToMonday);
@@ -866,8 +944,12 @@
       else renderAll();
     }
 
-    function money(n) {
-      return '$' + Number(n || 0).toLocaleString('es-CO');
+    function cop(n) {
+      return '$' + Number(n || 0).toLocaleString('es-CO') + ' COP';
+    }
+
+    function usdtFmt(n) {
+      return Number(n || 0).toFixed(2) + ' USDT';
     }
 
     function esc(s) {
@@ -879,6 +961,7 @@
         if (currentView === 'noregistros') return r.origen === 'NO REGISTRO';
         if (currentView === 'esim') return r.origen === 'E-SIM';
         if (currentView === 'servicios') return r.origen === 'SERVICIO';
+        if (currentView === 'binance') return r.moneda === 'USDT' || Number(r.usdt) > 0;
         if (currentView === 'enproceso') return r.estado === 'EN PROCESO';
         return true;
       });
@@ -896,8 +979,8 @@
         const subList = catList.filter(r => matchesPeriod(r.fecha, p.key));
         const sales = subList.reduce((s, r) => s + Number(r.venta || 0), 0);
         const profit = subList.reduce((s, r) => s + (Number(r.venta || 0) - Number(r.costo || 0)), 0);
-        document.getElementById(p.valId).textContent = money(sales);
-        document.getElementById(p.subId).textContent = `${subList.length} registros · Ganancia ${money(profit)}`;
+        document.getElementById(p.valId).textContent = cop(sales);
+        document.getElementById(p.subId).textContent = `${subList.length} registros · Ganancia ${cop(profit)}`;
       });
     }
 
@@ -906,6 +989,7 @@
       document.getElementById('badge-noreg').textContent = records.filter(r => r.origen === 'NO REGISTRO').length;
       document.getElementById('badge-esim').textContent = records.filter(r => r.origen === 'E-SIM').length;
       document.getElementById('badge-serv').textContent = records.filter(r => r.origen === 'SERVICIO').length;
+      document.getElementById('badge-usdt').textContent = records.filter(r => r.moneda === 'USDT' || Number(r.usdt) > 0).length;
       document.getElementById('badge-proc').textContent = records.filter(r => r.estado === 'EN PROCESO').length;
 
       const uniqueClients = new Set(records.map(r => (r.cliente || '').trim().toLowerCase()).filter(Boolean));
@@ -919,12 +1003,14 @@
       const unpaid = baseList.filter(r => r.pagado === 'NO PAGADO').reduce((s, r) => s + Number(r.venta || 0), 0);
       const pending = baseList.filter(r => r.estado === 'EN PROCESO').length;
       const profit = baseList.reduce((s, r) => s + (Number(r.venta || 0) - Number(r.costo || 0)), 0);
+      const usdtSum = baseList.reduce((s, r) => s + getRecordUsdt(r), 0);
 
       document.getElementById('kpiCount').textContent = baseList.length;
-      document.getElementById('kpiPaid').textContent = money(paid);
-      document.getElementById('kpiUnpaid').textContent = money(unpaid);
+      document.getElementById('kpiPaid').textContent = cop(paid);
+      document.getElementById('kpiUnpaid').textContent = cop(unpaid);
       document.getElementById('kpiPending').textContent = pending;
-      document.getElementById('kpiProfit').textContent = money(profit);
+      document.getElementById('kpiProfit').textContent = cop(profit);
+      document.getElementById('kpiUsdtTotal').textContent = usdtFmt(usdtSum);
 
       const q = (document.getElementById('searchInput').value || '').toLowerCase().trim();
       const fPay = document.getElementById('filterPay').value;
@@ -934,7 +1020,7 @@
         if (fPay !== 'ALL' && r.pagado !== fPay) return false;
         if (fStatus !== 'ALL' && r.estado !== fStatus) return false;
         if (q) {
-          const hay = [r.origen, r.fecha, r.cliente, r.telefono, r.detalle, r.operador].some(v => String(v || '').toLowerCase().includes(q));
+          const hay = [r.origen, r.fecha, r.cliente, r.telefono, r.detalle, r.operador, r.moneda].some(v => String(v || '').toLowerCase().includes(q));
           if (!hay) return false;
         }
         return true;
@@ -942,25 +1028,31 @@
 
       const tbody = document.getElementById('recordsTbody');
       if (!rows.length) {
-        tbody.innerHTML = '<tr><td colspan="11" style="text-align:center;padding:24px;color:#64748b;">No hay registros en este período o vista.</td></tr>';
+        tbody.innerHTML = '<tr><td colspan="12" style="text-align:center;padding:24px;color:#64748b;">No hay registros en este período o vista.</td></tr>';
         return;
       }
 
       tbody.innerHTML = rows.map(r => {
         const gain = Number(r.venta || 0) - Number(r.costo || 0);
+        const uVal = getRecordUsdt(r);
+        const isUsdt = r.moneda === 'USDT' || uVal > 0;
         const stClass = r.estado === 'EXITOSO' ? 'pill-exitoso' : (r.estado === 'RECHAZADO' ? 'pill-rechazado' : 'pill-proceso');
         const payClass = r.pagado === 'PAGADO' ? 'pill-pagado' : 'pill-nopagado';
         return `
           <tr>
-            <td><span class="tag-origin">${esc(r.origen)}</span></td>
+            <td>
+              <span class="tag-origin">${esc(r.origen)}</span>
+              ${isUsdt ? `<br><span class="tag-usdt">Binance USDT</span>` : ''}
+            </td>
             <td>${esc(r.fecha)}</td>
             <td><strong>${esc(r.cliente)}</strong>${r.telefono ? `<br><span style="font-size:11px;color:#64748b;">${esc(r.telefono)}</span>` : ''}</td>
             <td>${esc(r.detalle || '-')}</td>
             <td>${esc(r.operador)}</td>
             <td><button type="button" class="pill ${stClass}" onclick="cycleStatus('${r.id}')" title="Clic para cambiar estado">${esc(r.estado)}</button></td>
-            <td>${money(r.costo)}</td>
-            <td><strong>${money(r.venta)}</strong></td>
-            <td style="color:#059669;font-weight:800;">${money(gain)}</td>
+            <td>${cop(r.costo)}</td>
+            <td><strong>${cop(r.venta)}</strong></td>
+            <td style="color:#b45309;font-weight:800;">${uVal > 0 ? usdtFmt(uVal) : '-'}</td>
+            <td style="color:#059669;font-weight:800;">${cop(gain)}</td>
             <td><button type="button" class="pill ${payClass}" onclick="togglePay('${r.id}')" title="Clic para cambiar pago">${esc(r.pagado)}</button></td>
             <td>
               <div class="row-actions">
@@ -983,7 +1075,9 @@
       document.getElementById('fOperador').value = '';
       document.getElementById('fDetalle').value = '';
       document.getElementById('fCosto').value = '0';
-      document.getElementById('fVenta').value = '';
+      document.getElementById('fVenta').value = '15000';
+      document.getElementById('fMoneda').value = currentView === 'binance' ? 'USDT' : 'COP';
+      document.getElementById('fUsdt').value = currentView === 'binance' ? (15000 / usdtRate).toFixed(2) : '0.00';
       document.getElementById('fEstado').value = 'EN PROCESO';
       document.getElementById('fPagado').value = 'NO PAGADO';
 
@@ -1011,11 +1105,12 @@
         detalle: document.getElementById('fDetalle').value.trim(),
         costo: Number(document.getElementById('fCosto').value) || 0,
         venta: Number(document.getElementById('fVenta').value) || 0,
+        moneda: document.getElementById('fMoneda').value,
+        usdt: Number(document.getElementById('fUsdt').value) || 0,
         estado: document.getElementById('fEstado').value,
         pagado: document.getElementById('fPagado').value
       };
 
-      // Validación local rápida de duplicados antes de enviar
       if (!id) {
         const dup = records.find(r =>
           String(r.origen || '').toLowerCase() === payload.origen.toLowerCase() &&
@@ -1082,6 +1177,8 @@
       document.getElementById('fDetalle').value = r.detalle || '';
       document.getElementById('fCosto').value = r.costo;
       document.getElementById('fVenta').value = r.venta;
+      document.getElementById('fMoneda').value = r.moneda || (Number(r.usdt) > 0 ? 'USDT' : 'COP');
+      document.getElementById('fUsdt').value = getRecordUsdt(r).toFixed(2);
       document.getElementById('fEstado').value = r.estado;
       document.getElementById('fPagado').value = r.pagado;
       document.getElementById('recordModal').classList.add('open');
@@ -1139,10 +1236,11 @@
       const map = new Map();
       records.filter(r => matchesPeriod(r.fecha, currentPeriod)).forEach(r => {
         const key = (r.cliente || 'Sin nombre').trim();
-        if (!map.has(key)) map.set(key, { name: key, phone: r.telefono || '', total: 0, debt: 0, count: 0 });
+        if (!map.has(key)) map.set(key, { name: key, phone: r.telefono || '', total: 0, debt: 0, usdt: 0, count: 0 });
         const c = map.get(key);
         c.count += 1;
         c.total += Number(r.venta || 0);
+        c.usdt += getRecordUsdt(r);
         if (r.pagado === 'NO PAGADO') c.debt += Number(r.venta || 0);
         if (!c.phone && r.telefono) c.phone = r.telefono;
       });
@@ -1159,9 +1257,10 @@
           <h3>${esc(c.name)}</h3>
           <p><strong>WhatsApp:</strong> ${esc(c.phone || 'No registrado')}</p>
           <p><strong>Trabajos realizados:</strong> ${c.count}</p>
-          <p><strong>Facturado:</strong> ${money(c.total)}</p>
+          <p><strong>Facturado:</strong> ${cop(c.total)}</p>
+          ${c.usdt > 0 ? `<p style="color:#b45309;font-weight:800;">Binance: ${usdtFmt(c.usdt)}</p>` : ''}
           <p style="color:${c.debt > 0 ? '#dc2626' : '#059669'};font-weight:800;">
-            ${c.debt > 0 ? 'Saldo pendiente: ' + money(c.debt) : 'Al día en pagos'}
+            ${c.debt > 0 ? 'Saldo pendiente: ' + cop(c.debt) : 'Al día en pagos'}
           </p>
         </div>
       `).join('');
@@ -1170,7 +1269,7 @@
     async function addExpense() {
       const desc = document.getElementById('expDesc').value.trim();
       const amount = Number(document.getElementById('expAmount').value) || 0;
-      if (!desc || amount <= 0) { toast('Escribe concepto y valor'); return; }
+      if (!desc || amount <= 0) { toast('Escribe concepto y valor en COP'); return; }
       const fecha = new Date().toISOString().slice(0, 10);
 
       try {
@@ -1193,7 +1292,7 @@
       document.getElementById('expAmount').value = '';
       saveLocalCache();
       renderExpenses();
-      toast('Gasto agregado');
+      toast('Gasto agregado en COP');
     }
 
     async function deleteExpense(id) {
@@ -1212,7 +1311,7 @@
     function renderExpenses() {
       const list = expenses.filter(e => matchesPeriod(e.fecha, currentPeriod));
       const total = list.reduce((s, e) => s + Number(e.monto || 0), 0);
-      document.getElementById('kpiExpensesTotal').textContent = money(total);
+      document.getElementById('kpiExpensesTotal').textContent = cop(total);
       const grid = document.getElementById('expensesGrid');
       if (!list.length) {
         grid.innerHTML = '<div class="info-card"><p>Sin gastos o deudas en este período.</p></div>';
@@ -1222,7 +1321,7 @@
         <div class="info-card">
           <h3>${esc(e.descripcion)}</h3>
           <p>Fecha: ${esc(e.fecha)}</p>
-          <p style="color:#dc2626;font-weight:900;font-size:15px;">${money(e.monto)}</p>
+          <p style="color:#dc2626;font-weight:900;font-size:15px;">${cop(e.monto)}</p>
           <button type="button" class="icon-btn del" style="margin-top:8px;" onclick="deleteExpense('${e.id}')">Eliminar</button>
         </div>
       `).join('');
@@ -1234,15 +1333,17 @@
       const sales = rList.reduce((s, r) => s + Number(r.venta || 0), 0);
       const costs = rList.reduce((s, r) => s + Number(r.costo || 0), 0);
       const exp = eList.reduce((s, e) => s + Number(e.monto || 0), 0);
-      document.getElementById('sumSales').textContent = money(sales);
-      document.getElementById('sumCosts').textContent = money(costs + exp);
-      document.getElementById('sumNet').textContent = money(sales - costs - exp);
+      const usdtSum = rList.reduce((s, r) => s + getRecordUsdt(r), 0);
+      document.getElementById('sumSales').textContent = cop(sales);
+      document.getElementById('sumCosts').textContent = cop(costs + exp);
+      document.getElementById('sumNet').textContent = cop(sales - costs - exp);
+      document.getElementById('sumUsdt').textContent = usdtFmt(usdtSum);
     }
 
     function exportCsv() {
-      const headers = ['Origen', 'Fecha', 'Cliente', 'Telefono', 'Detalle', 'Operador', 'Estado', 'Costo', 'Venta', 'Ganancia', 'Pagado'];
+      const headers = ['Origen', 'Fecha', 'Cliente', 'Telefono', 'Detalle', 'Operador', 'Estado', 'Costo_COP', 'Venta_COP', 'USDT_Binance', 'Ganancia_COP', 'Pagado'];
       const rows = records.map(r => [
-        r.origen, r.fecha, r.cliente, r.telefono, r.detalle, r.operador, r.estado, r.costo, r.venta, (Number(r.venta || 0) - Number(r.costo || 0)), r.pagado
+        r.origen, r.fecha, r.cliente, r.telefono, r.detalle, r.operador, r.estado, r.costo, r.venta, getRecordUsdt(r).toFixed(2), (Number(r.venta || 0) - Number(r.costo || 0)), r.pagado
       ].map(v => `"${String(v || '').replace(/"/g, '""')}"`).join(','));
       const blob = new Blob(['\uFEFF' + [headers.join(','), ...rows].join('\n')], { type: 'text/csv;charset=utf-8;' });
       const a = document.createElement('a');
@@ -1252,7 +1353,7 @@
     }
 
     function exportJson() {
-      const blob = new Blob([JSON.stringify({ records, expenses }, null, 2)], { type: 'application/json' });
+      const blob = new Blob([JSON.stringify({ records, expenses, usdtRate }, null, 2)], { type: 'application/json' });
       const a = document.createElement('a');
       a.href = URL.createObjectURL(blob);
       a.download = 'respaldo-zonagsm.json';
