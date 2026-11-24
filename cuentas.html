@@ -1132,7 +1132,7 @@
     <div class="ai-drawer-head">
       <div>
         <h3>Asistente de Cuentas</h3>
-        <span>Crea o edita órdenes directo en D1</span>
+        <span>Crea o edita órdenes y caja en D1</span>
       </div>
       <button type="button" class="close-btn" style="color:#0f172a;" onclick="toggleAiDrawer(false)">&times;</button>
     </div>
@@ -1141,7 +1141,8 @@
       <div class="ai-msg bot">
         Dime qué quieres crear o editar. Ejemplos:<br>
         • <em>"Crea No Registro Tigo cliente Pedro 3104141805 IMEI 35888887664849 venta 25000 costo 10000 Nequi pagado exitoso"</em><br>
-        • <em>"Edita orden ORD-140W a pagado y exitoso por Bancolombia"</em>
+        • <em>"Edita orden ORD-140W a pagado y exitoso por Bancolombia"</em><br>
+        • <em>"Salida de 15000 en Nequi por comida"</em>
       </div>
     </div>
 
@@ -2117,6 +2118,39 @@
       const raw = String(text || '').trim();
       const lower = raw.toLowerCase();
 
+      let canal = 'EFECTIVO';
+      if (/\bnequi\b/.test(lower)) canal = 'NEQUI';
+      else if (/\bbancolombia\b|\bbanco\b/.test(lower)) canal = 'BANCOLOMBIA';
+      else if (/\busdt\b|\bbinance\b|\bcripto\b/.test(lower)) canal = 'USDT_CRIPTO';
+
+      const copMatches = Array.from(raw.matchAll(/\$?\s*(\d{1,3}(?:[.,]\d{3})+|\d{3,})\s*(?:cop|pesos)?/gi))
+        .map(m => Number(String(m[1]).replace(/\./g, '').replace(/,/g, '')))
+        .filter(n => n > 0);
+
+      const isCashFlow = /\b(gasto|gaste|salida|retiro|pague|pagué|entrada|ingrese|ingresó|recibi|recibí|comida|renta|crédito|credito|transferencia)\b/.test(lower)
+        && !/\b(orden|imei|e-?sim|no\s*registro|servicio|frp|mdm|bypass|unlock)\b/.test(lower);
+
+      if (isCashFlow) {
+        const isEntrada = /\b(entrada|ingrese|ingresó|recibi|recibí|abono|cobro\s*extra)\b/.test(lower);
+        const tipo = isEntrada ? 'ENTRADA' : 'SALIDA';
+        const conceptoLimpio = raw
+          .replace(/\b(registra|registrate|anota|agrega|pon|crea|una|un|salida|gasto|entrada|de|en|por|pesos|cop|\$)\b/gi, ' ')
+          .replace(/\b(efectivo|nequi|bancolombia|banco|usdt|binance|cripto)\b/gi, ' ')
+          .replace(/\b\d{1,3}(?:[.,]\d{3})+|\b\d{2,}\b/g, ' ')
+          .replace(/\s+/g, ' ')
+          .trim() || (isEntrada ? 'Entrada de dinero' : 'Gasto / salida');
+
+        return {
+          mode: 'create',
+          target: 'gasto',
+          fecha: new Date().toISOString().slice(0, 10),
+          tipo,
+          canal,
+          descripcion: conceptoLimpio,
+          monto: copMatches[0] || 0
+        };
+      }
+
       const idMatch = raw.match(/\b((?:ZG|ORD|ESIM|EXP)-[A-Za-z0-9_-]+)\b/i);
       const existingRecord = idMatch
         ? records.find(r =>
@@ -2129,11 +2163,6 @@
           });
 
       const isEdit = Boolean(existingRecord) || /\b(edita|editar|cambia|cambiar|actualiza|actualizar|marca|marcar)\b/.test(lower);
-
-      let canal = 'EFECTIVO';
-      if (/\bnequi\b/.test(lower)) canal = 'NEQUI';
-      else if (/\bbancolombia\b|\bbanco\b/.test(lower)) canal = 'BANCOLOMBIA';
-      else if (/\busdt\b|\bbinance\b|\bcripto\b/.test(lower)) canal = 'USDT_CRIPTO';
 
       let pagado = existingRecord ? existingRecord.pagado : 'NO PAGADO';
       if (/\bno\s*pagado\b|\bpendiente\b|\bdebe\b/.test(lower)) pagado = 'NO PAGADO';
@@ -2149,12 +2178,12 @@
       else if (/\bno\s*registro\b|\bimei\b/.test(lower)) origen = 'NO REGISTRO';
       else if (/\bservicio\b|\bfrp\b|\bmdm\b|\bbypass\b|\bunlock\b/.test(lower)) origen = 'SERVICIO';
 
-      const copMatches = Array.from(raw.matchAll(/\$?\s*(\d{1,3}(?:[.,]\d{3})+|\d{4,})\s*(?:cop|pesos)?/gi))
-        .map(m => Number(String(m[1]).replace(/\./g, '').replace(/,/g, '')))
-        .filter(n => n > 0);
-
       const usdtMatch = raw.match(/(\d+(?:[.,]\d+)?)\s*usdt/i);
-      const usdtVal = usdtMatch ? parseFloat(usdtMatch[1].replace(',', '.')) : (canal === 'USDT_CRIPTO' && copMatches[0] && usdtRate > 0 ? Number((copMatches[0] / usdtRate).toFixed(2)) : (existingRecord ? Number(existingRecord.usdt || 0) : 0));
+      const usdtVal = usdtMatch
+        ? parseFloat(usdtMatch[1].replace(',', '.'))
+        : (canal === 'USDT_CRIPTO' && copMatches[0] && usdtRate > 0
+            ? Number((copMatches[0] / usdtRate).toFixed(2))
+            : (existingRecord ? Number(existingRecord.usdt || 0) : 0));
 
       let venta = existingRecord ? Number(existingRecord.venta || 0) : (copMatches[0] || 0);
       let costo = existingRecord ? Number(existingRecord.costo || 0) : 0;
@@ -2222,11 +2251,18 @@
           throw new Error(data.error || 'No se pudo aplicar el cambio');
         }
         await syncFromCloud(false);
-        appendAiMsg(
-          `✅ ${payload.mode === 'update' ? 'Actualizado' : 'Creado'}: <strong>${esc(payload.cliente)}</strong> · ${esc(payload.origen)} (${esc(payload.operador)}) · ${cop(payload.venta)} · <strong>${esc(payload.pagado)}</strong> / <strong>${esc(payload.estado)}</strong>`,
-          'bot'
-        );
-        toast(payload.mode === 'update' ? 'Orden editada en D1' : 'Orden creada en D1');
+        if (payload.target === 'gasto') {
+          appendAiMsg(
+            `✅ ${payload.tipo === 'ENTRADA' ? 'Ingreso' : 'Gasto'} en <strong>${canalLabel(payload.canal)}</strong>: <strong>${esc(payload.descripcion)}</strong> · ${cop(payload.monto)}`,
+            'bot'
+          );
+        } else {
+          appendAiMsg(
+            `✅ ${payload.mode === 'update' ? 'Actualizado' : 'Creado'}: <strong>${esc(payload.cliente)}</strong> · ${esc(payload.origen)} (${esc(payload.operador)}) · ${cop(payload.venta)} · <strong>${esc(payload.pagado)}</strong> / <strong>${esc(payload.estado)}</strong>`,
+            'bot'
+          );
+        }
+        toast(payload.target === 'gasto' ? 'Movimiento guardado en D1' : (payload.mode === 'update' ? 'Orden editada en D1' : 'Orden creada en D1'));
       } catch (err) {
         appendAiMsg(`⚠️ Error: ${esc(err.message || 'No se pudo procesar')}`, 'bot');
       } finally {
