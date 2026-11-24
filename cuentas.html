@@ -221,6 +221,7 @@
     .kpi-val.red { color: #dc2626; }
     .kpi-val.amber { color: #d97706; }
     .kpi-val.binance { color: #b45309; }
+    .kpi-sub { font-size: 11px; color: #64748b; font-weight: 700; margin-top: 2px; }
 
     /* --- BARRA DE FILTROS --- */
     .toolbar {
@@ -310,6 +311,9 @@
       margin-top: 3px;
       white-space: nowrap;
     }
+    .tag-entrada { background: #dcfce7; color: #15803d; border: 1px solid #86efac; }
+    .tag-salida { background: #fee2e2; color: #b91c1c; border: 1px solid #fca5a5; }
+    .tag-wallet { background: #f1f5f9; color: #0f172a; border: 1px solid #cbd5e1; }
 
     .op-badge {
       display: inline-block;
@@ -381,7 +385,7 @@
     .client-row-main { display: flex; flex-direction: column; gap: 2px; min-width: 180px; }
     .client-row-name { font-size: 14px; font-weight: 900; color: #0f172a; }
     .client-row-meta { font-size: 11.5px; color: #64748b; font-weight: 600; }
-    .client-row-stats { display: flex; align-items: center; gap: 14px; flex-wrap: wrap; font-size: 12px; font-weight: 800; }
+    .client-row-stats { display: flex; align-items: center; gap: 12px; flex-wrap: wrap; font-size: 12px; font-weight: 800; }
 
     .client-detail-panel {
       display: none;
@@ -418,7 +422,7 @@
     .client-mini-kpi span { display: block; font-size: 10px; font-weight: 800; color: #64748b; text-transform: uppercase; }
     .client-mini-kpi strong { display: block; font-size: 15px; font-weight: 900; margin-top: 3px; color: #0f172a; }
 
-    /* --- DIRECTORIO DE DEUDAS --- */
+    /* --- DIRECTORIO DE DEUDAS / ENTRADAS Y SALIDAS --- */
     .cards-grid {
       display: grid;
       grid-template-columns: repeat(auto-fill, minmax(250px, 1fr));
@@ -744,7 +748,7 @@
 
           <div class="table-card">
             <div class="table-wrap">
-              <table style="min-width:620px;">
+              <table style="min-width:650px;">
                 <thead>
                   <tr>
                     <th>Servicio</th>
@@ -754,6 +758,7 @@
                     <th>Estado</th>
                     <th>Valor (COP)</th>
                     <th>Pago</th>
+                    <th>Eliminar</th>
                   </tr>
                 </thead>
                 <tbody id="clientServicesTbody"></tbody>
@@ -766,19 +771,52 @@
         <div id="clientsList" class="client-list"></div>
       </section>
 
-      <!-- VISTA 3: DEUDAS Y GASTOS -->
+      <!-- VISTA 3: ENTRADAS Y SALIDAS DE DINERO + DISPONIBLE GLOBAL POR CANAL -->
       <section id="view-deudas" class="view-section">
         <div class="kpi-grid">
           <div class="kpi-card">
-            <div class="kpi-lbl">Deudas / Gastos (COP)</div>
+            <div class="kpi-lbl">Disponible Efectivo (Global)</div>
+            <div id="balEfectivo" class="kpi-val green">$0 COP</div>
+            <div id="subEfectivo" class="kpi-sub">Pagos + Entradas - Salidas</div>
+          </div>
+          <div class="kpi-card">
+            <div class="kpi-lbl">Disponible Nequi (Global)</div>
+            <div id="balNequi" class="kpi-val green">$0 COP</div>
+            <div id="subNequi" class="kpi-sub">Pagos + Entradas - Salidas</div>
+          </div>
+          <div class="kpi-card">
+            <div class="kpi-lbl">Disponible Bancolombia (Global)</div>
+            <div id="balBancolombia" class="kpi-val green">$0 COP</div>
+            <div id="subBancolombia" class="kpi-sub">Pagos + Entradas - Salidas</div>
+          </div>
+          <div class="kpi-card">
+            <div class="kpi-lbl">Disponible USDT / Cripto</div>
+            <div id="balUsdtCripto" class="kpi-val binance">0.00 USDT</div>
+            <div id="balUsdtCopEq" class="kpi-sub">$0 COP aprox.</div>
+          </div>
+          <div class="kpi-card">
+            <div class="kpi-lbl">Entradas vs Salidas (Período)</div>
             <div id="kpiExpensesTotal" class="kpi-val red">$0 COP</div>
+            <div id="subInOutPeriod" class="kpi-sub">Entradas $0 · Salidas $0</div>
           </div>
         </div>
+
         <div class="toolbar">
-          <input id="expDesc" class="search-input" type="text" placeholder="Concepto (Ej. Créditos servidor, renta herramienta, gasto...)" />
-          <input id="expAmount" class="filter-select" type="number" placeholder="Valor COP $" style="width:150px;" />
-          <button type="button" class="btn-primary" onclick="addExpense()">Agregar Gasto / Deuda</button>
+          <select id="expTipo" class="filter-select">
+            <option value="SALIDA">Salida / Gasto (-)</option>
+            <option value="ENTRADA">Entrada de Dinero (+)</option>
+          </select>
+          <select id="expCanal" class="filter-select">
+            <option value="EFECTIVO">Efectivo</option>
+            <option value="NEQUI">Nequi</option>
+            <option value="BANCOLOMBIA">Bancolombia</option>
+            <option value="USDT_CRIPTO">USDT / Criptomonedas</option>
+          </select>
+          <input id="expDesc" class="search-input" type="text" placeholder="Concepto (Ej. Pago cliente, recarga Nequi, compra USDT, gasto...)" />
+          <input id="expAmount" class="filter-select" type="number" min="0" step="100" placeholder="Valor COP $" style="width:140px;" />
+          <button type="button" class="btn-primary" onclick="addExpense()">Guardar Movimiento</button>
         </div>
+
         <div id="expensesGrid" class="cards-grid"></div>
       </section>
 
@@ -786,11 +824,11 @@
       <section id="view-resumen" class="view-section">
         <div class="kpi-grid">
           <div class="kpi-card">
-            <div class="kpi-lbl">Ventas (COP)</div>
+            <div class="kpi-lbl">Ventas + Entradas (COP)</div>
             <div id="sumSales" class="kpi-val">$0 COP</div>
           </div>
           <div class="kpi-card">
-            <div class="kpi-lbl">Costos + Gastos (COP)</div>
+            <div class="kpi-lbl">Costos + Salidas (COP)</div>
             <div id="sumCosts" class="kpi-val">$0 COP</div>
           </div>
           <div class="kpi-card">
@@ -936,7 +974,7 @@
       binance: { title: 'USDT / Binance', sub: 'Movimientos pagados o calculados en USDT Binance' },
       enproceso: { title: 'En Proceso', sub: 'Trámites pendientes por finalizar' },
       clientes: { title: 'Directorio de Clientes', sub: 'Lista de clientes, historial global, exitosos, pagados y deudas' },
-      deudas: { title: 'Deudas y Gastos', sub: 'Control de costos operativos en COP' },
+      deudas: { title: 'Entradas, Salidas y Saldos', sub: 'Control de dinero de la empresa: pagos de clientes, entradas, salidas y disponible global' },
       resumen: { title: 'Resumen Semanal', sub: 'Totales en COP y USDT por semana, mes y global' }
     };
 
@@ -1373,6 +1411,15 @@
       }
     }
 
+    async function deleteClientRecords(clientKey, ev) {
+      if (ev) ev.stopPropagation();
+      const targets = records.filter(r => ((r.cliente || 'Sin nombre').trim() || 'Sin nombre').toLowerCase() === clientKey);
+      for (const item of targets) {
+        await deleteRecord(item.id);
+      }
+      if (selectedClientKey === clientKey) closeClientDetail();
+    }
+
     async function togglePay(id) {
       const item = records.find(r => r.id === id);
       if (!item) return;
@@ -1380,6 +1427,7 @@
       records = records.map(r => r.id === id ? { ...r, pagado: nextPay } : r);
       saveLocalCache();
       renderCurrent();
+      toast(nextPay === 'PAGADO' ? 'Pago sumado a caja/cuentas' : 'Pago retirado de caja/cuentas');
       try {
         await fetch(WORKER_URL, {
           method: 'POST',
@@ -1491,7 +1539,7 @@
 
       const tbody = document.getElementById('clientServicesTbody');
       if (!filteredItems.length) {
-        tbody.innerHTML = '<tr><td colspan="7" style="text-align:center;padding:18px;color:#64748b;">No hay servicios para este filtro en este cliente.</td></tr>';
+        tbody.innerHTML = '<tr><td colspan="8" style="text-align:center;padding:18px;color:#64748b;">No hay servicios para este filtro en este cliente.</td></tr>';
         return;
       }
 
@@ -1507,6 +1555,7 @@
             <td><span class="pill ${stClass}">${esc(r.estado)}</span></td>
             <td class="num-nowrap"><strong>${cop(r.venta)}</strong></td>
             <td><button type="button" class="pill ${payClass}" onclick="togglePay('${r.id}')" title="Clic para cambiar pago">${esc(r.pagado)}</button></td>
+            <td><button type="button" class="icon-btn del" onclick="deleteRecord('${r.id}')">X</button></td>
           </tr>
         `;
       }).join('');
@@ -1541,6 +1590,7 @@
             <span style="color:${c.debt > 0 ? '#dc2626' : '#059669'};">
               ${c.debt > 0 ? 'Debe: ' + cop(c.debt) : 'Al día'}
             </span>
+            <button type="button" class="icon-btn del" onclick="deleteClientRecords('${esc(c.key)}', event)">Eliminar</button>
           </div>
         </div>
       `).join('');
@@ -1550,39 +1600,94 @@
       }
     }
 
+    function detectRecordWallet(r) {
+      const uVal = getRecordUsdt(r);
+      if (r.moneda === 'USDT' || uVal > 0) return 'USDT_CRIPTO';
+      const txt = `${r.operador || ''} ${r.detalle || ''}`.toUpperCase();
+      if (txt.includes('NEQUI')) return 'NEQUI';
+      if (txt.includes('BANCOLOMBIA') || txt.includes('BANCO')) return 'BANCOLOMBIA';
+      return 'EFECTIVO';
+    }
+
+    function parseCanal(desc) {
+      const txt = String(desc || '').toUpperCase();
+      if (txt.includes('[NEQUI]') || txt.includes('NEQUI')) return 'NEQUI';
+      if (txt.includes('[BANCOLOMBIA]') || txt.includes('BANCOLOMBIA')) return 'BANCOLOMBIA';
+      if (txt.includes('[USDT_CRIPTO]') || txt.includes('[USDT]') || txt.includes('BINANCE') || txt.includes('USDT') || txt.includes('CRIPTO')) return 'USDT_CRIPTO';
+      if (txt.includes('[EFECTIVO]') || txt.includes('EFECTIVO')) return 'EFECTIVO';
+      return 'EFECTIVO';
+    }
+
+    function parseTipo(desc, amount) {
+      const txt = String(desc || '').toUpperCase();
+      if (txt.includes('[ENTRADA]') || Number(amount) < 0) return 'ENTRADA';
+      return 'SALIDA';
+    }
+
+    function cleanConceptText(desc) {
+      return String(desc || '').replace(/\[(ENTRADA|SALIDA|EFECTIVO|NEQUI|BANCOLOMBIA|USDT_CRIPTO|USDT)\]/gi, '').trim() || 'Movimiento';
+    }
+
+    function computeGlobalBalances() {
+      const balances = { EFECTIVO: 0, NEQUI: 0, BANCOLOMBIA: 0, USDT_CRIPTO: 0 };
+      const clientPaidByWallet = { EFECTIVO: 0, NEQUI: 0, BANCOLOMBIA: 0, USDT_CRIPTO: 0 };
+
+      records.filter(r => r.pagado === 'PAGADO').forEach(r => {
+        const venta = Number(r.venta || 0);
+        const wallet = detectRecordWallet(r);
+        balances[wallet] += venta;
+        clientPaidByWallet[wallet] += venta;
+      });
+
+      expenses.forEach(e => {
+        const canal = parseCanal(e.descripcion);
+        const tipo = parseTipo(e.descripcion, e.monto);
+        const val = Math.abs(Number(e.monto || 0));
+        if (tipo === 'ENTRADA') balances[canal] += val;
+        else balances[canal] -= val;
+      });
+
+      return { balances, clientPaidByWallet };
+    }
+
     async function addExpense() {
-      const desc = document.getElementById('expDesc').value.trim();
-      const amount = Number(document.getElementById('expAmount').value) || 0;
-      if (!desc || amount <= 0) { toast('Escribe concepto y valor en COP'); return; }
+      const tipo = document.getElementById('expTipo').value;
+      const canal = document.getElementById('expCanal').value;
+      const rawDesc = document.getElementById('expDesc').value.trim();
+      const amount = Math.abs(Number(document.getElementById('expAmount').value) || 0);
+      if (!rawDesc || amount <= 0) { toast('Escribe concepto y valor en COP'); return; }
+
       const fecha = new Date().toISOString().slice(0, 10);
+      const descripcion = `[${tipo}][${canal}] ${rawDesc}`;
 
       try {
         const res = await fetch(WORKER_URL, {
           method: 'POST',
           headers: { 'Content-Type': 'application/json' },
-          body: JSON.stringify({ action: 'create_cuenta_gasto', fecha, descripcion: desc, monto: amount })
+          body: JSON.stringify({ action: 'create_cuenta_gasto', fecha, descripcion, monto: amount })
         });
         const data = await res.json();
         if (data.success && data.gasto) {
           expenses.unshift(data.gasto);
         } else {
-          expenses.unshift({ id: 'EXP-' + Date.now(), fecha, descripcion: desc, monto: amount });
+          expenses.unshift({ id: 'EXP-' + Date.now(), fecha, descripcion, monto: amount });
         }
       } catch (e) {
-        expenses.unshift({ id: 'EXP-' + Date.now(), fecha, descripcion: desc, monto: amount });
+        expenses.unshift({ id: 'EXP-' + Date.now(), fecha, descripcion, monto: amount });
       }
 
       document.getElementById('expDesc').value = '';
       document.getElementById('expAmount').value = '';
       saveLocalCache();
       renderExpenses();
-      toast('Gasto agregado en COP');
+      toast(tipo === 'ENTRADA' ? 'Entrada guardada en ' + canal : 'Salida guardada en ' + canal);
     }
 
     async function deleteExpense(id) {
       expenses = expenses.filter(x => x.id !== id);
       saveLocalCache();
       renderExpenses();
+      toast('Movimiento eliminado');
       try {
         await fetch(WORKER_URL, {
           method: 'POST',
@@ -1593,22 +1698,74 @@
     }
 
     function renderExpenses() {
+      const { balances, clientPaidByWallet } = computeGlobalBalances();
+      document.getElementById('balEfectivo').textContent = cop(balances.EFECTIVO);
+      document.getElementById('subEfectivo').textContent = `Cobros clientes: ${cop(clientPaidByWallet.EFECTIVO)}`;
+
+      document.getElementById('balNequi').textContent = cop(balances.NEQUI);
+      document.getElementById('subNequi').textContent = `Cobros clientes: ${cop(clientPaidByWallet.NEQUI)}`;
+
+      document.getElementById('balBancolombia').textContent = cop(balances.BANCOLOMBIA);
+      document.getElementById('subBancolombia').textContent = `Cobros clientes: ${cop(clientPaidByWallet.BANCOLOMBIA)}`;
+
+      const usdtUnits = usdtRate > 0 ? (balances.USDT_CRIPTO / usdtRate) : 0;
+      document.getElementById('balUsdtCripto').textContent = usdtFmt(usdtUnits);
+      document.getElementById('balUsdtCopEq').textContent = `${cop(balances.USDT_CRIPTO)} · Cobros: ${cop(clientPaidByWallet.USDT_CRIPTO)}`;
+
+      const paidRecordsInPeriod = records.filter(r => r.pagado === 'PAGADO' && matchesPeriod(r.fecha, currentPeriod));
+      const cobrosPeriodo = paidRecordsInPeriod.reduce((s, r) => s + Number(r.venta || 0), 0);
+
       const list = expenses.filter(e => matchesPeriod(e.fecha, currentPeriod));
-      const total = list.reduce((s, e) => s + Number(e.monto || 0), 0);
-      document.getElementById('kpiExpensesTotal').textContent = cop(total);
+      const entradasManuales = list.filter(e => parseTipo(e.descripcion, e.monto) === 'ENTRADA').reduce((s, e) => s + Math.abs(Number(e.monto || 0)), 0);
+      const salidasManuales = list.filter(e => parseTipo(e.descripcion, e.monto) !== 'ENTRADA').reduce((s, e) => s + Math.abs(Number(e.monto || 0)), 0);
+      const neto = (cobrosPeriodo + entradasManuales) - salidasManuales;
+
+      const netEl = document.getElementById('kpiExpensesTotal');
+      netEl.textContent = cop(neto);
+      netEl.className = 'kpi-val ' + (neto >= 0 ? 'green' : 'red');
+      document.getElementById('subInOutPeriod').textContent = `Entradas ${cop(cobrosPeriodo + entradasManuales)} · Salidas ${cop(salidasManuales)}`;
+
       const grid = document.getElementById('expensesGrid');
-      if (!list.length) {
-        grid.innerHTML = '<div class="info-card"><p>Sin gastos o deudas en este período.</p></div>';
+      const paidCards = paidRecordsInPeriod.map(r => `
+        <div class="info-card">
+          <div style="display:flex;gap:6px;flex-wrap:wrap;margin-bottom:6px;">
+            <span class="tag-origin tag-entrada">PAGO CLIENTE (+)</span>
+            <span class="tag-origin tag-wallet">${detectRecordWallet(r).replace('_', ' / ')}</span>
+          </div>
+          <h3>${esc(r.cliente)} · ${esc(r.operador)}</h3>
+          <p>Fecha: ${esc(r.fecha)} · ${esc(r.origen)}</p>
+          <p style="color:#059669;font-weight:900;font-size:15px;">+${cop(r.venta)}</p>
+          <button type="button" class="icon-btn del" style="margin-top:8px;" onclick="deleteRecord('${r.id}')">Eliminar</button>
+        </div>
+      `);
+
+      const manualCards = list.map(e => {
+        const tipo = parseTipo(e.descripcion, e.monto);
+        const canal = parseCanal(e.descripcion);
+        const concepto = cleanConceptText(e.descripcion);
+        const val = Math.abs(Number(e.monto || 0));
+        return `
+          <div class="info-card">
+            <div style="display:flex;gap:6px;flex-wrap:wrap;margin-bottom:6px;">
+              <span class="tag-origin ${tipo === 'ENTRADA' ? 'tag-entrada' : 'tag-salida'}">${tipo === 'ENTRADA' ? 'ENTRADA (+)' : 'SALIDA (-)'}</span>
+              <span class="tag-origin tag-wallet">${canal.replace('_', ' / ')}</span>
+            </div>
+            <h3>${esc(concepto)}</h3>
+            <p>Fecha: ${esc(e.fecha)}</p>
+            <p style="color:${tipo === 'ENTRADA' ? '#059669' : '#dc2626'};font-weight:900;font-size:15px;">
+              ${tipo === 'ENTRADA' ? '+' : '-'}${cop(val)}
+            </p>
+            <button type="button" class="icon-btn del" style="margin-top:8px;" onclick="deleteExpense('${e.id}')">Eliminar</button>
+          </div>
+        `;
+      });
+
+      const allCards = [...paidCards, ...manualCards];
+      if (!allCards.length) {
+        grid.innerHTML = '<div class="info-card"><p>Sin entradas o salidas en este período.</p></div>';
         return;
       }
-      grid.innerHTML = list.map(e => `
-        <div class="info-card">
-          <h3>${esc(e.descripcion)}</h3>
-          <p>Fecha: ${esc(e.fecha)}</p>
-          <p style="color:#dc2626;font-weight:900;font-size:15px;">${cop(e.monto)}</p>
-          <button type="button" class="icon-btn del" style="margin-top:8px;" onclick="deleteExpense('${e.id}')">Eliminar</button>
-        </div>
-      `).join('');
+      grid.innerHTML = allCards.join('');
     }
 
     function renderSummary() {
@@ -1616,11 +1773,13 @@
       const eList = expenses.filter(e => matchesPeriod(e.fecha, currentPeriod));
       const sales = rList.reduce((s, r) => s + Number(r.venta || 0), 0);
       const costs = rList.reduce((s, r) => s + Number(r.costo || 0), 0);
-      const exp = eList.reduce((s, e) => s + Number(e.monto || 0), 0);
+      const entradas = eList.filter(e => parseTipo(e.descripcion, e.monto) === 'ENTRADA').reduce((s, e) => s + Math.abs(Number(e.monto || 0)), 0);
+      const salidas = eList.filter(e => parseTipo(e.descripcion, e.monto) !== 'ENTRADA').reduce((s, e) => s + Math.abs(Number(e.monto || 0)), 0);
       const usdtSum = rList.reduce((s, r) => s + getRecordUsdt(r), 0);
-      document.getElementById('sumSales').textContent = cop(sales);
-      document.getElementById('sumCosts').textContent = cop(costs + exp);
-      document.getElementById('sumNet').textContent = cop(sales - costs - exp);
+
+      document.getElementById('sumSales').textContent = cop(sales + entradas);
+      document.getElementById('sumCosts').textContent = cop(costs + salidas);
+      document.getElementById('sumNet').textContent = cop((sales + entradas) - (costs + salidas));
       document.getElementById('sumUsdt').textContent = usdtFmt(usdtSum);
     }
 
