@@ -171,7 +171,7 @@
     .period-box:hover { background: #f8fafc; }
     .period-box.selected {
       border-color: #1e3a5f;
-      background: #eff6ff;
+      background: #e8eef5;
     }
     .period-tag { font-size: 9px; font-weight: 700; text-transform: uppercase; color: #475569; letter-spacing: 0.3px; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
     .period-box.selected .period-tag { color: #1e3a5f; }
@@ -254,11 +254,11 @@
       outline: none;
     }
 
-    /* --- TABLAS ESTILO PLANILLA CON SEPARADORES DE COLOR ENTRE COLUMNAS --- */
+    /* --- TABLAS ESTILO HOJA DE CÁLCULO (FILAS ALTERNAS BLANCO / AZUL SUAVE + CUADRÍCULA FINA) --- */
     .table-card {
       background: #ffffff;
       border-radius: 4px;
-      border: 1px solid #94a3b8;
+      border: 1px solid #cbd5e1;
       overflow: hidden;
     }
     .table-wrap { overflow-x: auto; width: 100%; }
@@ -267,41 +267,31 @@
       background: #1e3a5f;
       color: #ffffff;
       text-align: left;
-      padding: 6px 7px;
+      padding: 6px 8px;
       font-size: 9px;
       font-weight: 700;
       letter-spacing: 0.25px;
       text-transform: uppercase;
       white-space: nowrap;
-      border-right: 2px solid #93c5fd;
+      border-right: 1px solid rgba(255, 255, 255, 0.2);
     }
     thead th:last-child { border-right: none; }
+
+    tbody tr:nth-child(odd) { background-color: #ffffff; }
+    tbody tr:nth-child(even) { background-color: #e8eef5; }
+
     tbody td {
-      padding: 5px 7px;
-      border-bottom: 1px solid #cbd5e1;
-      border-right: 2px solid #cbd5e1;
+      padding: 5px 8px;
+      border-bottom: 1px solid #d5dde7;
+      border-right: 1px solid #d5dde7;
       color: #0f172a;
       font-weight: 500;
       vertical-align: middle;
     }
     tbody td:last-child { border-right: none; }
 
-    /* Alternancia suave de color de fondo por columna en todas las tablas */
-    tbody td:nth-child(1) { background-color: #f8fafc; border-right-color: #93c5fd; }
-    tbody td:nth-child(2) { background-color: #eff6ff; border-right-color: #86efac; }
-    tbody td:nth-child(3) { background-color: #f0fdf4; border-right-color: #fcd34d; }
-    tbody td:nth-child(4) { background-color: #fffbeb; border-right-color: #c4b5fd; }
-    tbody td:nth-child(5) { background-color: #f5f3ff; border-right-color: #f9a8d4; }
-    tbody td:nth-child(6) { background-color: #fdf2f8; border-right-color: #67e8f9; }
-    tbody td:nth-child(7) { background-color: #ecfeff; border-right-color: #fdba74; }
-    tbody td:nth-child(8) { background-color: #fff7ed; border-right-color: #a5b4fc; }
-    tbody td:nth-child(9) { background-color: #eef2ff; border-right-color: #6ee7b7; }
-    tbody td:nth-child(10) { background-color: #ecfdf5; border-right-color: #fca5a5; }
-    tbody td:nth-child(11) { background-color: #fef2f2; border-right-color: #93c5fd; }
-    tbody td:nth-child(12) { background-color: #f8fafc; }
-
-    tbody tr:hover td { filter: brightness(0.975); }
-    tbody tr.selected-row td { background-color: #dbeafe !important; }
+    tbody tr:hover { background-color: #dce6f2; }
+    tbody tr.selected-row { background-color: #cfe0f5 !important; }
     .cell-debt { background: #fee2e2 !important; color: #b91c1c; font-weight: 700; }
 
     /* Etiquetas limpias tipo celda */
@@ -313,7 +303,7 @@
       font-weight: 700;
       background: #ffffff;
       color: #334155;
-      border: 1px solid #94a3b8;
+      border: 1px solid #cbd5e1;
       white-space: nowrap;
     }
     .tag-entrada { background: #dcfce7; color: #15803d; border-color: #86efac; }
@@ -341,7 +331,7 @@
     .icon-btn {
       padding: 2px 5px;
       border-radius: 3px;
-      border: 1px solid #94a3b8;
+      border: 1px solid #cbd5e1;
       background: #ffffff;
       font-size: 9.5px;
       font-weight: 700;
@@ -361,7 +351,7 @@
     }
     .audit-box {
       background: #ffffff;
-      border: 1px solid #94a3b8;
+      border: 1px solid #cbd5e1;
       border-radius: 4px;
       overflow: hidden;
     }
