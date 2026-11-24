@@ -254,11 +254,11 @@
       outline: none;
     }
 
-    /* --- TABLAS ESTILO PLANILLA / EXCEL --- */
+    /* --- TABLAS ESTILO PLANILLA CON SEPARADORES DE COLOR ENTRE COLUMNAS --- */
     .table-card {
       background: #ffffff;
       border-radius: 4px;
-      border: 1px solid #cbd5e1;
+      border: 1px solid #94a3b8;
       overflow: hidden;
     }
     .table-wrap { overflow-x: auto; width: 100%; }
@@ -273,21 +273,36 @@
       letter-spacing: 0.25px;
       text-transform: uppercase;
       white-space: nowrap;
-      border-right: 1px solid rgba(255, 255, 255, 0.14);
+      border-right: 2px solid #93c5fd;
     }
     thead th:last-child { border-right: none; }
     tbody td {
       padding: 5px 7px;
-      border-bottom: 1px solid #e2e8f0;
-      border-right: 1px solid #e2e8f0;
+      border-bottom: 1px solid #cbd5e1;
+      border-right: 2px solid #cbd5e1;
       color: #0f172a;
       font-weight: 500;
       vertical-align: middle;
     }
     tbody td:last-child { border-right: none; }
-    tbody tr:hover { background: #f8fafc; }
-    tbody tr.selected-row { background: #eff6ff; }
-    .cell-debt { background: #fee2e2; color: #b91c1c; font-weight: 700; }
+
+    /* Alternancia suave de color de fondo por columna en todas las tablas */
+    tbody td:nth-child(1) { background-color: #f8fafc; border-right-color: #93c5fd; }
+    tbody td:nth-child(2) { background-color: #eff6ff; border-right-color: #86efac; }
+    tbody td:nth-child(3) { background-color: #f0fdf4; border-right-color: #fcd34d; }
+    tbody td:nth-child(4) { background-color: #fffbeb; border-right-color: #c4b5fd; }
+    tbody td:nth-child(5) { background-color: #f5f3ff; border-right-color: #f9a8d4; }
+    tbody td:nth-child(6) { background-color: #fdf2f8; border-right-color: #67e8f9; }
+    tbody td:nth-child(7) { background-color: #ecfeff; border-right-color: #fdba74; }
+    tbody td:nth-child(8) { background-color: #fff7ed; border-right-color: #a5b4fc; }
+    tbody td:nth-child(9) { background-color: #eef2ff; border-right-color: #6ee7b7; }
+    tbody td:nth-child(10) { background-color: #ecfdf5; border-right-color: #fca5a5; }
+    tbody td:nth-child(11) { background-color: #fef2f2; border-right-color: #93c5fd; }
+    tbody td:nth-child(12) { background-color: #f8fafc; }
+
+    tbody tr:hover td { filter: brightness(0.975); }
+    tbody tr.selected-row td { background-color: #dbeafe !important; }
+    .cell-debt { background: #fee2e2 !important; color: #b91c1c; font-weight: 700; }
 
     /* Etiquetas limpias tipo celda */
     .tag-origin {
@@ -296,9 +311,9 @@
       border-radius: 3px;
       font-size: 9px;
       font-weight: 700;
-      background: #f1f5f9;
+      background: #ffffff;
       color: #334155;
-      border: 1px solid #cbd5e1;
+      border: 1px solid #94a3b8;
       white-space: nowrap;
     }
     .tag-entrada { background: #dcfce7; color: #15803d; border-color: #86efac; }
@@ -326,7 +341,7 @@
     .icon-btn {
       padding: 2px 5px;
       border-radius: 3px;
-      border: 1px solid #cbd5e1;
+      border: 1px solid #94a3b8;
       background: #ffffff;
       font-size: 9.5px;
       font-weight: 700;
@@ -335,7 +350,7 @@
       white-space: nowrap;
     }
     .icon-btn:hover { background: #f1f5f9; }
-    .icon-btn.del { border-color: #fca5a5; background: #fef2f2; color: #dc2626; }
+    .icon-btn.del { border-color: #f87171; background: #fef2f2; color: #dc2626; }
 
     /* --- VISTA DIVIDIDA DE CLIENTES + AUDITORÍA --- */
     .split-grid {
@@ -346,7 +361,7 @@
     }
     .audit-box {
       background: #ffffff;
-      border: 1px solid #cbd5e1;
+      border: 1px solid #94a3b8;
       border-radius: 4px;
       overflow: hidden;
     }
@@ -1478,7 +1493,7 @@
             <td><button type="button" class="pill ${stClass}" onclick="cycleStatus('${r.id}')" title="Clic para cambiar estado">${esc(r.estado)}</button></td>
             <td class="num-nowrap">${cop(r.costo)}</td>
             <td class="num-nowrap"><strong>${cop(r.venta)}</strong></td>
-            <td class="num-nowrap">${uVal > 0 ? usdtFmt(uVal) : '-'}</td>
+            <td class="num-nowrap" style="color:#92400e;font-weight:700;">${uVal > 0 ? usdtFmt(uVal) : '-'}</td>
             <td class="num-nowrap" style="color:${gain >= 0 ? '#15803d' : '#b91c1c'};font-weight:700;">${cop(gain)}</td>
             <td><button type="button" class="pill ${payClass}" onclick="togglePay('${r.id}')" title="Clic para cambiar pago">${esc(r.pagado)}</button></td>
             <td>
