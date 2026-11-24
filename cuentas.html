@@ -1353,17 +1353,24 @@
     }
 
     async function deleteRecord(id) {
-      records = records.filter(r => r.id !== id);
-      saveLocalCache();
-      renderCurrent();
-      toast('Registro eliminado');
       try {
-        await fetch(WORKER_URL, {
+        const res = await fetch(WORKER_URL, {
           method: 'POST',
           headers: { 'Content-Type': 'application/json' },
           body: JSON.stringify({ action: 'delete_cuenta_movimiento', id })
         });
-      } catch (e) {}
+        const data = await res.json();
+        if (!data.success) {
+          toast('Error al eliminar en D1');
+          return;
+        }
+        records = records.filter(r => r.id !== id);
+        saveLocalCache();
+        renderCurrent();
+        toast('Registro eliminado de D1');
+      } catch (e) {
+        toast('Error de conexión al eliminar');
+      }
     }
 
     async function togglePay(id) {
