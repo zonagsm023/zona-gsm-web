@@ -4,13 +4,13 @@
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <title>Zona GSM — Métodos de Pago</title>
-  <meta name="description" content="Paga en Zona GSM por Nequi o Binance. Copia el dato con un toque y envía tu comprobante." />
+  <meta name="description" content="Paga en Zona GSM por Nequi, Llave Bre-B o Binance. Copia el dato con un toque y envía tu comprobante." />
   <link rel="canonical" href="https://pagos.zonagsm.site/" />
   <link rel="icon" type="image/png" href="logo.png" />
 
   <meta property="og:type" content="website" />
   <meta property="og:title" content="Zona GSM — Métodos de Pago" />
-  <meta property="og:description" content="Paga por Nequi o Binance." />
+  <meta property="og:description" content="Paga por Nequi, Llave Bre-B o Binance." />
   <meta property="og:url" content="https://pagos.zonagsm.site/" />
   <meta property="og:image" content="logo.png" />
   <meta property="og:site_name" content="Zona GSM" />
@@ -68,25 +68,46 @@
     .section-title { font-size: 12px; font-weight: 700; letter-spacing: 1px; color: #64748b; text-transform: uppercase; margin-bottom: 16px; }
     .cards { display: flex; flex-direction: column; gap: 14px; padding: 0 4px; }
 
-    .card { background: #ffffff; border-radius: 50px; padding: 12px 16px; display: flex; align-items: center; justify-content: space-between; box-shadow: 0 4px 14px rgba(15, 23, 42, 0.05); border: 1px solid #eef2f6; text-align: left; transition: transform 0.15s ease; }
+    .card { background: #ffffff; border-radius: 50px; padding: 12px 14px; display: flex; align-items: center; justify-content: space-between; gap: 8px; box-shadow: 0 4px 14px rgba(15, 23, 42, 0.05); border: 1px solid #eef2f6; text-align: left; transition: transform 0.15s ease; }
     .card:hover { transform: translateY(-1px); }
-    .card-left { display: flex; align-items: center; gap: 14px; min-width: 0; }
+    .card-left { display: flex; align-items: center; gap: 12px; min-width: 0; }
 
     .bank-icon { width: 46px; height: 46px; border-radius: 50%; flex-shrink: 0; display: flex; align-items: center; justify-content: center; font-weight: 800; font-size: 15px; }
     .icon-nequi { background: #f5eff7; color: #200020; }
+    .icon-breb { background: #260354; color: #00e5a8; font-size: 11px; letter-spacing: -0.3px; }
     .icon-binance { background: #181a20; color: #f0b90b; }
 
     .card-info { display: flex; flex-direction: column; min-width: 0; }
-    .bank-name { font-size: 14px; font-weight: 800; color: #0f172a; letter-spacing: 0.2px; }
-    .account-number { font-size: 14px; font-weight: 600; color: #475569; margin-top: 1px; word-break: break-all; }
-    .account-holder { font-size: 12px; color: #64748b; margin-top: 1px; }
+    .bank-name { font-size: 13.5px; font-weight: 800; color: #0f172a; letter-spacing: 0.2px; }
+    .account-number { font-size: 13.5px; font-weight: 600; color: #475569; margin-top: 1px; word-break: break-all; }
+    .account-holder { font-size: 11.5px; color: #64748b; margin-top: 1px; }
 
-    .copy-btn { width: 40px; height: 40px; border-radius: 50%; border: none; background: #c81d4e; color: #ffffff; cursor: pointer; flex-shrink: 0; display: flex; align-items: center; justify-content: center; transition: background 0.2s ease, transform 0.1s ease; }
+    .card-actions { display: flex; align-items: center; gap: 7px; flex-shrink: 0; }
+    .action-btn { width: 38px; height: 38px; border-radius: 50%; border: none; cursor: pointer; flex-shrink: 0; display: flex; align-items: center; justify-content: center; transition: background 0.2s ease, transform 0.1s ease; }
+    .action-btn:active { transform: scale(0.94); }
+
+    .qr-btn { background: #f1f5f9; color: #0f172a; border: 1px solid #e2e8f0; }
+    .qr-btn:hover { background: #e2e8f0; }
+
+    .copy-btn { background: #c81d4e; color: #ffffff; }
     .copy-btn:hover { background: #a3163f; }
-    .copy-btn:active { transform: scale(0.94); }
     .copy-btn.copied { background: #10b981; }
 
-    .toast { position: fixed; bottom: 24px; left: 50%; transform: translateX(-50%) translateY(20px); background: #0f172a; color: #ffffff; padding: 10px 18px; border-radius: 999px; font-size: 13px; font-weight: 600; opacity: 0; pointer-events: none; transition: opacity 0.25s ease, transform 0.25s ease; box-shadow: 0 8px 20px rgba(0, 0, 0, 0.2); z-index: 10000; }
+    /* Modal QR */
+    .qr-modal { position: fixed; inset: 0; background: rgba(15, 23, 42, 0.65); backdrop-filter: blur(4px); -webkit-backdrop-filter: blur(4px); display: flex; align-items: center; justify-content: center; padding: 20px; z-index: 10001; opacity: 0; visibility: hidden; pointer-events: none; transition: opacity 0.25s ease, visibility 0.25s ease; }
+    .qr-modal.open { opacity: 1; visibility: visible; pointer-events: auto; }
+    .qr-modal-box { background: #ffffff; width: 100%; max-width: 340px; border-radius: 24px; padding: 20px; text-align: center; box-shadow: 0 20px 45px rgba(0, 0, 0, 0.25); transform: scale(0.94); transition: transform 0.25s ease; position: relative; }
+    .qr-modal.open .qr-modal-box { transform: scale(1); }
+    .qr-modal-header { display: flex; align-items: center; justify-content: space-between; margin-bottom: 14px; }
+    .qr-modal-title { font-size: 16px; font-weight: 800; color: #0f172a; }
+    .qr-close-btn { width: 32px; height: 32px; border-radius: 50%; border: none; background: #f1f5f9; color: #334155; font-size: 18px; font-weight: 700; cursor: pointer; display: flex; align-items: center; justify-content: center; }
+    .qr-close-btn:hover { background: #e2e8f0; }
+    .qr-img-wrap { background: #ffffff; border: 1px solid #e2e8f0; border-radius: 16px; padding: 10px; margin-bottom: 14px; }
+    .qr-img-wrap img { width: 100%; height: auto; display: block; border-radius: 10px; }
+    .qr-modal-copy { width: 100%; padding: 11px 16px; border-radius: 999px; border: none; background: #c81d4e; color: #ffffff; font-size: 13px; font-weight: 700; cursor: pointer; display: inline-flex; align-items: center; justify-content: center; gap: 8px; }
+    .qr-modal-copy:hover { background: #a3163f; }
+
+    .toast { position: fixed; bottom: 24px; left: 50%; transform: translateX(-50%) translateY(20px); background: #0f172a; color: #ffffff; padding: 10px 18px; border-radius: 999px; font-size: 13px; font-weight: 600; opacity: 0; pointer-events: none; transition: opacity 0.25s ease, transform 0.25s ease; box-shadow: 0 8px 20px rgba(0, 0, 0, 0.2); z-index: 10002; }
     .toast.show { opacity: 1; transform: translateX(-50%) translateY(0); }
   </style>
 </head>
@@ -99,6 +120,7 @@
     <symbol id="icon-tg" viewBox="0 0 24 24"><path fill="#229ED9" d="M11.944 0A12 12 0 0 0 0 12a12 12 0 0 0 12 12 12 12 0 0 0 12-12A12 12 0 0 0 12 0a12 12 0 0 0-.056 0zm4.962 7.224c.1-.002.321.023.465.14a.506.506 0 0 1 .171.325c.016.093.036.306.02.472-.18 1.898-.962 6.502-1.36 8.627-.168.9-.499 1.201-.82 1.23-.696.065-1.225-.46-1.9-.902-1.056-.693-1.653-1.124-2.678-1.8-1.185-.78-.417-1.21.258-1.91.177-.184 3.247-2.977 3.307-3.23.007-.032.014-.15-.056-.212s-.174-.041-.249-.024c-.106.024-1.793 1.14-5.061 3.345-.48.33-.913.49-1.302.48-.428-.008-1.252-.241-1.865-.44-.752-.245-1.349-.374-1.297-.789.027-.216.325-.437.893-.663 3.498-1.524 5.83-2.529 6.998-3.014 3.332-1.386 4.025-1.627 4.476-1.635z"/></symbol>
     <symbol id="icon-share" viewBox="0 0 24 24"><g fill="none" stroke="#0f172a" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><circle cx="18" cy="5" r="3"/><circle cx="6" cy="12" r="3"/><circle cx="18" cy="19" r="3"/><line x1="8.59" y1="13.51" x2="15.42" y2="17.49"/><line x1="15.41" y1="6.51" x2="8.59" y2="10.49"/></g></symbol>
     <symbol id="icon-copy" viewBox="0 0 24 24"><g fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><rect x="9" y="9" width="13" height="13" rx="2" ry="2"/><path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"/></g></symbol>
+    <symbol id="icon-qr" viewBox="0 0 24 24"><g fill="none" stroke="currentColor" stroke-width="2.1" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="3" width="7" height="7" rx="1"/><rect x="14" y="3" width="7" height="7" rx="1"/><rect x="3" y="14" width="7" height="7" rx="1"/><path d="M14 14h3v3h-3z"/><path d="M20 14v3h-1"/><path d="M14 20h3"/><path d="M20 20h.01"/></g></symbol>
   </svg>
 
   <div id="preloader" class="preloader">
@@ -128,7 +150,7 @@
 
     <div class="content-box">
       <h1>Zona GSM</h1>
-      <p class="bio">Paga por Nequi o Binance. Copia el dato con un toque y envía tu comprobante.</p>
+      <p class="bio">Paga por Nequi, Llave Bre-B o Binance. Copia el dato con un toque o escanea el QR.</p>
 
       <div class="socials">
         <a class="social-item" href="https://wa.me/573104141805" target="_blank" rel="noopener noreferrer" aria-label="Soporte 1 por WhatsApp">
@@ -156,6 +178,7 @@
       <div class="section-title">MÉTODOS DE PAGO</div>
 
       <div class="cards">
+        <!-- NEQUI -->
         <div class="card">
           <div class="card-left">
             <div class="bank-icon icon-nequi"><span style="color:#da0081;margin-right:1px;">•</span>N</div>
@@ -165,9 +188,37 @@
               <span class="account-holder">Victor Ruiz</span>
             </div>
           </div>
-          <button class="copy-btn" onclick="copyText('3246816788', 'Nequi', this)" title="Copiar número" aria-label="Copiar número Nequi"><svg width="18" height="18"><use href="#icon-copy"/></svg></button>
+          <div class="card-actions">
+            <button class="action-btn qr-btn" onclick="openQrModal('QR Nequi — Victor Ruiz', 'qr-nequi.jpg', '3246816788', 'Nequi')" title="Ver código QR" aria-label="Ver QR Nequi">
+              <svg width="18" height="18"><use href="#icon-qr"/></svg>
+            </button>
+            <button class="action-btn copy-btn" onclick="copyText('3246816788', 'Nequi', this)" title="Copiar número" aria-label="Copiar número Nequi">
+              <svg width="17" height="17"><use href="#icon-copy"/></svg>
+            </button>
+          </div>
         </div>
 
+        <!-- LLAVE BRE-B -->
+        <div class="card">
+          <div class="card-left">
+            <div class="bank-icon icon-breb">Bre-B</div>
+            <div class="card-info">
+              <span class="bank-name">LLAVE BRE-B</span>
+              <span class="account-number">@NEQUIVIC7388</span>
+              <span class="account-holder">Victor Ruiz</span>
+            </div>
+          </div>
+          <div class="card-actions">
+            <button class="action-btn qr-btn" onclick="openQrModal('QR Llave Bre-B — Victor Ruiz', 'qr-breb.jpg', '@NEQUIVIC7388', 'Llave Bre-B')" title="Ver código QR" aria-label="Ver QR Llave Bre-B">
+              <svg width="18" height="18"><use href="#icon-qr"/></svg>
+            </button>
+            <button class="action-btn copy-btn" onclick="copyText('@NEQUIVIC7388', 'Llave Bre-B', this)" title="Copiar llave" aria-label="Copiar Llave Bre-B">
+              <svg width="17" height="17"><use href="#icon-copy"/></svg>
+            </button>
+          </div>
+        </div>
+
+        <!-- BINANCE -->
         <div class="card">
           <div class="card-left">
             <div class="bank-icon icon-binance">
@@ -179,11 +230,32 @@
               <span class="account-holder">ZonaGSM PAID</span>
             </div>
           </div>
-          <button class="copy-btn" onclick="copyText('91851198', 'Binance ID', this)" title="Copiar ID" aria-label="Copiar ID Binance"><svg width="18" height="18"><use href="#icon-copy"/></svg></button>
+          <div class="card-actions">
+            <button class="action-btn copy-btn" onclick="copyText('91851198', 'Binance ID', this)" title="Copiar ID" aria-label="Copiar ID Binance">
+              <svg width="17" height="17"><use href="#icon-copy"/></svg>
+            </button>
+          </div>
         </div>
       </div>
     </div>
   </main>
+
+  <!-- MODAL PARA VER QR -->
+  <div id="qrModal" class="qr-modal" onclick="closeQrModal(event)">
+    <div class="qr-modal-box" onclick="event.stopPropagation()">
+      <div class="qr-modal-header">
+        <span id="qrModalTitle" class="qr-modal-title">Código QR</span>
+        <button class="qr-close-btn" type="button" onclick="closeQrModal()" aria-label="Cerrar">&times;</button>
+      </div>
+      <div class="qr-img-wrap">
+        <img id="qrModalImg" src="" alt="Código QR de pago" />
+      </div>
+      <button id="qrModalCopyBtn" class="qr-modal-copy" type="button">
+        <svg width="16" height="16"><use href="#icon-copy"/></svg>
+        <span id="qrModalCopyLabel">Copiar dato</span>
+      </button>
+    </div>
+  </div>
 
   <div id="toast" class="toast">Copiado</div>
 
@@ -201,6 +273,22 @@
       wrap.innerHTML = '<div class="avatar-fallback"><div class="logo-badge"><span class="logo-zona">Zona</span><span class="logo-gsm">GSM</span></div></div>';
     }
 
+    function openQrModal(title, imgSrc, copyValue, copyLabel) {
+      document.getElementById('qrModalTitle').textContent = title;
+      document.getElementById('qrModalImg').src = imgSrc;
+      document.getElementById('qrModalCopyLabel').textContent = 'Copiar ' + copyValue;
+      document.getElementById('qrModalCopyBtn').onclick = () => copyText(copyValue, copyLabel, null);
+      document.getElementById('qrModal').classList.add('open');
+    }
+
+    function closeQrModal() {
+      document.getElementById('qrModal').classList.remove('open');
+    }
+
+    document.addEventListener('keydown', (e) => {
+      if (e.key === 'Escape') closeQrModal();
+    });
+
     function copyText(text, label, btn) {
       const done = () => {
         showToast(label + ' copiado');
@@ -210,16 +298,19 @@
         navigator.clipboard.writeText(text).then(done).catch(() => fallbackCopy(text, done));
       } else fallbackCopy(text, done);
     }
+
     function fallbackCopy(text, done) {
       const ta = document.createElement('textarea'); ta.value = text; ta.style.position = 'fixed'; ta.style.left = '-9999px';
       document.body.appendChild(ta); ta.focus(); ta.select();
       try { document.execCommand('copy'); done(); } catch (e) { showToast('No se pudo copiar'); }
       document.body.removeChild(ta);
     }
+
     function showToast(msg) {
       const t = document.getElementById('toast'); t.textContent = msg; t.classList.add('show');
       setTimeout(() => t.classList.remove('show'), 2400);
     }
+
     function sharePage() {
       if (navigator.share) navigator.share({ title: 'Zona GSM — Métodos de Pago', url: window.location.href }).catch(() => copyText(window.location.href, 'Enlace', document.querySelector('.socials button')));
       else copyText(window.location.href, 'Enlace', document.querySelector('.socials button'));
