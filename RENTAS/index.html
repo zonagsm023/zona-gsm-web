@@ -66,7 +66,16 @@
     .social-item:hover .social-circle { box-shadow: 0 6px 16px rgba(15, 23, 42, 0.13); }
     .social-label { font-size: 11px; font-weight: 700; color: #334155; line-height: 1.15; letter-spacing: -0.1px; white-space: nowrap; }
 
-    .section-title { font-size: 12px; font-weight: 700; letter-spacing: 1px; color: #64748b; text-transform: uppercase; margin-bottom: 16px; }
+    .section-title { font-size: 12px; font-weight: 700; letter-spacing: 1px; color: #64748b; text-transform: uppercase; margin-bottom: 10px; }
+
+    /* Buscador rápido de tools */
+    .search-box { position: relative; margin: 0 4px 16px; }
+    .search-input { width: 100%; padding: 10px 36px 10px 15px; border-radius: 999px; border: 1px solid #dbe4ee; background: #ffffff; color: #0f172a; font-size: 13px; font-weight: 600; outline: none; box-shadow: 0 4px 12px rgba(15, 23, 42, 0.04); transition: border-color 0.15s ease, box-shadow 0.15s ease; }
+    .search-input:focus { border-color: #c81d4e; box-shadow: 0 0 0 3px rgba(200, 29, 78, 0.12); }
+    .search-clear { position: absolute; right: 10px; top: 50%; transform: translateY(-50%); width: 22px; height: 22px; border-radius: 50%; border: none; background: #e2e8f0; color: #334155; font-size: 12px; font-weight: 800; cursor: pointer; display: none; align-items: center; justify-content: center; }
+    .search-clear.show { display: inline-flex; }
+    .no-results { display: none; padding: 18px; border-radius: 18px; background: #ffffff; color: #64748b; font-size: 13px; font-weight: 600; border: 1px solid #eef2f6; }
+
     .cards { display: flex; flex-direction: column; gap: 14px; padding: 0 4px; }
 
     .card { background: #ffffff; border-radius: 50px; padding: 12px 16px; display: flex; align-items: center; justify-content: space-between; box-shadow: 0 4px 14px rgba(15, 23, 42, 0.05); border: 1px solid #eef2f6; text-align: left; transition: transform 0.15s ease; }
@@ -75,7 +84,9 @@
 
     .tool-icon { width: 46px; height: 46px; border-radius: 50%; flex-shrink: 0; overflow: hidden; background: #0f172a; border: 1px solid #e2e8f0; display: flex; align-items: center; justify-content: center; }
     .tool-icon img { width: 100%; height: 100%; object-fit: cover; display: block; }
-    .tool-fallback { width: 100%; height: 100%; display: flex; align-items: center; justify-content: center; font-weight: 900; font-size: 9.5px; color: #ffffff; text-align: center; padding: 2px; line-height: 1.05; }
+    .tool-fallback { width: 100%; height: 100%; display: flex; align-items: center; justify-content: center; font-weight: 900; font-size: 9px; color: #ffffff; text-align: center; padding: 2px; line-height: 1.05; }
+    .tool-fallback.logo-360 { background: radial-gradient(circle at 50% 25%, #1e3a8a 0%, #090d16 75%); color: #fbbf24; font-size: 9.5px; letter-spacing: 0.2px; border: 1.5px solid #f59e0b; }
+    .tool-fallback.logo-anonyshu { background: linear-gradient(135deg, #1d4ed8 0%, #0f172a 100%); color: #facc15; font-size: 8px; letter-spacing: 0.2px; }
 
     .card-info { display: flex; flex-direction: column; min-width: 0; }
     .tool-name { font-size: 14px; font-weight: 800; color: #0f172a; letter-spacing: 0.2px; }
@@ -157,7 +168,14 @@
 
       <div class="section-title">HERRAMIENTAS EN RENTA</div>
 
-      <div class="cards">
+      <div class="search-box">
+        <input id="toolSearchInput" class="search-input" type="search" placeholder="Buscar tool (Ej. TSM, Chimera, UnlockTool...)" oninput="filterTools()" />
+        <button id="toolSearchClear" class="search-clear" type="button" onclick="clearToolSearch()" aria-label="Limpiar búsqueda">&times;</button>
+      </div>
+
+      <div id="noResultsMsg" class="no-results">No se encontraron herramientas con ese nombre.</div>
+
+      <div class="cards" id="toolsCards">
         <!-- 1. TSM TOOL -->
         <div class="card">
           <div class="card-left">
@@ -170,7 +188,19 @@
           <a class="status-badge status-online" href="https://wa.me/573104141805?text=Hola%2C%20quiero%20rentar%20TSM%20Tool%20(12%20hrs%20-%20%2415.000)"><span class="online-dot"></span>ONLINE</a>
         </div>
 
-        <!-- 2. SIGMA PLUS -->
+        <!-- 2. CHIMERA TOOL (OFFLINE) -->
+        <div class="card">
+          <div class="card-left">
+            <div class="tool-icon"><img src="chimera.jpg" alt="Chimera Tool" onerror="handleToolError(this, 'CHIMERA')" /></div>
+            <div class="card-info">
+              <span class="tool-name">CHIMERA TOOL</span>
+              <span class="tool-meta">Renta de licencia GSM</span>
+            </div>
+          </div>
+          <span class="status-badge status-offline">OFFLINE</span>
+        </div>
+
+        <!-- 3. SIGMA PLUS -->
         <div class="card">
           <div class="card-left">
             <div class="tool-icon"><img src="sigmaplus.jpg" alt="Sigma Plus" onerror="handleToolError(this, 'SIGMA PLUS')" /></div>
@@ -182,7 +212,7 @@
           <a class="status-badge status-online" href="https://wa.me/573104141805?text=Hola%2C%20quiero%20rentar%20Sigma%20Plus%20(6%20hrs%20-%20%2420.000)"><span class="online-dot"></span>ONLINE</a>
         </div>
 
-        <!-- 3. UNLOCKTOOL -->
+        <!-- 4. UNLOCKTOOL -->
         <div class="card">
           <div class="card-left">
             <div class="tool-icon"><img src="UNLOCKTOOL.png" alt="UnlockTool" onerror="handleToolError(this, 'UNLOCKTOOL')" /></div>
@@ -194,7 +224,19 @@
           <a class="status-badge status-online" href="https://wa.me/573104141805?text=Hola%2C%20quiero%20rentar%20UnlockTool%20(6%20hrs%20-%20%2410.000)"><span class="online-dot"></span>ONLINE</a>
         </div>
 
-        <!-- 4. INLOOK GUARD -->
+        <!-- 5. PANDORA (OFFLINE) -->
+        <div class="card">
+          <div class="card-left">
+            <div class="tool-icon"><img src="pandora.jpg" alt="Pandora" onerror="handleToolError(this, 'PANDORA')" /></div>
+            <div class="card-info">
+              <span class="tool-name">PANDORA</span>
+              <span class="tool-meta">Renta de licencia GSM</span>
+            </div>
+          </div>
+          <span class="status-badge status-offline">OFFLINE</span>
+        </div>
+
+        <!-- 6. INLOOK GUARD -->
         <div class="card">
           <div class="card-left">
             <div class="tool-icon"><img src="INLOOKGUARD.jpg" alt="InLook Guard" onerror="handleToolError(this, 'INLOOK GUARD')" /></div>
@@ -206,7 +248,7 @@
           <a class="status-badge status-online" href="https://wa.me/573104141805?text=Hola%2C%20quiero%20rentar%20InLook%20Guard%20(12%20hrs%20-%20%2415.000)"><span class="online-dot"></span>ONLINE</a>
         </div>
 
-        <!-- 5. NEUTRAL GSM -->
+        <!-- 7. NEUTRAL GSM -->
         <div class="card">
           <div class="card-left">
             <div class="tool-icon"><img src="neutralGSM.jpg" alt="Neutral GSM" onerror="handleToolError(this, 'NEUTRAL GSM')" /></div>
@@ -218,7 +260,7 @@
           <a class="status-badge status-online" href="https://wa.me/573104141805?text=Hola%2C%20quiero%20rentar%20Neutral%20GSM%20(6%20hrs%20-%20%2415.000)"><span class="online-dot"></span>ONLINE</a>
         </div>
 
-        <!-- 6. ANDROID MULTITOOL -->
+        <!-- 8. ANDROID MULTITOOL -->
         <div class="card">
           <div class="card-left">
             <div class="tool-icon"><img src="androidmultitool.jpg" alt="Android MultiTool" onerror="handleToolError(this, 'AMT')" /></div>
@@ -230,7 +272,7 @@
           <a class="status-badge status-online" href="https://wa.me/573104141805?text=Hola%2C%20quiero%20rentar%20Android%20MultiTool"><span class="online-dot"></span>ONLINE</a>
         </div>
 
-        <!-- 7. ANDROID WIN TOOL -->
+        <!-- 9. ANDROID WIN TOOL -->
         <div class="card">
           <div class="card-left">
             <div class="tool-icon"><img src="androidwintool.jpg" alt="Android Win Tool" onerror="handleToolError(this, 'WIN TOOL')" /></div>
@@ -257,7 +299,7 @@
         <!-- 360 TOOL -->
         <div class="card">
           <div class="card-left">
-            <div class="tool-icon"><img src="360tool.jpg" alt="360 Tool" onerror="handleToolError(this, '360 TOOL')" /></div>
+            <div class="tool-icon"><img src="360tool.jpg" alt="360 Tool" onerror="handleToolError(this, '360 TOOL', 'logo-360')" /></div>
             <div class="card-info">
               <span class="tool-name">360 TOOL</span>
               <span class="tool-meta">Renta de licencia GSM</span>
@@ -269,7 +311,7 @@
         <!-- ANONYSHU TOOL -->
         <div class="card">
           <div class="card-left">
-            <div class="tool-icon"><img src="anonyshu.jpg" alt="Anonyshu Tool" onerror="handleToolError(this, 'ANONYSHU')" /></div>
+            <div class="tool-icon"><img src="anonyshu.jpg" alt="Anonyshu Tool" onerror="handleToolError(this, 'ANONYSHU', 'logo-anonyshu')" /></div>
             <div class="card-info">
               <span class="tool-name">ANONYSHU TOOL</span>
               <span class="tool-meta">Renta de licencia GSM</span>
@@ -410,7 +452,7 @@
           <a class="status-badge status-online" href="https://wa.me/573104141805?text=Hola%2C%20quiero%20rentar%20Hydra%20Tool"><span class="online-dot"></span>ONLINE</a>
         </div>
 
-        <!-- INFINITY -->
+        <!-- INFINITY (OFFLINE) -->
         <div class="card">
           <div class="card-left">
             <div class="tool-icon"><img src="infinity.jpg" alt="Infinity" onerror="handleToolError(this, 'INFINITY')" /></div>
@@ -419,7 +461,7 @@
               <span class="tool-meta">Renta de licencia GSM</span>
             </div>
           </div>
-          <a class="status-badge status-online" href="https://wa.me/573104141805?text=Hola%2C%20quiero%20rentar%20Infinity"><span class="online-dot"></span>ONLINE</a>
+          <span class="status-badge status-offline">OFFLINE</span>
         </div>
 
         <!-- KG KILLER -->
@@ -482,7 +524,7 @@
           <a class="status-badge status-online" href="https://wa.me/573104141805?text=Hola%2C%20quiero%20rentar%20MST%20Tool"><span class="online-dot"></span>ONLINE</a>
         </div>
 
-        <!-- NICE UNLOCKER PRO -->
+        <!-- NICE UNLOCKER PRO (OFFLINE) -->
         <div class="card">
           <div class="card-left">
             <div class="tool-icon"><img src="niceunlockerpro.jpg" alt="Nice Unlocker PRO" onerror="handleToolError(this, 'NICE PRO')" /></div>
@@ -491,7 +533,7 @@
               <span class="tool-meta">Renta de licencia GSM</span>
             </div>
           </div>
-          <a class="status-badge status-online" href="https://wa.me/573104141805?text=Hola%2C%20quiero%20rentar%20Nice%20Unlocker%20PRO"><span class="online-dot"></span>ONLINE</a>
+          <span class="status-badge status-offline">OFFLINE</span>
         </div>
 
         <!-- OCTOPLUS -->
@@ -506,7 +548,7 @@
           <a class="status-badge status-online" href="https://wa.me/573104141805?text=Hola%2C%20quiero%20rentar%20Octoplus"><span class="online-dot"></span>ONLINE</a>
         </div>
 
-        <!-- PURE UNLOCKER -->
+        <!-- PURE UNLOCKER (OFFLINE) -->
         <div class="card">
           <div class="card-left">
             <div class="tool-icon"><img src="pureunlocker.jpg" alt="Pure Unlocker" onerror="handleToolError(this, 'PURE')" /></div>
@@ -515,7 +557,7 @@
               <span class="tool-meta">Renta de licencia GSM</span>
             </div>
           </div>
-          <a class="status-badge status-online" href="https://wa.me/573104141805?text=Hola%2C%20quiero%20rentar%20Pure%20Unlocker"><span class="online-dot"></span>ONLINE</a>
+          <span class="status-badge status-offline">OFFLINE</span>
         </div>
 
         <!-- RTC TOOL -->
@@ -589,30 +631,6 @@
           </div>
           <a class="status-badge status-online" href="https://wa.me/573104141805?text=Hola%2C%20quiero%20rentar%20UAT%20Pro"><span class="online-dot"></span>ONLINE</a>
         </div>
-
-        <!-- CHIMERA (OFFLINE) -->
-        <div class="card">
-          <div class="card-left">
-            <div class="tool-icon"><img src="chimera.jpg" alt="Chimera Tool" onerror="handleToolError(this, 'CHIMERA')" /></div>
-            <div class="card-info">
-              <span class="tool-name">CHIMERA TOOL</span>
-              <span class="tool-meta">Renta de licencia GSM</span>
-            </div>
-          </div>
-          <span class="status-badge status-offline">OFFLINE</span>
-        </div>
-
-        <!-- PANDORA (OFFLINE) -->
-        <div class="card">
-          <div class="card-left">
-            <div class="tool-icon"><img src="pandora.jpg" alt="Pandora" onerror="handleToolError(this, 'PANDORA')" /></div>
-            <div class="card-info">
-              <span class="tool-name">PANDORA</span>
-              <span class="tool-meta">Renta de licencia GSM</span>
-            </div>
-          </div>
-          <span class="status-badge status-offline">OFFLINE</span>
-        </div>
       </div>
     </div>
   </main>
@@ -632,13 +650,35 @@
       const wrap = img.parentElement;
       wrap.innerHTML = '<div class="avatar-fallback"><div class="logo-badge"><span class="logo-zona">Zona</span><span class="logo-gsm">GSM</span></div></div>';
     }
-    function handleToolError(img, name) {
+    function handleToolError(img, name, extraClass = '') {
       const c = img.parentElement;
       img.style.display = 'none';
       const d = document.createElement('div');
-      d.className = 'tool-fallback';
+      d.className = `tool-fallback ${extraClass}`.trim();
       d.textContent = name;
       c.appendChild(d);
+    }
+    function filterTools() {
+      const inp = document.getElementById('toolSearchInput');
+      const clearBtn = document.getElementById('toolSearchClear');
+      const noRes = document.getElementById('noResultsMsg');
+      const query = (inp.value || '').toLowerCase().trim();
+      clearBtn.classList.toggle('show', query.length > 0);
+
+      let visibleCount = 0;
+      document.querySelectorAll('#toolsCards .card').forEach(card => {
+        const text = card.textContent.toLowerCase();
+        const match = !query || text.includes(query);
+        card.style.display = match ? '' : 'none';
+        if (match) visibleCount++;
+      });
+      noRes.style.display = visibleCount === 0 ? 'block' : 'none';
+    }
+    function clearToolSearch() {
+      const inp = document.getElementById('toolSearchInput');
+      inp.value = '';
+      filterTools();
+      inp.focus();
     }
     function showToast(msg) {
       const t = document.getElementById('toast'); t.textContent = msg; t.classList.add('show');
