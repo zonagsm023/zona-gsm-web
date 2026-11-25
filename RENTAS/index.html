@@ -24,7 +24,6 @@
     .loader-circle-wrap { position: relative; width: 124px; height: 124px; display: flex; align-items: center; justify-content: center; animation: loaderPopIn 0.5s cubic-bezier(0.22, 1, 0.36, 1) forwards; }
     @keyframes loaderPopIn { 0% { transform: scale(0.85); opacity: 0; } 100% { transform: scale(1); opacity: 1; } }
     
-    /* CAMBIO: Anillos del preloader en tonos rojos */
     .loader-ring { position: absolute; inset: 0; border-radius: 50%; border: 2px solid rgba(200, 29, 78, 0.35); background: rgba(200, 29, 78, 0.05); animation: loaderPulse 1.4s ease-in-out infinite; }
     .loader-ring-2 { position: absolute; inset: 0; border-radius: 50%; border: 1.5px solid rgba(200, 29, 78, 0.2); animation: loaderPulse 1.4s ease-in-out 0.35s infinite; }
     @keyframes loaderPulse { 0% { transform: scale(0.98); opacity: 0.9; } 70%, 100% { transform: scale(1.24); opacity: 0; } }
@@ -32,13 +31,11 @@
     .container { width: 100%; max-width: 460px; background: #f4f7fa; border-radius: 0 0 28px 28px; padding: 0 0 32px; box-shadow: 0 12px 35px rgba(15, 23, 42, 0.08); border: 1px solid rgba(255, 255, 255, 0.85); border-top: none; text-align: center; overflow: hidden; position: relative; opacity: 0; transform: translateY(14px); transition: opacity 0.75s cubic-bezier(0.22, 1, 0.36, 1), transform 0.75s cubic-bezier(0.22, 1, 0.36, 1); }
     .container.visible { opacity: 1; transform: translateY(0); }
 
-    /* CAMBIO: Fondo superior cambiado a tonos rojos del logo */
     .cover-area { height: 155px; background: linear-gradient(135deg, #8a0f33 0%, #c81d4e 55%, #e62e62 100%); position: relative; }
     .top-nav { position: absolute; top: 14px; left: 0; right: 0; display: flex; justify-content: center; gap: 6px; padding: 0 10px; z-index: 10; flex-wrap: wrap; }
     .nav-pill { padding: 6px 11px; border-radius: 999px; font-size: 11px; font-weight: 700; text-decoration: none; color: rgba(255, 255, 255, 0.92); background: rgba(255, 255, 255, 0.14); backdrop-filter: blur(8px); -webkit-backdrop-filter: blur(8px); border: 1px solid rgba(255, 255, 255, 0.25); transition: all 0.2s ease; }
     .nav-pill:hover { background: rgba(255, 255, 255, 0.26); transform: translateY(-1px); }
     
-    /* CAMBIO: Color del texto del botón activo */
     .nav-pill.active { background: #ffffff; color: #8a0f33; border-color: #ffffff; box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15); }
     .mountain-divider { position: absolute; bottom: -1px; left: 0; width: 100%; height: 36px; fill: #f4f7fa; display: block; }
 
@@ -50,7 +47,6 @@
     .logo-zona { background: #c81d4e; color: #ffffff; padding: 3px 6px; border-radius: 2px; margin-right: 4px; }
     .logo-gsm { color: #0f0f0f; }
 
-    /* CAMBIO: Anillos de pulso del avatar en tonos rojos */
     .pulse-ring { position: absolute; top: 0; left: 0; width: 100%; height: 100%; border-radius: 50%; border: 1.5px solid rgba(200, 29, 78, 0.32); background: rgba(200, 29, 78, 0.05); pointer-events: none; z-index: 1; }
     .ring-1 { animation: breatheRing1 4.2s ease-in-out infinite; }
     .ring-2 { border-color: rgba(200, 29, 78, 0.2); background: rgba(200, 29, 78, 0.03); animation: breatheRing2 4.2s ease-in-out infinite; }
@@ -84,6 +80,7 @@
     .card-info { display: flex; flex-direction: column; min-width: 0; }
     .tool-name { font-size: 14px; font-weight: 800; color: #0f172a; letter-spacing: 0.2px; }
     .tool-meta { font-size: 12px; color: #64748b; margin-top: 2px; }
+    .tool-price { font-size: 12.5px; font-weight: 800; color: #c81d4e; margin-top: 2px; }
 
     .status-badge { padding: 6px 12px; border-radius: 999px; font-size: 11px; font-weight: 800; letter-spacing: 0.4px; flex-shrink: 0; text-decoration: none; transition: transform 0.15s ease, opacity 0.15s ease; display: inline-flex; align-items: center; gap: 5px; }
     .status-badge:hover { transform: scale(1.03); }
@@ -179,10 +176,10 @@
             <div class="tool-icon"><img src="dftpro.png" alt="DFT Pro" onerror="handleToolError(this, 'DFT PRO')" /></div>
             <div class="card-info">
               <span class="tool-name">DFT PRO</span>
-              <span class="tool-meta">Renta de licencia GSM</span>
+              <span class="tool-price">$25.000 COP • 48 hrs</span>
             </div>
           </div>
-          <a class="status-badge status-online" href="https://wa.me/573104141805?text=Hola%2C%20quiero%20rentar%20DFT%20Pro"><span class="online-dot"></span>ONLINE</a>
+          <a class="status-badge status-online" href="https://wa.me/573104141805?text=Hola%2C%20quiero%20rentar%20DFT%20Pro%20(48%20hrs%20-%20%2425.000)"><span class="online-dot"></span>ONLINE</a>
         </div>
 
         <!-- INLOOK GUARD -->
@@ -191,10 +188,10 @@
             <div class="tool-icon"><img src="INLOOKGUARD.jpg" alt="InLook Guard" onerror="handleToolError(this, 'INLOOK GUARD')" /></div>
             <div class="card-info">
               <span class="tool-name">INLOOK GUARD</span>
-              <span class="tool-meta">Suite Android y MDM</span>
+              <span class="tool-price">$15.000 COP • 12 hrs</span>
             </div>
           </div>
-          <a class="status-badge status-online" href="https://wa.me/573104141805?text=Hola%2C%20quiero%20rentar%20InLook%20Guard"><span class="online-dot"></span>ONLINE</a>
+          <a class="status-badge status-online" href="https://wa.me/573104141805?text=Hola%2C%20quiero%20rentar%20InLook%20Guard%20(12%20hrs%20-%20%2415.000)"><span class="online-dot"></span>ONLINE</a>
         </div>
 
         <!-- NEUTRAL GSM -->
@@ -203,10 +200,10 @@
             <div class="tool-icon"><img src="neutralGSM.jpg" alt="Neutral GSM" onerror="handleToolError(this, 'NEUTRAL GSM')" /></div>
             <div class="card-info">
               <span class="tool-name">NEUTRAL GSM</span>
-              <span class="tool-meta">Renta de herramienta GSM</span>
+              <span class="tool-price">$15.000 COP • 6 hrs</span>
             </div>
           </div>
-          <a class="status-badge status-online" href="https://wa.me/573104141805?text=Hola%2C%20quiero%20rentar%20Neutral%20GSM"><span class="online-dot"></span>ONLINE</a>
+          <a class="status-badge status-online" href="https://wa.me/573104141805?text=Hola%2C%20quiero%20rentar%20Neutral%20GSM%20(6%20hrs%20-%20%2415.000)"><span class="online-dot"></span>ONLINE</a>
         </div>
 
         <!-- PANDORA -->
@@ -218,7 +215,7 @@
               <span class="tool-meta">Renta de licencia GSM</span>
             </div>
           </div>
-          <a class="status-badge status-online" href="https://wa.me/573104141805?text=Hola%2C%20quiero%20rentar%20Pandora"><span class="online-dot"></span>ONLINE</a>
+          <span class="status-badge status-offline">OFFLINE</span>
         </div>
 
         <!-- SIGMA PLUS -->
@@ -227,10 +224,10 @@
             <div class="tool-icon"><img src="sigmaplus.jpg" alt="Sigma Plus" onerror="handleToolError(this, 'SIGMA PLUS')" /></div>
             <div class="card-info">
               <span class="tool-name">SIGMA PLUS</span>
-              <span class="tool-meta">Renta de licencia GSM</span>
+              <span class="tool-price">$20.000 COP • 6 hrs</span>
             </div>
           </div>
-          <a class="status-badge status-online" href="https://wa.me/573104141805?text=Hola%2C%20quiero%20rentar%20Sigma%20Plus"><span class="online-dot"></span>ONLINE</a>
+          <a class="status-badge status-online" href="https://wa.me/573104141805?text=Hola%2C%20quiero%20rentar%20Sigma%20Plus%20(6%20hrs%20-%20%2420.000)"><span class="online-dot"></span>ONLINE</a>
         </div>
 
         <!-- TSM TOOL -->
@@ -239,10 +236,10 @@
             <div class="tool-icon"><img src="TSMTOOL.jpg" alt="TSM Tool" onerror="handleToolError(this, 'TSM TOOL')" /></div>
             <div class="card-info">
               <span class="tool-name">TSM TOOL</span>
-              <span class="tool-meta">Turbo Service Mobile</span>
+              <span class="tool-price">$15.000 COP • 12 hrs</span>
             </div>
           </div>
-          <a class="status-badge status-online" href="https://wa.me/573104141805?text=Hola%2C%20quiero%20rentar%20TSM%20Tool"><span class="online-dot"></span>ONLINE</a>
+          <a class="status-badge status-online" href="https://wa.me/573104141805?text=Hola%2C%20quiero%20rentar%20TSM%20Tool%20(12%20hrs%20-%20%2415.000)"><span class="online-dot"></span>ONLINE</a>
         </div>
 
         <!-- UNLOCKTOOL -->
@@ -251,10 +248,10 @@
             <div class="tool-icon"><img src="UNLOCKTOOL.png" alt="UnlockTool" onerror="handleToolError(this, 'UNLOCKTOOL')" /></div>
             <div class="card-info">
               <span class="tool-name">UNLOCKTOOL</span>
-              <span class="tool-meta">Renta de licencia GSM</span>
+              <span class="tool-price">$10.000 COP • 6 hrs</span>
             </div>
           </div>
-          <a class="status-badge status-online" href="https://wa.me/573104141805?text=Hola%2C%20quiero%20rentar%20UnlockTool"><span class="online-dot"></span>ONLINE</a>
+          <a class="status-badge status-online" href="https://wa.me/573104141805?text=Hola%2C%20quiero%20rentar%20UnlockTool%20(6%20hrs%20-%20%2410.000)"><span class="online-dot"></span>ONLINE</a>
         </div>
       </div>
     </div>
