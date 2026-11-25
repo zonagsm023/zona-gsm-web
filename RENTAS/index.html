@@ -23,7 +23,7 @@
     .preloader.hidden { opacity: 0; visibility: hidden; pointer-events: none; }
     .loader-circle-wrap { position: relative; width: 124px; height: 124px; display: flex; align-items: center; justify-content: center; animation: loaderPopIn 0.5s cubic-bezier(0.22, 1, 0.36, 1) forwards; }
     @keyframes loaderPopIn { 0% { transform: scale(0.85); opacity: 0; } 100% { transform: scale(1); opacity: 1; } }
-    
+
     .loader-ring { position: absolute; inset: 0; border-radius: 50%; border: 2px solid rgba(200, 29, 78, 0.35); background: rgba(200, 29, 78, 0.05); animation: loaderPulse 1.4s ease-in-out infinite; }
     .loader-ring-2 { position: absolute; inset: 0; border-radius: 50%; border: 1.5px solid rgba(200, 29, 78, 0.2); animation: loaderPulse 1.4s ease-in-out 0.35s infinite; }
     @keyframes loaderPulse { 0% { transform: scale(0.98); opacity: 0.9; } 70%, 100% { transform: scale(1.24); opacity: 0; } }
@@ -35,7 +35,6 @@
     .top-nav { position: absolute; top: 14px; left: 0; right: 0; display: flex; justify-content: center; gap: 6px; padding: 0 10px; z-index: 10; flex-wrap: wrap; }
     .nav-pill { padding: 6px 11px; border-radius: 999px; font-size: 11px; font-weight: 700; text-decoration: none; color: rgba(255, 255, 255, 0.92); background: rgba(255, 255, 255, 0.14); backdrop-filter: blur(8px); -webkit-backdrop-filter: blur(8px); border: 1px solid rgba(255, 255, 255, 0.25); transition: all 0.2s ease; }
     .nav-pill:hover { background: rgba(255, 255, 255, 0.26); transform: translateY(-1px); }
-    
     .nav-pill.active { background: #ffffff; color: #8a0f33; border-color: #ffffff; box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15); }
     .mountain-divider { position: absolute; bottom: -1px; left: 0; width: 100%; height: 36px; fill: #f4f7fa; display: block; }
 
@@ -58,7 +57,7 @@
     .bio { font-size: 14px; line-height: 1.45; color: #334155; max-width: 340px; margin: 0 auto 22px; }
 
     @keyframes subtleHop { 0%, 78%, 100% { transform: translateY(0); } 84% { transform: translateY(-5px); } 90% { transform: translateY(0); } 94% { transform: translateY(-2px); } }
-    .socials { display: flex; justify-content: center; align-items: flex-start; gap: 10px; margin-bottom: 26px; }
+    .socials { display: flex; justify-content: center; align-items: flex-start; gap: 10px; margin-bottom: 24px; }
     .social-item { display: flex; flex-direction: column; align-items: center; text-decoration: none; background: none; border: none; cursor: pointer; width: 64px; animation: subtleHop 5s ease-in-out infinite; }
     .social-item:nth-child(1) { animation-delay: 0s; } .social-item:nth-child(2) { animation-delay: 0.3s; } .social-item:nth-child(3) { animation-delay: 0.6s; } .social-item:nth-child(4) { animation-delay: 0.9s; } .social-item:nth-child(5) { animation-delay: 1.2s; }
     .social-item:hover { animation-play-state: paused; transform: translateY(-3px); }
@@ -66,28 +65,57 @@
     .social-item:hover .social-circle { box-shadow: 0 6px 16px rgba(15, 23, 42, 0.13); }
     .social-label { font-size: 11px; font-weight: 700; color: #334155; line-height: 1.15; letter-spacing: -0.1px; white-space: nowrap; }
 
-    .section-title { font-size: 12px; font-weight: 700; letter-spacing: 1px; color: #64748b; text-transform: uppercase; margin-bottom: 16px; }
-    .cards { display: flex; flex-direction: column; gap: 14px; padding: 0 4px; }
+    .section-title { font-size: 12px; font-weight: 700; letter-spacing: 1px; color: #64748b; text-transform: uppercase; margin-bottom: 10px; }
 
-    .card { background: #ffffff; border-radius: 50px; padding: 12px 16px; display: flex; align-items: center; justify-content: space-between; box-shadow: 0 4px 14px rgba(15, 23, 42, 0.05); border: 1px solid #eef2f6; text-align: left; transition: transform 0.15s ease; }
+    /* Barra de tasa USD -> COP en tiempo real */
+    .fx-bar { background: #ffffff; border: 1px solid #e2e8f0; border-radius: 16px; padding: 8px 12px; margin: 0 4px 12px; display: flex; align-items: center; justify-content: space-between; gap: 8px; font-size: 11.5px; color: #334155; box-shadow: 0 2px 8px rgba(15, 23, 42, 0.03); }
+    .fx-left { display: flex; align-items: center; gap: 6px; font-weight: 700; text-align: left; }
+    .fx-dot { width: 7px; height: 7px; border-radius: 50%; background: #10b981; flex-shrink: 0; }
+    .fx-dot.loading { background: #f59e0b; }
+    .fx-actions { display: flex; align-items: center; gap: 6px; }
+    .fx-btn { border: 1px solid #cbd5e1; background: #f8fafc; color: #0f172a; font-size: 10.5px; font-weight: 700; padding: 4px 8px; border-radius: 999px; cursor: pointer; transition: all 0.15s ease; }
+    .fx-btn:hover { border-color: #c81d4e; color: #c81d4e; }
+    .fx-input { width: 76px; padding: 3px 7px; border-radius: 8px; border: 1px solid #c81d4e; font-size: 11px; font-weight: 700; color: #0f172a; text-align: right; display: none; }
+    .fx-input.editing { display: inline-block; }
+
+    /* Buscador y filtros */
+    .catalog-controls { margin-bottom: 18px; padding: 0 4px; display: flex; flex-direction: column; gap: 10px; }
+    .search-input { width: 100%; padding: 11px 16px; border-radius: 999px; border: 1px solid #dce4ee; background: #ffffff; font-size: 13px; color: #0f172a; outline: none; box-shadow: 0 3px 10px rgba(15, 23, 42, 0.04); transition: border-color 0.2s ease, box-shadow 0.2s ease; }
+    .search-input:focus { border-color: #c81d4e; box-shadow: 0 0 0 3px rgba(200, 29, 78, 0.12); }
+
+    .filter-row { display: flex; gap: 6px; overflow-x: auto; padding-bottom: 4px; scrollbar-width: none; }
+    .filter-row::-webkit-scrollbar { display: none; }
+    .filter-chip { border: 1px solid #dce4ee; background: #ffffff; color: #334155; font-size: 11px; font-weight: 700; padding: 6px 11px; border-radius: 999px; cursor: pointer; white-space: nowrap; transition: all 0.15s ease; }
+    .filter-chip:hover { border-color: #c81d4e; color: #c81d4e; }
+    .filter-chip.active { background: #c81d4e; color: #ffffff; border-color: #c81d4e; }
+
+    /* Grupos y tarjetas */
+    .group-block { margin-bottom: 20px; }
+    .group-header { font-size: 11px; font-weight: 800; letter-spacing: 0.6px; text-transform: uppercase; color: #8a0f33; background: #ffe4ec; border: 1px solid #fbcfe8; padding: 6px 12px; border-radius: 999px; display: inline-block; margin-bottom: 10px; }
+
+    .cards { display: flex; flex-direction: column; gap: 11px; padding: 0 4px; }
+
+    .card { background: #ffffff; border-radius: 26px; padding: 11px 14px; display: flex; align-items: center; justify-content: space-between; gap: 10px; box-shadow: 0 4px 14px rgba(15, 23, 42, 0.05); border: 1px solid #eef2f6; text-align: left; transition: transform 0.15s ease; }
     .card:hover { transform: translateY(-1px); }
-    .card-left { display: flex; align-items: center; gap: 14px; min-width: 0; }
+    .card-left { display: flex; align-items: center; gap: 12px; min-width: 0; flex: 1; }
 
-    .tool-icon { width: 46px; height: 46px; border-radius: 50%; flex-shrink: 0; overflow: hidden; background: #0f172a; border: 1px solid #e2e8f0; display: flex; align-items: center; justify-content: center; }
+    .tool-icon { width: 44px; height: 44px; border-radius: 50%; flex-shrink: 0; overflow: hidden; background: #0f172a; border: 1px solid #e2e8f0; display: flex; align-items: center; justify-content: center; }
     .tool-icon img { width: 100%; height: 100%; object-fit: cover; display: block; }
-    .tool-fallback { width: 100%; height: 100%; display: flex; align-items: center; justify-content: center; font-weight: 900; font-size: 10px; color: #ffffff; text-align: center; padding: 2px; }
+    .tool-fallback { width: 100%; height: 100%; display: flex; align-items: center; justify-content: center; font-weight: 900; font-size: 9.5px; line-height: 1.05; color: #ffffff; text-align: center; padding: 2px; letter-spacing: -0.2px; }
 
     .card-info { display: flex; flex-direction: column; min-width: 0; }
-    .tool-name { font-size: 14px; font-weight: 800; color: #0f172a; letter-spacing: 0.2px; }
-    .tool-meta { font-size: 12px; color: #64748b; margin-top: 2px; }
-    .tool-price { font-size: 12.5px; font-weight: 800; color: #c81d4e; margin-top: 2px; }
+    .tool-name { font-size: 13.5px; font-weight: 800; color: #0f172a; letter-spacing: 0.1px; line-height: 1.2; }
+    .tool-meta { font-size: 11.5px; color: #64748b; margin-top: 2px; }
+    .tool-price { font-size: 12px; font-weight: 800; color: #c81d4e; margin-top: 2px; line-height: 1.25; }
 
-    .status-badge { padding: 6px 12px; border-radius: 999px; font-size: 11px; font-weight: 800; letter-spacing: 0.4px; flex-shrink: 0; text-decoration: none; transition: transform 0.15s ease, opacity 0.15s ease; display: inline-flex; align-items: center; gap: 5px; }
+    .status-badge { padding: 6px 11px; border-radius: 999px; font-size: 10.5px; font-weight: 800; letter-spacing: 0.4px; flex-shrink: 0; text-decoration: none; transition: transform 0.15s ease, opacity 0.15s ease; display: inline-flex; align-items: center; gap: 5px; }
     .status-badge:hover { transform: scale(1.03); }
     .status-online { background: #dcfce7; color: #15803d; border: 1px solid #86efac; }
     .status-offline { background: #fee2e2; color: #b91c1c; border: 1px solid #fca5a5; }
     .online-dot { width: 6px; height: 6px; border-radius: 50%; background: #10b981; animation: breatheOnline 1.8s ease-in-out infinite; }
     @keyframes breatheOnline { 0%, 100% { transform: scale(0.9); box-shadow: 0 0 0 0 rgba(16, 185, 129, 0.65); opacity: 0.85; } 50% { transform: scale(1.2); box-shadow: 0 0 0 4px rgba(16, 185, 129, 0); opacity: 1; } }
+
+    .empty-msg { font-size: 13px; color: #64748b; padding: 20px 10px; display: none; }
 
     .toast { position: fixed; bottom: 24px; left: 50%; transform: translateX(-50%) translateY(20px); background: #0f172a; color: #ffffff; padding: 10px 18px; border-radius: 999px; font-size: 13px; font-weight: 600; opacity: 0; pointer-events: none; transition: opacity 0.25s ease, transform 0.25s ease; box-shadow: 0 8px 20px rgba(0, 0, 0, 0.2); z-index: 10000; }
     .toast.show { opacity: 1; transform: translateX(-50%) translateY(0); }
@@ -157,110 +185,308 @@
 
       <div class="section-title">HERRAMIENTAS EN RENTA</div>
 
-      <div class="cards">
-        <!-- CHIMERA -->
-        <div class="card">
-          <div class="card-left">
-            <div class="tool-icon"><img src="chimera.jpg" alt="Chimera Tool" onerror="handleToolError(this, 'CHIMERA')" /></div>
-            <div class="card-info">
-              <span class="tool-name">CHIMERA TOOL</span>
-              <span class="tool-meta">Renta de licencia GSM</span>
-            </div>
-          </div>
-          <span class="status-badge status-offline">OFFLINE</span>
+      <div class="fx-bar" id="fxBar">
+        <div class="fx-left">
+          <span class="fx-dot loading" id="fxDot"></span>
+          <span id="fxStatusText">1 USD = cargando COP...</span>
         </div>
-
-        <!-- DFT PRO -->
-        <div class="card">
-          <div class="card-left">
-            <div class="tool-icon"><img src="dftpro.png" alt="DFT Pro" onerror="handleToolError(this, 'DFT PRO')" /></div>
-            <div class="card-info">
-              <span class="tool-name">DFT PRO</span>
-              <span class="tool-price">$25.000 COP • 48 hrs</span>
-            </div>
-          </div>
-          <a class="status-badge status-online" href="https://wa.me/573104141805?text=Hola%2C%20quiero%20rentar%20DFT%20Pro%20(48%20hrs%20-%20%2425.000)"><span class="online-dot"></span>ONLINE</a>
-        </div>
-
-        <!-- INLOOK GUARD -->
-        <div class="card">
-          <div class="card-left">
-            <div class="tool-icon"><img src="INLOOKGUARD.jpg" alt="InLook Guard" onerror="handleToolError(this, 'INLOOK GUARD')" /></div>
-            <div class="card-info">
-              <span class="tool-name">INLOOK GUARD</span>
-              <span class="tool-price">$15.000 COP • 12 hrs</span>
-            </div>
-          </div>
-          <a class="status-badge status-online" href="https://wa.me/573104141805?text=Hola%2C%20quiero%20rentar%20InLook%20Guard%20(12%20hrs%20-%20%2415.000)"><span class="online-dot"></span>ONLINE</a>
-        </div>
-
-        <!-- NEUTRAL GSM -->
-        <div class="card">
-          <div class="card-left">
-            <div class="tool-icon"><img src="neutralGSM.jpg" alt="Neutral GSM" onerror="handleToolError(this, 'NEUTRAL GSM')" /></div>
-            <div class="card-info">
-              <span class="tool-name">NEUTRAL GSM</span>
-              <span class="tool-price">$15.000 COP • 6 hrs</span>
-            </div>
-          </div>
-          <a class="status-badge status-online" href="https://wa.me/573104141805?text=Hola%2C%20quiero%20rentar%20Neutral%20GSM%20(6%20hrs%20-%20%2415.000)"><span class="online-dot"></span>ONLINE</a>
-        </div>
-
-        <!-- PANDORA -->
-        <div class="card">
-          <div class="card-left">
-            <div class="tool-icon"><img src="pandora.jpg" alt="Pandora" onerror="handleToolError(this, 'PANDORA')" /></div>
-            <div class="card-info">
-              <span class="tool-name">PANDORA</span>
-              <span class="tool-meta">Renta de licencia GSM</span>
-            </div>
-          </div>
-          <span class="status-badge status-offline">OFFLINE</span>
-        </div>
-
-        <!-- SIGMA PLUS -->
-        <div class="card">
-          <div class="card-left">
-            <div class="tool-icon"><img src="sigmaplus.jpg" alt="Sigma Plus" onerror="handleToolError(this, 'SIGMA PLUS')" /></div>
-            <div class="card-info">
-              <span class="tool-name">SIGMA PLUS</span>
-              <span class="tool-price">$20.000 COP • 6 hrs</span>
-            </div>
-          </div>
-          <a class="status-badge status-online" href="https://wa.me/573104141805?text=Hola%2C%20quiero%20rentar%20Sigma%20Plus%20(6%20hrs%20-%20%2420.000)"><span class="online-dot"></span>ONLINE</a>
-        </div>
-
-        <!-- TSM TOOL -->
-        <div class="card">
-          <div class="card-left">
-            <div class="tool-icon"><img src="TSMTOOL.jpg" alt="TSM Tool" onerror="handleToolError(this, 'TSM TOOL')" /></div>
-            <div class="card-info">
-              <span class="tool-name">TSM TOOL</span>
-              <span class="tool-price">$15.000 COP • 12 hrs</span>
-            </div>
-          </div>
-          <a class="status-badge status-online" href="https://wa.me/573104141805?text=Hola%2C%20quiero%20rentar%20TSM%20Tool%20(12%20hrs%20-%20%2415.000)"><span class="online-dot"></span>ONLINE</a>
-        </div>
-
-        <!-- UNLOCKTOOL -->
-        <div class="card">
-          <div class="card-left">
-            <div class="tool-icon"><img src="UNLOCKTOOL.png" alt="UnlockTool" onerror="handleToolError(this, 'UNLOCKTOOL')" /></div>
-            <div class="card-info">
-              <span class="tool-name">UNLOCKTOOL</span>
-              <span class="tool-price">$10.000 COP • 6 hrs</span>
-            </div>
-          </div>
-          <a class="status-badge status-online" href="https://wa.me/573104141805?text=Hola%2C%20quiero%20rentar%20UnlockTool%20(6%20hrs%20-%20%2410.000)"><span class="online-dot"></span>ONLINE</a>
+        <div class="fx-actions">
+          <input id="fxCustomInput" class="fx-input" type="number" step="10" min="1000" max="10000" aria-label="Tasa COP manual" />
+          <button type="button" class="fx-btn" id="fxEditBtn" onclick="toggleFxEdit()">Ajustar</button>
+          <button type="button" class="fx-btn" onclick="fetchLiveRate(true)" title="Actualizar tasa">↻</button>
         </div>
       </div>
+
+      <div class="catalog-controls">
+        <input id="toolSearch" class="search-input" type="search" placeholder="Buscar herramienta o duración (ej. UnlockTool, 24h, DFT)..." oninput="filterCatalog()" />
+        <div class="filter-row" id="filterRow">
+          <button type="button" class="filter-chip active" data-group="all" onclick="selectGroup('all', this)">Todos</button>
+          <button type="button" class="filter-chip" data-group="destacadas" onclick="selectGroup('destacadas', this)">Principales</button>
+          <button type="button" class="filter-chip" data-group="digital" onclick="selectGroup('digital', this)">Digital Tools Auto</button>
+          <button type="button" class="filter-chip" data-group="remote" onclick="selectGroup('remote', this)">Remote Group</button>
+          <button type="button" class="filter-chip" data-group="rent360" onclick="selectGroup('rent360', this)">360 Tool & Box</button>
+        </div>
+      </div>
+
+      <div id="catalogContainer"></div>
+      <div id="emptyMessage" class="empty-msg">No se encontraron herramientas con ese filtro.</div>
     </div>
   </main>
 
   <div id="toast" class="toast">Copiado</div>
 
   <script>
+    const WA_NUMBER = '573104141805';
+    const PROFIT_USD = 2.0; // Ganancia fija de +$2 USD por renta
+    const FALLBACK_RATE = 3750; // Respaldo si no hay conexión a APIs
+    let usdToCop = FALLBACK_RATE;
+    let isManualRate = false;
+
+    // usd: precio base en dólares (se le suma PROFIT_USD). copFixed: precio fijo en COP si aplica.
+    const GROUPS = [
+      {
+        id: 'destacadas',
+        title: 'Principales & Remote',
+        items: [
+          { name: 'CHIMERA TOOL', meta: 'Renta de licencia GSM', usd: null, copFixed: null, img: 'chimera.jpg', code: 'CHIMERA', online: false },
+          { name: 'DFT PRO', meta: '48 hrs', usd: null, copFixed: 25000, img: 'dftpro.png', code: 'DFT PRO', online: true },
+          { name: 'INLOOK GUARD', meta: '12 hrs', usd: null, copFixed: 15000, img: 'INLOOKGUARD.jpg', code: 'INLOOK', online: true },
+          { name: 'NEUTRAL GSM', meta: '6 hrs', usd: null, copFixed: 15000, img: 'neutralGSM.jpg', code: 'NEUTRAL', online: true },
+          { name: 'PANDORA', meta: 'Renta de licencia GSM', usd: null, copFixed: null, img: 'pandora.jpg', code: 'PANDORA', online: false },
+          { name: 'SIGMA PLUS', meta: '6 hrs', usd: null, copFixed: 20000, img: 'sigmaplus.jpg', code: 'SIGMA+', online: true },
+          { name: 'TSM TOOL', meta: '12 hrs', usd: null, copFixed: 15000, img: 'TSMTOOL.jpg', code: 'TSM TOOL', online: true },
+          { name: 'UNLOCKTOOL', meta: '6 hrs', usd: null, copFixed: 10000, img: 'UNLOCKTOOL.png', code: 'UNLOCK', online: true },
+          { name: 'MOTOKINGPRO RENTAL (1PC)', meta: '24 horas • Entrega 1-2 min', usd: 4.0, copFixed: null, img: '', code: 'MKP 24H', online: true },
+          { name: 'MOTOKINGPRO RENTAL (1PC)', meta: '72 horas • Entrega 1-2 min', usd: 8.5, copFixed: null, img: '', code: 'MKP 72H', online: true }
+        ]
+      },
+      {
+        id: 'digital',
+        title: 'Digital Tools — ID & Password Auto (API)',
+        items: [
+          { name: 'Infinity [CM2] Online/Digital Rent', meta: '24 horas • Entrega 1-2 h', usd: 7.35, copFixed: null, img: '', code: 'CM2', online: true },
+          { name: 'RTC Tool (Auto User + Pass)', meta: '6 horas • Entrega 1-2 min', usd: 1.2, copFixed: null, img: '', code: 'RTC', online: true },
+          { name: 'MDM FIX TOOL BETA', meta: '1 hora • Entrega 1-2 min', usd: 1.0, copFixed: null, img: '', code: 'MDM FIX', online: true },
+          { name: 'CERBERUS TOOL PRO & KGPRO TOOL', meta: '6 horas • Auto User + Pass • 1-2 min', usd: 1.2, copFixed: null, img: '', code: 'CERBERUS', online: true },
+          { name: 'APIZU MDM TOOL PRO', meta: '4 horas • Auto User + Pass • 1-2 min', usd: 1.6, copFixed: null, img: '', code: 'APIZU', online: true },
+          { name: 'HSPRO TOOL', meta: '6 horas • Auto User + Pass • 1-2 min', usd: 3.3, copFixed: null, img: '', code: 'HSPRO', online: true },
+          { name: 'UnlockTool (Source 2)', meta: '6 horas • Entrega 1-60 h', usd: 0.2, copFixed: null, img: 'UNLOCKTOOL.png', code: 'UT S2', online: true },
+          { name: 'Octoplus Full Digital License', meta: '1 día (24h) • Entrega 1-30 min', usd: 5.2, copFixed: null, img: '', code: 'OCTOPLUS', online: true },
+          { name: 'UNLOCKTOOL RENT', meta: '6 horas • Entrega 1-60 min', usd: 0.2, copFixed: null, img: 'UNLOCKTOOL.png', code: 'UT 6H', online: true },
+          { name: 'MDM FIX BETA Tool', meta: '1 hora • Entrega 1-60 min', usd: 1.0, copFixed: null, img: '', code: 'MDM BETA', online: true },
+          { name: 'Dft Pro Tool', meta: '48 horas • Entrega 1-6 min', usd: 1.3, copFixed: null, img: 'dftpro.png', code: 'DFT 48H', online: true },
+          { name: 'CF Tools', meta: '10 horas • Entrega 1-60 min', usd: 0.3, copFixed: null, img: '', code: 'CF TOOL', online: true },
+          { name: 'TSM Tool (Source 2)', meta: '6 horas • Entrega 1-60 min', usd: 0.55, copFixed: null, img: 'TSMTOOL.jpg', code: 'TSM S2', online: true },
+          { name: 'TFM Tool Pro (Source 2)', meta: '6 horas • Entrega 1-60 min', usd: 0.3, copFixed: null, img: '', code: 'TFM PRO', online: true },
+          { name: 'DFT Pro Tool (Source 2)', meta: '48 horas • Entrega 1-60 min', usd: 1.2, copFixed: null, img: 'dftpro.png', code: 'DFT S2', online: true },
+          { name: 'AndroidWinTool (AWT)', meta: '24 horas • Entrega 1-60 min', usd: 1.5, copFixed: null, img: '', code: 'AWT 24H', online: true },
+          { name: 'TSM-Tools', meta: '6 horas • Entrega 1-60 min', usd: 0.4, copFixed: null, img: 'TSMTOOL.jpg', code: 'TSM 6H', online: true },
+          { name: 'Griffin Unlocker Premium Pack', meta: '5 horas • Instant • 1-60 min', usd: 1.5, copFixed: null, img: '', code: 'GRIFFIN+', online: true },
+          { name: 'Hydra Tool (Without Dongle)', meta: '12 horas • Entrega 1-60 min', usd: 0.4, copFixed: null, img: '', code: 'HYDRA', online: true },
+          { name: 'UnlockTool (Instant Access)', meta: '24 horas • Entrega 1-30 min', usd: 0.5, copFixed: null, img: 'UNLOCKTOOL.png', code: 'UT 24H', online: true },
+          { name: 'PURE UNLOCKER PRO', meta: '12 horas • Entrega 1-20 min', usd: 1.2, copFixed: null, img: '', code: 'PURE PRO', online: true },
+          { name: 'E-GSM Tool', meta: '24 horas • Entrega 1-2 min', usd: 4.8, copFixed: null, img: '', code: 'E-GSM', online: true },
+          { name: 'Smart Tool Pro', meta: '10 horas • Entrega 1-2 min', usd: 2.1, copFixed: null, img: '', code: 'SMART PRO', online: true },
+          { name: 'TMT Pro Tool', meta: '4 horas • Entrega 1-2 min', usd: 0.3, copFixed: null, img: '', code: 'TMT PRO', online: true }
+        ]
+      },
+      {
+        id: 'remote',
+        title: 'Remote Default Group',
+        items: [
+          { name: 'Celltool SAMSUNGTOOL.US', meta: '10 horas • Entrega 1-72 h', usd: 1.5, copFixed: null, img: '', code: 'SAMTOOL', online: true },
+          { name: 'Rent For EFT PRO', meta: '5 horas • Entrega 1-30 h', usd: 1.8, copFixed: null, img: '', code: 'EFT PRO', online: true },
+          { name: 'OPPO–REALME–OnePlus Decrypt Token', meta: 'Open Debug • Entrega 1-72 h', usd: 0.7, copFixed: null, img: '', code: 'DECRYPT', online: true },
+          { name: 'UAT PRO TOOL', meta: '2 horas • Entrega 1-72 h', usd: 0.7, copFixed: null, img: '', code: 'UAT PRO', online: true },
+          { name: 'TR Tool', meta: '24 horas • Entrega 1-72 h', usd: 2.2, copFixed: null, img: '', code: 'TR TOOL', online: true },
+          { name: 'Rent For TFM Tool', meta: '5 horas • Entrega 1-7 min', usd: 0.3, copFixed: null, img: '', code: 'TFM 5H', online: true },
+          { name: 'Rent For KG Killer', meta: '4 horas • Entrega 1-72 h', usd: 0.25, copFixed: null, img: '', code: 'KG KILL', online: true },
+          { name: 'Mst [MobileSea Service Tool]', meta: '6 horas • Entrega 1-72 h', usd: 0.7, copFixed: null, img: '', code: 'MST TOOL', online: true },
+          { name: 'MRT Tool', meta: '24 horas • Entrega 1-72 h', usd: 0.5, copFixed: null, img: '', code: 'MRT 24H', online: true },
+          { name: 'Griffin-Unlocker Tool (Not Premium)', meta: '6 horas • Entrega 1-72 h', usd: 1.0, copFixed: null, img: '', code: 'GRIFFIN', online: true },
+          { name: 'Arab FRP Tool', meta: '3 horas • Entrega 1-72 h', usd: 0.8, copFixed: null, img: '', code: 'ARAB FRP', online: true },
+          { name: 'AnonySHU Tool', meta: '10 horas • Entrega 1-72 h', usd: 1.0, copFixed: null, img: '', code: 'ANONYSHU', online: true },
+          { name: 'AndroidWinTool (AWT) (Auto Login)', meta: '40 horas • Entrega 1-72 h', usd: 1.5, copFixed: null, img: '', code: 'AWT 40H', online: true },
+          { name: 'Android Multi Tool (AMT)', meta: '2 horas • Entrega 1-72 h', usd: 0.2, copFixed: null, img: '', code: 'AMT 2H', online: true },
+          { name: 'CF Tools (Remote)', meta: '10 horas • Entrega 1-60 min', usd: 0.3, copFixed: null, img: '', code: 'CF 10H', online: true },
+          { name: 'Password Wrong / PC Bind Verification', meta: 'Verificación de acceso • 1-7 min', usd: null, copFixed: 0, isVerification: true, img: '', code: 'SOPORTE', online: true }
+        ]
+      },
+      {
+        id: 'rent360',
+        title: '360 Tool & Box Share',
+        items: [
+          { name: '360 TOOL (tojo360.com)', meta: '12 horas • Entrega 1 min', usd: 0.7, copFixed: null, img: '', code: '360 12H', online: true },
+          { name: '360 TOOL (tojo360.com)', meta: '24 horas • Entrega 1 min', usd: 0.8, copFixed: null, img: '', code: '360 24H', online: true },
+          { name: '360 TOOL (tojo360.com)', meta: '48 horas • Entrega 1 min', usd: 1.5, copFixed: null, img: '', code: '360 48H', online: true },
+          { name: '360 Tool Rent', meta: '6 horas • Entrega 1 min', usd: 0.2, copFixed: null, img: '', code: '360 6H', online: true },
+          { name: 'Nice Unlocker PRO (Box Share)', meta: '6 horas • Entrega 1 min', usd: 1.6, copFixed: null, img: '', code: 'NICE PRO', online: true },
+          { name: 'Galaxy Multi Tool (Box Share)', meta: '2 horas • Entrega 1-60 min', usd: 0.2, copFixed: null, img: '', code: 'GALAXY', online: true }
+        ]
+      }
+    ];
+
+    let activeGroup = 'all';
+
+    function formatCop(amount) {
+      const rounded = Math.round(amount / 100) * 100;
+      return '$' + rounded.toLocaleString('es-CO') + ' COP';
+    }
+
+    function formatUsd(amount) {
+      return '$' + amount.toFixed(2) + ' USD';
+    }
+
+    function getItemPricing(item) {
+      if (item.isVerification) {
+        return { display: 'Verificación gratuita', plain: 'Verificación gratuita' };
+      }
+      if (typeof item.usd === 'number') {
+        const finalUsd = item.usd + PROFIT_USD;
+        const copVal = formatCop(finalUsd * usdToCop);
+        const usdVal = formatUsd(finalUsd);
+        return { display: `${usdVal} • ${copVal}`, plain: `${usdVal} / ${copVal}` };
+      }
+      if (typeof item.copFixed === 'number') {
+        const copVal = '$' + item.copFixed.toLocaleString('es-CO') + ' COP';
+        const usdVal = formatUsd(item.copFixed / usdToCop);
+        return { display: `${usdVal} • ${copVal}`, plain: `${usdVal} / ${copVal}` };
+      }
+      return { display: null, plain: '' };
+    }
+
+    function updateFxBar(statusLabel, isLive = true) {
+      const dot = document.getElementById('fxDot');
+      const txt = document.getElementById('fxStatusText');
+      dot.classList.remove('loading');
+      dot.style.background = isLive ? '#10b981' : '#f59e0b';
+      txt.textContent = statusLabel;
+    }
+
+    async function fetchLiveRate(notify = false) {
+      if (isManualRate) return;
+      document.getElementById('fxDot').classList.add('loading');
+      document.getElementById('fxStatusText').textContent = 'Actualizando tasa USD/COP...';
+
+      const sources = [
+        async () => {
+          const r = await fetch('https://open.er-api.com/v6/latest/USD', { cache: 'no-store' });
+          const d = await r.json();
+          return d && d.rates && d.rates.COP ? Number(d.rates.COP) : null;
+        },
+        async () => {
+          const r = await fetch('https://api.frankfurter.app/latest?from=USD&to=COP', { cache: 'no-store' });
+          const d = await r.json();
+          return d && d.rates && d.rates.COP ? Number(d.rates.COP) : null;
+        }
+      ];
+
+      for (const fn of sources) {
+        try {
+          const rate = await fn();
+          if (rate && rate > 1000 && rate < 10000) {
+            usdToCop = Math.round(rate * 100) / 100;
+            updateFxBar(`1 USD = $${Math.round(usdToCop).toLocaleString('es-CO')} COP (En vivo)`, true);
+            renderCatalog();
+            if (notify) showToast('Tasa USD/COP actualizada');
+            return;
+          }
+        } catch (_) {}
+      }
+
+      usdToCop = FALLBACK_RATE;
+      updateFxBar(`1 USD ≈ $${usdToCop.toLocaleString('es-CO')} COP (Base)`, false);
+      renderCatalog();
+      if (notify) showToast('Usando tasa base de respaldo');
+    }
+
+    function toggleFxEdit() {
+      const input = document.getElementById('fxCustomInput');
+      const btn = document.getElementById('fxEditBtn');
+      const editing = input.classList.contains('editing');
+
+      if (!editing) {
+        input.value = Math.round(usdToCop);
+        input.classList.add('editing');
+        btn.textContent = 'Guardar';
+        input.focus();
+      } else {
+        const val = Number(input.value);
+        if (val >= 1000 && val <= 10000) {
+          usdToCop = val;
+          isManualRate = true;
+          updateFxBar(`1 USD = $${val.toLocaleString('es-CO')} COP (Manual)`, true);
+          renderCatalog();
+          showToast('Tasa manual aplicada');
+        }
+        input.classList.remove('editing');
+        btn.textContent = 'Ajustar';
+      }
+    }
+
+    function buildWhatsAppUrl(item, pricing) {
+      const detail = pricing.plain ? ` (${item.meta} - ${pricing.plain})` : ` (${item.meta})`;
+      const text = `Hola, quiero solicitar: ${item.name}${detail}`;
+      return `https://wa.me/${WA_NUMBER}?text=${encodeURIComponent(text)}`;
+    }
+
+    function renderCatalog() {
+      const container = document.getElementById('catalogContainer');
+      const query = (document.getElementById('toolSearch').value || '').trim().toLowerCase();
+      let visibleCards = 0;
+
+      container.innerHTML = GROUPS.map(group => {
+        if (activeGroup !== 'all' && activeGroup !== group.id) return '';
+
+        const filtered = group.items.filter(item => {
+          if (!query) return true;
+          const pricing = getItemPricing(item);
+          return (
+            item.name.toLowerCase().includes(query) ||
+            item.meta.toLowerCase().includes(query) ||
+            (pricing.plain && pricing.plain.toLowerCase().includes(query))
+          );
+        });
+
+        if (!filtered.length) return '';
+        visibleCards += filtered.length;
+
+        const cardsHtml = filtered.map(item => {
+          const pricing = getItemPricing(item);
+          const iconHtml = item.img
+            ? `<img src="${item.img}" alt="${item.name}" onerror="handleToolError(this, '${item.code}')" />`
+            : `<div class="tool-fallback">${item.code}</div>`;
+
+          const priceHtml = pricing.display
+            ? `<span class="tool-price">${pricing.display}</span>`
+            : '';
+
+          const badgeHtml = item.online
+            ? `<a class="status-badge status-online" href="${buildWhatsAppUrl(item, pricing)}" target="_blank" rel="noopener noreferrer"><span class="online-dot"></span>ONLINE</a>`
+            : `<span class="status-badge status-offline">OFFLINE</span>`;
+
+          return `
+            <div class="card">
+              <div class="card-left">
+                <div class="tool-icon">${iconHtml}</div>
+                <div class="card-info">
+                  <span class="tool-name">${item.name}</span>
+                  ${priceHtml}
+                  <span class="tool-meta">${item.meta}</span>
+                </div>
+              </div>
+              ${badgeHtml}
+            </div>
+          `;
+        }).join('');
+
+        return `
+          <section class="group-block">
+            <div class="group-header">${group.title}</div>
+            <div class="cards">${cardsHtml}</div>
+          </section>
+        `;
+      }).join('');
+
+      document.getElementById('emptyMessage').style.display = visibleCards === 0 ? 'block' : 'none';
+    }
+
+    function selectGroup(groupId, btn) {
+      activeGroup = groupId;
+      document.querySelectorAll('.filter-chip').forEach(chip => chip.classList.remove('active'));
+      if (btn) btn.classList.add('active');
+      renderCatalog();
+    }
+
+    function filterCatalog() {
+      renderCatalog();
+    }
+
     window.addEventListener('DOMContentLoaded', () => {
+      renderCatalog();
+      fetchLiveRate(false);
+      setInterval(() => fetchLiveRate(false), 15 * 60 * 1000);
+
       setTimeout(() => {
         document.getElementById('preloader').classList.add('hidden');
         document.getElementById('mainContent').classList.add('visible');
