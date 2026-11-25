@@ -168,7 +168,7 @@
       </div>
 
       <div class="section-title">HERRAMIENTAS EN RENTA</div>
-      <div id="trmInfo" class="trm-note">Tarifa base + $2.50 USD · TRM: $3.592,03 COP</div>
+      <div id="trmInfo" class="trm-note">Dólar hoy: $3.592,03 COP</div>
 
       <div class="search-box">
         <input id="toolSearchInput" class="search-input" type="search" placeholder="Buscar tool (Ej. TSM, Chimera, UnlockTool...)" oninput="filterTools()" />
@@ -235,9 +235,16 @@
       return '$' + Math.round(amount).toLocaleString('es-CO') + ' COP';
     }
 
-    function calcToolPriceCop(baseUsd) {
-      const totalUsd = Number(baseUsd || 0) + MARGIN_USD;
-      const rawCop = totalUsd * currentUsdToCop;
+    function formatUsd(amount) {
+      return '$' + Number(amount).toFixed(2) + ' USD';
+    }
+
+    function calcFinalUsd(baseUsd) {
+      return Number((Number(baseUsd || 0) + MARGIN_USD).toFixed(2));
+    }
+
+    function calcToolPriceCop(finalUsd) {
+      const rawCop = finalUsd * currentUsdToCop;
       return Math.round(rawCop / 100) * 100;
     }
 
@@ -246,7 +253,7 @@
       const trmNote = document.getElementById('trmInfo');
       if (trmNote) {
         const formattedRate = currentUsdToCop.toLocaleString('es-CO', { minimumFractionDigits: 2, maximumFractionDigits: 2 });
-        trmNote.textContent = `Tarifa base + $${MARGIN_USD.toFixed(2)} USD · Dólar hoy: $${formattedRate} COP`;
+        trmNote.textContent = `Dólar hoy: $${formattedRate} COP`;
       }
 
       container.innerHTML = TOOLS_CATALOG.map(t => {
@@ -265,16 +272,17 @@
           `;
         }
 
-        const priceCop = calcToolPriceCop(t.baseUsd);
-        const priceLabel = formatCop(priceCop);
-        const waMsg = encodeURIComponent(`Hola, quiero rentar ${t.name} (${t.duration} - ${priceLabel})`);
+        const finalUsd = calcFinalUsd(t.baseUsd);
+        const usdLabel = formatUsd(finalUsd);
+        const copLabel = formatCop(calcToolPriceCop(finalUsd));
+        const waMsg = encodeURIComponent(`Hola, quiero rentar ${t.name} (${t.duration} - ${usdLabel} / ${copLabel})`);
         return `
           <div class="card">
             <div class="card-left">
               <div class="tool-icon"><img src="${t.img}" alt="${t.name}" onerror="handleToolError(this, '${t.fallback}', '${t.extraClass || ''}')" /></div>
               <div class="card-info">
                 <span class="tool-name">${t.name}</span>
-                <span class="tool-price">${priceLabel} • ${t.duration}</span>
+                <span class="tool-price">${usdLabel} • ${copLabel} • ${t.duration}</span>
               </div>
             </div>
             <a class="status-badge status-online" href="https://wa.me/573104141805?text=${waMsg}"><span class="online-dot"></span>ONLINE</a>
