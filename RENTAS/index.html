@@ -66,10 +66,11 @@
     .social-item:hover .social-circle { box-shadow: 0 6px 16px rgba(15, 23, 42, 0.13); }
     .social-label { font-size: 11px; font-weight: 700; color: #334155; line-height: 1.15; letter-spacing: -0.1px; white-space: nowrap; }
 
-    .section-title { font-size: 12px; font-weight: 700; letter-spacing: 1px; color: #64748b; text-transform: uppercase; margin-bottom: 10px; }
+    .section-title { font-size: 12px; font-weight: 700; letter-spacing: 1px; color: #64748b; text-transform: uppercase; margin-bottom: 4px; }
+    .trm-note { font-size: 11px; color: #64748b; font-weight: 600; margin-bottom: 10px; }
 
     /* Buscador rápido de tools */
-    .search-box { position: relative; margin: 0 4px 16px; }
+    .search-box { position: relative; margin: 0 4px 14px; }
     .search-input { width: 100%; padding: 10px 36px 10px 15px; border-radius: 999px; border: 1px solid #dbe4ee; background: #ffffff; color: #0f172a; font-size: 13px; font-weight: 600; outline: none; box-shadow: 0 4px 12px rgba(15, 23, 42, 0.04); transition: border-color 0.15s ease, box-shadow 0.15s ease; }
     .search-input:focus { border-color: #c81d4e; box-shadow: 0 0 0 3px rgba(200, 29, 78, 0.12); }
     .search-clear { position: absolute; right: 10px; top: 50%; transform: translateY(-50%); width: 22px; height: 22px; border-radius: 50%; border: none; background: #e2e8f0; color: #334155; font-size: 12px; font-weight: 800; cursor: pointer; display: none; align-items: center; justify-content: center; }
@@ -167,6 +168,7 @@
       </div>
 
       <div class="section-title">HERRAMIENTAS EN RENTA</div>
+      <div id="trmInfo" class="trm-note">Tarifa base + $2.50 USD · TRM: $3.592,03 COP</div>
 
       <div class="search-box">
         <input id="toolSearchInput" class="search-input" type="search" placeholder="Buscar tool (Ej. TSM, Chimera, UnlockTool...)" oninput="filterTools()" />
@@ -175,470 +177,139 @@
 
       <div id="noResultsMsg" class="no-results">No se encontraron herramientas con ese nombre.</div>
 
-      <div class="cards" id="toolsCards">
-        <!-- 1. TSM TOOL -->
-        <div class="card">
-          <div class="card-left">
-            <div class="tool-icon"><img src="TSMTOOL.jpg" alt="TSM Tool" onerror="handleToolError(this, 'TSM TOOL')" /></div>
-            <div class="card-info">
-              <span class="tool-name">TSM TOOL</span>
-              <span class="tool-price">$15.000 COP • 12 hrs</span>
-            </div>
-          </div>
-          <a class="status-badge status-online" href="https://wa.me/573104141805?text=Hola%2C%20quiero%20rentar%20TSM%20Tool%20(12%20hrs%20-%20%2415.000)"><span class="online-dot"></span>ONLINE</a>
-        </div>
-
-        <!-- 2. CHIMERA TOOL (OFFLINE) -->
-        <div class="card">
-          <div class="card-left">
-            <div class="tool-icon"><img src="chimera.jpg" alt="Chimera Tool" onerror="handleToolError(this, 'CHIMERA')" /></div>
-            <div class="card-info">
-              <span class="tool-name">CHIMERA TOOL</span>
-              <span class="tool-meta">Renta de licencia GSM</span>
-            </div>
-          </div>
-          <span class="status-badge status-offline">OFFLINE</span>
-        </div>
-
-        <!-- 3. SIGMA PLUS -->
-        <div class="card">
-          <div class="card-left">
-            <div class="tool-icon"><img src="sigmaplus.jpg" alt="Sigma Plus" onerror="handleToolError(this, 'SIGMA PLUS')" /></div>
-            <div class="card-info">
-              <span class="tool-name">SIGMA PLUS</span>
-              <span class="tool-price">$20.000 COP • 6 hrs</span>
-            </div>
-          </div>
-          <a class="status-badge status-online" href="https://wa.me/573104141805?text=Hola%2C%20quiero%20rentar%20Sigma%20Plus%20(6%20hrs%20-%20%2420.000)"><span class="online-dot"></span>ONLINE</a>
-        </div>
-
-        <!-- 4. UNLOCKTOOL -->
-        <div class="card">
-          <div class="card-left">
-            <div class="tool-icon"><img src="UNLOCKTOOL.png" alt="UnlockTool" onerror="handleToolError(this, 'UNLOCKTOOL')" /></div>
-            <div class="card-info">
-              <span class="tool-name">UNLOCKTOOL</span>
-              <span class="tool-price">$10.000 COP • 6 hrs</span>
-            </div>
-          </div>
-          <a class="status-badge status-online" href="https://wa.me/573104141805?text=Hola%2C%20quiero%20rentar%20UnlockTool%20(6%20hrs%20-%20%2410.000)"><span class="online-dot"></span>ONLINE</a>
-        </div>
-
-        <!-- 5. PANDORA (OFFLINE) -->
-        <div class="card">
-          <div class="card-left">
-            <div class="tool-icon"><img src="pandora.jpg" alt="Pandora" onerror="handleToolError(this, 'PANDORA')" /></div>
-            <div class="card-info">
-              <span class="tool-name">PANDORA</span>
-              <span class="tool-meta">Renta de licencia GSM</span>
-            </div>
-          </div>
-          <span class="status-badge status-offline">OFFLINE</span>
-        </div>
-
-        <!-- 6. INLOOK GUARD -->
-        <div class="card">
-          <div class="card-left">
-            <div class="tool-icon"><img src="INLOOKGUARD.jpg" alt="InLook Guard" onerror="handleToolError(this, 'INLOOK GUARD')" /></div>
-            <div class="card-info">
-              <span class="tool-name">INLOOK GUARD</span>
-              <span class="tool-price">$15.000 COP • 12 hrs</span>
-            </div>
-          </div>
-          <a class="status-badge status-online" href="https://wa.me/573104141805?text=Hola%2C%20quiero%20rentar%20InLook%20Guard%20(12%20hrs%20-%20%2415.000)"><span class="online-dot"></span>ONLINE</a>
-        </div>
-
-        <!-- 7. NEUTRAL GSM -->
-        <div class="card">
-          <div class="card-left">
-            <div class="tool-icon"><img src="neutralGSM.jpg" alt="Neutral GSM" onerror="handleToolError(this, 'NEUTRAL GSM')" /></div>
-            <div class="card-info">
-              <span class="tool-name">NEUTRAL GSM</span>
-              <span class="tool-price">$15.000 COP • 6 hrs</span>
-            </div>
-          </div>
-          <a class="status-badge status-online" href="https://wa.me/573104141805?text=Hola%2C%20quiero%20rentar%20Neutral%20GSM%20(6%20hrs%20-%20%2415.000)"><span class="online-dot"></span>ONLINE</a>
-        </div>
-
-        <!-- 8. ANDROID MULTITOOL -->
-        <div class="card">
-          <div class="card-left">
-            <div class="tool-icon"><img src="androidmultitool.jpg" alt="Android MultiTool" onerror="handleToolError(this, 'AMT')" /></div>
-            <div class="card-info">
-              <span class="tool-name">ANDROID MULTITOOL</span>
-              <span class="tool-meta">Renta de licencia GSM</span>
-            </div>
-          </div>
-          <a class="status-badge status-online" href="https://wa.me/573104141805?text=Hola%2C%20quiero%20rentar%20Android%20MultiTool"><span class="online-dot"></span>ONLINE</a>
-        </div>
-
-        <!-- 9. ANDROID WIN TOOL -->
-        <div class="card">
-          <div class="card-left">
-            <div class="tool-icon"><img src="androidwintool.jpg" alt="Android Win Tool" onerror="handleToolError(this, 'WIN TOOL')" /></div>
-            <div class="card-info">
-              <span class="tool-name">ANDROID WIN TOOL</span>
-              <span class="tool-meta">Renta de licencia GSM</span>
-            </div>
-          </div>
-          <a class="status-badge status-online" href="https://wa.me/573104141805?text=Hola%2C%20quiero%20rentar%20Android%20Win%20Tool"><span class="online-dot"></span>ONLINE</a>
-        </div>
-
-        <!-- DFT PRO -->
-        <div class="card">
-          <div class="card-left">
-            <div class="tool-icon"><img src="dftpro.png" alt="DFT Pro" onerror="handleToolError(this, 'DFT PRO')" /></div>
-            <div class="card-info">
-              <span class="tool-name">DFT PRO</span>
-              <span class="tool-price">$25.000 COP • 48 hrs</span>
-            </div>
-          </div>
-          <a class="status-badge status-online" href="https://wa.me/573104141805?text=Hola%2C%20quiero%20rentar%20DFT%20Pro%20(48%20hrs%20-%20%2425.000)"><span class="online-dot"></span>ONLINE</a>
-        </div>
-
-        <!-- 360 TOOL -->
-        <div class="card">
-          <div class="card-left">
-            <div class="tool-icon"><img src="360tool.jpg" alt="360 Tool" onerror="handleToolError(this, '360 TOOL', 'logo-360')" /></div>
-            <div class="card-info">
-              <span class="tool-name">360 TOOL</span>
-              <span class="tool-meta">Renta de licencia GSM</span>
-            </div>
-          </div>
-          <a class="status-badge status-online" href="https://wa.me/573104141805?text=Hola%2C%20quiero%20rentar%20360%20Tool"><span class="online-dot"></span>ONLINE</a>
-        </div>
-
-        <!-- ANONYSHU TOOL -->
-        <div class="card">
-          <div class="card-left">
-            <div class="tool-icon"><img src="anonyshu.jpg" alt="Anonyshu Tool" onerror="handleToolError(this, 'ANONYSHU', 'logo-anonyshu')" /></div>
-            <div class="card-info">
-              <span class="tool-name">ANONYSHU TOOL</span>
-              <span class="tool-meta">Renta de licencia GSM</span>
-            </div>
-          </div>
-          <a class="status-badge status-online" href="https://wa.me/573104141805?text=Hola%2C%20quiero%20rentar%20Anonyshu%20Tool"><span class="online-dot"></span>ONLINE</a>
-        </div>
-
-        <!-- APIZU TOOL -->
-        <div class="card">
-          <div class="card-left">
-            <div class="tool-icon"><img src="apizutool.jpg" alt="Apizu Tool" onerror="handleToolError(this, 'APIZU')" /></div>
-            <div class="card-info">
-              <span class="tool-name">APIZU TOOL</span>
-              <span class="tool-meta">Renta de licencia GSM</span>
-            </div>
-          </div>
-          <a class="status-badge status-online" href="https://wa.me/573104141805?text=Hola%2C%20quiero%20rentar%20Apizu%20Tool"><span class="online-dot"></span>ONLINE</a>
-        </div>
-
-        <!-- ARAB FRP -->
-        <div class="card">
-          <div class="card-left">
-            <div class="tool-icon"><img src="arabfrp.jpg" alt="Arab FRP" onerror="handleToolError(this, 'ARAB FRP')" /></div>
-            <div class="card-info">
-              <span class="tool-name">ARAB FRP</span>
-              <span class="tool-meta">Renta de licencia GSM</span>
-            </div>
-          </div>
-          <a class="status-badge status-online" href="https://wa.me/573104141805?text=Hola%2C%20quiero%20rentar%20Arab%20FRP"><span class="online-dot"></span>ONLINE</a>
-        </div>
-
-        <!-- CELLTOOL -->
-        <div class="card">
-          <div class="card-left">
-            <div class="tool-icon"><img src="celltool.avif" alt="CellTool" onerror="handleToolError(this, 'CELLTOOL')" /></div>
-            <div class="card-info">
-              <span class="tool-name">CELLTOOL</span>
-              <span class="tool-meta">Renta de licencia GSM</span>
-            </div>
-          </div>
-          <a class="status-badge status-online" href="https://wa.me/573104141805?text=Hola%2C%20quiero%20rentar%20CellTool"><span class="online-dot"></span>ONLINE</a>
-        </div>
-
-        <!-- CERBERUS TOOL PRO -->
-        <div class="card">
-          <div class="card-left">
-            <div class="tool-icon"><img src="cerberustool.png" alt="Cerberus Tool Pro" onerror="handleToolError(this, 'CERBERUS')" /></div>
-            <div class="card-info">
-              <span class="tool-name">CERBERUS TOOL PRO</span>
-              <span class="tool-meta">Renta de licencia GSM</span>
-            </div>
-          </div>
-          <a class="status-badge status-online" href="https://wa.me/573104141805?text=Hola%2C%20quiero%20rentar%20Cerberus%20Tool%20Pro"><span class="online-dot"></span>ONLINE</a>
-        </div>
-
-        <!-- CF TOOLS -->
-        <div class="card">
-          <div class="card-left">
-            <div class="tool-icon"><img src="cftool.jpeg" alt="CF Tools" onerror="handleToolError(this, 'CF TOOLS')" /></div>
-            <div class="card-info">
-              <span class="tool-name">CF TOOLS</span>
-              <span class="tool-meta">Renta de licencia GSM</span>
-            </div>
-          </div>
-          <a class="status-badge status-online" href="https://wa.me/573104141805?text=Hola%2C%20quiero%20rentar%20CF%20Tools"><span class="online-dot"></span>ONLINE</a>
-        </div>
-
-        <!-- EFT PRO -->
-        <div class="card">
-          <div class="card-left">
-            <div class="tool-icon"><img src="eftpro.jpg" alt="EFT Pro" onerror="handleToolError(this, 'EFT PRO')" /></div>
-            <div class="card-info">
-              <span class="tool-name">EFT PRO</span>
-              <span class="tool-meta">Renta de licencia GSM</span>
-            </div>
-          </div>
-          <a class="status-badge status-online" href="https://wa.me/573104141805?text=Hola%2C%20quiero%20rentar%20EFT%20Pro"><span class="online-dot"></span>ONLINE</a>
-        </div>
-
-        <!-- EGSM TOOL -->
-        <div class="card">
-          <div class="card-left">
-            <div class="tool-icon"><img src="egsmtool.jpg" alt="EGSM Tool" onerror="handleToolError(this, 'EGSM TOOL')" /></div>
-            <div class="card-info">
-              <span class="tool-name">EGSM TOOL</span>
-              <span class="tool-meta">Renta de licencia GSM</span>
-            </div>
-          </div>
-          <a class="status-badge status-online" href="https://wa.me/573104141805?text=Hola%2C%20quiero%20rentar%20EGSM%20Tool"><span class="online-dot"></span>ONLINE</a>
-        </div>
-
-        <!-- GALAXY MULTI TOOL -->
-        <div class="card">
-          <div class="card-left">
-            <div class="tool-icon"><img src="galaxymultitool.png" alt="Galaxy Multi Tool" onerror="handleToolError(this, 'GMT')" /></div>
-            <div class="card-info">
-              <span class="tool-name">GALAXY MULTI TOOL</span>
-              <span class="tool-meta">Renta de licencia GSM</span>
-            </div>
-          </div>
-          <a class="status-badge status-online" href="https://wa.me/573104141805?text=Hola%2C%20quiero%20rentar%20Galaxy%20Multi%20Tool"><span class="online-dot"></span>ONLINE</a>
-        </div>
-
-        <!-- GRIFFIN UNLOCKER -->
-        <div class="card">
-          <div class="card-left">
-            <div class="tool-icon"><img src="griffin.avif" alt="Griffin Unlocker" onerror="handleToolError(this, 'GRIFFIN')" /></div>
-            <div class="card-info">
-              <span class="tool-name">GRIFFIN UNLOCKER</span>
-              <span class="tool-meta">Renta de licencia GSM</span>
-            </div>
-          </div>
-          <a class="status-badge status-online" href="https://wa.me/573104141805?text=Hola%2C%20quiero%20rentar%20Griffin%20Unlocker"><span class="online-dot"></span>ONLINE</a>
-        </div>
-
-        <!-- HS-PRO TOOL -->
-        <div class="card">
-          <div class="card-left">
-            <div class="tool-icon"><img src="HSPROTOOL.jpg" alt="HS-PRO Tool" onerror="handleToolError(this, 'HS-PRO')" /></div>
-            <div class="card-info">
-              <span class="tool-name">HS-PRO TOOL</span>
-              <span class="tool-meta">Renta de licencia GSM</span>
-            </div>
-          </div>
-          <a class="status-badge status-online" href="https://wa.me/573104141805?text=Hola%2C%20quiero%20rentar%20HS-PRO%20Tool"><span class="online-dot"></span>ONLINE</a>
-        </div>
-
-        <!-- HYDRA TOOL -->
-        <div class="card">
-          <div class="card-left">
-            <div class="tool-icon"><img src="hydratool.jpg" alt="Hydra Tool" onerror="handleToolError(this, 'HYDRA')" /></div>
-            <div class="card-info">
-              <span class="tool-name">HYDRA TOOL</span>
-              <span class="tool-meta">Renta de licencia GSM</span>
-            </div>
-          </div>
-          <a class="status-badge status-online" href="https://wa.me/573104141805?text=Hola%2C%20quiero%20rentar%20Hydra%20Tool"><span class="online-dot"></span>ONLINE</a>
-        </div>
-
-        <!-- INFINITY (OFFLINE) -->
-        <div class="card">
-          <div class="card-left">
-            <div class="tool-icon"><img src="infinity.jpg" alt="Infinity" onerror="handleToolError(this, 'INFINITY')" /></div>
-            <div class="card-info">
-              <span class="tool-name">INFINITY</span>
-              <span class="tool-meta">Renta de licencia GSM</span>
-            </div>
-          </div>
-          <span class="status-badge status-offline">OFFLINE</span>
-        </div>
-
-        <!-- KG KILLER -->
-        <div class="card">
-          <div class="card-left">
-            <div class="tool-icon"><img src="kgkiller.jpg" alt="KG Killer" onerror="handleToolError(this, 'KG KILLER')" /></div>
-            <div class="card-info">
-              <span class="tool-name">KG KILLER</span>
-              <span class="tool-meta">Renta de licencia GSM</span>
-            </div>
-          </div>
-          <a class="status-badge status-online" href="https://wa.me/573104141805?text=Hola%2C%20quiero%20rentar%20KG%20Killer"><span class="online-dot"></span>ONLINE</a>
-        </div>
-
-        <!-- MDM FIX TOOL -->
-        <div class="card">
-          <div class="card-left">
-            <div class="tool-icon"><img src="mdmfix.jpg" alt="MDM Fix Tool" onerror="handleToolError(this, 'MDM FIX')" /></div>
-            <div class="card-info">
-              <span class="tool-name">MDM FIX TOOL</span>
-              <span class="tool-meta">Renta de licencia GSM</span>
-            </div>
-          </div>
-          <a class="status-badge status-online" href="https://wa.me/573104141805?text=Hola%2C%20quiero%20rentar%20MDM%20Fix%20Tool"><span class="online-dot"></span>ONLINE</a>
-        </div>
-
-        <!-- MOTO KING PRO -->
-        <div class="card">
-          <div class="card-left">
-            <div class="tool-icon"><img src="motoking.jpg" alt="Moto King Pro" onerror="handleToolError(this, 'MOTO KING')" /></div>
-            <div class="card-info">
-              <span class="tool-name">MOTO KING PRO</span>
-              <span class="tool-meta">Renta de licencia GSM</span>
-            </div>
-          </div>
-          <a class="status-badge status-online" href="https://wa.me/573104141805?text=Hola%2C%20quiero%20rentar%20Moto%20King%20Pro"><span class="online-dot"></span>ONLINE</a>
-        </div>
-
-        <!-- MRT KEY -->
-        <div class="card">
-          <div class="card-left">
-            <div class="tool-icon"><img src="mrtkey.png" alt="MRT Key" onerror="handleToolError(this, 'MRT KEY')" /></div>
-            <div class="card-info">
-              <span class="tool-name">MRT KEY</span>
-              <span class="tool-meta">Renta de licencia GSM</span>
-            </div>
-          </div>
-          <a class="status-badge status-online" href="https://wa.me/573104141805?text=Hola%2C%20quiero%20rentar%20MRT%20Key"><span class="online-dot"></span>ONLINE</a>
-        </div>
-
-        <!-- MST TOOL -->
-        <div class="card">
-          <div class="card-left">
-            <div class="tool-icon"><img src="msttool.jpg" alt="MST Tool" onerror="handleToolError(this, 'MST TOOL')" /></div>
-            <div class="card-info">
-              <span class="tool-name">MST TOOL</span>
-              <span class="tool-meta">Renta de licencia GSM</span>
-            </div>
-          </div>
-          <a class="status-badge status-online" href="https://wa.me/573104141805?text=Hola%2C%20quiero%20rentar%20MST%20Tool"><span class="online-dot"></span>ONLINE</a>
-        </div>
-
-        <!-- NICE UNLOCKER PRO (OFFLINE) -->
-        <div class="card">
-          <div class="card-left">
-            <div class="tool-icon"><img src="niceunlockerpro.jpg" alt="Nice Unlocker PRO" onerror="handleToolError(this, 'NICE PRO')" /></div>
-            <div class="card-info">
-              <span class="tool-name">NICE UNLOCKER PRO</span>
-              <span class="tool-meta">Renta de licencia GSM</span>
-            </div>
-          </div>
-          <span class="status-badge status-offline">OFFLINE</span>
-        </div>
-
-        <!-- OCTOPLUS -->
-        <div class="card">
-          <div class="card-left">
-            <div class="tool-icon"><img src="octoplusfull.jpg" alt="Octoplus" onerror="handleToolError(this, 'OCTOPLUS')" /></div>
-            <div class="card-info">
-              <span class="tool-name">OCTOPLUS</span>
-              <span class="tool-meta">Renta de licencia GSM</span>
-            </div>
-          </div>
-          <a class="status-badge status-online" href="https://wa.me/573104141805?text=Hola%2C%20quiero%20rentar%20Octoplus"><span class="online-dot"></span>ONLINE</a>
-        </div>
-
-        <!-- PURE UNLOCKER (OFFLINE) -->
-        <div class="card">
-          <div class="card-left">
-            <div class="tool-icon"><img src="pureunlocker.jpg" alt="Pure Unlocker" onerror="handleToolError(this, 'PURE')" /></div>
-            <div class="card-info">
-              <span class="tool-name">PURE UNLOCKER</span>
-              <span class="tool-meta">Renta de licencia GSM</span>
-            </div>
-          </div>
-          <span class="status-badge status-offline">OFFLINE</span>
-        </div>
-
-        <!-- RTC TOOL -->
-        <div class="card">
-          <div class="card-left">
-            <div class="tool-icon"><img src="rtc.jpg" alt="RTC Tool" onerror="handleToolError(this, 'RTC TOOL')" /></div>
-            <div class="card-info">
-              <span class="tool-name">RTC TOOL</span>
-              <span class="tool-meta">Renta de licencia GSM</span>
-            </div>
-          </div>
-          <a class="status-badge status-online" href="https://wa.me/573104141805?text=Hola%2C%20quiero%20rentar%20RTC%20Tool"><span class="online-dot"></span>ONLINE</a>
-        </div>
-
-        <!-- SMARTTOOL -->
-        <div class="card">
-          <div class="card-left">
-            <div class="tool-icon"><img src="smarttool.jpg" alt="SmartTool" onerror="handleToolError(this, 'SMARTTOOL')" /></div>
-            <div class="card-info">
-              <span class="tool-name">SMARTTOOL</span>
-              <span class="tool-meta">Renta de licencia GSM</span>
-            </div>
-          </div>
-          <a class="status-badge status-online" href="https://wa.me/573104141805?text=Hola%2C%20quiero%20rentar%20SmartTool"><span class="online-dot"></span>ONLINE</a>
-        </div>
-
-        <!-- TFM TOOL -->
-        <div class="card">
-          <div class="card-left">
-            <div class="tool-icon"><img src="tfmtool.jpg" alt="TFM Tool" onerror="handleToolError(this, 'TFM TOOL')" /></div>
-            <div class="card-info">
-              <span class="tool-name">TFM TOOL</span>
-              <span class="tool-meta">Renta de licencia GSM</span>
-            </div>
-          </div>
-          <a class="status-badge status-online" href="https://wa.me/573104141805?text=Hola%2C%20quiero%20rentar%20TFM%20Tool"><span class="online-dot"></span>ONLINE</a>
-        </div>
-
-        <!-- TMT PRO TOOL -->
-        <div class="card">
-          <div class="card-left">
-            <div class="tool-icon"><img src="tmtpro.jpg" alt="TMT Pro Tool" onerror="handleToolError(this, 'TMT PRO')" /></div>
-            <div class="card-info">
-              <span class="tool-name">TMT PRO TOOL</span>
-              <span class="tool-meta">Renta de licencia GSM</span>
-            </div>
-          </div>
-          <a class="status-badge status-online" href="https://wa.me/573104141805?text=Hola%2C%20quiero%20rentar%20TMT%20Pro%20Tool"><span class="online-dot"></span>ONLINE</a>
-        </div>
-
-        <!-- TRTOOLS PRO -->
-        <div class="card">
-          <div class="card-left">
-            <div class="tool-icon"><img src="trttools.png" alt="TRTools Pro" onerror="handleToolError(this, 'TRTOOLS')" /></div>
-            <div class="card-info">
-              <span class="tool-name">TRTOOLS PRO</span>
-              <span class="tool-meta">Renta de licencia GSM</span>
-            </div>
-          </div>
-          <a class="status-badge status-online" href="https://wa.me/573104141805?text=Hola%2C%20quiero%20rentar%20TRTools%20Pro"><span class="online-dot"></span>ONLINE</a>
-        </div>
-
-        <!-- UAT PRO -->
-        <div class="card">
-          <div class="card-left">
-            <div class="tool-icon"><img src="uatpro.jpg" alt="UAT Pro" onerror="handleToolError(this, 'UAT PRO')" /></div>
-            <div class="card-info">
-              <span class="tool-name">UAT PRO</span>
-              <span class="tool-meta">Renta de licencia GSM</span>
-            </div>
-          </div>
-          <a class="status-badge status-online" href="https://wa.me/573104141805?text=Hola%2C%20quiero%20rentar%20UAT%20Pro"><span class="online-dot"></span>ONLINE</a>
-        </div>
-      </div>
+      <div class="cards" id="toolsCards"></div>
     </div>
   </main>
 
   <div id="toast" class="toast">Copiado</div>
 
   <script>
+    const MARGIN_USD = 2.50;
+    const FALLBACK_USD_TO_COP = 3592.03;
+    const RATE_CACHE_KEY = 'zonagsm_rentas_usd_cop_v1';
+    let currentUsdToCop = FALLBACK_USD_TO_COP;
+
+    // Orden exacto solicitado: 1 TSM, 2 Chimera (offline), 3 Sigma, 4 UnlockTool, 5 Pandora (offline), 6 InLook, 7 Neutral, 8 AMT, 9 AWT...
+    const TOOLS_CATALOG = [
+      { id: 'tsm', name: 'TSM TOOL', img: 'TSMTOOL.jpg', fallback: 'TSM TOOL', baseUsd: 0.40, duration: '6 hrs', online: true },
+      { id: 'chimera', name: 'CHIMERA TOOL', img: 'chimera.jpg', fallback: 'CHIMERA', baseUsd: 0, duration: '', online: false },
+      { id: 'sigma', name: 'SIGMA PLUS', img: 'sigmaplus.jpg', fallback: 'SIGMA PLUS', baseUsd: 2.10, duration: '6 hrs', online: true },
+      { id: 'unlocktool', name: 'UNLOCKTOOL', img: 'UNLOCKTOOL.png', fallback: 'UNLOCKTOOL', baseUsd: 0.20, duration: '6 hrs', online: true },
+      { id: 'pandora', name: 'PANDORA', img: 'pandora.jpg', fallback: 'PANDORA', baseUsd: 0, duration: '', online: false },
+      { id: 'inlook', name: 'INLOOK GUARD', img: 'INLOOKGUARD.jpg', fallback: 'INLOOK GUARD', baseUsd: 1.60, duration: '6 hrs', online: true },
+      { id: 'neutral', name: 'NEUTRAL GSM', img: 'neutralGSM.jpg', fallback: 'NEUTRAL GSM', baseUsd: 1.00, duration: '6 hrs', online: true },
+      { id: 'amt', name: 'ANDROID MULTITOOL', img: 'androidmultitool.jpg', fallback: 'AMT', baseUsd: 0.20, duration: '2 hrs', online: true },
+      { id: 'awt', name: 'ANDROID WIN TOOL', img: 'androidwintool.jpg', fallback: 'WIN TOOL', baseUsd: 1.50, duration: '24 hrs', online: true },
+      { id: 'dft', name: 'DFT PRO', img: 'dftpro.png', fallback: 'DFT PRO', baseUsd: 1.20, duration: '48 hrs', online: true },
+      { id: '360', name: '360 TOOL', img: '360tool.jpg', fallback: '360 TOOL', extraClass: 'logo-360', baseUsd: 0.20, duration: '6 hrs', online: true },
+      { id: 'anonyshu', name: 'ANONYSHU TOOL', img: 'anonyshu.jpg', fallback: 'ANONYSHU', extraClass: 'logo-anonyshu', baseUsd: 1.00, duration: '10 hrs', online: true },
+      { id: 'apizu', name: 'APIZU TOOL', img: 'apizutool.jpg', fallback: 'APIZU', baseUsd: 1.60, duration: '4 hrs', online: true },
+      { id: 'arabfrp', name: 'ARAB FRP', img: 'arabfrp.jpg', fallback: 'ARAB FRP', baseUsd: 0.80, duration: '3 hrs', online: true },
+      { id: 'celltool', name: 'CELLTOOL', img: 'celltool.avif', fallback: 'CELLTOOL', baseUsd: 1.50, duration: '10 hrs', online: true },
+      { id: 'cerberus', name: 'CERBERUS TOOL PRO', img: 'cerberustool.png', fallback: 'CERBERUS', baseUsd: 1.20, duration: '6 hrs', online: true },
+      { id: 'cftools', name: 'CF TOOLS', img: 'cftool.jpeg', fallback: 'CF TOOLS', baseUsd: 0.30, duration: '10 hrs', online: true },
+      { id: 'eft', name: 'EFT PRO', img: 'eftpro.jpg', fallback: 'EFT PRO', baseUsd: 1.80, duration: '5 hrs', online: true },
+      { id: 'egsm', name: 'EGSM TOOL', img: 'egsmtool.jpg', fallback: 'EGSM TOOL', baseUsd: 4.80, duration: '24 hrs', online: true },
+      { id: 'gmt', name: 'GALAXY MULTI TOOL', img: 'galaxymultitool.png', fallback: 'GMT', baseUsd: 0.20, duration: '2 hrs', online: true },
+      { id: 'griffin', name: 'GRIFFIN UNLOCKER', img: 'griffin.avif', fallback: 'GRIFFIN', baseUsd: 1.00, duration: '6 hrs', online: true },
+      { id: 'hspro', name: 'HS-PRO TOOL', img: 'HSPROTOOL.jpg', fallback: 'HS-PRO', baseUsd: 3.30, duration: '6 hrs', online: true },
+      { id: 'hydra', name: 'HYDRA TOOL', img: 'hydratool.jpg', fallback: 'HYDRA', baseUsd: 0.40, duration: '12 hrs', online: true },
+      { id: 'infinity', name: 'INFINITY', img: 'infinity.jpg', fallback: 'INFINITY', baseUsd: 0, duration: '', online: false },
+      { id: 'kgkiller', name: 'KG KILLER', img: 'kgkiller.jpg', fallback: 'KG KILLER', baseUsd: 0.25, duration: '4 hrs', online: true },
+      { id: 'mdmfix', name: 'MDM FIX TOOL', img: 'mdmfix.jpg', fallback: 'MDM FIX', baseUsd: 1.00, duration: '1 hr', online: true },
+      { id: 'motoking', name: 'MOTO KING PRO', img: 'motoking.jpg', fallback: 'MOTO KING', baseUsd: 4.00, duration: '24 hrs', online: true },
+      { id: 'mrt', name: 'MRT KEY', img: 'mrtkey.png', fallback: 'MRT KEY', baseUsd: 0.50, duration: '24 hrs', online: true },
+      { id: 'mst', name: 'MST TOOL', img: 'msttool.jpg', fallback: 'MST TOOL', baseUsd: 0.70, duration: '6 hrs', online: true },
+      { id: 'nicepro', name: 'NICE UNLOCKER PRO', img: 'niceunlockerpro.jpg', fallback: 'NICE PRO', baseUsd: 0, duration: '', online: false },
+      { id: 'octoplus', name: 'OCTOPLUS', img: 'octoplusfull.jpg', fallback: 'OCTOPLUS', baseUsd: 5.20, duration: '24 hrs', online: true },
+      { id: 'pure', name: 'PURE UNLOCKER', img: 'pureunlocker.jpg', fallback: 'PURE', baseUsd: 0, duration: '', online: false },
+      { id: 'rtc', name: 'RTC TOOL', img: 'rtc.jpg', fallback: 'RTC TOOL', baseUsd: 1.20, duration: '6 hrs', online: true },
+      { id: 'smarttool', name: 'SMARTTOOL', img: 'smarttool.jpg', fallback: 'SMARTTOOL', baseUsd: 2.10, duration: '10 hrs', online: true },
+      { id: 'tfm', name: 'TFM TOOL', img: 'tfmtool.jpg', fallback: 'TFM TOOL', baseUsd: 0.30, duration: '5 hrs', online: true },
+      { id: 'tmt', name: 'TMT PRO TOOL', img: 'tmtpro.jpg', fallback: 'TMT PRO', baseUsd: 0.30, duration: '4 hrs', online: true },
+      { id: 'trt', name: 'TRTOOLS PRO', img: 'trttools.png', fallback: 'TRTOOLS', baseUsd: 2.20, duration: '24 hrs', online: true },
+      { id: 'uat', name: 'UAT PRO', img: 'uatpro.jpg', fallback: 'UAT PRO', baseUsd: 0.70, duration: '2 hrs', online: true }
+    ];
+
+    function formatCop(amount) {
+      return '$' + Math.round(amount).toLocaleString('es-CO') + ' COP';
+    }
+
+    function calcToolPriceCop(baseUsd) {
+      const totalUsd = Number(baseUsd || 0) + MARGIN_USD;
+      const rawCop = totalUsd * currentUsdToCop;
+      return Math.round(rawCop / 100) * 100;
+    }
+
+    function renderToolsCatalog() {
+      const container = document.getElementById('toolsCards');
+      const trmNote = document.getElementById('trmInfo');
+      if (trmNote) {
+        const formattedRate = currentUsdToCop.toLocaleString('es-CO', { minimumFractionDigits: 2, maximumFractionDigits: 2 });
+        trmNote.textContent = `Tarifa base + $${MARGIN_USD.toFixed(2)} USD · Dólar hoy: $${formattedRate} COP`;
+      }
+
+      container.innerHTML = TOOLS_CATALOG.map(t => {
+        if (!t.online) {
+          return `
+            <div class="card">
+              <div class="card-left">
+                <div class="tool-icon"><img src="${t.img}" alt="${t.name}" onerror="handleToolError(this, '${t.fallback}', '${t.extraClass || ''}')" /></div>
+                <div class="card-info">
+                  <span class="tool-name">${t.name}</span>
+                  <span class="tool-meta">Renta de licencia GSM</span>
+                </div>
+              </div>
+              <span class="status-badge status-offline">OFFLINE</span>
+            </div>
+          `;
+        }
+
+        const priceCop = calcToolPriceCop(t.baseUsd);
+        const priceLabel = formatCop(priceCop);
+        const waMsg = encodeURIComponent(`Hola, quiero rentar ${t.name} (${t.duration} - ${priceLabel})`);
+        return `
+          <div class="card">
+            <div class="card-left">
+              <div class="tool-icon"><img src="${t.img}" alt="${t.name}" onerror="handleToolError(this, '${t.fallback}', '${t.extraClass || ''}')" /></div>
+              <div class="card-info">
+                <span class="tool-name">${t.name}</span>
+                <span class="tool-price">${priceLabel} • ${t.duration}</span>
+              </div>
+            </div>
+            <a class="status-badge status-online" href="https://wa.me/573104141805?text=${waMsg}"><span class="online-dot"></span>ONLINE</a>
+          </div>
+        `;
+      }).join('');
+
+      filterTools();
+    }
+
+    async function updateDailyUsdRate() {
+      const todayKey = new Date().toISOString().slice(0, 10);
+      try {
+        const cached = JSON.parse(localStorage.getItem(RATE_CACHE_KEY) || 'null');
+        if (cached && cached.date === todayKey && Number(cached.rate) > 1000) {
+          currentUsdToCop = Number(cached.rate);
+          renderToolsCatalog();
+        }
+      } catch (_) {}
+
+      try {
+        const res = await fetch('https://open.er-api.com/v6/latest/USD', { cache: 'no-store' });
+        const data = await res.json();
+        const copRate = Number(data?.rates?.COP);
+        if (copRate > 1000) {
+          currentUsdToCop = copRate;
+          localStorage.setItem(RATE_CACHE_KEY, JSON.stringify({ date: todayKey, rate: copRate }));
+          renderToolsCatalog();
+        }
+      } catch (_) {}
+    }
+
     window.addEventListener('DOMContentLoaded', () => {
+      renderToolsCatalog();
+      updateDailyUsdRate();
       setTimeout(() => {
         document.getElementById('preloader').classList.add('hidden');
         document.getElementById('mainContent').classList.add('visible');
@@ -662,6 +333,7 @@
       const inp = document.getElementById('toolSearchInput');
       const clearBtn = document.getElementById('toolSearchClear');
       const noRes = document.getElementById('noResultsMsg');
+      if (!inp || !clearBtn || !noRes) return;
       const query = (inp.value || '').toLowerCase().trim();
       clearBtn.classList.toggle('show', query.length > 0);
 
