@@ -30,7 +30,7 @@
     .tab-btn { padding: 8px 16px; background: #f1f5f9; border: 1px solid #cbd5e1; border-bottom: none; border-radius: 6px 6px 0 0; font-size: 13px; font-weight: 700; color: #475569; cursor: pointer; }
     .tab-btn.active { background: white; color: #c81d4e; border-top: 3px solid #c81d4e; border-bottom: 2px solid white; margin-bottom: -2px; }
 
-    /* Barra de filtros (Estilo Formulario) */
+    /* Barra de filtros */
     .filter-bar { display: flex; align-items: center; gap: 10px; padding: 10px 15px; background: white; border: 1px solid #cbd5e1; border-bottom: none; flex-wrap: wrap; }
     .filter-group { display: flex; align-items: center; gap: 6px; flex-wrap: wrap; }
     .filter-bar label { font-size: 12px; font-weight: 700; color: #475569; }
@@ -44,42 +44,24 @@
     table { width: 100%; border-collapse: collapse; min-width: 1200px; font-size: 12px; }
     
     /* Encabezados */
-    th { 
-      background: #f1f5f9; 
-      color: #334155; 
-      font-weight: 700; 
-      font-size: 11px; 
-      padding: 8px 10px; 
-      text-align: left; 
-      border: 1px solid #cbd5e1; 
-      white-space: nowrap; 
-      position: sticky;
-      top: 0;
-    }
+    th { background: #f1f5f9; color: #334155; font-weight: 700; font-size: 11px; padding: 8px 10px; text-align: left; border: 1px solid #cbd5e1; white-space: nowrap; position: sticky; top: 0; }
 
     /* Celdas */
-    td { 
-      padding: 6px 10px; 
-      border: 1px solid #e2e8f0; 
-      color: #1e293b; 
-      vertical-align: middle; 
-    }
+    td { padding: 6px 10px; border: 1px solid #e2e8f0; color: #1e293b; vertical-align: middle; }
 
     /* FILAS ALTERNAS (Blanco y Gris) */
     tbody tr:nth-child(even) { background-color: #f8fafc; }
     tbody tr:nth-child(odd) { background-color: #ffffff; }
     tbody tr:hover { background-color: #e2e8f0; }
 
-    /* Etiquetas (Badges) tipo Excel */
-    .badge { padding: 3px 6px; border-radius: 3px; font-size: 10px; font-weight: 700; display: inline-block; text-align: center; min-width: 60px; }
-    .badge-Pendiente { background: #fef3c7; color: #b45309; border: 1px solid #fcd34d; }
-    .badge-Proceso { background: #e0f2fe; color: #0369a1; border: 1px solid #7dd3fc; }
-    .badge-Exitoso { background: #dcfce7; color: #15803d; border: 1px solid #86efac; }
-    .badge-Rechazado { background: #fee2e2; color: #b91c1c; border: 1px solid #fca5a5; }
-    .badge-Pagado { background: #dcfce7; color: #15803d; border: 1px solid #86efac; }
-    .badge-No-Pagado { background: #fef2f2; color: #b91c1c; border: 1px solid #fecaca; }
+    /* COLORES CONDICIONALES POR ESTADO (Fondo de toda la fila) */
+    tr.fila-exito { background-color: #dcfce7 !important; }
+    tr.fila-exito:hover { background-color: #bbf7d0 !important; }
+    
+    tr.fila-rechazado { background-color: #fee2e2 !important; }
+    tr.fila-rechazado:hover { background-color: #fecaca !important; }
 
-    /* Selectores pequeños dentro de la celda */
+    /* Selectores dentro de la celda */
     select.estado-select, select.pago-select { 
       padding: 4px; 
       border-radius: 3px; 
@@ -92,14 +74,12 @@
       cursor: pointer;
     }
     
-    /* Botones de acción mini */
-    .action-group { display: flex; flex-direction: column; gap: 4px; }
-    .btn-mini { padding: 5px 8px; border-radius: 3px; font-size: 11px; font-weight: 700; cursor: pointer; text-align: center; border: 1px solid transparent; width: 100%;}
-    .btn-deliver { background: #c81d4e; color: white; }
+    /* Botón de eliminar mini */
+    .btn-mini { padding: 5px 8px; border-radius: 3px; font-size: 11px; font-weight: 700; cursor: pointer; text-align: center; border: 1px solid transparent; width: 100%; }
     .btn-delete { background: #fef2f2; color: #dc2626; border-color: #fca5a5; }
     .btn-delete:hover { background: #fee2e2; }
 
-    /* Modales (Sin cambios visuales drásticos) */
+    /* Modales */
     .new-order-overlay { position: fixed; inset: 0; background: rgba(15, 23, 42, 0.65); backdrop-filter: blur(3px); display: none; align-items: center; justify-content: center; padding: 20px; z-index: 9999; }
     .new-order-overlay.open { display: flex; }
     .new-order-modal { width: 100%; max-width: 450px; background: #ffffff; border-radius: 12px; overflow: hidden; box-shadow: 0 20px 25px -5px rgba(0, 0, 0, 0.1); max-height: 90vh; overflow-y: auto; }
@@ -256,7 +236,7 @@
     </div>
   </div>
 
-  <!-- MODALES (Igual que antes) -->
+  <!-- MODALES -->
   <div id="newOrderOverlay" class="new-order-overlay">
     <div class="new-order-modal">
       <div class="new-order-header">
@@ -313,8 +293,6 @@
   </div>
 
   <script>
-    // La lógica de tu script se mantiene exactamente igual.
-    // Solo cambié las clases CSS en los innerHTML generados para que encajen con el nuevo diseño.
     const WORKER_URL = "https://telegram-zonagsm.zonagsm023.workers.dev";
     const SEEN_ORDERS_KEY = "zg_admin_seen_orders";
     const PAYMENT_STATE_KEY = "zg_admin_payment_states";
@@ -655,12 +633,12 @@
         const tr = document.createElement('tr');
         const fecha = new Date(o.fecha + "Z").toLocaleString('es-CO', { timeZone: 'America/Bogota' });
         const pagoActual = o._pago;
-        const pagoBadgeClass = pagoActual === 'Pagado' ? 'badge-Pagado' : 'badge-No-Pagado';
 
-        let estadoClass = 'Pendiente';
-        if (o.estado === 'En Proceso') estadoClass = 'Proceso';
-        if (o.estado === 'Exitoso') estadoClass = 'Exitoso';
-        if (o.estado === 'Rechazado') estadoClass = 'Rechazado';
+        // Clase condicional para la fila según el estado
+        let rowClass = '';
+        if (o.estado === 'Exitoso') rowClass = 'fila-exito';
+        if (o.estado === 'Rechazado') rowClass = 'fila-rechazado';
+        if (rowClass) tr.className = rowClass;
 
         const selectOptions = `
           <option value="Pendiente" ${o.estado === 'Pendiente' ? 'selected' : ''}>Pendiente</option>
@@ -683,17 +661,13 @@
           <td><strong>${o.precio}</strong></td>
           <td>${o.comprobante_url ? `<a href="${o.comprobante_url}" target="_blank" style="color: #2563eb; font-weight: 600;">Ver foto</a>` : '<span style="color:#94a3b8;">Sin foto</span>'}</td>
           <td>
-            <div style="display:flex; flex-direction:column; gap:4px;">
-              <span class="badge ${pagoBadgeClass}">${pagoActual}</span>
-              <select class="pago-select" onchange="cambiarPago('${o.numero_orden}', this.value)">${pagoOptions}</select>
-            </div>
+            <select class="pago-select" onchange="cambiarPago('${o.numero_orden}', this.value)">${pagoOptions}</select>
           </td>
-          <td><span class="badge badge-${estadoClass}">${o.estado}</span></td>
           <td>
-            <div class="action-group">
-              <select class="estado-select" onchange="cambiarEstado('${o.numero_orden}', this.value)">${selectOptions}</select>
-              <button type="button" class="btn-mini btn-delete" onclick="eliminarOrden('${o.numero_orden}')">🗑️ Eliminar</button>
-            </div>
+            <select class="estado-select" onchange="cambiarEstado('${o.numero_orden}', this.value)">${selectOptions}</select>
+          </td>
+          <td>
+            <button type="button" class="btn-mini btn-delete" onclick="eliminarOrden('${o.numero_orden}')">🗑️ Eliminar</button>
           </td>
         `;
         tbody.appendChild(tr);
@@ -729,12 +703,23 @@
         const tr = document.createElement('tr');
         const fecha = new Date(o.fecha + "Z").toLocaleString('es-CO', { timeZone: 'America/Bogota' });
         const pagoActual = o._pago;
-        const pagoBadgeClass = pagoActual === 'Pagado' ? 'badge-Pagado' : 'badge-No-Pagado';
 
-        let estadoClass = 'Pendiente';
-        if (o.estado === 'En Proceso') estadoClass = 'Proceso';
-        if (o.estado === 'Exitoso') estadoClass = 'Exitoso';
-        if (o.estado === 'Rechazado') estadoClass = 'Rechazado';
+        // Clase condicional para la fila según el estado
+        let rowClass = '';
+        if (o.estado === 'Exitoso') rowClass = 'fila-exito';
+        if (o.estado === 'Rechazado') rowClass = 'fila-rechazado';
+        if (rowClass) tr.className = rowClass;
+
+        const selectOptions = `
+          <option value="Pendiente" ${o.estado === 'Pendiente' ? 'selected' : ''}>Pendiente</option>
+          <option value="En Proceso" ${o.estado === 'En Proceso' ? 'selected' : ''}>En Proceso</option>
+          <option value="Exitoso" ${o.estado === 'Exitoso' ? 'selected' : ''}>Exitoso</option>
+          <option value="Rechazado" ${o.estado === 'Rechazado' ? 'selected' : ''}>Rechazado</option>
+        `;
+        const pagoOptions = `
+          <option value="Pagado" ${pagoActual === 'Pagado' ? 'selected' : ''}>Pagado</option>
+          <option value="No Pagado" ${pagoActual === 'No Pagado' ? 'selected' : ''}>No Pagado</option>
+        `;
 
         const qrInfo = `
           <div style="display:flex; flex-direction:column; gap:4px;">
@@ -753,27 +738,14 @@
           <td><strong>${o.precio}</strong></td>
           <td>${o.comprobante_url ? `<a href="${o.comprobante_url}" target="_blank" style="color: #2563eb; font-weight: 600;">Ver foto</a>` : '<span style="color:#94a3b8;">Sin foto</span>'}</td>
           <td>
-            <div style="display:flex; flex-direction:column; gap:4px;">
-              <span class="badge ${pagoBadgeClass}">${pagoActual}</span>
-              <select class="pago-select" onchange="cambiarPagoEsim('${o.numero_orden}', this.value)">
-                <option value="Pagado" ${pagoActual === 'Pagado' ? 'selected' : ''}>Pagado</option>
-                <option value="No Pagado" ${pagoActual === 'No Pagado' ? 'selected' : ''}>No Pagado</option>
-              </select>
-            </div>
+            <select class="pago-select" onchange="cambiarPagoEsim('${o.numero_orden}', this.value)">${pagoOptions}</select>
           </td>
-          <td><span class="badge badge-${estadoClass}">${o.estado || 'Pendiente'}</span></td>
+          <td>
+            <select class="estado-select" onchange="cambiarEstadoEsim('${o.numero_orden}', this.value)">${selectOptions}</select>
+          </td>
           <td>${qrInfo}</td>
           <td>
-            <div class="action-group">
-              <button type="button" class="btn-mini btn-deliver" onclick="openDeliverEsimModal('${o.numero_orden}')">📲 Entregar QR</button>
-              <select class="estado-select" onchange="cambiarEstadoEsim('${o.numero_orden}', this.value)">
-                <option value="Pendiente" ${o.estado === 'Pendiente' ? 'selected' : ''}>Pendiente</option>
-                <option value="En Proceso" ${o.estado === 'En Proceso' ? 'selected' : ''}>En Proceso</option>
-                <option value="Exitoso" ${o.estado === 'Exitoso' ? 'selected' : ''}>Exitoso</option>
-                <option value="Rechazado" ${o.estado === 'Rechazado' ? 'selected' : ''}>Rechazado</option>
-              </select>
-              <button type="button" class="btn-mini btn-delete" onclick="eliminarEsimOrden('${o.numero_orden}')">🗑️ Eliminar</button>
-            </div>
+            <button type="button" class="btn-mini btn-delete" onclick="eliminarEsimOrden('${o.numero_orden}')">🗑️ Eliminar</button>
           </td>
         `;
         tbody.appendChild(tr);
