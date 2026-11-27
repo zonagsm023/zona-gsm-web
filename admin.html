@@ -58,8 +58,15 @@
       text-transform: uppercase;
     }
 
-    /* Celdas */
-    td { padding: 4px 8px; border: 1px solid #e2e8f0; color: #1e293b; vertical-align: middle; height: 28px; }
+    /* Celdas: Texto más oscuro y grueso, bordes más marcados */
+    td { 
+      padding: 4px 8px; 
+      border: 1px solid #94a3b8; /* Gris más oscuro para las líneas */
+      color: #0f172a; /* Texto casi negro */
+      font-weight: 600; /* Un poco más de grosor general */
+      vertical-align: middle; 
+      height: 28px; 
+    }
 
     /* FILAS ALTERNAS (Blanco y Gris) */
     tbody tr:nth-child(even) { background-color: #f8fafc; }
@@ -73,24 +80,41 @@
     tr.fila-rechazado { background-color: #fee2e2 !important; }
     tr.fila-rechazado:hover { background-color: #fecaca !important; }
 
-    /* SELECTORES OCULTOS PERO FUNCIONALES (Para que se vea como celda de color) */
-    .cell-select-wrapper { position: relative; width: 100%; height: 100%; display: flex; align-items: center; justify-content: center; border-radius: 2px; font-weight: 700; }
-    
-    .cell-select-wrapper select {
-      appearance: none; -webkit-appearance: none;
-      position: absolute; top: 0; left: 0; width: 100%; height: 100%;
-      opacity: 0; cursor: pointer;
-    }
+    tr.fila-proceso { background-color: #fef08a !important; } /* Fila amarilla */
+    tr.fila-proceso:hover { background-color: #fde047 !important; }
 
-    /* Colores de Estado (Texto y Fondo) */
-    .bg-exitoso { background-color: #00b050 !important; color: white; font-weight: bold; }
-    .bg-rechazado { background-color: #ff0000 !important; color: white; font-weight: bold; }
-    .bg-proceso { background-color: #fef08a !important; color: #854d0e; font-weight: bold; }
-    .bg-pendiente { background-color: #e2e8f0 !important; color: #475569; font-weight: bold; }
+    /* ESTILOS DE BOTONES TIPO ACCIÓN (Pago, Estado) */
+    .cell-btn { 
+      padding: 4px 8px; 
+      border-radius: 3px; 
+      font-size: 11px; 
+      font-weight: 700; 
+      cursor: pointer; 
+      text-align: center; 
+      border: 1px solid transparent; 
+      width: 100%; 
+      display: block;
+    }
     
     /* Colores de Pago */
-    .bg-pagado { background-color: #00b050 !important; color: white; font-weight: bold; }
-    .bg-no-pagado { background-color: #ff0000 !important; color: white; font-weight: bold; }
+    .btn-pago-si { background-color: #00b050; color: white; border-color: #00903c; }
+    .btn-pago-si:hover { background-color: #00903c; }
+    
+    .btn-pago-no { background-color: #ff0000; color: white; border-color: #cc0000; }
+    .btn-pago-no:hover { background-color: #cc0000; }
+
+    /* Colores de Estado */
+    .btn-estado-exitoso { background-color: #00b050; color: white; border-color: #00903c; }
+    .btn-estado-exitoso:hover { background-color: #00903c; }
+    
+    .btn-estado-rechazado { background-color: #ff0000; color: white; border-color: #cc0000; }
+    .btn-estado-rechazado:hover { background-color: #cc0000; }
+    
+    .btn-estado-proceso { background-color: #fef08a; color: #854d0e; border-color: #ca8a04; }
+    .btn-estado-proceso:hover { background-color: #fde047; }
+    
+    .btn-estado-pendiente { background-color: #e2e8f0; color: #475569; border-color: #cbd5e1; }
+    .btn-estado-pendiente:hover { background-color: #cbd5e1; }
 
     /* Botón de eliminar mini */
     .btn-mini { padding: 4px 8px; border-radius: 3px; font-size: 11px; font-weight: 700; cursor: pointer; text-align: center; border: 1px solid #fca5a5; background: #fef2f2; color: #dc2626; width: 100%; }
@@ -655,6 +679,7 @@
         let rowClass = '';
         if (o.estado === 'Exitoso') rowClass = 'fila-exito';
         if (o.estado === 'Rechazado') rowClass = 'fila-rechazado';
+        if (o.estado === 'En Proceso') rowClass = 'fila-proceso';
         if (rowClass) tr.className = rowClass;
 
         const selectOptions = `
@@ -731,6 +756,7 @@
         let rowClass = '';
         if (o.estado === 'Exitoso') rowClass = 'fila-exito';
         if (o.estado === 'Rechazado') rowClass = 'fila-rechazado';
+        if (o.estado === 'En Proceso') rowClass = 'fila-proceso';
         if (rowClass) tr.className = rowClass;
 
         const selectOptions = `
