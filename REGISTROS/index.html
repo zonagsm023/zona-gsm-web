@@ -142,6 +142,20 @@
     .imei-send-btn { width: 100%; padding: 12px; border: none; border-radius: 12px; background: #c81d4e; color: #ffffff; font-size: 14px; font-weight: 800; cursor: pointer; transition: background 0.15s ease; margin-top: 12px; }
     .imei-send-btn:hover { background: #a61840; }
 
+    .pay-channel-box { background: #f8fafc; padding: 10px; border-radius: 12px; margin-top: 12px; border: 1px solid #e2e8f0; }
+    .pay-channel-title { font-size: 12px; font-weight: 700; color: #334155; margin-bottom: 8px; }
+    .pay-actions-row { display: flex; gap: 6px; flex-wrap: wrap; }
+    .pay-copy-btn { flex: 1.3; padding: 8px 10px; background: #ffffff; color: #0f172a; border: 1px solid #cbd5e1; border-radius: 8px; font-size: 11px; font-weight: 800; cursor: pointer; transition: all 0.15s ease; }
+    .pay-copy-btn:hover { border-color: #7c3aed; background: #f5f3ff; color: #5b21b6; }
+    .pay-key-btn { flex: 1; padding: 8px 10px; background: #ffffff; color: #0f172a; border: 1px solid #cbd5e1; border-radius: 8px; font-size: 11px; font-weight: 800; cursor: pointer; transition: all 0.15s ease; }
+    .pay-key-btn:hover { border-color: #0284c7; background: #f0f9ff; color: #0369a1; }
+    .pay-qr-btn { flex: 1; padding: 8px 10px; background: #f5f3ff; color: #6d28d9; border: 1px solid #ddd6fe; border-radius: 8px; font-size: 11px; font-weight: 800; cursor: pointer; transition: all 0.15s ease; display: inline-flex; align-items: center; justify-content: center; gap: 4px; }
+    .pay-qr-btn:hover { background: #ede9fe; border-color: #c4b5fd; }
+
+    .nequi-qr-preview { width: 210px; height: 210px; margin: 10px auto 6px; border-radius: 14px; border: 1.5px solid #e2e8f0; background: #f8fafc; display: flex; align-items: center; justify-content: center; overflow: hidden; padding: 8px; }
+    .nequi-qr-preview img { width: 100%; height: 100%; object-fit: contain; display: block; border-radius: 8px; }
+    .nequi-qr-fallback { font-size: 12px; font-weight: 700; color: #64748b; text-align: center; line-height: 1.4; }
+
     .receipt-dropzone { display: flex; align-items: center; justify-content: space-between; gap: 10px; padding: 10px 12px; border-radius: 12px; border: 1.5px dashed #cbd5e1; background: #f8fafc; cursor: pointer; transition: all 0.2s ease; }
     .receipt-dropzone:hover, .receipt-dropzone.has-file { border-color: #c81d4e; background: #fff5f8; }
     .receipt-btn-pill { background: #c81d4e; color: #ffffff; font-size: 12px; font-weight: 700; padding: 7px 12px; border-radius: 9px; white-space: nowrap; flex-shrink: 0; }
@@ -412,10 +426,15 @@
         </div>
 
         <!-- CANAL DE PAGO -->
-        <div style="background: #f8fafc; padding: 10px; border-radius: 12px; margin-top: 12px; border: 1px solid #e2e8f0;">
-          <p style="font-size: 12px; font-weight: 700; color: #334155; margin-bottom: 8px;">💳 Canal de Pago (Toca para copiar):</p>
-          <div style="display: flex; gap: 6px; flex-wrap: wrap;">
-            <button type="button" onclick="copyPayment('3246816788', 'Nequi')" style="flex: 1; padding: 8px; background: white; border: 1px solid #cbd5e1; border-radius: 8px; font-size: 11px; font-weight: bold; cursor: pointer;">Nequi: 3246816788</button>
+        <div class="pay-channel-box">
+          <p class="pay-channel-title">💳 Canal de Pago Nequi (Toca para copiar o ver QR):</p>
+          <div class="pay-actions-row">
+            <button type="button" onclick="copyPayment('3226108075', 'Nequi')" class="pay-copy-btn">Nequi: 3226108075</button>
+            <button type="button" onclick="copyNequiKey()" class="pay-key-btn">🔑 Llave</button>
+            <button type="button" onclick="openNequiQrModal()" class="pay-qr-btn">
+              <svg width="14" height="14"><use href="#icon-qr"/></svg>
+              <span>QR</span>
+            </button>
           </div>
         </div>
 
@@ -445,6 +464,24 @@
         <button type="submit" class="imei-send-btn">Enviar Solicitud</button>
       </form>
 
+    </div>
+  </div>
+
+  <!-- MODAL: QR DE NEQUI -->
+  <div id="nequiQrOverlay" class="imei-overlay" onclick="closeNequiQrOutside(event)">
+    <div class="imei-box" style="max-width: 320px; text-align: center;">
+      <div class="imei-box-top">
+        <div class="imei-box-title">QR Nequi · 3226108075</div>
+        <button type="button" class="imei-close" onclick="closeNequiQrModal()" aria-label="Cerrar">&times;</button>
+      </div>
+      <div class="nequi-qr-preview" id="nequiQrBox">
+        <img id="nequiQrImg" src="nequi-qr.png" alt="QR Nequi 3226108075" onerror="handleNequiQrError(this)" />
+      </div>
+      <p style="font-size: 12px; color: #475569; margin-bottom: 10px;">Escanea el código desde tu app Nequi o copia el número/llave.</p>
+      <div style="display: flex; gap: 8px;">
+        <button type="button" class="imei-send-btn" style="margin-top: 0; background: #6d28d9;" onclick="copyPayment('3226108075', 'Nequi')">Copiar 3226108075</button>
+        <button type="button" class="imei-send-btn" style="margin-top: 0; background: #0284c7;" onclick="copyNequiKey()">Copiar Llave</button>
+      </div>
     </div>
   </div>
 
@@ -538,6 +575,7 @@
   <script>
     const WORKER_URL = "https://telegram-zonagsm.zonagsm023.workers.dev";
     const PAYMENT_STATE_KEY = "zg_admin_payment_states";
+    const NEQUI_KEY_VALUE = "3226108075";
 
     let dbClientesNube = [];
     let clienteVerificado = null;
@@ -615,11 +653,42 @@
       return dbClientesNube.find(c => String(c.pin) === String(pin)) || null;
     }
 
-    /* --- COPIAR CANALES DE PAGO --- */
+    /* --- COPIAR CANALES DE PAGO, LLAVE Y QR NEQUI --- */
     function copyPayment(number, method) {
-      navigator.clipboard.writeText(number).then(() => {
-        showToast('Número de ' + method + ' copiado');
-      });
+      copyText(number, 'Número de ' + method);
+    }
+
+    function copyNequiKey() {
+      copyText(NEQUI_KEY_VALUE, 'Llave Nequi');
+    }
+
+    function openNequiQrModal() {
+      const img = document.getElementById('nequiQrImg');
+      if (img && !img.getAttribute('src')) {
+        img.src = 'nequi-qr.png';
+      }
+      document.getElementById('nequiQrOverlay').classList.add('open');
+    }
+
+    function closeNequiQrModal() {
+      document.getElementById('nequiQrOverlay').classList.remove('open');
+    }
+
+    function closeNequiQrOutside(e) {
+      if (e.target.id === 'nequiQrOverlay') {
+        closeNequiQrModal();
+      }
+    }
+
+    function handleNequiQrError(img) {
+      img.style.display = 'none';
+      const box = document.getElementById('nequiQrBox');
+      if (box && !box.querySelector('.nequi-qr-fallback')) {
+        const fb = document.createElement('div');
+        fb.className = 'nequi-qr-fallback';
+        fb.innerHTML = 'Sube tu imagen <strong>nequi-qr.png</strong> o paga directo al Nequi <strong>3226108075</strong>.';
+        box.appendChild(fb);
+      }
     }
 
     /* --- SUBIR COMPROBANTE --- */
@@ -1330,6 +1399,7 @@
     document.addEventListener('keydown', (e) => {
       if (e.key === 'Escape') {
         closeImeiBox();
+        closeNequiQrModal();
         closeRegisterBox();
         closeClientPanel();
       }
