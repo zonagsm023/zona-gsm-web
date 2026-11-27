@@ -5,115 +5,149 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>Panel de Administración — Zona GSM</title>
   <style>
+    /* Estilos generales */
     * { box-sizing: border-box; font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif; }
-    body { background: #f1f5f9; padding: 20px; color: #111827; margin: 0; }
+    body { background: #e2e8f0; padding: 20px; color: #111827; margin: 0; }
 
-    /* Login */
-    .login-box { max-width: 340px; margin: 100px auto; background: white; padding: 35px 30px; border-radius: 8px; box-shadow: 0 4px 10px rgba(0,0,0,0.1); text-align: center; border: 1px solid #cbd5e1; }
-    .login-box input { width: 100%; padding: 10px; margin-bottom: 15px; border: 1px solid #cbd5e1; border-radius: 4px; font-size: 14px; outline: none; }
-    .login-box button { width: 100%; padding: 11px; background: #c81d4e; color: white; border: none; border-radius: 4px; font-size: 15px; font-weight: bold; cursor: pointer; }
+    /* Estilos del Login */
+    .login-box { max-width: 340px; margin: 100px auto; background: white; padding: 35px 30px; border-radius: 12px; box-shadow: 0 4px 6px rgba(0,0,0,0.1); text-align: center; border: 1px solid #cbd5e1; }
+    .login-box input { width: 100%; padding: 10px; margin-bottom: 15px; border: 1px solid #cbd5e1; border-radius: 6px; font-size: 14px; outline: none; }
+    .login-box input:focus { border-color: #c81d4e; }
+    .login-box button { width: 100%; padding: 11px; background: #c81d4e; color: white; border: none; border-radius: 6px; font-size: 15px; font-weight: bold; cursor: pointer; }
     
-    /* Panel */
-    .panel { display: none; max-width: 1500px; margin: 0 auto; background: white; border: 1px solid #cbd5e1; box-shadow: 0 2px 4px rgba(0,0,0,0.05); }
-    .header { display: flex; justify-content: space-between; align-items: center; padding: 10px 15px; border-bottom: 1px solid #cbd5e1; background: #f8fafc; }
-    .header h1 { font-size: 18px; color: #0f172a; margin: 0; font-weight: 800; }
-    .btn-refresh { padding: 6px 12px; background: #0f172a; color: white; border: none; border-radius: 4px; cursor: pointer; font-weight: bold; font-size: 12px; }
+    /* Estilos del Panel */
+    .panel { display: none; max-width: 1400px; margin: 0 auto; }
+    .header { display: flex; justify-content: space-between; align-items: center; margin-bottom: 15px; flex-wrap: wrap; gap: 10px; }
+    .header-left { display: flex; align-items: center; gap: 10px; }
+    .header h1 { font-size: 22px; color: #0f172a; margin: 0; font-weight: 800; }
+    .live-badge { display: inline-flex; align-items: center; gap: 5px; padding: 4px 8px; border-radius: 4px; background: #ecfdf5; border: 1px solid #a7f3d0; color: #059669; font-size: 11px; font-weight: 800; }
+    .live-dot { width: 6px; height: 6px; border-radius: 50%; background: #10b981; animation: pulseLive 1.6s infinite; }
+    @keyframes pulseLive { 0%, 100% { opacity: 1; transform: scale(1); } 50% { opacity: 0.4; transform: scale(1.2); } }
+    .btn-refresh { padding: 8px 14px; background: #0f172a; color: white; border: none; border-radius: 6px; cursor: pointer; font-weight: bold; font-size: 12px; }
     
-    /* Pestañas (Tabs) */
-    .tabs { display: flex; gap: 2px; border-bottom: 1px solid #cbd5e1; background: #f8fafc; }
-    .tab-btn { padding: 8px 16px; background: #e2e8f0; border: none; border-right: 1px solid #cbd5e1; font-size: 12px; font-weight: 700; color: #475569; cursor: pointer; }
-    .tab-btn.active { background: white; color: #c81d4e; border-top: 2px solid #c81d4e; }
+    /* Pestañas */
+    .tabs { display: flex; gap: 5px; margin-bottom: 10px; border-bottom: 2px solid #cbd5e1; flex-wrap: wrap; }
+    .tab-btn { padding: 8px 16px; background: #f1f5f9; border: 1px solid #cbd5e1; border-bottom: none; border-radius: 6px 6px 0 0; font-size: 13px; font-weight: 700; color: #475569; cursor: pointer; }
+    .tab-btn.active { background: white; color: #c81d4e; border-top: 3px solid #c81d4e; border-bottom: 2px solid white; margin-bottom: -2px; }
 
-    /* Filtros */
-    .filter-bar { display: flex; align-items: center; gap: 10px; padding: 8px 15px; background: white; border-bottom: 1px solid #cbd5e1; }
-    .filter-select, .search-input { padding: 4px 8px; border-radius: 3px; border: 1px solid #cbd5e1; font-size: 12px; outline: none; }
+    /* Barra de filtros */
+    .filter-bar { display: flex; align-items: center; gap: 10px; padding: 10px 15px; background: white; border: 1px solid #cbd5e1; border-bottom: none; flex-wrap: wrap; }
+    .filter-group { display: flex; align-items: center; gap: 6px; flex-wrap: wrap; }
+    .filter-bar label { font-size: 12px; font-weight: 700; color: #475569; }
+    .filter-select, .search-input { padding: 6px 10px; border-radius: 4px; border: 1px solid #cbd5e1; font-size: 12px; font-weight: 600; color: #0f172a; background: #f8fafc; outline: none; }
+    .filter-select { min-width: 150px; cursor: pointer; }
+    .search-input { min-width: 200px; }
+    .btn-clear { padding: 6px 12px; border-radius: 4px; border: 1px solid #cbd5e1; background: #ffffff; color: #475569; font-size: 12px; font-weight: 700; cursor: pointer; }
 
-    /* TABLA ESTILO EXCEL AVANZADO */
-    .table-container { background: white; overflow-x: auto; }
-    table { width: 100%; border-collapse: collapse; min-width: 1100px; font-size: 12px; }
+    /* TABLA ESTILO EXCEL */
+    .table-container { background: white; border: 1px solid #cbd5e1; overflow-x: auto; }
+    table { width: 100%; border-collapse: collapse; min-width: 1200px; font-size: 12px; }
     
-    /* Encabezados Azul Oscuro */
-    th { 
-      background: #1e3a5f; 
-      color: #ffffff; 
-      font-weight: 700; 
-      font-size: 11px; 
-      padding: 6px 8px; 
-      text-align: left; 
-      border: 1px solid #0f172a; 
-      white-space: nowrap; 
-      text-transform: uppercase;
-    }
+    /* Encabezados */
+    th { background: #f1f5f9; color: #334155; font-weight: 700; font-size: 11px; padding: 8px 10px; text-align: left; border: 1px solid #cbd5e1; white-space: nowrap; position: sticky; top: 0; }
 
     /* Celdas */
-    td { padding: 4px 8px; border: 1px solid #e2e8f0; color: #1e293b; vertical-align: middle; height: 28px; }
+    td { padding: 6px 10px; border: 1px solid #e2e8f0; color: #1e293b; vertical-align: middle; }
 
-    /* Filas alternas (por si no tienen color de estado) */
+    /* FILAS ALTERNAS (Blanco y Gris) */
     tbody tr:nth-child(even) { background-color: #f8fafc; }
+    tbody tr:nth-child(odd) { background-color: #ffffff; }
+    tbody tr:hover { background-color: #e2e8f0; }
 
-    /* SELECTORES OCULTOS PERO FUNCIONALES (Para que se vea como celda de color pero se pueda editar) */
-    .cell-select-wrapper { position: relative; width: 100%; height: 100%; display: flex; align-items: center; justify-content: center; border-radius: 2px; }
+    /* COLORES CONDICIONALES POR ESTADO (Fondo de toda la fila) */
+    tr.fila-exito { background-color: #dcfce7 !important; }
+    tr.fila-exito:hover { background-color: #bbf7d0 !important; }
     
-    .cell-select-wrapper select {
-      appearance: none; -webkit-appearance: none;
-      position: absolute; top: 0; left: 0; width: 100%; height: 100%;
-      opacity: 0; cursor: pointer;
+    tr.fila-rechazado { background-color: #fee2e2 !important; }
+    tr.fila-rechazado:hover { background-color: #fecaca !important; }
+
+    /* Selectores dentro de la celda */
+    select.estado-select, select.pago-select { 
+      padding: 4px; 
+      border-radius: 3px; 
+      border: 1px solid #cbd5e1; 
+      font-weight: 600; 
+      font-size: 11px; 
+      background: white; 
+      color: #334155; 
+      width: 100%;
+      cursor: pointer;
     }
-
-    /* Colores de Estado (Texto y Fondo) */
-    .bg-exitoso { background-color: #00b050 !important; color: white; font-weight: bold; }
-    .bg-rechazado { background-color: #ff0000 !important; color: white; font-weight: bold; }
-    .bg-proceso { background-color: #fef08a !important; color: #854d0e; font-weight: bold; }
-    .bg-pendiente { background-color: #e2e8f0 !important; color: #475569; font-weight: bold; }
     
-    /* Colores de Pago */
-    .bg-pagado { background-color: #00b050 !important; color: white; font-weight: bold; }
-    .bg-no-pagado { background-color: #ff0000 !important; color: white; font-weight: bold; }
-
     /* Botón de eliminar mini */
-    .btn-mini { padding: 3px 6px; border-radius: 3px; font-size: 11px; font-weight: 700; cursor: pointer; border: 1px solid #fca5a5; background: #fef2f2; color: #dc2626; width: 100%; }
-    .btn-mini:hover { background: #fee2e2; }
+    .btn-mini { padding: 5px 8px; border-radius: 3px; font-size: 11px; font-weight: 700; cursor: pointer; text-align: center; border: 1px solid transparent; width: 100%; }
+    .btn-delete { background: #fef2f2; color: #dc2626; border-color: #fca5a5; }
+    .btn-delete:hover { background: #fee2e2; }
 
     /* Modales */
     .new-order-overlay { position: fixed; inset: 0; background: rgba(15, 23, 42, 0.65); backdrop-filter: blur(3px); display: none; align-items: center; justify-content: center; padding: 20px; z-index: 9999; }
     .new-order-overlay.open { display: flex; }
-    .new-order-modal { width: 100%; max-width: 450px; background: #ffffff; border-radius: 8px; overflow: hidden; max-height: 90vh; overflow-y: auto; }
+    .new-order-modal { width: 100%; max-width: 450px; background: #ffffff; border-radius: 12px; overflow: hidden; box-shadow: 0 20px 25px -5px rgba(0, 0, 0, 0.1); max-height: 90vh; overflow-y: auto; }
     .new-order-header { background: #0f172a; color: #ffffff; padding: 15px 20px; display: flex; align-items: center; justify-content: space-between; }
+    .new-order-header h2, .new-order-header h3 { margin: 0; font-size: 16px; font-weight: 700; }
     .new-order-body { padding: 20px; }
-    
+    .order-detail-grid { background: #f8fafc; border: 1px solid #e2e8f0; border-radius: 8px; padding: 12px; display: flex; flex-direction: column; gap: 8px; margin-bottom: 15px; }
+    .order-detail-row { display: flex; justify-content: space-between; align-items: center; font-size: 13px; border-bottom: 1px dashed #cbd5e1; padding-bottom: 6px; }
+    .order-detail-row:last-child { border-bottom: none; padding-bottom: 0; }
+    .order-detail-label { color: #64748b; font-weight: 600; font-size: 11px; text-transform: uppercase; }
+    .order-detail-value { color: #0f172a; font-weight: 700; text-align: right; }
+    .new-order-actions { display: grid; grid-template-columns: 1fr 1fr; gap: 8px; margin-top: 15px;}
+    .btn-modal-accept { grid-column: 1 / -1; padding: 10px; border: none; border-radius: 6px; background: #0284c7; color: #ffffff; font-size: 14px; font-weight: 700; cursor: pointer; }
+    .btn-modal-reject { padding: 10px; border: none; border-radius: 6px; background: #fee2e2; color: #dc2626; font-size: 13px; font-weight: 700; cursor: pointer; }
+    .btn-modal-dismiss { padding: 10px; border: 1px solid #cbd5e1; border-radius: 6px; background: #ffffff; color: #334155; font-size: 13px; font-weight: 600; cursor: pointer; }
+
+    .field-group { margin-bottom: 12px; }
+    .field-group label { display: block; font-size: 12px; font-weight: 700; color: #334155; margin-bottom: 4px; }
+    .field-input { width: 100%; padding: 8px; border-radius: 6px; border: 1px solid #cbd5e1; font-size: 13px; outline: none; }
+
     .hidden { display: none !important; }
   </style>
 </head>
 <body>
 
+  <!-- LOGIN -->
   <div id="loginBox" class="login-box">
-    <h2>Zona GSM Admin</h2>
-    <input type="text" id="userInput" value="admin">
-    <input type="password" id="passwordInput" value="admin">
+    <h2 style="margin-top: 0; color: #0f172a;">Zona GSM Admin</h2>
+    <input type="text" id="userInput" placeholder="Usuario" value="admin">
+    <input type="password" id="passwordInput" placeholder="Contraseña" value="admin">
     <button onclick="login()">Ingresar</button>
   </div>
 
+  <!-- PANEL -->
   <div id="adminPanel" class="panel">
     <div class="header">
-      <h1>PANEL DE CONTROL - ZONA GSM</h1>
+      <div class="header-left">
+        <h1>Zona GSM Admin</h1>
+        <span class="live-badge"><span class="live-dot"></span>En vivo</span>
+      </div>
       <button class="btn-refresh" onclick="recargarTodo()">🔄 Actualizar Datos</button>
     </div>
 
     <div class="tabs">
-      <button class="tab-btn active" id="tab-orders-btn" onclick="showTab('orders')">NO REGISTROS</button>
-      <button class="tab-btn" id="tab-esim-btn" onclick="showTab('esim')">E-SIM</button>
-      <button class="tab-btn" id="tab-clients-btn" onclick="showTab('clients')">CLIENTES</button>
+      <button class="tab-btn active" id="tab-orders-btn" onclick="showTab('orders')">Órdenes</button>
+      <button class="tab-btn" id="tab-esim-btn" onclick="showTab('esim')">Órdenes E-SIM</button>
+      <button class="tab-btn" id="tab-clients-btn" onclick="showTab('clients')">Clientes</button>
     </div>
 
     <!-- VISTA: ÓRDENES -->
     <div id="view-orders">
       <div class="filter-bar">
-        <select id="filtroCliente" class="filter-select" onchange="aplicarFiltroCliente()"><option value="">Todos los clientes</option></select>
-        <select id="filtroPago" class="filter-select" onchange="aplicarFiltroCliente()">
-          <option value="">Todos los pagos</option><option value="Pagado">Pagado</option><option value="No Pagado">No Pagado</option>
-        </select>
-        <input type="text" id="buscadorOrdenes" class="search-input" placeholder="Buscar..." oninput="aplicarFiltroCliente()">
-        <button type="button" class="btn-refresh" style="background:#e2e8f0; color:#334155;" onclick="limpiarFiltroCliente()">Limpiar</button>
+        <div class="filter-group">
+          <select id="filtroCliente" class="filter-select" onchange="aplicarFiltroCliente()">
+            <option value="">Todos los clientes</option>
+          </select>
+        </div>
+        <div class="filter-group">
+          <select id="filtroPago" class="filter-select" style="min-width: 120px;" onchange="aplicarFiltroCliente()">
+            <option value="">Todos los pagos</option>
+            <option value="Pagado">Pagado</option>
+            <option value="No Pagado">No Pagado</option>
+          </select>
+        </div>
+        <div class="filter-group">
+          <input type="text" id="buscadorOrdenes" class="search-input" placeholder="Buscar orden, teléfono, IMEI..." oninput="aplicarFiltroCliente()">
+        </div>
+        <button type="button" class="btn-clear" onclick="limpiarFiltroCliente()">Limpiar</button>
       </div>
       
       <div class="table-container">
@@ -133,7 +167,9 @@
               <th>ACCIONES</th>
             </tr>
           </thead>
-          <tbody id="tablaOrdenes"></tbody>
+          <tbody id="tablaOrdenes">
+            <tr><td colspan="11" style="text-align: center; padding: 20px;">Cargando datos...</td></tr>
+          </tbody>
         </table>
       </div>
     </div>
@@ -141,11 +177,17 @@
     <!-- VISTA: ÓRDENES E-SIM -->
     <div id="view-esim" class="hidden">
       <div class="filter-bar">
-        <select id="filtroPagoEsim" class="filter-select" onchange="renderEsimOrdenes(esimCache)">
-          <option value="">Todos los pagos</option><option value="Pagado">Pagado</option><option value="No Pagado">No Pagado</option>
-        </select>
-        <input type="text" id="buscadorEsim" class="search-input" placeholder="Buscar..." oninput="renderEsimOrdenes(esimCache)">
-        <button type="button" class="btn-refresh" style="background:#e2e8f0; color:#334155;" onclick="limpiarFiltrosEsim()">Limpiar</button>
+        <div class="filter-group">
+          <select id="filtroPagoEsim" class="filter-select" style="min-width: 120px;" onchange="renderEsimOrdenes(esimCache)">
+            <option value="">Todos los pagos</option>
+            <option value="Pagado">Pagado</option>
+            <option value="No Pagado">No Pagado</option>
+          </select>
+        </div>
+        <div class="filter-group">
+          <input type="text" id="buscadorEsim" class="search-input" placeholder="Buscar orden, operador, cliente..." oninput="renderEsimOrdenes(esimCache)">
+        </div>
+        <button type="button" class="btn-clear" onclick="limpiarFiltrosEsim()">Limpiar</button>
       </div>
       
       <div class="table-container">
@@ -166,66 +208,399 @@
               <th>ACCIONES</th>
             </tr>
           </thead>
-          <tbody id="tablaEsimOrdenes"></tbody>
+          <tbody id="tablaEsimOrdenes">
+            <tr><td colspan="12" style="text-align: center; padding: 20px;">Cargando órdenes E-SIM...</td></tr>
+          </tbody>
         </table>
       </div>
     </div>
-    
+
     <!-- VISTA: CLIENTES -->
     <div id="view-clients" class="hidden">
       <div class="table-container">
         <table>
           <thead>
-            <tr><th>ID</th><th>NOMBRE / NEGOCIO</th><th>WHATSAPP</th><th>PIN</th><th>ACCIONES</th></tr>
+            <tr>
+              <th>ID</th>
+              <th>NOMBRE / NEGOCIO</th>
+              <th>WHATSAPP</th>
+              <th>PIN</th>
+              <th>ACCIONES</th>
+            </tr>
           </thead>
-          <tbody id="tablaClientes"></tbody>
+          <tbody id="tablaClientes">
+            <tr><td colspan="5" style="text-align: center; padding: 20px;">Cargando datos...</td></tr>
+          </tbody>
         </table>
       </div>
     </div>
   </div>
 
-  <!-- MODALES (Igual que antes) -->
+  <!-- MODALES -->
   <div id="newOrderOverlay" class="new-order-overlay">
     <div class="new-order-modal">
-      <div class="new-order-header"><h2 id="newOrderModalTitle">🔔 ¡Nueva Orden Recibida!</h2></div>
+      <div class="new-order-header">
+        <h2 id="newOrderModalTitle">🔔 ¡Nueva Orden Recibida!</h2>
+      </div>
       <div class="new-order-body">
-        <div id="newOrderDetails" style="font-size:13px; line-height:2;"></div>
-        <div style="margin-top:15px;">
-          <label style="font-size:12px; font-weight:bold;">Estado del pago:</label>
-          <select id="modalPagoSelect" style="width:100%; padding:8px; margin-top:5px;" onchange="cambiarPagoModal(this.value)">
-            <option value="No Pagado">No Pagado</option><option value="Pagado">Pagado</option>
+        <div id="newOrderDetails" class="order-detail-grid"></div>
+        <div class="field-group">
+          <label>Estado del pago:</label>
+          <select id="modalPagoSelect" class="pago-select" onchange="cambiarPagoModal(this.value)">
+            <option value="No Pagado">No Pagado</option>
+            <option value="Pagado">Pagado</option>
           </select>
         </div>
-        <div style="display:flex; gap:10px; margin-top:15px;">
-          <button type="button" id="btnModalAccept" style="flex:2; padding:10px; background:#00b050; color:white; border:none; border-radius:4px; font-weight:bold;" onclick="procesarOrdenModal('En Proceso')">✅ Aceptar</button>
-          <button type="button" id="btnModalReject" style="flex:1; padding:10px; background:#ff0000; color:white; border:none; border-radius:4px; font-weight:bold;" onclick="procesarOrdenModal('Rechazado')">❌ Rechazar</button>
+        <div class="new-order-actions">
+          <button type="button" id="btnModalAccept" class="btn-modal-accept" onclick="procesarOrdenModal('En Proceso')">✅ Aceptar Orden</button>
+          <button type="button" id="btnModalReject" class="btn-modal-reject" onclick="procesarOrdenModal('Rechazado')">❌ Rechazar</button>
+          <button type="button" class="btn-modal-dismiss" onclick="cerrarAvisoNuevaOrden()">Ver después</button>
         </div>
-        <button type="button" style="width:100%; margin-top:10px; padding:8px; background:#e2e8f0; border:none; border-radius:4px;" onclick="cerrarAvisoNuevaOrden()">Ver después</button>
       </div>
     </div>
   </div>
 
   <div id="deliverEsimOverlay" class="new-order-overlay" onclick="if(event.target.id==='deliverEsimOverlay') closeDeliverEsimModal()">
     <div class="new-order-modal" style="max-width: 400px;">
-      <div class="new-order-header"><h3 id="deliverEsimTitle">📲 Entregar E-SIM</h3></div>
+      <div class="new-order-header">
+        <h3 id="deliverEsimTitle">📲 Entregar E-SIM</h3>
+        <button type="button" onclick="closeDeliverEsimModal()" style="background:none; border:none; color:white; font-size:20px; cursor:pointer;">&times;</button>
+      </div>
       <div class="new-order-body">
-        <label style="font-size:12px; font-weight:bold;">Número E-SIM</label>
-        <input type="text" id="deliverEsimNumber" style="width:100%; padding:8px; margin:5px 0 15px 0; border:1px solid #ccc; border-radius:4px;">
-        <label style="font-size:12px; font-weight:bold;">Enlace del QR (Opcional)</label>
-        <input type="text" id="deliverEsimQrUrl" style="width:100%; padding:8px; margin:5px 0 15px 0; border:1px solid #ccc; border-radius:4px;">
-        <label style="font-size:12px; font-weight:bold;">Subir foto</label>
-        <input type="file" id="deliverEsimQrFile" accept="image/*" style="width:100%; margin:5px 0 15px 0;" onchange="previewDeliverQr(this)">
-        <img id="deliverQrPreview" style="display:none; max-width:100%; margin-bottom:15px; border-radius:4px;">
-        <button type="button" id="btnSaveDeliverEsim" style="width:100%; padding:10px; background:#1e3a5f; color:white; border:none; border-radius:4px; font-weight:bold;" onclick="guardarEntregaEsim()">💾 Guardar</button>
+        <div class="field-group">
+          <label>Número E-SIM</label>
+          <input type="text" id="deliverEsimNumber" class="field-input" placeholder="Ej: 3101234567">
+        </div>
+        <div class="field-group">
+          <label>Enlace del QR (Opcional)</label>
+          <input type="text" id="deliverEsimQrUrl" class="field-input" placeholder="https://...">
+        </div>
+        <div class="field-group">
+          <label>Subir foto del QR</label>
+          <input type="file" id="deliverEsimQrFile" accept="image/*" class="field-input" onchange="previewDeliverQr(this)">
+          <img id="deliverQrPreview" style="display:none; max-width:100%; margin-top:8px; border-radius:6px;">
+        </div>
+        <div class="field-group">
+          <label>Estado final</label>
+          <select id="deliverEsimStatus" class="field-input">
+            <option value="Exitoso">Exitoso</option>
+            <option value="En Proceso">En Proceso</option>
+          </select>
+        </div>
+        <button type="button" id="btnSaveDeliverEsim" class="btn-modal-accept" onclick="guardarEntregaEsim()">💾 Guardar Entrega</button>
       </div>
     </div>
   </div>
 
   <script>
     const WORKER_URL = "https://telegram-zonagsm.zonagsm023.workers.dev";
-    // ... (Variables y lógica de Audio se mantienen igual) ...
+    const SEEN_ORDERS_KEY = "zg_admin_seen_orders";
+    const PAYMENT_STATE_KEY = "zg_admin_payment_states";
 
-    // --- RENDERIZADO TIPO EXCEL CON COLORES SÓLIDOS ---
+    let ordenesCache = [];
+    let esimCache = [];
+    let clientesCache = [];
+    let colaNuevasOrdenes = [];
+    let ordenActualModal = null;
+    let adminPollingTimer = null;
+    let esimAEntregar = null;
+    let deliverQrBase64 = null;
+
+    let sharedAudioCtx = null;
+    let audioUnlocked = false;
+    let pendingVoicePayload = null;
+
+    function getAudioContext() {
+      const AudioCtx = window.AudioContext || window.webkitAudioContext;
+      if (!AudioCtx) return null;
+      if (!sharedAudioCtx || sharedAudioCtx.state === "closed") {
+        sharedAudioCtx = new AudioCtx();
+      }
+      return sharedAudioCtx;
+    }
+
+    function precargarVoces() {
+      if ("speechSynthesis" in window) {
+        try { window.speechSynthesis.getVoices(); } catch (_) {}
+      }
+    }
+
+    function desbloquearAudioYVoz() {
+      audioUnlocked = true;
+      precargarVoces();
+      const ctx = getAudioContext();
+      if (ctx && ctx.state === "suspended") {
+        ctx.resume().catch(() => {});
+      }
+      if (pendingVoicePayload) {
+        const pendiente = pendingVoicePayload;
+        pendingVoicePayload = null;
+        anunciarOrdenConCampanaYVoz(pendiente.orden, pendiente.tipo, true);
+      }
+    }
+
+    window.addEventListener("DOMContentLoaded", () => {
+      precargarVoces();
+      if ("speechSynthesis" in window) {
+        window.speechSynthesis.onvoiceschanged = () => precargarVoces();
+      }
+      ["pointerdown", "keydown", "click", "touchstart"].forEach(ev => {
+        document.addEventListener(ev, desbloquearAudioYVoz, { passive: true });
+      });
+    });
+
+    function hablarAnuncio(textoVoz) {
+      if (!("speechSynthesis" in window)) return;
+      try {
+        window.speechSynthesis.cancel();
+        const utterance = new SpeechSynthesisUtterance(textoVoz);
+        utterance.lang = "es-CO";
+        utterance.rate = 1;
+        utterance.pitch = 1;
+        const voces = window.speechSynthesis.getVoices() || [];
+        const vozEs = voces.find(v => /es(-|_|$)/i.test(v.lang));
+        if (vozEs) utterance.voice = vozEs;
+        window.speechSynthesis.speak(utterance);
+      } catch (_) {}
+    }
+
+    function anunciarOrdenConCampanaYVoz(orden, tipo, desdeDesbloqueo = false) {
+      const esEsim = tipo === "esim";
+      const tipoServicio = esEsim ? "E SIM" : "registro";
+      const cliente = (orden && orden.nombre && String(orden.nombre).trim())
+        ? String(orden.nombre).trim()
+        : "cliente";
+      const textoVoz = `Nuevo servicio de ${tipoServicio}, ${cliente}`;
+
+      const ctx = getAudioContext();
+      if (ctx && ctx.state === "suspended") {
+        ctx.resume().then(() => {
+          audioUnlocked = true;
+          tocarCampanaYHablar(ctx, textoVoz);
+        }).catch(() => {
+          if (!desdeDesbloqueo) pendingVoicePayload = { orden, tipo };
+          hablarAnuncio(textoVoz);
+        });
+        return;
+      }
+
+      if (!audioUnlocked && !desdeDesbloqueo) pendingVoicePayload = { orden, tipo };
+      tocarCampanaYHablar(ctx, textoVoz);
+    }
+
+    function tocarCampanaYHablar(ctx, textoVoz) {
+      try {
+        if (!ctx) {
+          hablarAnuncio(textoVoz);
+          return;
+        }
+        const ahora = ctx.currentTime;
+        const notas = [880, 1174.66];
+
+        notas.forEach((freq, idx) => {
+          const osc = ctx.createOscillator();
+          const gain = ctx.createGain();
+          osc.type = "triangle";
+          osc.frequency.setValueAtTime(freq, ahora + idx * 0.14);
+          gain.gain.setValueAtTime(0.24, ahora + idx * 0.14);
+          gain.gain.exponentialRampToValueAtTime(0.001, ahora + idx * 0.14 + 0.18);
+          osc.connect(gain);
+          gain.connect(ctx.destination);
+          osc.start(ahora + idx * 0.14);
+          osc.stop(ahora + idx * 0.14 + 0.19);
+        });
+        setTimeout(() => hablarAnuncio(textoVoz), 360);
+      } catch (_) {
+        hablarAnuncio(textoVoz);
+      }
+    }
+
+    function getEstadosPagoLocales() {
+      try { return JSON.parse(localStorage.getItem(PAYMENT_STATE_KEY) || "{}"); } catch (e) { return {}; }
+    }
+
+    function guardarEstadoPagoLocal(numeroOrden, estadoPago) {
+      if (!numeroOrden) return;
+      const mapa = getEstadosPagoLocales();
+      mapa[numeroOrden] = estadoPago;
+      localStorage.setItem(PAYMENT_STATE_KEY, JSON.stringify(mapa));
+    }
+
+    function resolverEstadoPago(orden) {
+      if (orden.pago === 'Pagado' || orden.pago === 'No Pagado') return orden.pago;
+      const mapa = getEstadosPagoLocales();
+      if (orden.numero_orden && mapa[orden.numero_orden]) return mapa[orden.numero_orden];
+      return orden.comprobante_url ? 'Pagado' : 'No Pagado';
+    }
+
+    function getOrdenesVistas() {
+      try { return JSON.parse(localStorage.getItem(SEEN_ORDERS_KEY) || "[]"); } catch (e) { return []; }
+    }
+
+    function marcarOrdenComoVista(key) {
+      if (!key) return;
+      const vistas = getOrdenesVistas();
+      if (!vistas.includes(key)) {
+        vistas.push(key);
+        localStorage.setItem(SEEN_ORDERS_KEY, JSON.stringify(vistas.slice(-400)));
+      }
+    }
+
+    function iniciarMonitoreoOrdenes() {
+      if (adminPollingTimer) clearInterval(adminPollingTimer);
+      adminPollingTimer = setInterval(() => {
+        cargarOrdenes(true);
+        cargarEsimOrdenes(true);
+      }, 8000);
+    }
+
+    function login() {
+      desbloquearAudioYVoz();
+      const u = document.getElementById('userInput').value;
+      const p = document.getElementById('passwordInput').value;
+      if (u === 'admin' && p === 'admin') {
+        document.getElementById('loginBox').style.display = 'none';
+        document.getElementById('adminPanel').style.display = 'block';
+        localStorage.setItem('zg_admin_logged', 'true');
+        recargarTodo();
+        iniciarMonitoreoOrdenes();
+      } else {
+        alert("Usuario o contraseña incorrectos");
+      }
+    }
+
+    if (localStorage.getItem('zg_admin_logged') === 'true') {
+      document.getElementById('loginBox').style.display = 'none';
+      document.getElementById('adminPanel').style.display = 'block';
+      recargarTodo();
+      iniciarMonitoreoOrdenes();
+    }
+
+    function showTab(tabName) {
+      document.getElementById('tab-orders-btn').classList.toggle('active', tabName === 'orders');
+      document.getElementById('tab-esim-btn').classList.toggle('active', tabName === 'esim');
+      document.getElementById('tab-clients-btn').classList.toggle('active', tabName === 'clients');
+
+      document.getElementById('view-orders').classList.toggle('hidden', tabName !== 'orders');
+      document.getElementById('view-esim').classList.toggle('hidden', tabName !== 'esim');
+      document.getElementById('view-clients').classList.toggle('hidden', tabName !== 'clients');
+    }
+
+    async function recargarTodo() {
+      await Promise.all([cargarClientes(), cargarOrdenes(false), cargarEsimOrdenes(false)]);
+    }
+
+    function poblarFiltroClientes() {
+      const select = document.getElementById('filtroCliente');
+      const valorActual = select.value;
+      select.innerHTML = '<option value="">Todos los clientes</option>';
+      clientesCache.forEach(c => {
+        const opt = document.createElement('option');
+        opt.value = `${c.pin || ''}||${c.celular || ''}`;
+        opt.textContent = `${c.nombre || 'Sin nombre'} — ${c.celular || ''}`;
+        select.appendChild(opt);
+      });
+      if (valorActual) select.value = valorActual;
+    }
+
+    function aplicarFiltroCliente() { renderOrdenes(ordenesCache); }
+    function limpiarFiltroCliente() {
+      document.getElementById('filtroCliente').value = '';
+      document.getElementById('filtroPago').value = '';
+      document.getElementById('buscadorOrdenes').value = '';
+      renderOrdenes(ordenesCache);
+    }
+    function limpiarFiltrosEsim() {
+      document.getElementById('filtroPagoEsim').value = '';
+      document.getElementById('buscadorEsim').value = '';
+      renderEsimOrdenes(esimCache);
+    }
+
+    function evaluarNuevasEnCola(items, tipo) {
+      const vistas = getOrdenesVistas();
+      if (vistas.length === 0 && items.length > 0) {
+        items.forEach(o => marcarOrdenComoVista(`${tipo}:${o.numero_orden}`));
+        return;
+      }
+      let huboNueva = false;
+      items.forEach(o => {
+        const key = `${tipo}:${o.numero_orden}`;
+        const yaVista = vistas.includes(key);
+        const enCola = colaNuevasOrdenes.some(item => item._key === key);
+        if (!yaVista && !enCola && o.estado === 'Pendiente') {
+          colaNuevasOrdenes.push({ ...o, _tipo: tipo, _key: key });
+          huboNueva = true;
+        } else if (!yaVista) {
+          marcarOrdenComoVista(key);
+        }
+      });
+      if (huboNueva) {
+        const ultimaNueva = colaNuevasOrdenes[colaNuevasOrdenes.length - 1];
+        if (ultimaNueva) anunciarOrdenConCampanaYVoz(ultimaNueva, ultimaNueva._tipo);
+        mostrarSiguienteOrdenModal();
+      }
+    }
+
+    function mostrarSiguienteOrdenModal() {
+      const overlay = document.getElementById('newOrderOverlay');
+      if (colaNuevasOrdenes.length === 0) {
+        ordenActualModal = null;
+        overlay.classList.remove('open');
+        return;
+      }
+      ordenActualModal = colaNuevasOrdenes[0];
+      const o = ordenActualModal;
+      const esEsim = o._tipo === 'esim';
+      const estadoPagoActual = resolverEstadoPago(o);
+      const fecha = new Date(o.fecha + "Z").toLocaleString('es-CO', { timeZone: 'America/Bogota' });
+
+      document.getElementById('newOrderModalTitle').textContent = esEsim ? '📱 ¡Nueva Orden E-SIM Recibida!' : '🔔 ¡Nueva Orden Recibida!';
+      document.getElementById('modalPagoSelect').value = estadoPagoActual;
+
+      document.getElementById('newOrderDetails').innerHTML = `
+        <div class="order-detail-row"><span class="order-detail-label">Orden</span><span class="order-detail-value" style="color:#c81d4e;">${o.numero_orden}</span></div>
+        <div class="order-detail-row"><span class="order-detail-label">Cliente</span><span class="order-detail-value">${o.nombre || 'Sin nombre'}</span></div>
+        <div class="order-detail-row"><span class="order-detail-label">WhatsApp</span><span class="order-detail-value">${o.celular}</span></div>
+        <div class="order-detail-row"><span class="order-detail-label">Servicio</span><span class="order-detail-value">${esEsim ? `${o.operador} (${o.cantidad || 1} und)` : `No Registro ${o.operador}`}</span></div>
+        <div class="order-detail-row"><span class="order-detail-label">Valor</span><span class="order-detail-value" style="color:#059669;">${o.precio}</span></div>
+      `;
+      overlay.classList.add('open');
+    }
+
+    function cambiarPagoModal(nuevoPago) {
+      if (!ordenActualModal) return;
+      if (ordenActualModal._tipo === 'esim') cambiarPagoEsim(ordenActualModal.numero_orden, nuevoPago);
+      else cambiarPago(ordenActualModal.numero_orden, nuevoPago);
+    }
+
+    function cerrarAvisoNuevaOrden() {
+      if (ordenActualModal) {
+        marcarOrdenComoVista(ordenActualModal._key);
+        colaNuevasOrdenes.shift();
+      }
+      mostrarSiguienteOrdenModal();
+    }
+
+    async function procesarOrdenModal(nuevoEstado) {
+      if (!ordenActualModal) return;
+      const btnAccept = document.getElementById('btnModalAccept');
+      const btnReject = document.getElementById('btnModalReject');
+      btnAccept.disabled = true; btnReject.disabled = true;
+      try {
+        const o = ordenActualModal;
+        const pagoSeleccionado = document.getElementById('modalPagoSelect').value;
+        guardarEstadoPagoLocal(o.numero_orden, pagoSeleccionado);
+        if (o._tipo === 'esim') await cambiarEstadoEsim(o.numero_orden, nuevoEstado);
+        else await cambiarEstado(o.numero_orden, nuevoEstado);
+        marcarOrdenComoVista(o._key);
+        colaNuevasOrdenes.shift();
+        mostrarSiguienteOrdenModal();
+      } finally {
+        btnAccept.disabled = false; btnReject.disabled = false;
+      }
+    }
+
+    // --- RENDERIZADO TIPO EXCEL: ORDENES ---
     function renderOrdenes(lista) {
       const tbody = document.getElementById('tablaOrdenes');
       const filtroVal = document.getElementById('filtroCliente').value;
@@ -243,6 +618,7 @@
         filtradas = filtradas.filter(o =>
           String(o.numero_orden || '').toLowerCase().includes(textoBusqueda) ||
           String(o.celular || '').toLowerCase().includes(textoBusqueda) ||
+          String(o.imei || '').toLowerCase().includes(textoBusqueda) ||
           String(o.nombre || '').toLowerCase().includes(textoBusqueda)
         );
       }
@@ -258,12 +634,11 @@
         const fecha = new Date(o.fecha + "Z").toLocaleString('es-CO', { timeZone: 'America/Bogota' });
         const pagoActual = o._pago;
 
-        // Definir clases de color para las celdas
-        let clasePago = pagoActual === 'Pagado' ? 'bg-pagado' : 'bg-no-pagado';
-        let claseEstado = 'bg-pendiente';
-        if (o.estado === 'Exitoso') claseEstado = 'bg-exitoso';
-        if (o.estado === 'Rechazado') claseEstado = 'bg-rechazado';
-        if (o.estado === 'En Proceso') claseEstado = 'bg-proceso';
+        // Clase condicional para la fila según el estado
+        let rowClass = '';
+        if (o.estado === 'Exitoso') rowClass = 'fila-exito';
+        if (o.estado === 'Rechazado') rowClass = 'fila-rechazado';
+        if (rowClass) tr.className = rowClass;
 
         const selectOptions = `
           <option value="Pendiente" ${o.estado === 'Pendiente' ? 'selected' : ''}>Pendiente</option>
@@ -284,33 +659,22 @@
           <td>${o.operador}</td>
           <td style="font-family: monospace;">${o.imei}</td>
           <td><strong>${o.precio}</strong></td>
-          <td>${o.comprobante_url ? `<a href="${o.comprobante_url}" target="_blank" style="color: #2563eb;">Ver foto</a>` : 'Sin foto'}</td>
-          
-          <!-- CELDA PAGO: Fondo de color, Select transparente encima -->
-          <td style="padding: 0;">
-            <div class="cell-select-wrapper ${clasePago}">
-              ${pagoActual}
-              <select onchange="cambiarPago('${o.numero_orden}', this.value)">${pagoOptions}</select>
-            </div>
-          </td>
-
-          <!-- CELDA ESTADO: Fondo de color, Select transparente encima -->
-          <td style="padding: 0;">
-            <div class="cell-select-wrapper ${claseEstado}">
-              ${o.estado}
-              <select onchange="cambiarEstado('${o.numero_orden}', this.value)">${selectOptions}</select>
-            </div>
-          </td>
-
+          <td>${o.comprobante_url ? `<a href="${o.comprobante_url}" target="_blank" style="color: #2563eb; font-weight: 600;">Ver foto</a>` : '<span style="color:#94a3b8;">Sin foto</span>'}</td>
           <td>
-            <button type="button" class="btn-mini" onclick="eliminarOrden('${o.numero_orden}')">🗑️</button>
+            <select class="pago-select" onchange="cambiarPago('${o.numero_orden}', this.value)">${pagoOptions}</select>
+          </td>
+          <td>
+            <select class="estado-select" onchange="cambiarEstado('${o.numero_orden}', this.value)">${selectOptions}</select>
+          </td>
+          <td>
+            <button type="button" class="btn-mini btn-delete" onclick="eliminarOrden('${o.numero_orden}')">🗑️ Eliminar</button>
           </td>
         `;
         tbody.appendChild(tr);
       });
     }
 
-    // --- RENDERIZADO E-SIM (Aplicando misma lógica visual) ---
+    // --- RENDERIZADO TIPO EXCEL: E-SIM ---
     function renderEsimOrdenes(lista) {
       const tbody = document.getElementById('tablaEsimOrdenes');
       const filtroPagoVal = document.getElementById('filtroPagoEsim').value;
@@ -323,6 +687,8 @@
         filtradas = filtradas.filter(o =>
           String(o.numero_orden || '').toLowerCase().includes(textoBusqueda) ||
           String(o.celular || '').toLowerCase().includes(textoBusqueda) ||
+          String(o.operador || '').toLowerCase().includes(textoBusqueda) ||
+          String(o.numero_esim || '').toLowerCase().includes(textoBusqueda) ||
           String(o.nombre || '').toLowerCase().includes(textoBusqueda)
         );
       }
@@ -338,11 +704,11 @@
         const fecha = new Date(o.fecha + "Z").toLocaleString('es-CO', { timeZone: 'America/Bogota' });
         const pagoActual = o._pago;
 
-        let clasePago = pagoActual === 'Pagado' ? 'bg-pagado' : 'bg-no-pagado';
-        let claseEstado = 'bg-pendiente';
-        if (o.estado === 'Exitoso') claseEstado = 'bg-exitoso';
-        if (o.estado === 'Rechazado') claseEstado = 'bg-rechazado';
-        if (o.estado === 'En Proceso') claseEstado = 'bg-proceso';
+        // Clase condicional para la fila según el estado
+        let rowClass = '';
+        if (o.estado === 'Exitoso') rowClass = 'fila-exito';
+        if (o.estado === 'Rechazado') rowClass = 'fila-rechazado';
+        if (rowClass) tr.className = rowClass;
 
         const selectOptions = `
           <option value="Pendiente" ${o.estado === 'Pendiente' ? 'selected' : ''}>Pendiente</option>
@@ -355,6 +721,13 @@
           <option value="No Pagado" ${pagoActual === 'No Pagado' ? 'selected' : ''}>No Pagado</option>
         `;
 
+        const qrInfo = `
+          <div style="display:flex; flex-direction:column; gap:4px;">
+            <div><strong>N°:</strong> <span style="font-family:monospace;">${o.numero_esim || '—'}</span></div>
+            <div>${o.qr_url ? `<a href="${o.qr_url}" target="_blank" style="color:#059669; font-weight:700;">Ver QR</a>` : '<span style="color:#94a3b8;">Sin QR</span>'}</div>
+          </div>
+        `;
+
         tr.innerHTML = `
           <td><strong>${o.numero_orden}</strong></td>
           <td>${fecha}</td>
@@ -363,34 +736,299 @@
           <td>${o.operador}</td>
           <td>${o.cantidad || 1}</td>
           <td><strong>${o.precio}</strong></td>
-          <td>${o.comprobante_url ? `<a href="${o.comprobante_url}" target="_blank" style="color: #2563eb;">Ver foto</a>` : 'Sin foto'}</td>
-          
-          <td style="padding: 0;">
-            <div class="cell-select-wrapper ${clasePago}">
-              ${pagoActual}
-              <select onchange="cambiarPagoEsim('${o.numero_orden}', this.value)">${pagoOptions}</select>
-            </div>
-          </td>
-          <td style="padding: 0;">
-            <div class="cell-select-wrapper ${claseEstado}">
-              ${o.estado}
-              <select onchange="cambiarEstadoEsim('${o.numero_orden}', this.value)">${selectOptions}</select>
-            </div>
+          <td>${o.comprobante_url ? `<a href="${o.comprobante_url}" target="_blank" style="color: #2563eb; font-weight: 600;">Ver foto</a>` : '<span style="color:#94a3b8;">Sin foto</span>'}</td>
+          <td>
+            <select class="pago-select" onchange="cambiarPagoEsim('${o.numero_orden}', this.value)">${pagoOptions}</select>
           </td>
           <td>
-            <div style="font-size:11px;">N°: ${o.numero_esim || '—'}</div>
-            <div>${o.qr_url ? `<a href="${o.qr_url}" target="_blank" style="color:#059669;">Ver QR</a>` : 'Sin QR'}</div>
+            <select class="estado-select" onchange="cambiarEstadoEsim('${o.numero_orden}', this.value)">${selectOptions}</select>
           </td>
+          <td>${qrInfo}</td>
           <td>
-            <button type="button" class="btn-mini" onclick="eliminarEsimOrden('${o.numero_orden}')">🗑️</button>
+            <button type="button" class="btn-mini btn-delete" onclick="eliminarEsimOrden('${o.numero_orden}')">🗑️ Eliminar</button>
           </td>
         `;
         tbody.appendChild(tr);
       });
     }
 
-    // ... (El resto de funciones como login, cargarOrdenes, cambiarPago, etc. se mantienen IGUAL que en tu código anterior) ...
-    // (Asegúrate de incluir todas las funciones de la lógica de JS que ya tenías)
+    // --- FUNCIONES DE MODAL ---
+    function openDeliverEsimModal(numeroOrden) {
+      const orden = esimCache.find(o => o.numero_orden === numeroOrden);
+      if (!orden) return;
+      esimAEntregar = orden;
+      deliverQrBase64 = null;
+
+      document.getElementById('deliverEsimTitle').textContent = `📲 Entregar ${orden.numero_orden}`;
+      document.getElementById('deliverEsimNumber').value = orden.numero_esim || '';
+      document.getElementById('deliverEsimQrUrl').value = orden.qr_url || '';
+      document.getElementById('deliverEsimQrFile').value = '';
+      document.getElementById('deliverEsimStatus').value = 'Exitoso';
+
+      const prev = document.getElementById('deliverQrPreview');
+      if (orden.qr_url) {
+        prev.src = orden.qr_url;
+        prev.style.display = 'block';
+      } else {
+        prev.style.display = 'none';
+      }
+
+      document.getElementById('deliverEsimOverlay').classList.add('open');
+    }
+
+    function closeDeliverEsimModal() {
+      document.getElementById('deliverEsimOverlay').classList.remove('open');
+      esimAEntregar = null;
+      deliverQrBase64 = null;
+    }
+
+    function previewDeliverQr(input) {
+      const file = input.files && input.files[0];
+      const prev = document.getElementById('deliverQrPreview');
+      if (!file) {
+        deliverQrBase64 = null;
+        return;
+      }
+      const reader = new FileReader();
+      reader.onload = function (e) {
+        deliverQrBase64 = e.target.result;
+        prev.src = deliverQrBase64;
+        prev.style.display = 'block';
+      };
+      reader.readAsDataURL(file);
+    }
+
+    async function guardarEntregaEsim() {
+      if (!esimAEntregar) return;
+      const btn = document.getElementById('btnSaveDeliverEsim');
+      const orig = btn.textContent;
+      btn.textContent = "Guardando...";
+      btn.disabled = true;
+
+      try {
+        const res = await fetch(WORKER_URL, {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({
+            action: 'deliver_esim',
+            numero_orden: esimAEntregar.numero_orden,
+            numero_esim: document.getElementById('deliverEsimNumber').value.trim(),
+            qr_url: document.getElementById('deliverEsimQrUrl').value.trim(),
+            qrBase64: deliverQrBase64,
+            estado: document.getElementById('deliverEsimStatus').value,
+            admin_token: 'admin'
+          })
+        });
+        const data = await res.json();
+        if (data.success) {
+          closeDeliverEsimModal();
+          await cargarEsimOrdenes(true);
+          alert("E-SIM entregada correctamente.");
+        } else {
+          alert("Error: " + (data.error || "No se pudo guardar"));
+        }
+      } catch (err) {
+        alert("Error de conexión al guardar la E-SIM.");
+      } finally {
+        btn.textContent = orig;
+        btn.disabled = false;
+      }
+    }
+
+    // --- ACCIONES ---
+    async function cambiarPago(numeroOrden, nuevoPago) {
+      guardarEstadoPagoLocal(numeroOrden, nuevoPago);
+      ordenesCache = ordenesCache.map(o => o.numero_orden === numeroOrden ? { ...o, pago: nuevoPago } : o);
+      renderOrdenes(ordenesCache);
+      try {
+        await fetch(WORKER_URL, {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({ action: 'update_payment', numero_orden: numeroOrden, pago: nuevoPago, admin_token: 'admin' })
+        });
+      } catch (err) {}
+    }
+
+    async function cambiarPagoEsim(numeroOrden, nuevoPago) {
+      guardarEstadoPagoLocal(numeroOrden, nuevoPago);
+      esimCache = esimCache.map(o => o.numero_orden === numeroOrden ? { ...o, pago: nuevoPago } : o);
+      renderEsimOrdenes(esimCache);
+      try {
+        await fetch(WORKER_URL, {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({ action: 'update_esim_payment', numero_orden: numeroOrden, pago: nuevoPago, admin_token: 'admin' })
+        });
+      } catch (err) {}
+    }
+
+    async function eliminarOrden(numeroOrden) {
+      if (!confirm(`¿Seguro que deseas eliminar la orden ${numeroOrden}?`)) return;
+      ordenesCache = ordenesCache.filter(o => o.numero_orden !== numeroOrden);
+      colaNuevasOrdenes = colaNuevasOrdenes.filter(o => !(o._tipo === 'imei' && o.numero_orden === numeroOrden));
+      renderOrdenes(ordenesCache);
+      try {
+        const res = await fetch(WORKER_URL, {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({ action: 'delete_order', numero_orden: numeroOrden, admin_token: 'admin' })
+        });
+        const data = await res.json();
+        if (!data.success) {
+          alert("No se pudo eliminar: " + (data.error || "Error desconocido"));
+          await cargarOrdenes(true);
+        }
+      } catch (err) {
+        alert("Error de conexión al eliminar.");
+        await cargarOrdenes(true);
+      }
+    }
+
+    async function eliminarEsimOrden(numeroOrden) {
+      if (!confirm(`¿Seguro que deseas eliminar la orden E-SIM ${numeroOrden}?`)) return;
+      esimCache = esimCache.filter(o => o.numero_orden !== numeroOrden);
+      colaNuevasOrdenes = colaNuevasOrdenes.filter(o => !(o._tipo === 'esim' && o.numero_orden === numeroOrden));
+      renderEsimOrdenes(esimCache);
+      try {
+        const res = await fetch(WORKER_URL, {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({ action: 'delete_esim_order', numero_orden: numeroOrden, admin_token: 'admin' })
+        });
+        const data = await res.json();
+        if (!data.success) {
+          alert("No se pudo eliminar: " + (data.error || "Error desconocido"));
+          await cargarEsimOrdenes(true);
+        }
+      } catch (err) {
+        alert("Error de conexión al eliminar.");
+        await cargarEsimOrdenes(true);
+      }
+    }
+
+    async function eliminarCliente(id, nombre) {
+      if (!confirm(`¿Seguro que deseas eliminar al cliente "${nombre || id}"?`)) return;
+      clientesCache = clientesCache.filter(c => String(c.id) !== String(id));
+      poblarFiltroClientes();
+      renderClientes(clientesCache);
+      try {
+        const res = await fetch(WORKER_URL, {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({ action: 'delete_client', id: id, admin_token: 'admin' })
+        });
+        const data = await res.json();
+        if (!data.success) {
+          alert("No se pudo eliminar: " + (data.error || "Error desconocido"));
+          await cargarClientes();
+        }
+      } catch (err) {
+        alert("Error de conexión al eliminar.");
+        await cargarClientes();
+      }
+    }
+
+    // --- CARGAR DATOS ---
+    async function cargarOrdenes(silencioso = false) {
+      const tbody = document.getElementById('tablaOrdenes');
+      if (!silencioso && ordenesCache.length === 0) {
+        tbody.innerHTML = '<tr><td colspan="11" style="text-align: center; padding: 20px;">Cargando...</td></tr>';
+      }
+      try {
+        const res = await fetch(WORKER_URL + "?action=get_orders");
+        const data = await res.json();
+        if (data.success) {
+          ordenesCache = data.ordenes || [];
+          renderOrdenes(ordenesCache);
+          evaluarNuevasEnCola(ordenesCache, 'imei');
+        } else throw new Error(data.error);
+      } catch (err) {
+        if (!silencioso) tbody.innerHTML = `<tr><td colspan="11" style="text-align: center; color: red; padding: 20px;">Error: ${err.message}</td></tr>`;
+      }
+    }
+
+    async function cargarEsimOrdenes(silencioso = false) {
+      const tbody = document.getElementById('tablaEsimOrdenes');
+      if (!silencioso && esimCache.length === 0) {
+        tbody.innerHTML = '<tr><td colspan="12" style="text-align: center; padding: 20px;">Cargando...</td></tr>';
+      }
+      try {
+        const res = await fetch(WORKER_URL + "?action=get_esim_orders");
+        const data = await res.json();
+        if (data.success) {
+          esimCache = data.ordenes || [];
+          renderEsimOrdenes(esimCache);
+          evaluarNuevasEnCola(esimCache, 'esim');
+        }
+      } catch (err) {}
+    }
+
+    function renderClientes(lista) {
+      const tbody = document.getElementById('tablaClientes');
+      tbody.innerHTML = '';
+      if (!lista || lista.length === 0) {
+        tbody.innerHTML = '<tr><td colspan="5" style="text-align: center; padding: 20px;">No hay clientes registrados.</td></tr>';
+        return;
+      }
+      lista.forEach(c => {
+        const tr = document.createElement('tr');
+        const nombreEscapado = String(c.nombre || '').replace(/'/g, "\\'");
+        tr.innerHTML = `
+          <td>${c.id}</td>
+          <td><strong>${c.nombre || 'Sin nombre'}</strong></td>
+          <td>${c.celular}</td>
+          <td style="font-family: monospace; font-size: 14px; font-weight: bold;">${c.pin}</td>
+          <td><button type="button" class="btn-mini btn-delete" onclick="eliminarCliente('${c.id}', '${nombreEscapado}')">🗑️ Eliminar</button></td>
+        `;
+        tbody.appendChild(tr);
+      });
+    }
+
+    async function cargarClientes() {
+      const tbody = document.getElementById('tablaClientes');
+      tbody.innerHTML = '<tr><td colspan="5" style="text-align: center; padding: 20px;">Cargando...</td></tr>';
+      try {
+        const res = await fetch(WORKER_URL + "?action=get_clients");
+        const data = await res.json();
+        if (data.success) {
+          clientesCache = data.clientes || [];
+          poblarFiltroClientes();
+          renderClientes(clientesCache);
+        } else throw new Error(data.error);
+      } catch (err) {
+        tbody.innerHTML = `<tr><td colspan="5" style="text-align: center; color: red; padding: 20px;">Error: ${err.message}</td></tr>`;
+      }
+    }
+
+    async function cambiarEstado(numeroOrden, nuevoEstado) {
+      try {
+        const res = await fetch(WORKER_URL, {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({ action: 'update_status', numero_orden: numeroOrden, estado: nuevoEstado, admin_token: 'admin' })
+        });
+        const data = await res.json();
+        if (data.success) {
+          marcarOrdenComoVista(`imei:${numeroOrden}`);
+          await cargarOrdenes(true);
+        } else alert("Error al actualizar: " + data.error);
+      } catch (err) { alert("Error de conexión al actualizar."); }
+    }
+
+    async function cambiarEstadoEsim(numeroOrden, nuevoEstado) {
+      try {
+        const res = await fetch(WORKER_URL, {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({ action: 'update_esim_status', numero_orden: numeroOrden, estado: nuevoEstado, admin_token: 'admin' })
+        });
+        const data = await res.json();
+        if (data.success) {
+          marcarOrdenComoVista(`esim:${numeroOrden}`);
+          await cargarEsimOrdenes(true);
+        } else alert("Error al actualizar: " + data.error);
+      } catch (err) { alert("Error de conexión al actualizar."); }
+    }
   </script>
 </body>
 </html>
