@@ -5,7 +5,6 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>Panel de Administración — Zona GSM</title>
   <style>
-    /* Estilos generales */
     * { box-sizing: border-box; font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif; }
     body { background: #e2e8f0; padding: 20px; color: #111827; margin: 0; }
 
@@ -14,7 +13,7 @@
     .login-box input { width: 100%; padding: 10px; margin-bottom: 15px; border: 1px solid #cbd5e1; border-radius: 6px; font-size: 14px; outline: none; }
     .login-box input:focus { border-color: #c81d4e; }
     .login-box button { width: 100%; padding: 11px; background: #c81d4e; color: white; border: none; border-radius: 6px; font-size: 15px; font-weight: bold; cursor: pointer; }
-    
+
     /* Estilos del Panel */
     .panel { display: none; max-width: 1400px; margin: 0 auto; }
     .header { display: flex; justify-content: space-between; align-items: center; margin-bottom: 15px; flex-wrap: wrap; gap: 10px; }
@@ -24,7 +23,7 @@
     .live-dot { width: 6px; height: 6px; border-radius: 50%; background: #10b981; animation: pulseLive 1.6s infinite; }
     @keyframes pulseLive { 0%, 100% { opacity: 1; transform: scale(1); } 50% { opacity: 0.4; transform: scale(1.2); } }
     .btn-refresh { padding: 8px 14px; background: #0f172a; color: white; border: none; border-radius: 6px; cursor: pointer; font-weight: bold; font-size: 12px; }
-    
+
     /* Pestañas */
     .tabs { display: flex; gap: 5px; margin-bottom: 10px; border-bottom: 2px solid #cbd5e1; flex-wrap: wrap; }
     .tab-btn { padding: 8px 16px; background: #f1f5f9; border: 1px solid #cbd5e1; border-bottom: none; border-radius: 6px 6px 0 0; font-size: 13px; font-weight: 700; color: #475569; cursor: pointer; }
@@ -42,83 +41,109 @@
     /* TABLA ESTILO EXCEL AVANZADO */
     .table-container { background: white; border: 1px solid #cbd5e1; overflow-x: auto; }
     table { width: 100%; border-collapse: collapse; min-width: 1200px; font-size: 12px; }
-    
-    /* Encabezados Azul Oscuro */
-    th { 
-      background: #1e3a5f; 
-      color: #ffffff; 
-      font-weight: 700; 
-      font-size: 11px; 
-      padding: 6px 8px; 
-      text-align: left; 
-      border: 1px solid #0f172a; 
-      white-space: nowrap; 
+
+    th {
+      background: #1e3a5f;
+      color: #ffffff;
+      font-weight: 700;
+      font-size: 11px;
+      padding: 6px 8px;
+      text-align: left;
+      border: 1px solid #0f172a;
+      white-space: nowrap;
       position: sticky;
       top: 0;
       text-transform: uppercase;
     }
 
-    /* Celdas: Texto más oscuro y grueso, bordes más marcados */
-    td { 
-      padding: 4px 8px; 
-      border: 1px solid #94a3b8; /* Gris más oscuro para las líneas */
-      color: #0f172a; /* Texto casi negro */
-      font-weight: 600; /* Un poco más de grosor general */
-      vertical-align: middle; 
-      height: 28px; 
+    td {
+      padding: 4px 8px;
+      border: 1px solid #94a3b8;
+      color: #0f172a;
+      font-weight: 600;
+      vertical-align: middle;
+      height: 28px;
     }
 
-    /* FILAS ALTERNAS (Blanco y Gris) */
     tbody tr:nth-child(even) { background-color: #f8fafc; }
     tbody tr:nth-child(odd) { background-color: #ffffff; }
     tbody tr:hover { background-color: #e2e8f0; }
 
-    /* COLORES CONDICIONALES POR ESTADO (Fondo de toda la fila) */
+    /* COLORES CONDICIONALES POR ESTADO */
     tr.fila-exito { background-color: #dcfce7 !important; }
     tr.fila-exito:hover { background-color: #bbf7d0 !important; }
-    
+
     tr.fila-rechazado { background-color: #fee2e2 !important; }
     tr.fila-rechazado:hover { background-color: #fecaca !important; }
 
-    tr.fila-proceso { background-color: #fef08a !important; } /* Fila amarilla */
+    tr.fila-proceso { background-color: #fef08a !important; }
     tr.fila-proceso:hover { background-color: #fde047 !important; }
 
-    /* ESTILOS DE BOTONES TIPO ACCIÓN (Pago, Estado) */
-    .cell-btn { 
-      padding: 4px 8px; 
-      border-radius: 3px; 
-      font-size: 11px; 
-      font-weight: 700; 
-      cursor: pointer; 
-      text-align: center; 
-      border: 1px solid transparent; 
-      width: 100%; 
-      display: block;
+    /* SELECTORES INTEGRADOS CON COLOR */
+    .cell-select-wrapper {
+      position: relative;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      width: 100%;
+      height: 100%;
+      min-height: 28px;
+      padding: 3px 6px;
     }
-    
-    /* Colores de Pago */
-    .btn-pago-si { background-color: #00b050; color: white; border-color: #00903c; }
-    .btn-pago-si:hover { background-color: #00903c; }
-    
-    .btn-pago-no { background-color: #ff0000; color: white; border-color: #cc0000; }
-    .btn-pago-no:hover { background-color: #cc0000; }
+    .cell-select-wrapper select {
+      width: 100%;
+      min-width: 105px;
+      padding: 4px 6px;
+      border-radius: 4px;
+      font-size: 11px;
+      font-weight: 800;
+      cursor: pointer;
+      outline: none;
+      border: 1px solid rgba(15, 23, 42, 0.25);
+    }
+    .bg-pagado select { background-color: #00b050; color: #ffffff; border-color: #008a3e; }
+    .bg-no-pagado select { background-color: #dc2626; color: #ffffff; border-color: #991b1b; }
 
-    /* Colores de Estado */
-    .btn-estado-exitoso { background-color: #00b050; color: white; border-color: #00903c; }
-    .btn-estado-exitoso:hover { background-color: #00903c; }
-    
-    .btn-estado-rechazado { background-color: #ff0000; color: white; border-color: #cc0000; }
-    .btn-estado-rechazado:hover { background-color: #cc0000; }
-    
-    .btn-estado-proceso { background-color: #fef08a; color: #854d0e; border-color: #ca8a04; }
-    .btn-estado-proceso:hover { background-color: #fde047; }
-    
-    .btn-estado-pendiente { background-color: #e2e8f0; color: #475569; border-color: #cbd5e1; }
-    .btn-estado-pendiente:hover { background-color: #cbd5e1; }
+    .bg-exitoso select { background-color: #00b050; color: #ffffff; border-color: #008a3e; }
+    .bg-rechazado select { background-color: #dc2626; color: #ffffff; border-color: #991b1b; }
+    .bg-proceso select { background-color: #facc15; color: #422006; border-color: #ca8a04; }
+    .bg-pendiente select { background-color: #e2e8f0; color: #334155; border-color: #94a3b8; }
 
-    /* Botón de eliminar mini */
-    .btn-mini { padding: 4px 8px; border-radius: 3px; font-size: 11px; font-weight: 700; cursor: pointer; text-align: center; border: 1px solid #fca5a5; background: #fef2f2; color: #dc2626; width: 100%; }
-    .btn-mini:hover { background: #fee2e2; }
+    .modal-pago-select {
+      width: 100%;
+      padding: 8px 10px;
+      border-radius: 6px;
+      border: 1px solid #cbd5e1;
+      font-size: 13px;
+      font-weight: 700;
+      background: #f8fafc;
+      color: #0f172a;
+      outline: none;
+    }
+
+    /* Botones de acción en fila */
+    .row-actions-group { display: flex; align-items: center; gap: 5px; }
+    .btn-mini {
+      padding: 4px 8px;
+      border-radius: 4px;
+      font-size: 11px;
+      font-weight: 700;
+      cursor: pointer;
+      text-align: center;
+      white-space: nowrap;
+    }
+    .btn-deliver {
+      border: 1px solid #9d174d;
+      background: #c81d4e;
+      color: #ffffff;
+    }
+    .btn-deliver:hover { background: #a61840; }
+    .btn-delete {
+      border: 1px solid #fca5a5;
+      background: #fef2f2;
+      color: #dc2626;
+    }
+    .btn-delete:hover { background: #dc2626; color: #ffffff; }
 
     /* Modales */
     .new-order-overlay { position: fixed; inset: 0; background: rgba(15, 23, 42, 0.65); backdrop-filter: blur(3px); display: none; align-items: center; justify-content: center; padding: 20px; z-index: 9999; }
@@ -132,7 +157,7 @@
     .order-detail-row:last-child { border-bottom: none; padding-bottom: 0; }
     .order-detail-label { color: #64748b; font-weight: 600; font-size: 11px; text-transform: uppercase; }
     .order-detail-value { color: #0f172a; font-weight: 700; text-align: right; }
-    .new-order-actions { display: grid; grid-template-columns: 1fr 1fr; gap: 8px; margin-top: 15px;}
+    .new-order-actions { display: grid; grid-template-columns: 1fr 1fr; gap: 8px; margin-top: 15px; }
     .btn-modal-accept { grid-column: 1 / -1; padding: 10px; border: none; border-radius: 6px; background: #0284c7; color: #ffffff; font-size: 14px; font-weight: 700; cursor: pointer; }
     .btn-modal-reject { padding: 10px; border: none; border-radius: 6px; background: #fee2e2; color: #dc2626; font-size: 13px; font-weight: 700; cursor: pointer; }
     .btn-modal-dismiss { padding: 10px; border: 1px solid #cbd5e1; border-radius: 6px; background: #ffffff; color: #334155; font-size: 13px; font-weight: 600; cursor: pointer; }
@@ -190,7 +215,7 @@
         </div>
         <button type="button" class="btn-clear" onclick="limpiarFiltroCliente()">Limpiar</button>
       </div>
-      
+
       <div class="table-container">
         <table>
           <thead>
@@ -230,7 +255,7 @@
         </div>
         <button type="button" class="btn-clear" onclick="limpiarFiltrosEsim()">Limpiar</button>
       </div>
-      
+
       <div class="table-container">
         <table>
           <thead>
@@ -287,7 +312,7 @@
         <div id="newOrderDetails" class="order-detail-grid"></div>
         <div class="field-group">
           <label>Estado del pago:</label>
-          <select id="modalPagoSelect" class="pago-select" onchange="cambiarPagoModal(this.value)">
+          <select id="modalPagoSelect" class="modal-pago-select" onchange="cambiarPagoModal(this.value)">
             <option value="No Pagado">No Pagado</option>
             <option value="Pagado">Pagado</option>
           </select>
@@ -446,7 +471,7 @@
           gain.gain.setValueAtTime(0.24, ahora + idx * 0.14);
           gain.gain.exponentialRampToValueAtTime(0.001, ahora + idx * 0.14 + 0.18);
           osc.connect(gain);
-          gain.connect(ctx.destination);
+          osc.connect(ctx.destination);
           osc.start(ahora + idx * 0.14);
           osc.stop(ahora + idx * 0.14 + 0.19);
         });
@@ -593,7 +618,6 @@
       const o = ordenActualModal;
       const esEsim = o._tipo === 'esim';
       const estadoPagoActual = resolverEstadoPago(o);
-      const fecha = new Date(o.fecha + "Z").toLocaleString('es-CO', { timeZone: 'America/Bogota' });
 
       document.getElementById('newOrderModalTitle').textContent = esEsim ? '📱 ¡Nueva Orden E-SIM Recibida!' : '🔔 ¡Nueva Orden Recibida!';
       document.getElementById('modalPagoSelect').value = estadoPagoActual;
@@ -641,6 +665,13 @@
       }
     }
 
+    function obtenerClaseEstadoSelect(estado) {
+      if (estado === 'Exitoso') return 'bg-exitoso';
+      if (estado === 'Rechazado') return 'bg-rechazado';
+      if (estado === 'En Proceso') return 'bg-proceso';
+      return 'bg-pendiente';
+    }
+
     // --- RENDERIZADO TIPO EXCEL: ORDENES ---
     function renderOrdenes(lista) {
       const tbody = document.getElementById('tablaOrdenes');
@@ -674,19 +705,19 @@
         const tr = document.createElement('tr');
         const fecha = new Date(o.fecha + "Z").toLocaleString('es-CO', { timeZone: 'America/Bogota' });
         const pagoActual = o._pago;
+        const estadoActual = o.estado || 'Pendiente';
 
-        // Clase condicional para la fila según el estado
         let rowClass = '';
-        if (o.estado === 'Exitoso') rowClass = 'fila-exito';
-        if (o.estado === 'Rechazado') rowClass = 'fila-rechazado';
-        if (o.estado === 'En Proceso') rowClass = 'fila-proceso';
+        if (estadoActual === 'Exitoso') rowClass = 'fila-exito';
+        if (estadoActual === 'Rechazado') rowClass = 'fila-rechazado';
+        if (estadoActual === 'En Proceso') rowClass = 'fila-proceso';
         if (rowClass) tr.className = rowClass;
 
         const selectOptions = `
-          <option value="Pendiente" ${o.estado === 'Pendiente' ? 'selected' : ''}>Pendiente</option>
-          <option value="En Proceso" ${o.estado === 'En Proceso' ? 'selected' : ''}>En Proceso</option>
-          <option value="Exitoso" ${o.estado === 'Exitoso' ? 'selected' : ''}>Exitoso</option>
-          <option value="Rechazado" ${o.estado === 'Rechazado' ? 'selected' : ''}>Rechazado</option>
+          <option value="Pendiente" ${estadoActual === 'Pendiente' ? 'selected' : ''}>Pendiente</option>
+          <option value="En Proceso" ${estadoActual === 'En Proceso' ? 'selected' : ''}>En Proceso</option>
+          <option value="Exitoso" ${estadoActual === 'Exitoso' ? 'selected' : ''}>Exitoso</option>
+          <option value="Rechazado" ${estadoActual === 'Rechazado' ? 'selected' : ''}>Rechazado</option>
         `;
         const pagoOptions = `
           <option value="Pagado" ${pagoActual === 'Pagado' ? 'selected' : ''}>Pagado</option>
@@ -701,21 +732,21 @@
           <td>${o.operador}</td>
           <td style="font-family: monospace;">${o.imei}</td>
           <td><strong>${o.precio}</strong></td>
-          <td>${o.comprobante_url ? `<a href="${o.comprobante_url}" target="_blank" style="color: #2563eb; font-weight: 600;">Ver foto</a>` : '<span style="color:#94a3b8;">Sin foto</span>'}</td>
+          <td>${o.comprobante_url ? `<a href="${o.comprobante_url}" target="_blank" style="color: #2563eb; font-weight: 700;">Ver foto</a>` : '<span style="color:#94a3b8;">Sin foto</span>'}</td>
           <td style="padding: 0;">
             <div class="cell-select-wrapper ${pagoActual === 'Pagado' ? 'bg-pagado' : 'bg-no-pagado'}">
-              ${pagoActual}
               <select class="pago-select" onchange="cambiarPago('${o.numero_orden}', this.value)">${pagoOptions}</select>
             </div>
           </td>
           <td style="padding: 0;">
-            <div class="cell-select-wrapper ${o.estado === 'Exitoso' ? 'bg-exitoso' : o.estado === 'Rechazado' ? 'bg-rechazado' : o.estado === 'En Proceso' ? 'bg-proceso' : 'bg-pendiente'}">
-              ${o.estado}
+            <div class="cell-select-wrapper ${obtenerClaseEstadoSelect(estadoActual)}">
               <select class="estado-select" onchange="cambiarEstado('${o.numero_orden}', this.value)">${selectOptions}</select>
             </div>
           </td>
           <td>
-            <button type="button" class="btn-mini btn-delete" onclick="eliminarOrden('${o.numero_orden}')">🗑️ Eliminar</button>
+            <div class="row-actions-group">
+              <button type="button" class="btn-mini btn-delete" onclick="eliminarOrden('${o.numero_orden}')">🗑️ Eliminar</button>
+            </div>
           </td>
         `;
         tbody.appendChild(tr);
@@ -751,19 +782,19 @@
         const tr = document.createElement('tr');
         const fecha = new Date(o.fecha + "Z").toLocaleString('es-CO', { timeZone: 'America/Bogota' });
         const pagoActual = o._pago;
+        const estadoActual = o.estado || 'Pendiente';
 
-        // Clase condicional para la fila según el estado
         let rowClass = '';
-        if (o.estado === 'Exitoso') rowClass = 'fila-exito';
-        if (o.estado === 'Rechazado') rowClass = 'fila-rechazado';
-        if (o.estado === 'En Proceso') rowClass = 'fila-proceso';
+        if (estadoActual === 'Exitoso') rowClass = 'fila-exito';
+        if (estadoActual === 'Rechazado') rowClass = 'fila-rechazado';
+        if (estadoActual === 'En Proceso') rowClass = 'fila-proceso';
         if (rowClass) tr.className = rowClass;
 
         const selectOptions = `
-          <option value="Pendiente" ${o.estado === 'Pendiente' ? 'selected' : ''}>Pendiente</option>
-          <option value="En Proceso" ${o.estado === 'En Proceso' ? 'selected' : ''}>En Proceso</option>
-          <option value="Exitoso" ${o.estado === 'Exitoso' ? 'selected' : ''}>Exitoso</option>
-          <option value="Rechazado" ${o.estado === 'Rechazado' ? 'selected' : ''}>Rechazado</option>
+          <option value="Pendiente" ${estadoActual === 'Pendiente' ? 'selected' : ''}>Pendiente</option>
+          <option value="En Proceso" ${estadoActual === 'En Proceso' ? 'selected' : ''}>En Proceso</option>
+          <option value="Exitoso" ${estadoActual === 'Exitoso' ? 'selected' : ''}>Exitoso</option>
+          <option value="Rechazado" ${estadoActual === 'Rechazado' ? 'selected' : ''}>Rechazado</option>
         `;
         const pagoOptions = `
           <option value="Pagado" ${pagoActual === 'Pagado' ? 'selected' : ''}>Pagado</option>
@@ -771,9 +802,9 @@
         `;
 
         const qrInfo = `
-          <div style="display:flex; flex-direction:column; gap:4px;">
+          <div style="display:flex; flex-direction:column; gap:3px;">
             <div><strong>N°:</strong> <span style="font-family:monospace;">${o.numero_esim || '—'}</span></div>
-            <div>${o.qr_url ? `<a href="${o.qr_url}" target="_blank" style="color:#059669; font-weight:700;">Ver QR</a>` : '<span style="color:#94a3b8;">Sin QR</span>'}</div>
+            <div>${o.qr_url ? `<a href="${o.qr_url}" target="_blank" style="color:#059669; font-weight:700;">Ver QR</a>` : '<span style="color:#64748b;">Sin QR</span>'}</div>
           </div>
         `;
 
@@ -785,22 +816,23 @@
           <td>${o.operador}</td>
           <td>${o.cantidad || 1}</td>
           <td><strong>${o.precio}</strong></td>
-          <td>${o.comprobante_url ? `<a href="${o.comprobante_url}" target="_blank" style="color: #2563eb; font-weight: 600;">Ver foto</a>` : '<span style="color:#94a3b8;">Sin foto</span>'}</td>
+          <td>${o.comprobante_url ? `<a href="${o.comprobante_url}" target="_blank" style="color: #2563eb; font-weight: 700;">Ver foto</a>` : '<span style="color:#94a3b8;">Sin foto</span>'}</td>
           <td style="padding: 0;">
             <div class="cell-select-wrapper ${pagoActual === 'Pagado' ? 'bg-pagado' : 'bg-no-pagado'}">
-              ${pagoActual}
               <select class="pago-select" onchange="cambiarPagoEsim('${o.numero_orden}', this.value)">${pagoOptions}</select>
             </div>
           </td>
           <td style="padding: 0;">
-            <div class="cell-select-wrapper ${o.estado === 'Exitoso' ? 'bg-exitoso' : o.estado === 'Rechazado' ? 'bg-rechazado' : o.estado === 'En Proceso' ? 'bg-proceso' : 'bg-pendiente'}">
-              ${o.estado}
+            <div class="cell-select-wrapper ${obtenerClaseEstadoSelect(estadoActual)}">
               <select class="estado-select" onchange="cambiarEstadoEsim('${o.numero_orden}', this.value)">${selectOptions}</select>
             </div>
           </td>
           <td>${qrInfo}</td>
           <td>
-            <button type="button" class="btn-mini btn-delete" onclick="eliminarEsimOrden('${o.numero_orden}')">🗑️ Eliminar</button>
+            <div class="row-actions-group">
+              <button type="button" class="btn-mini btn-deliver" onclick="openDeliverEsimModal('${o.numero_orden}')">📲 Entregar</button>
+              <button type="button" class="btn-mini btn-delete" onclick="eliminarEsimOrden('${o.numero_orden}')">🗑️ Eliminar</button>
+            </div>
           </td>
         `;
         tbody.appendChild(tr);
