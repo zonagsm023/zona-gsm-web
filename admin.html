@@ -59,6 +59,8 @@
     select.estado-select:hover, select.pago-select:hover { background: #e2e8f0; }
     .btn-deliver-esim { padding: 7px 11px; border-radius: 8px; border: none; background: #c81d4e; color: #ffffff; font-size: 12px; font-weight: 800; cursor: pointer; white-space: nowrap; }
     .btn-deliver-esim:hover { background: #a61840; }
+    .btn-delete-row { padding: 6px 10px; border-radius: 8px; border: 1px solid #fecaca; background: #fef2f2; color: #dc2626; font-size: 12px; font-weight: 800; cursor: pointer; white-space: nowrap; transition: all 0.15s ease; }
+    .btn-delete-row:hover { background: #dc2626; color: #ffffff; border-color: #dc2626; }
 
     /* MODAL CENTRAL DE NUEVA ORDEN */
     .new-order-overlay { position: fixed; inset: 0; background: rgba(15, 23, 42, 0.65); backdrop-filter: blur(5px); -webkit-backdrop-filter: blur(5px); display: none; align-items: center; justify-content: center; padding: 20px; z-index: 9999; }
@@ -216,10 +218,11 @@
             <th>Nombre / Negocio</th>
             <th>Número de WhatsApp</th>
             <th>PIN</th>
+            <th>Acciones</th>
           </tr>
         </thead>
         <tbody id="tablaClientes">
-          <tr><td colspan="4" style="text-align: center; padding: 30px;">Cargando datos...</td></tr>
+          <tr><td colspan="5" style="text-align: center; padding: 30px;">Cargando datos...</td></tr>
         </tbody>
       </table>
     </div>
@@ -665,9 +668,12 @@
           </td>
           <td><span class="badge badge-${estadoClass}">${o.estado}</span></td>
           <td>
-            <select class="estado-select" onchange="cambiarEstado('${o.numero_orden}', this.value)">
-              ${selectOptions}
-            </select>
+            <div style="display:flex; flex-direction:column; gap:6px; align-items:flex-start;">
+              <select class="estado-select" onchange="cambiarEstado('${o.numero_orden}', this.value)">
+                ${selectOptions}
+              </select>
+              <button type="button" class="btn-delete-row" onclick="eliminarOrden('${o.numero_orden}')">🗑️ Eliminar</button>
+            </div>
           </td>
         `;
         tbody.appendChild(tr);
@@ -740,7 +746,7 @@
           <td><span class="badge badge-${estadoClass}">${o.estado || 'Pendiente'}</span></td>
           <td>${qrInfo}</td>
           <td>
-            <div style="display:flex; flex-direction:column; gap:6px;">
+            <div style="display:flex; flex-direction:column; gap:6px; align-items:flex-start;">
               <button type="button" class="btn-deliver-esim" onclick="openDeliverEsimModal('${o.numero_orden}')">📲 Entregar QR</button>
               <select class="estado-select" onchange="cambiarEstadoEsim('${o.numero_orden}', this.value)">
                 <option value="Pendiente" ${o.estado === 'Pendiente' ? 'selected' : ''}>Pendiente</option>
@@ -748,6 +754,7 @@
                 <option value="Exitoso" ${o.estado === 'Exitoso' ? 'selected' : ''}>Exitoso</option>
                 <option value="Rechazado" ${o.estado === 'Rechazado' ? 'selected' : ''}>Rechazado</option>
               </select>
+              <button type="button" class="btn-delete-row" onclick="eliminarEsimOrden('${o.numero_orden}')">🗑️ Eliminar</button>
             </div>
           </td>
         `;
@@ -879,6 +886,88 @@
       } catch (err) {}
     }
 
+    // --- ELIMINAR REGISTROS ---
+    async function eliminarOrden(numeroOrden) {
+      if (!confirm(`¿Seguro que deseas eliminar la orden ${numeroOrden}?`)) return;
+      ordenesCache = ordenesCache.filter(o => o.numero_orden !== numeroOrden);
+      colaNuevasOrdenes = colaNuevasOrdenes.filter(o => !(o._tipo === 'imei' && o.numero_orden === numeroOrden));
+      renderOrdenes(ordenesCache);
+
+      try {
+        const res = await fetch(WORKER_URL, {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({
+            action: 'delete_order',
+            numero_orden: numeroOrden,
+            admin_token: 'admin'
+          })
+        });
+        const data = await res.json();
+        if (!data.success) {
+          alert("No se pudo eliminar en el servidor: " + (data.error || "Error desconocido"));
+          await cargarOrdenes(true);
+        }
+      } catch (err) {
+        alert("Error de conexión al eliminar la orden.");
+        await cargarOrdenes(true);
+      }
+    }
+
+    async function eliminarEsimOrden(numeroOrden) {
+      if (!confirm(`¿Seguro que deseas eliminar la orden E-SIM ${numeroOrden}?`)) return;
+      esimCache = esimCache.filter(o => o.numero_orden !== numeroOrden);
+      colaNuevasOrdenes = colaNuevasOrdenes.filter(o => !(o._tipo === 'esim' && o.numero_orden === numeroOrden));
+      renderEsimOrdenes(esimCache);
+
+      try {
+        const res = await fetch(WORKER_URL, {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({
+            action: 'delete_esim_order',
+            numero_orden: numeroOrden,
+            admin_token: 'admin'
+          })
+        });
+        const data = await res.json();
+        if (!data.success) {
+          alert("No se pudo eliminar en el servidor: " + (data.error || "Error desconocido"));
+          await cargarEsimOrdenes(true);
+        }
+      } catch (err) {
+        alert("Error de conexión al eliminar la orden E-SIM.");
+        await cargarEsimOrdenes(true);
+      }
+    }
+
+    async function eliminarCliente(id, nombre) {
+      if (!confirm(`¿Seguro que deseas eliminar al cliente "${nombre || id}"?`)) return;
+      clientesCache = clientesCache.filter(c => String(c.id) !== String(id));
+      poblarFiltroClientes();
+      renderClientes(clientesCache);
+
+      try {
+        const res = await fetch(WORKER_URL, {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({
+            action: 'delete_client',
+            id: id,
+            admin_token: 'admin'
+          })
+        });
+        const data = await res.json();
+        if (!data.success) {
+          alert("No se pudo eliminar en el servidor: " + (data.error || "Error desconocido"));
+          await cargarClientes();
+        }
+      } catch (err) {
+        alert("Error de conexión al eliminar el cliente.");
+        await cargarClientes();
+      }
+    }
+
     // --- CARGAR ÓRDENES ---
     async function cargarOrdenes(silencioso = false) {
       const tbody = document.getElementById('tablaOrdenes');
@@ -923,10 +1012,34 @@
       } catch (err) {}
     }
 
-    // --- CARGAR CLIENTES ---
+    // --- RENDER Y CARGAR CLIENTES ---
+    function renderClientes(lista) {
+      const tbody = document.getElementById('tablaClientes');
+      tbody.innerHTML = '';
+      if (!lista || lista.length === 0) {
+        tbody.innerHTML = '<tr><td colspan="5" style="text-align: center; padding: 30px;">No hay clientes registrados aún.</td></tr>';
+        return;
+      }
+
+      lista.forEach(c => {
+        const tr = document.createElement('tr');
+        const nombreEscapado = String(c.nombre || '').replace(/'/g, "\\'");
+        tr.innerHTML = `
+          <td>${c.id}</td>
+          <td><strong>${c.nombre || 'Sin nombre'}</strong></td>
+          <td>${c.celular}</td>
+          <td style="font-family: monospace; font-size: 16px; font-weight: bold;">${c.pin}</td>
+          <td>
+            <button type="button" class="btn-delete-row" onclick="eliminarCliente('${c.id}', '${nombreEscapado}')">🗑️ Eliminar</button>
+          </td>
+        `;
+        tbody.appendChild(tr);
+      });
+    }
+
     async function cargarClientes() {
       const tbody = document.getElementById('tablaClientes');
-      tbody.innerHTML = '<tr><td colspan="4" style="text-align: center; padding: 30px;">Cargando...</td></tr>';
+      tbody.innerHTML = '<tr><td colspan="5" style="text-align: center; padding: 30px;">Cargando...</td></tr>';
 
       try {
         const res = await fetch(WORKER_URL + "?action=get_clients");
@@ -935,27 +1048,12 @@
         if (data.success) {
           clientesCache = data.clientes || [];
           poblarFiltroClientes();
-          tbody.innerHTML = '';
-          if (clientesCache.length === 0) {
-            tbody.innerHTML = '<tr><td colspan="4" style="text-align: center; padding: 30px;">No hay clientes registrados aún.</td></tr>';
-            return;
-          }
-
-          clientesCache.forEach(c => {
-            const tr = document.createElement('tr');
-            tr.innerHTML = `
-              <td>${c.id}</td>
-              <td><strong>${c.nombre}</strong></td>
-              <td>${c.celular}</td>
-              <td style="font-family: monospace; font-size: 16px; font-weight: bold;">${c.pin}</td>
-            `;
-            tbody.appendChild(tr);
-          });
+          renderClientes(clientesCache);
         } else {
           throw new Error(data.error);
         }
       } catch (err) {
-        tbody.innerHTML = `<tr><td colspan="4" style="text-align: center; color: red; padding: 30px;">Error: ${err.message}</td></tr>`;
+        tbody.innerHTML = `<tr><td colspan="5" style="text-align: center; color: red; padding: 30px;">Error: ${err.message}</td></tr>`;
       }
     }
 
