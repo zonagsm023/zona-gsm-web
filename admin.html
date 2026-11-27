@@ -314,6 +314,123 @@
     let esimAEntregar = null;
     let deliverQrBase64 = null;
 
+    // Audio y voz en automático
+    let sharedAudioCtx = null;
+    let audioUnlocked = false;
+    let pendingVoicePayload = null;
+
+    function getAudioContext() {
+      const AudioCtx = window.AudioContext || window.webkitAudioContext;
+      if (!AudioCtx) return null;
+      if (!sharedAudioCtx || sharedAudioCtx.state === "closed") {
+        sharedAudioCtx = new AudioCtx();
+      }
+      return sharedAudioCtx;
+    }
+
+    function precargarVoces() {
+      if ("speechSynthesis" in window) {
+        try { window.speechSynthesis.getVoices(); } catch (_) {}
+      }
+    }
+
+    function desbloquearAudioYVoz() {
+      audioUnlocked = true;
+      precargarVoces();
+      const ctx = getAudioContext();
+      if (ctx && ctx.state === "suspended") {
+        ctx.resume().catch(() => {});
+      }
+      if (pendingVoicePayload) {
+        const pendiente = pendingVoicePayload;
+        pendingVoicePayload = null;
+        anunciarOrdenConCampanaYVoz(pendiente.orden, pendiente.tipo, true);
+      }
+    }
+
+    window.addEventListener("DOMContentLoaded", () => {
+      precargarVoces();
+      if ("speechSynthesis" in window) {
+        window.speechSynthesis.onvoiceschanged = () => precargarVoces();
+      }
+      ["pointerdown", "keydown", "click", "touchstart"].forEach(ev => {
+        document.addEventListener(ev, desbloquearAudioYVoz, { passive: true });
+      });
+    });
+
+    function hablarAnuncio(textoVoz) {
+      if (!("speechSynthesis" in window)) return;
+      try {
+        window.speechSynthesis.cancel();
+        const utterance = new SpeechSynthesisUtterance(textoVoz);
+        utterance.lang = "es-CO";
+        utterance.rate = 1;
+        utterance.pitch = 1;
+
+        const voces = window.speechSynthesis.getVoices() || [];
+        const vozEs = voces.find(v => /es(-|_|$)/i.test(v.lang));
+        if (vozEs) utterance.voice = vozEs;
+
+        window.speechSynthesis.speak(utterance);
+      } catch (_) {}
+    }
+
+    function anunciarOrdenConCampanaYVoz(orden, tipo, desdeDesbloqueo = false) {
+      const esEsim = tipo === "esim";
+      const tipoServicio = esEsim ? "E SIM" : "registro";
+      const cliente = (orden && orden.nombre && String(orden.nombre).trim())
+        ? String(orden.nombre).trim()
+        : "cliente";
+      const textoVoz = `Nuevo servicio de ${tipoServicio}, ${cliente}`;
+
+      const ctx = getAudioContext();
+      if (ctx && ctx.state === "suspended") {
+        ctx.resume().then(() => {
+          audioUnlocked = true;
+          tocarCampanaYHablar(ctx, textoVoz);
+        }).catch(() => {
+          if (!desdeDesbloqueo) {
+            pendingVoicePayload = { orden, tipo };
+          }
+          hablarAnuncio(textoVoz);
+        });
+        return;
+      }
+
+      if (!audioUnlocked && !desdeDesbloqueo) {
+        pendingVoicePayload = { orden, tipo };
+      }
+      tocarCampanaYHablar(ctx, textoVoz);
+    }
+
+    function tocarCampanaYHablar(ctx, textoVoz) {
+      try {
+        if (!ctx) {
+          hablarAnuncio(textoVoz);
+          return;
+        }
+        const ahora = ctx.currentTime;
+        const notas = [880, 1174.66];
+
+        notas.forEach((freq, idx) => {
+          const osc = ctx.createOscillator();
+          const gain = ctx.createGain();
+          osc.type = "triangle";
+          osc.frequency.setValueAtTime(freq, ahora + idx * 0.14);
+          gain.gain.setValueAtTime(0.24, ahora + idx * 0.14);
+          gain.gain.exponentialRampToValueAtTime(0.001, ahora + idx * 0.14 + 0.18);
+          osc.connect(gain);
+          gain.connect(ctx.destination);
+          osc.start(ahora + idx * 0.14);
+          osc.stop(ahora + idx * 0.14 + 0.19);
+        });
+
+        setTimeout(() => hablarAnuncio(textoVoz), 360);
+      } catch (_) {
+        hablarAnuncio(textoVoz);
+      }
+    }
+
     function getEstadosPagoLocales() {
       try {
         return JSON.parse(localStorage.getItem(PAYMENT_STATE_KEY) || "{}");
@@ -357,25 +474,6 @@
       }
     }
 
-    function reproducirSonidoNuevaOrden() {
-      try {
-        const AudioCtx = window.AudioContext || window.webkitAudioContext;
-        if (!AudioCtx) return;
-        const ctx = new AudioCtx();
-        const osc = ctx.createOscillator();
-        const gain = ctx.createGain();
-        osc.type = "sine";
-        osc.frequency.setValueAtTime(880, ctx.currentTime);
-        osc.frequency.setValueAtTime(1174.66, ctx.currentTime + 0.14);
-        gain.gain.setValueAtTime(0.18, ctx.currentTime);
-        gain.gain.exponentialRampToValueAtTime(0.001, ctx.currentTime + 0.42);
-        osc.connect(gain);
-        gain.connect(ctx.destination);
-        osc.start();
-        osc.stop(ctx.currentTime + 0.42);
-      } catch (e) {}
-    }
-
     function iniciarMonitoreoOrdenes() {
       if (adminPollingTimer) clearInterval(adminPollingTimer);
       adminPollingTimer = setInterval(() => {
@@ -385,6 +483,7 @@
     }
 
     function login() {
+      desbloquearAudioYVoz();
       const u = document.getElementById('userInput').value;
       const p = document.getElementById('passwordInput').value;
 
@@ -475,7 +574,10 @@
       });
 
       if (huboNueva) {
-        reproducirSonidoNuevaOrden();
+        const ultimaNueva = colaNuevasOrdenes[colaNuevasOrdenes.length - 1];
+        if (ultimaNueva) {
+          anunciarOrdenConCampanaYVoz(ultimaNueva, ultimaNueva._tipo);
+        }
         mostrarSiguienteOrdenModal();
       }
     }
