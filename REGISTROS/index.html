@@ -181,8 +181,22 @@
     .pin-msg.error { color: #dc2626; }
     .pin-msg.success { color: #059669; }
 
+    /* --- CUADRO BLANCO DE ORDEN CREADA CON ÉXITO --- */
+    .order-created-card { background: #ffffff; max-width: 340px; text-align: center; border-radius: 24px; padding: 24px 20px; box-shadow: 0 20px 45px rgba(15, 23, 42, 0.24); animation: createdPop 0.25s cubic-bezier(0.22, 1, 0.36, 1); }
+    @keyframes createdPop { from { transform: scale(0.92); opacity: 0; } to { transform: scale(1); opacity: 1; } }
+    .check-loading-wrap { position: relative; width: 74px; height: 74px; margin: 0 auto 14px; display: flex; align-items: center; justify-content: center; }
+    .check-spinner-ring { position: absolute; inset: 0; border-radius: 50%; border: 3px solid #d1fae5; border-top-color: #10b981; animation: spinCheck 0.95s linear infinite; }
+    @keyframes spinCheck { to { transform: rotate(360deg); } }
+    .check-inner-circle { width: 58px; height: 58px; border-radius: 50%; background: #ecfdf5; display: flex; align-items: center; justify-content: center; z-index: 2; }
+    .created-order-badge { display: inline-block; background: #f1f5f9; color: #0f172a; font-family: monospace; font-size: 13px; font-weight: 900; padding: 5px 12px; border-radius: 999px; border: 1px solid #cbd5e1; margin-bottom: 16px; }
+    .btn-go-history { width: 100%; padding: 12px 14px; border: none; border-radius: 12px; background: #059669; color: #ffffff; font-size: 13.5px; font-weight: 800; cursor: pointer; transition: background 0.15s ease; }
+    .btn-go-history:hover { background: #047857; }
+    .btn-close-created { width: 100%; padding: 10px 14px; border: 1px solid #cbd5e1; border-radius: 12px; background: #ffffff; color: #334155; font-size: 13px; font-weight: 700; cursor: pointer; margin-top: 8px; transition: background 0.15s ease; }
+    .btn-close-created:hover { background: #f8fafc; }
+
     /* --- ESTILOS PARA EL MODAL DE PEDIDOS DEL CLIENTE --- */
-    .client-order-card { background: #f8fafc; border: 1px solid #e2e8f0; border-radius: 12px; padding: 15px; margin-bottom: 10px; border-left: 5px solid #cbd5e1; }
+    .client-order-card { background: #f8fafc; border: 1px solid #e2e8f0; border-radius: 12px; padding: 15px; margin-bottom: 10px; border-left: 5px solid #cbd5e1; transition: box-shadow 0.2s ease, border-color 0.2s ease; }
+    .client-order-card.highlighted { border-color: #10b981; background: #f0fdf4; box-shadow: 0 0 0 2px rgba(16, 185, 129, 0.25); }
     .client-order-card.Pendiente { border-left-color: #f59e0b; }
     .client-order-card.En-Proceso { border-left-color: #3b82f6; }
     .client-order-card.Exitoso { border-left-color: #10b981; }
@@ -470,6 +484,23 @@
     </div>
   </div>
 
+  <!-- CUADRO BLANCO: ORDEN CREADA CON ÉXITO -->
+  <div id="orderCreatedOverlay" class="imei-overlay" style="z-index: 10002;" onclick="closeOrderCreatedOutside(event)">
+    <div class="order-created-card" role="dialog" aria-modal="true" aria-labelledby="orderCreatedTitle">
+      <div class="check-loading-wrap">
+        <div class="check-spinner-ring"></div>
+        <div class="check-inner-circle">
+          <svg width="30" height="30" viewBox="0 0 24 24" fill="none" stroke="#10b981" stroke-width="3.2" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"></polyline></svg>
+        </div>
+      </div>
+      <h2 id="orderCreatedTitle" style="font-size: 18px; font-weight: 900; color: #0f172a; margin-bottom: 6px;">Orden creada con éxito</h2>
+      <p style="font-size: 12.5px; color: #475569; margin-bottom: 10px; line-height: 1.4;">Tu solicitud quedó registrada y ya puedes seguir su avance.</p>
+      <div id="createdOrderNumberBadge" class="created-order-badge">ORD-XXXX</div>
+      <button type="button" class="btn-go-history" onclick="irAlHistorialDesdeExito()">📋 Ver mi pedido en el historial</button>
+      <button type="button" class="btn-close-created" onclick="closeOrderCreatedModal()">Listo</button>
+    </div>
+  </div>
+
   <!-- MODAL: QR DE PAGO (NEQUI / LLAVE) -->
   <div id="payQrOverlay" class="imei-overlay" style="z-index: 10002;" onclick="closePayQrOutside(event)">
     <div class="imei-box" style="max-width: 320px; text-align: center;">
@@ -562,7 +593,7 @@
             <span style="font-size: 12px; font-weight: 700; color: #10b981; animation: pulse 1.5s infinite;">● En vivo</span>
             <span id="clientOrdersCount" style="font-size: 11.5px; font-weight: 800; color: #334155; background: #e2e8f0; padding: 2px 8px; border-radius: 999px;">0 pedidos</span>
           </div>
-          <button onclick="logoutClientPanel()" style="background: none; border: none; color: #64748b; font-size: 12px; font-weight: 700; cursor: pointer; text-decoration: underline;">Volver a consultar</button>
+          <button type="button" onclick="logoutClientPanel()" style="background: none; border: none; color: #64748b; font-size: 12px; font-weight: 700; cursor: pointer; text-decoration: underline;">Cerrar sesión</button>
         </div>
         <div id="clientOrdersList" style="max-height: 55vh; overflow-y: auto; padding-right: 5px;"></div>
       </div>
@@ -575,6 +606,8 @@
   <script>
     const WORKER_URL = "https://telegram-zonagsm.zonagsm023.workers.dev";
     const PAYMENT_STATE_KEY = "zg_admin_payment_states";
+    const PIN_SESSION_KEY = "zg_registros_pin_session_v1";
+    const SESSION_DURATION_MS = 60 * 60 * 1000; // 1 hora
     const NEQUI_NUMBER = "3226108075";
     const NEQUI_KEY = "@NEQUIVIC7388";
 
@@ -596,10 +629,60 @@
     // Variables para subir foto
     let receiptBase64 = null;
 
-    // Variables para el panel del cliente
+    // Variables para el panel del cliente y orden recién creada
     let clientPollingInterval = null;
     let activeClientPin = '';
     let activeClientPhone = '';
+    let lastCreatedOrderNum = '';
+    let highlightedOrderNum = '';
+
+    function guardarSesionPin(pin, celular, nombre = '') {
+      const cleanPin = String(pin || '').replace(/\D/g, '');
+      const cleanPhone = String(celular || '').replace(/\D/g, '');
+      if (cleanPin.length !== 4 || cleanPhone.length !== 10) return;
+
+      const payload = {
+        pin: cleanPin,
+        celular: cleanPhone,
+        nombre: String(nombre || '').trim(),
+        expiresAt: Date.now() + SESSION_DURATION_MS
+      };
+      try {
+        localStorage.setItem(PIN_SESSION_KEY, JSON.stringify(payload));
+      } catch (e) {}
+    }
+
+    function obtenerSesionPinActiva() {
+      try {
+        const raw = localStorage.getItem(PIN_SESSION_KEY);
+        if (!raw) return null;
+        const sesion = JSON.parse(raw);
+        if (!sesion || !sesion.expiresAt || Date.now() > Number(sesion.expiresAt)) {
+          localStorage.removeItem(PIN_SESSION_KEY);
+          return null;
+        }
+        const pin = String(sesion.pin || '').replace(/\D/g, '');
+        const celular = String(sesion.celular || '').replace(/\D/g, '');
+        if (pin.length !== 4 || celular.length !== 10) {
+          localStorage.removeItem(PIN_SESSION_KEY);
+          return null;
+        }
+        return {
+          pin,
+          celular,
+          nombre: String(sesion.nombre || '').trim(),
+          expiresAt: Number(sesion.expiresAt)
+        };
+      } catch (e) {
+        return null;
+      }
+    }
+
+    function limpiarSesionPin() {
+      try {
+        localStorage.removeItem(PIN_SESSION_KEY);
+      } catch (e) {}
+    }
 
     function normalizarPago(valor) {
       if (typeof valor !== 'string') return null;
@@ -627,6 +710,11 @@
 
     window.addEventListener('DOMContentLoaded', () => {
       cargarClientesDesdeNube();
+      const sesion = obtenerSesionPinActiva();
+      if (sesion) {
+        currentPin = sesion.pin;
+        currentCelular = sesion.celular;
+      }
       setTimeout(() => {
         document.getElementById('preloader').classList.add('hidden');
         document.getElementById('mainContent').classList.add('visible');
@@ -758,9 +846,14 @@
             input.blur();
 
             verifyGroup.style.display = 'flex';
-            verifyInput.value = '';
+            const sesionActiva = obtenerSesionPinActiva();
+            const celGuardado = (sesionActiva && sesionActiva.pin === currentPin) ? sesionActiva.celular : '';
+            verifyInput.value = celGuardado;
             document.getElementById('phoneVerifyMsg').textContent = '';
             verifyInput.classList.remove('error', 'success');
+            if (celGuardado.length === 10) {
+              await verifyPhone(celGuardado);
+            }
           } else {
             input.classList.add('error');
             input.classList.remove('success');
@@ -806,6 +899,7 @@
             msg.className = 'pin-msg success';
             clienteVerificado = cliente;
             currentCelular = num;
+            guardarSesionPin(currentPin, num, cliente.nombre);
             input.blur();
           } else {
             input.classList.add('error');
@@ -902,6 +996,7 @@
 
         if (result.success) {
           await cargarClientesDesdeNube();
+          guardarSesionPin(pin, cel, nombre);
           document.getElementById('registerOverlay').classList.remove('open');
           document.getElementById('successOverlay').classList.add('open');
           currentPin = pin;
@@ -921,6 +1016,30 @@
       document.getElementById('successOverlay').classList.remove('open');
       document.getElementById('mainPinInput').value = currentPin;
       checkPin(currentPin);
+    }
+
+    /* --- CUADRO BLANCO DE ORDEN CREADA --- */
+    function openOrderCreatedModal(numeroOrden) {
+      lastCreatedOrderNum = numeroOrden || '';
+      highlightedOrderNum = numeroOrden || '';
+      document.getElementById('createdOrderNumberBadge').textContent = numeroOrden || 'Orden registrada';
+      document.getElementById('orderCreatedOverlay').classList.add('open');
+    }
+
+    function closeOrderCreatedModal() {
+      document.getElementById('orderCreatedOverlay').classList.remove('open');
+    }
+
+    function closeOrderCreatedOutside(e) {
+      if (e.target.id === 'orderCreatedOverlay') {
+        closeOrderCreatedModal();
+      }
+    }
+
+    async function irAlHistorialDesdeExito() {
+      const ordenResaltada = lastCreatedOrderNum;
+      closeOrderCreatedModal();
+      await openClientPanel(ordenResaltada);
     }
 
     /* --- LÓGICA ORIGINAL DE IMEI Y OPERADORES --- */
@@ -1140,9 +1259,11 @@
       img.onerror = function () { handleOpError(this, fallbackText, bgClass); };
       logoWrap.appendChild(img);
 
-      document.getElementById('mainPinInput').value = '';
+      const sesionActiva = obtenerSesionPinActiva();
+      const pinInput = document.getElementById('mainPinInput');
+      pinInput.value = sesionActiva ? sesionActiva.pin : '';
       document.getElementById('pinMessage').textContent = '';
-      document.getElementById('mainPinInput').classList.remove('error', 'success');
+      pinInput.classList.remove('error', 'success');
 
       document.getElementById('phoneVerifyGroup').style.display = 'none';
       document.getElementById('verifyPhoneInput').value = '';
@@ -1176,7 +1297,11 @@
       document.getElementById('qrToggleBtn').classList.remove('active');
 
       document.getElementById('imeiOverlay').classList.add('open');
-      cargarClientesDesdeNube();
+      if (sesionActiva) {
+        checkPin(sesionActiva.pin);
+      } else {
+        cargarClientesDesdeNube();
+      }
     }
 
     async function closeImeiBox() {
@@ -1204,6 +1329,7 @@
           return;
         }
         clienteVerificado = cliente;
+        guardarSesionPin(currentPin, currentCelular, cliente.nombre);
 
         const input = document.getElementById('imeiField');
         const simInput = document.getElementById('simLineField');
@@ -1252,7 +1378,7 @@
 
         if (result.success) {
           await closeImeiBox();
-          showToast('¡Solicitud enviada! Revisa tu estado en el botón azul.');
+          openOrderCreatedModal(result.numero_orden || '');
         } else {
           throw new Error(result.error || 'Error desconocido');
         }
@@ -1265,13 +1391,43 @@
       }
     }
 
-    /* --- LÓGICA DEL PANEL DEL CLIENTE --- */
-    function openClientPanel() {
+    /* --- LÓGICA DEL PANEL DEL CLIENTE (SESIÓN DE 1 HORA) --- */
+    async function openClientPanel(ordenAResaltar = '') {
+      if (ordenAResaltar) {
+        highlightedOrderNum = ordenAResaltar;
+      }
       document.getElementById('clientPanelOverlay').classList.add('open');
+
+      const sesion = obtenerSesionPinActiva();
+      if (sesion) {
+        guardarSesionPin(sesion.pin, sesion.celular, sesion.nombre);
+        await iniciarVistaHistorialConSesion(sesion.pin, sesion.celular);
+        return;
+      }
+
       document.getElementById('clientLoginForm').style.display = 'block';
       document.getElementById('clientOrdersView').style.display = 'none';
       document.getElementById('clientPinInput').value = '';
       document.getElementById('clientPhoneInput').value = '';
+    }
+
+    async function iniciarVistaHistorialConSesion(pin, phone) {
+      activeClientPin = pin;
+      activeClientPhone = phone;
+
+      const loginForm = document.getElementById('clientLoginForm');
+      const ordersView = document.getElementById('clientOrdersView');
+      const ordersList = document.getElementById('clientOrdersList');
+      document.getElementById('clientOrdersCount').textContent = '0 pedidos';
+
+      loginForm.style.display = 'none';
+      ordersView.style.display = 'block';
+      ordersList.innerHTML = '<p style="text-align:center; color:#64748b; font-size:13px;">Cargando historial de pedidos...</p>';
+
+      await fetchClientOrders();
+
+      if (clientPollingInterval) clearInterval(clientPollingInterval);
+      clientPollingInterval = setInterval(fetchClientOrders, 10000);
     }
 
     function closeClientPanel() {
@@ -1289,8 +1445,14 @@
     }
 
     function logoutClientPanel() {
+      limpiarSesionPin();
+      activeClientPin = '';
+      activeClientPhone = '';
+      highlightedOrderNum = '';
       document.getElementById('clientOrdersView').style.display = 'none';
       document.getElementById('clientLoginForm').style.display = 'block';
+      document.getElementById('clientPinInput').value = '';
+      document.getElementById('clientPhoneInput').value = '';
       if (clientPollingInterval) {
         clearInterval(clientPollingInterval);
         clientPollingInterval = null;
@@ -1306,22 +1468,8 @@
         return;
       }
 
-      activeClientPin = pin;
-      activeClientPhone = phone;
-
-      const loginForm = document.getElementById('clientLoginForm');
-      const ordersView = document.getElementById('clientOrdersView');
-      const ordersList = document.getElementById('clientOrdersList');
-      document.getElementById('clientOrdersCount').textContent = '0 pedidos';
-
-      loginForm.style.display = 'none';
-      ordersView.style.display = 'block';
-      ordersList.innerHTML = '<p style="text-align:center; color:#64748b; font-size:13px;">Cargando historial de pedidos...</p>';
-
-      await fetchClientOrders();
-
-      if (clientPollingInterval) clearInterval(clientPollingInterval);
-      clientPollingInterval = setInterval(fetchClientOrders, 10000);
+      guardarSesionPin(pin, phone);
+      await iniciarVistaHistorialConSesion(pin, phone);
     }
 
     async function fetchClientOrders() {
@@ -1384,12 +1532,13 @@
           const estadoClass = String(o.estado || 'Pendiente').replace(/\s+/g, '-');
           const estadoPago = resolverEstadoPagoCliente(o);
           const pagoClass = estadoPago === 'Pagado' ? 'pagado' : 'no-pagado';
+          const isHighlighted = highlightedOrderNum && String(o.numero_orden) === String(highlightedOrderNum);
           const fecha = new Date(o.fecha + "Z").toLocaleString('es-CO', { timeZone: 'America/Bogota' });
 
           html += `
-            <div class="client-order-card ${estadoClass}">
+            <div class="client-order-card ${estadoClass}${isHighlighted ? ' highlighted' : ''}">
               <div class="client-order-top">
-                <span class="client-order-id">${o.numero_orden}</span>
+                <span class="client-order-id">${o.numero_orden}${isHighlighted ? ' <span style="font-size:10px; background:#10b981; color:#fff; padding:2px 7px; border-radius:999px; margin-left:4px;">Recién creada</span>' : ''}</span>
                 <div class="client-badges-wrap">
                   <span class="client-pay-badge ${pagoClass}">${estadoPago}</span>
                   <span class="client-badge ${estadoClass}">${o.estado}</span>
@@ -1414,6 +1563,7 @@
     document.addEventListener('keydown', (e) => {
       if (e.key === 'Escape') {
         closeImeiBox();
+        closeOrderCreatedModal();
         closePayQrModal();
         closeRegisterBox();
         closeClientPanel();
