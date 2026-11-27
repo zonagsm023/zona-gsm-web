@@ -143,6 +143,11 @@
     .pay-btns { display: flex; gap: 6px; flex-wrap: wrap; }
     .pay-chip-btn { flex: 1; min-width: 140px; padding: 8px 10px; background: #ffffff; border: 1px solid #cbd5e1; border-radius: 8px; font-size: 11px; font-weight: 800; color: #0f172a; cursor: pointer; text-align: left; }
     .pay-chip-btn:hover { border-color: #c81d4e; background: #fff5f8; }
+    .pay-qr-mini-btn { padding: 8px 10px; background: #f5f3ff; color: #6d28d9; border: 1px solid #ddd6fe; border-radius: 8px; font-size: 11px; font-weight: 800; cursor: pointer; display: inline-flex; align-items: center; gap: 4px; }
+    .pay-qr-mini-btn:hover { background: #ede9fe; border-color: #c4b5fd; }
+
+    .pay-qr-modal-img { width: 220px; height: 220px; margin: 8px auto 12px; border-radius: 14px; border: 1.5px solid #e2e8f0; background: #f8fafc; padding: 8px; display: flex; align-items: center; justify-content: center; overflow: hidden; }
+    .pay-qr-modal-img img { width: 100%; height: 100%; object-fit: contain; display: block; border-radius: 8px; }
 
     .receipt-dropzone { display: flex; align-items: center; justify-content: space-between; gap: 10px; padding: 10px 12px; border-radius: 12px; border: 1.5px dashed #cbd5e1; background: #f8fafc; cursor: pointer; transition: all 0.2s ease; }
     .receipt-dropzone:hover, .receipt-dropzone.has-file { border-color: #c81d4e; background: #fff5f8; }
@@ -360,10 +365,20 @@
         </div>
 
         <div class="pay-box">
-          <div class="pay-box-title">💳 Canales de Pago (Toca para copiar):</div>
+          <div class="pay-box-title">💳 Canales de Pago (Toca para copiar o ver QR):</div>
           <div class="pay-btns">
-            <button type="button" class="pay-chip-btn" data-copy="3246816788" data-label="Nequi" onclick="copyFromAttr(this)">Nequi: 3246816788 (Victor Ruiz)</button>
-            <button type="button" class="pay-chip-btn" data-copy="91851198" data-label="Binance ID" onclick="copyFromAttr(this)">Binance: 91851198</button>
+            <button type="button" class="pay-chip-btn" data-copy="3226108075" data-label="Nequi" onclick="copyFromAttr(this)">Nequi: 3226108075 (Victor Ruiz)</button>
+            <button type="button" class="pay-qr-mini-btn" onclick="openPayQrModal('nequi')">
+              <svg width="13" height="13"><use href="#icon-qr"/></svg>
+              <span>QR Nequi</span>
+            </button>
+          </div>
+          <div class="pay-btns" style="margin-top: 6px;">
+            <button type="button" class="pay-chip-btn" data-copy="@NEQUIVIC7388" data-label="Llave" onclick="copyFromAttr(this)">Llave: @NEQUIVIC7388 (Victor Ruiz)</button>
+            <button type="button" class="pay-qr-mini-btn" onclick="openPayQrModal('llave')">
+              <svg width="13" height="13"><use href="#icon-qr"/></svg>
+              <span>QR Llave</span>
+            </button>
           </div>
         </div>
 
@@ -379,6 +394,21 @@
 
         <button type="submit" id="esimSubmitBtn" class="esim-send-btn">Enviar Solicitud E-SIM</button>
       </form>
+    </div>
+  </div>
+
+  <!-- MODAL: QR DE PAGO (NEQUI / LLAVE) -->
+  <div id="payQrOverlay" class="esim-overlay" style="z-index: 10002;" onclick="closePayQrOutside(event)">
+    <div class="esim-box" style="max-width: 320px; text-align: center;">
+      <div class="esim-box-top">
+        <div id="payQrModalTitle" class="esim-box-title">QR de Pago</div>
+        <button type="button" class="esim-close" onclick="closePayQrModal()" aria-label="Cerrar">&times;</button>
+      </div>
+      <div class="pay-qr-modal-img">
+        <img id="payQrModalImg" src="nequiqr.png" alt="QR de Pago" />
+      </div>
+      <p id="payQrModalDesc" style="font-size: 12px; color: #475569; margin-bottom: 10px;">Victor Ruiz · Nequi 3226108075</p>
+      <button type="button" id="payQrCopyBtn" class="esim-send-btn" onclick="copyCurrentPayQrData()">Copiar dato</button>
     </div>
   </div>
 
@@ -465,6 +495,8 @@
 
   <script>
     const WORKER_URL = "https://telegram-zonagsm.zonagsm023.workers.dev";
+    const NEQUI_NUMBER = "3226108075";
+    const NEQUI_KEY = "@NEQUIVIC7388";
 
     let dbClientesNube = [];
     let clienteVerificado = null;
@@ -474,6 +506,7 @@
     let currentPin = "";
     let currentCelular = "";
     let receiptBase64 = null;
+    let currentPayQrType = "nequi";
 
     let esimPollingInterval = null;
     let activeClientPin = "";
@@ -498,6 +531,46 @@
       const qty = Math.max(1, parseInt(document.getElementById("esimQtyField").value, 10) || 1);
       const total = currentEsimUnitPrice * qty;
       document.getElementById("esimModalPrice").textContent = "Total: " + formatCOP(total);
+    }
+
+    function openPayQrModal(type) {
+      currentPayQrType = type === "llave" ? "llave" : "nequi";
+      const img = document.getElementById("payQrModalImg");
+      const title = document.getElementById("payQrModalTitle");
+      const desc = document.getElementById("payQrModalDesc");
+      const copyBtn = document.getElementById("payQrCopyBtn");
+
+      if (currentPayQrType === "llave") {
+        title.textContent = "QR Llave · " + NEQUI_KEY;
+        img.src = "llaveqr.png";
+        img.alt = "QR Llave " + NEQUI_KEY;
+        desc.textContent = "Victor Ruiz · Llave " + NEQUI_KEY;
+        copyBtn.textContent = "Copiar " + NEQUI_KEY;
+      } else {
+        title.textContent = "QR Nequi · " + NEQUI_NUMBER;
+        img.src = "nequiqr.png";
+        img.alt = "QR Nequi " + NEQUI_NUMBER;
+        desc.textContent = "Victor Ruiz · Nequi " + NEQUI_NUMBER;
+        copyBtn.textContent = "Copiar " + NEQUI_NUMBER;
+      }
+
+      document.getElementById("payQrOverlay").classList.add("open");
+    }
+
+    function closePayQrModal() {
+      document.getElementById("payQrOverlay").classList.remove("open");
+    }
+
+    function closePayQrOutside(e) {
+      if (e.target.id === "payQrOverlay") closePayQrModal();
+    }
+
+    function copyCurrentPayQrData() {
+      if (currentPayQrType === "llave") {
+        copyText(NEQUI_KEY, "Llave");
+      } else {
+        copyText(NEQUI_NUMBER, "Nequi");
+      }
     }
 
     async function cargarClientesDesdeNube() {
@@ -1057,6 +1130,7 @@
     document.addEventListener("keydown", (e) => {
       if (e.key === "Escape") {
         closeEsimBox();
+        closePayQrModal();
         closeRegisterBox();
         closeEsimClientPanel();
         closeQrZoom();
