@@ -6,92 +6,99 @@
   <title>Panel de Administración — Zona GSM</title>
   <style>
     * { box-sizing: border-box; font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif; }
-    body { background: #eef2f6; padding: 20px; color: #111827; margin: 0; }
+    body { background: #f1f5f9; padding: 20px; color: #111827; margin: 0; }
 
     /* Estilos del Login */
-    .login-box { max-width: 320px; margin: 100px auto; background: white; padding: 30px; border-radius: 16px; box-shadow: 0 10px 25px rgba(0,0,0,0.05); text-align: center; }
-    .login-box input { width: 100%; padding: 12px; margin-bottom: 15px; border: 1px solid #cbd5e1; border-radius: 8px; font-size: 16px; }
-    .login-box button { width: 100%; padding: 12px; background: #c81d4e; color: white; border: none; border-radius: 8px; font-size: 16px; font-weight: bold; cursor: pointer; }
+    .login-box { max-width: 340px; margin: 100px auto; background: white; padding: 35px 30px; border-radius: 16px; box-shadow: 0 10px 25px rgba(0,0,0,0.05); text-align: center; }
+    .login-box input { width: 100%; padding: 12px; margin-bottom: 15px; border: 1px solid #cbd5e1; border-radius: 8px; font-size: 16px; outline: none; transition: border 0.2s; }
+    .login-box input:focus { border-color: #c81d4e; }
+    .login-box button { width: 100%; padding: 12px; background: #c81d4e; color: white; border: none; border-radius: 8px; font-size: 16px; font-weight: bold; cursor: pointer; transition: background 0.2s; }
+    .login-box button:hover { background: #a61840; }
 
     /* Estilos del Panel */
-    .panel { display: none; max-width: 1320px; margin: 0 auto; }
-    .header { display: flex; justify-content: space-between; align-items: center; margin-bottom: 20px; flex-wrap: wrap; gap: 10px; }
+    .panel { display: none; max-width: 1400px; margin: 0 auto; }
+    .header { display: flex; justify-content: space-between; align-items: center; margin-bottom: 24px; flex-wrap: wrap; gap: 15px; }
     .header-left { display: flex; align-items: center; gap: 12px; }
-    .header h1 { font-size: 24px; color: #0f172a; margin: 0; }
-    .live-badge { display: inline-flex; align-items: center; gap: 6px; padding: 5px 10px; border-radius: 999px; background: #ecfdf5; border: 1px solid #a7f3d0; color: #059669; font-size: 12px; font-weight: 800; }
+    .header h1 { font-size: 26px; color: #0f172a; margin: 0; font-weight: 800; letter-spacing: -0.5px; }
+    .live-badge { display: inline-flex; align-items: center; gap: 6px; padding: 6px 12px; border-radius: 999px; background: #ecfdf5; border: 1px solid #a7f3d0; color: #059669; font-size: 12px; font-weight: 800; }
     .live-dot { width: 8px; height: 8px; border-radius: 50%; background: #10b981; animation: pulseLive 1.6s infinite; }
     @keyframes pulseLive { 0%, 100% { opacity: 1; transform: scale(1); } 50% { opacity: 0.4; transform: scale(1.25); } }
-    .btn-refresh { padding: 10px 20px; background: #0f172a; color: white; border: none; border-radius: 8px; cursor: pointer; font-weight: bold; }
+    .btn-refresh { padding: 10px 20px; background: #0f172a; color: white; border: none; border-radius: 8px; cursor: pointer; font-weight: bold; transition: background 0.2s; }
+    .btn-refresh:hover { background: #334155; }
 
     /* Pestañas (Tabs) */
-    .tabs { display: flex; gap: 10px; margin-bottom: 20px; border-bottom: 2px solid #cbd5e1; flex-wrap: wrap; }
-    .tab-btn { padding: 10px 20px; background: none; border: none; font-size: 15px; font-weight: 700; color: #64748b; cursor: pointer; border-bottom: 3px solid transparent; margin-bottom: -2px; transition: all 0.2s; }
+    .tabs { display: flex; gap: 10px; margin-bottom: 20px; border-bottom: 2px solid #e2e8f0; flex-wrap: wrap; }
+    .tab-btn { padding: 12px 24px; background: none; border: none; font-size: 15px; font-weight: 700; color: #64748b; cursor: pointer; border-bottom: 3px solid transparent; margin-bottom: -2px; transition: all 0.2s; }
     .tab-btn.active { color: #c81d4e; border-bottom-color: #c81d4e; }
     .tab-btn:hover { color: #0f172a; }
 
     /* Barra de filtro y búsqueda */
-    .filter-bar { display: flex; align-items: center; gap: 12px; padding: 14px 16px; background: white; border-bottom: 1px solid #e2e8f0; flex-wrap: wrap; }
+    .filter-bar { display: flex; align-items: center; gap: 12px; padding: 16px 20px; background: white; border-radius: 12px; box-shadow: 0 2px 8px rgba(0,0,0,0.03); margin-bottom: 16px; flex-wrap: wrap; border: 1px solid #e2e8f0; }
     .filter-group { display: flex; align-items: center; gap: 8px; flex-wrap: wrap; }
-    .filter-bar label { font-size: 13px; font-weight: 700; color: #334155; }
-    .filter-select { padding: 8px 12px; border-radius: 8px; border: 1px solid #cbd5e1; font-size: 13px; font-weight: 600; color: #0f172a; background: #f8fafc; min-width: 210px; outline: none; cursor: pointer; }
-    .search-input { padding: 8px 12px; border-radius: 8px; border: 1px solid #cbd5e1; font-size: 13px; font-weight: 600; color: #0f172a; background: #f8fafc; min-width: 220px; outline: none; transition: border-color 0.15s ease, background-color 0.15s ease; }
-    .search-input:focus { border-color: #c81d4e; background: #ffffff; }
-    .btn-clear { padding: 8px 12px; border-radius: 8px; border: 1px solid #cbd5e1; background: #ffffff; color: #475569; font-size: 12px; font-weight: 700; cursor: pointer; }
-    .btn-clear:hover { background: #f1f5f9; color: #0f172a; }
+    .filter-bar label { font-size: 13px; font-weight: 700; color: #475569; }
+    .filter-select, .search-input { padding: 10px 14px; border-radius: 8px; border: 1px solid #cbd5e1; font-size: 13.5px; font-weight: 600; color: #0f172a; background: #f8fafc; outline: none; transition: all 0.2s; }
+    .filter-select { min-width: 200px; cursor: pointer; }
+    .search-input { min-width: 240px; }
+    .filter-select:focus, .search-input:focus { border-color: #c81d4e; background: #ffffff; box-shadow: 0 0 0 3px rgba(200,29,78,0.1); }
+    .btn-clear { padding: 10px 16px; border-radius: 8px; border: 1px solid #cbd5e1; background: #ffffff; color: #475569; font-size: 13px; font-weight: 700; cursor: pointer; transition: all 0.2s; }
+    .btn-clear:hover { background: #f1f5f9; color: #0f172a; border-color: #94a3b8; }
 
     /* Tablas */
-    .table-container { background: white; border-radius: 16px; box-shadow: 0 4px 15px rgba(0,0,0,0.05); overflow-x: auto; }
-    table { width: 100%; border-collapse: collapse; min-width: 960px; }
-    th, td { padding: 12px 14px; text-align: left; border-bottom: 1px solid #e2e8f0; font-size: 13.5px; }
-    th { background: #f8fafc; color: #475569; font-weight: 700; text-transform: uppercase; font-size: 11.5px; letter-spacing: 0.5px; }
+    .table-container { background: white; border-radius: 12px; box-shadow: 0 4px 15px rgba(0,0,0,0.05); overflow-x: auto; border: 1px solid #e2e8f0; }
+    table { width: 100%; border-collapse: collapse; min-width: 1100px; }
+    th { background: #f8fafc; color: #475569; font-weight: 700; text-transform: uppercase; font-size: 11px; letter-spacing: 0.5px; padding: 16px; text-align: left; border-bottom: 2px solid #e2e8f0; white-space: nowrap; }
+    td { padding: 16px; border-bottom: 1px solid #f1f5f9; font-size: 13px; color: #334155; vertical-align: middle; }
+    tbody tr:hover { background-color: #f8fafc; }
 
     /* Estados */
-    .badge { padding: 4px 8px; border-radius: 999px; font-size: 11.5px; font-weight: 700; display: inline-block; }
-    .badge-Pendiente { background: #fef3c7; color: #d97706; }
-    .badge-Proceso { background: #e0f2fe; color: #0284c7; }
-    .badge-Exitoso { background: #dcfce7; color: #16a34a; }
-    .badge-Rechazado { background: #fee2e2; color: #dc2626; }
+    .badge { padding: 5px 10px; border-radius: 6px; font-size: 11px; font-weight: 800; display: inline-block; white-space: nowrap; }
+    .badge-Pendiente { background: #fef3c7; color: #b45309; border: 1px solid #fcd34d; }
+    .badge-Proceso { background: #e0f2fe; color: #0369a1; border: 1px solid #7dd3fc; }
+    .badge-Exitoso { background: #dcfce7; color: #15803d; border: 1px solid #86efac; }
+    .badge-Rechazado { background: #fee2e2; color: #b91c1c; border: 1px solid #fca5a5; }
     .badge-Pagado { background: #dcfce7; color: #15803d; border: 1px solid #86efac; }
     .badge-No-Pagado { background: #fef2f2; color: #b91c1c; border: 1px solid #fecaca; }
 
     /* Menús desplegables y botones de acciones */
-    select.estado-select, select.pago-select { padding: 7px 10px; border-radius: 8px; border: 1px solid #cbd5e1; font-weight: 700; font-size: 12.5px; cursor: pointer; outline: none; background: #f8fafc; color: #334155; width: 100%; max-width: 145px; transition: all 0.2s; }
-    select.estado-select:hover, select.pago-select:hover { background: #e2e8f0; }
-    .btn-deliver-esim { padding: 7px 11px; border-radius: 8px; border: none; background: #c81d4e; color: #ffffff; font-size: 12px; font-weight: 800; cursor: pointer; white-space: nowrap; }
+    select.estado-select, select.pago-select { padding: 8px 12px; border-radius: 8px; border: 1px solid #cbd5e1; font-weight: 700; font-size: 12.5px; cursor: pointer; outline: none; background: #ffffff; color: #334155; width: 100%; max-width: 150px; transition: all 0.2s; }
+    select.estado-select:hover, select.pago-select:hover { background: #f8fafc; border-color: #94a3b8; }
+    
+    .action-buttons { display: flex; flex-direction: column; gap: 6px; align-items: flex-start; }
+    .btn-deliver-esim { padding: 8px 14px; border-radius: 8px; border: none; background: #c81d4e; color: #ffffff; font-size: 12px; font-weight: 800; cursor: pointer; white-space: nowrap; transition: background 0.15s; box-shadow: 0 2px 4px rgba(200,29,78,0.2); }
     .btn-deliver-esim:hover { background: #a61840; }
-    .btn-delete-row { padding: 6px 10px; border-radius: 8px; border: 1px solid #fecaca; background: #fef2f2; color: #dc2626; font-size: 12px; font-weight: 800; cursor: pointer; white-space: nowrap; transition: all 0.15s ease; }
+    .btn-delete-row { padding: 8px 14px; border-radius: 8px; border: 1px solid #fecaca; background: #fef2f2; color: #dc2626; font-size: 12px; font-weight: 800; cursor: pointer; white-space: nowrap; transition: all 0.15s ease; }
     .btn-delete-row:hover { background: #dc2626; color: #ffffff; border-color: #dc2626; }
 
     /* MODAL CENTRAL DE NUEVA ORDEN */
-    .new-order-overlay { position: fixed; inset: 0; background: rgba(15, 23, 42, 0.65); backdrop-filter: blur(5px); -webkit-backdrop-filter: blur(5px); display: none; align-items: center; justify-content: center; padding: 20px; z-index: 9999; }
+    .new-order-overlay { position: fixed; inset: 0; background: rgba(15, 23, 42, 0.65); backdrop-filter: blur(5px); display: none; align-items: center; justify-content: center; padding: 20px; z-index: 9999; }
     .new-order-overlay.open { display: flex; animation: fadeInModal 0.2s ease; }
     @keyframes fadeInModal { from { opacity: 0; } to { opacity: 1; } }
-    .new-order-modal { width: 100%; max-width: 480px; background: #ffffff; border-radius: 22px; overflow: hidden; box-shadow: 0 25px 50px rgba(15, 23, 42, 0.35); border: 2px solid #c81d4e; animation: popModal 0.25s cubic-bezier(0.22, 1, 0.36, 1); max-height: 90vh; overflow-y: auto; }
+    .new-order-modal { width: 100%; max-width: 480px; background: #ffffff; border-radius: 20px; overflow: hidden; box-shadow: 0 25px 50px rgba(15, 23, 42, 0.35); animation: popModal 0.25s cubic-bezier(0.22, 1, 0.36, 1); max-height: 90vh; overflow-y: auto; }
     @keyframes popModal { from { transform: scale(0.92); opacity: 0; } to { transform: scale(1); opacity: 1; } }
-    .new-order-header { background: linear-gradient(135deg, #8a0f33 0%, #c81d4e 100%); color: #ffffff; padding: 18px 22px; display: flex; align-items: center; justify-content: space-between; }
-    .new-order-header h2, .new-order-header h3 { margin: 0; font-size: 18px; font-weight: 900; letter-spacing: 0.2px; }
-    .new-order-queue { background: rgba(255,255,255,0.2); padding: 4px 10px; border-radius: 999px; font-size: 12px; font-weight: 800; }
-    .new-order-body { padding: 20px 22px; }
-    .order-detail-grid { background: #f8fafc; border: 1px solid #e2e8f0; border-radius: 14px; padding: 14px 16px; display: flex; flex-direction: column; gap: 10px; margin-bottom: 16px; }
-    .order-detail-row { display: flex; justify-content: space-between; align-items: center; gap: 12px; font-size: 14px; border-bottom: 1px dashed #e2e8f0; padding-bottom: 8px; }
+    .new-order-header { background: linear-gradient(135deg, #0f172a 0%, #c81d4e 100%); color: #ffffff; padding: 20px 24px; display: flex; align-items: center; justify-content: space-between; }
+    .new-order-header h2, .new-order-header h3 { margin: 0; font-size: 18px; font-weight: 800; letter-spacing: 0.2px; }
+    .new-order-queue { background: rgba(255,255,255,0.2); padding: 4px 12px; border-radius: 999px; font-size: 12px; font-weight: 800; }
+    .new-order-body { padding: 20px 24px; }
+    .order-detail-grid { background: #f8fafc; border: 1px solid #e2e8f0; border-radius: 12px; padding: 16px; display: flex; flex-direction: column; gap: 10px; margin-bottom: 20px; }
+    .order-detail-row { display: flex; justify-content: space-between; align-items: center; gap: 12px; font-size: 14px; border-bottom: 1px dashed #e2e8f0; padding-bottom: 10px; }
     .order-detail-row:last-child { border-bottom: none; padding-bottom: 0; }
-    .order-detail-label { color: #64748b; font-weight: 700; font-size: 12.5px; text-transform: uppercase; }
+    .order-detail-label { color: #64748b; font-weight: 700; font-size: 12px; text-transform: uppercase; }
     .order-detail-value { color: #0f172a; font-weight: 800; text-align: right; word-break: break-all; }
-    .order-detail-value.mono { font-family: monospace; font-size: 15px; background: #eef2f6; padding: 3px 8px; border-radius: 6px; }
-    .modal-pago-box { display: flex; align-items: center; justify-content: space-between; gap: 10px; background: #f8fafc; border: 1px solid #cbd5e1; border-radius: 12px; padding: 10px 14px; margin-bottom: 16px; }
+    .order-detail-value.mono { font-family: monospace; font-size: 15px; background: #eef2f6; padding: 4px 10px; border-radius: 6px; }
+    .modal-pago-box { display: flex; align-items: center; justify-content: space-between; gap: 10px; background: #f8fafc; border: 1px solid #cbd5e1; border-radius: 12px; padding: 12px 16px; margin-bottom: 20px; }
     .modal-pago-box label { font-size: 13px; font-weight: 800; color: #334155; }
     .new-order-actions { display: grid; grid-template-columns: 1fr 1fr; gap: 10px; }
-    .btn-modal-accept { grid-column: 1 / -1; padding: 13px; border: none; border-radius: 12px; background: #0284c7; color: #ffffff; font-size: 15px; font-weight: 800; cursor: pointer; transition: background 0.15s; }
+    .btn-modal-accept { grid-column: 1 / -1; padding: 14px; border: none; border-radius: 10px; background: #0284c7; color: #ffffff; font-size: 15px; font-weight: 800; cursor: pointer; transition: background 0.15s; }
     .btn-modal-accept:hover { background: #0369a1; }
-    .btn-modal-reject { padding: 11px; border: none; border-radius: 12px; background: #fee2e2; color: #dc2626; font-size: 13.5px; font-weight: 800; cursor: pointer; transition: background 0.15s; }
+    .btn-modal-reject { padding: 12px; border: none; border-radius: 10px; background: #fee2e2; color: #dc2626; font-size: 13.5px; font-weight: 800; cursor: pointer; transition: background 0.15s; }
     .btn-modal-reject:hover { background: #fecaca; }
-    .btn-modal-dismiss { padding: 11px; border: 1px solid #cbd5e1; border-radius: 12px; background: #ffffff; color: #334155; font-size: 13.5px; font-weight: 700; cursor: pointer; transition: background 0.15s; }
+    .btn-modal-dismiss { padding: 12px; border: 1px solid #cbd5e1; border-radius: 10px; background: #ffffff; color: #334155; font-size: 13.5px; font-weight: 700; cursor: pointer; transition: background 0.15s; }
     .btn-modal-dismiss:hover { background: #f1f5f9; }
 
-    .field-group { margin-bottom: 12px; }
-    .field-group label { display: block; font-size: 12.5px; font-weight: 800; color: #334155; margin-bottom: 5px; }
-    .field-input { width: 100%; padding: 10px 12px; border-radius: 10px; border: 1.5px solid #cbd5e1; font-size: 13.5px; font-weight: 600; outline: none; }
-    .field-input:focus { border-color: #c81d4e; }
+    .field-group { margin-bottom: 16px; }
+    .field-group label { display: block; font-size: 12.5px; font-weight: 800; color: #334155; margin-bottom: 6px; }
+    .field-input { width: 100%; padding: 10px 14px; border-radius: 8px; border: 1px solid #cbd5e1; font-size: 13.5px; font-weight: 600; outline: none; transition: border 0.2s; }
+    .field-input:focus { border-color: #c81d4e; box-shadow: 0 0 0 3px rgba(200,29,78,0.1); }
 
     .hidden { display: none !important; }
   </style>
@@ -100,8 +107,8 @@
 
   <!-- LOGIN -->
   <div id="loginBox" class="login-box">
-    <h2 style="margin-top: 0; color: #0f172a;">Zona GSM Admin</h2>
-    <p style="color: #64748b; font-size: 14px; margin-bottom: 20px;">Ingresa tus credenciales</p>
+    <h2 style="margin-top: 0; color: #0f172a; font-size: 22px;">Zona GSM Admin</h2>
+    <p style="color: #64748b; font-size: 14px; margin-bottom: 24px;">Ingresa tus credenciales</p>
     <input type="text" id="userInput" placeholder="Usuario" value="admin">
     <input type="password" id="passwordInput" placeholder="Contraseña" value="admin">
     <button onclick="login()">Ingresar al Panel</button>
@@ -125,17 +132,17 @@
     </div>
 
     <!-- VISTA: ÓRDENES -->
-    <div id="view-orders" class="table-container">
+    <div id="view-orders">
       <div class="filter-bar">
         <div class="filter-group">
-          <label for="filtroCliente">Ver órdenes de cliente:</label>
+          <label for="filtroCliente">Cliente:</label>
           <select id="filtroCliente" class="filter-select" onchange="aplicarFiltroCliente()">
             <option value="">Todos los clientes</option>
           </select>
         </div>
         <div class="filter-group">
           <label for="filtroPago">Pago:</label>
-          <select id="filtroPago" class="filter-select" style="min-width: 150px;" onchange="aplicarFiltroCliente()">
+          <select id="filtroPago" class="filter-select" style="min-width: 130px;" onchange="aplicarFiltroCliente()">
             <option value="">Todos</option>
             <option value="Pagado">Pagado</option>
             <option value="No Pagado">No Pagado</option>
@@ -143,38 +150,41 @@
         </div>
         <div class="filter-group">
           <label for="buscadorOrdenes">Buscar:</label>
-          <input type="text" id="buscadorOrdenes" class="search-input" placeholder="N° orden, teléfono, IMEI o cliente..." oninput="aplicarFiltroCliente()">
+          <input type="text" id="buscadorOrdenes" class="search-input" placeholder="N° orden, teléfono, IMEI..." oninput="aplicarFiltroCliente()">
         </div>
-        <button type="button" class="btn-clear" onclick="limpiarFiltroCliente()">Mostrar todos</button>
+        <button type="button" class="btn-clear" onclick="limpiarFiltroCliente()">Limpiar</button>
       </div>
-      <table>
-        <thead>
-          <tr>
-            <th>Orden</th>
-            <th>Fecha</th>
-            <th>Cliente</th>
-            <th>WhatsApp</th>
-            <th>Servicio</th>
-            <th>IMEI</th>
-            <th>Precio</th>
-            <th>Comprobante</th>
-            <th>Pago</th>
-            <th>Estado</th>
-            <th>Acciones</th>
-          </tr>
-        </thead>
-        <tbody id="tablaOrdenes">
-          <tr><td colspan="11" style="text-align: center; padding: 30px;">Cargando datos...</td></tr>
-        </tbody>
-      </table>
+      
+      <div class="table-container">
+        <table>
+          <thead>
+            <tr>
+              <th>Orden</th>
+              <th>Fecha</th>
+              <th>Cliente</th>
+              <th>WhatsApp</th>
+              <th>Servicio</th>
+              <th>IMEI</th>
+              <th>Precio</th>
+              <th>Comprobante</th>
+              <th>Pago</th>
+              <th>Estado</th>
+              <th>Acciones</th>
+            </tr>
+          </thead>
+          <tbody id="tablaOrdenes">
+            <tr><td colspan="11" style="text-align: center; padding: 30px;">Cargando datos...</td></tr>
+          </tbody>
+        </table>
+      </div>
     </div>
 
     <!-- VISTA: ÓRDENES E-SIM -->
-    <div id="view-esim" class="table-container hidden">
+    <div id="view-esim" class="hidden">
       <div class="filter-bar">
         <div class="filter-group">
           <label for="filtroPagoEsim">Pago:</label>
-          <select id="filtroPagoEsim" class="filter-select" style="min-width: 150px;" onchange="renderEsimOrdenes(esimCache)">
+          <select id="filtroPagoEsim" class="filter-select" style="min-width: 130px;" onchange="renderEsimOrdenes(esimCache)">
             <option value="">Todos</option>
             <option value="Pagado">Pagado</option>
             <option value="No Pagado">No Pagado</option>
@@ -182,53 +192,58 @@
         </div>
         <div class="filter-group">
           <label for="buscadorEsim">Buscar:</label>
-          <input type="text" id="buscadorEsim" class="search-input" placeholder="N° orden, operador, número QR o cliente..." oninput="renderEsimOrdenes(esimCache)">
+          <input type="text" id="buscadorEsim" class="search-input" placeholder="N° orden, operador, cliente..." oninput="renderEsimOrdenes(esimCache)">
         </div>
-        <button type="button" class="btn-clear" onclick="limpiarFiltrosEsim()">Mostrar todos</button>
+        <button type="button" class="btn-clear" onclick="limpiarFiltrosEsim()">Limpiar</button>
       </div>
-      <table>
-        <thead>
-          <tr>
-            <th>Orden</th>
-            <th>Fecha</th>
-            <th>Cliente</th>
-            <th>WhatsApp</th>
-            <th>Operador</th>
-            <th>Cant.</th>
-            <th>Total</th>
-            <th>Comprobante</th>
-            <th>Pago</th>
-            <th>Estado</th>
-            <th>QR / Número</th>
-            <th>Acciones</th>
-          </tr>
-        </thead>
-        <tbody id="tablaEsimOrdenes">
-          <tr><td colspan="12" style="text-align: center; padding: 30px;">Cargando órdenes E-SIM...</td></tr>
-        </tbody>
-      </table>
+      
+      <div class="table-container">
+        <table>
+          <thead>
+            <tr>
+              <th>Orden</th>
+              <th>Fecha</th>
+              <th>Cliente</th>
+              <th>WhatsApp</th>
+              <th>Operador</th>
+              <th>Cant.</th>
+              <th>Total</th>
+              <th>Comprobante</th>
+              <th>Pago</th>
+              <th>Estado</th>
+              <th>QR / Número</th>
+              <th>Acciones</th>
+            </tr>
+          </thead>
+          <tbody id="tablaEsimOrdenes">
+            <tr><td colspan="12" style="text-align: center; padding: 30px;">Cargando órdenes E-SIM...</td></tr>
+          </tbody>
+        </table>
+      </div>
     </div>
 
     <!-- VISTA: CLIENTES -->
-    <div id="view-clients" class="table-container hidden">
-      <table>
-        <thead>
-          <tr>
-            <th>ID</th>
-            <th>Nombre / Negocio</th>
-            <th>Número de WhatsApp</th>
-            <th>PIN</th>
-            <th>Acciones</th>
-          </tr>
-        </thead>
-        <tbody id="tablaClientes">
-          <tr><td colspan="5" style="text-align: center; padding: 30px;">Cargando datos...</td></tr>
-        </tbody>
-      </table>
+    <div id="view-clients" class="hidden">
+      <div class="table-container">
+        <table>
+          <thead>
+            <tr>
+              <th>ID</th>
+              <th>Nombre / Negocio</th>
+              <th>Número de WhatsApp</th>
+              <th>PIN</th>
+              <th>Acciones</th>
+            </tr>
+          </thead>
+          <tbody id="tablaClientes">
+            <tr><td colspan="5" style="text-align: center; padding: 30px;">Cargando datos...</td></tr>
+          </tbody>
+        </table>
+      </div>
     </div>
   </div>
 
-  <!-- AVISO CENTRAL DE NUEVA ORDEN -->
+  <!-- AVISO CENTRAL DE NUEVA ORDEN (Mismo modal mejorado) -->
   <div id="newOrderOverlay" class="new-order-overlay">
     <div class="new-order-modal" role="dialog" aria-modal="true" aria-labelledby="newOrderModalTitle">
       <div class="new-order-header">
@@ -259,7 +274,7 @@
     </div>
   </div>
 
-  <!-- MODAL: ENTREGAR QR Y NÚMERO DE E-SIM -->
+  <!-- MODAL: ENTREGAR QR (Mismo modal mejorado) -->
   <div id="deliverEsimOverlay" class="new-order-overlay" onclick="if(event.target.id==='deliverEsimOverlay') closeDeliverEsimModal()">
     <div class="new-order-modal" style="max-width: 440px;">
       <div class="new-order-header">
@@ -292,13 +307,14 @@
           </select>
         </div>
 
-        <button type="button" id="btnSaveDeliverEsim" class="btn-deliver-esim" style="width:100%; padding:12px; font-size:14px;" onclick="guardarEntregaEsim()">
+        <button type="button" id="btnSaveDeliverEsim" class="btn-deliver-esim" style="width:100%; padding:14px; font-size:14px;" onclick="guardarEntregaEsim()">
           💾 Guardar y Entregar al Cliente
         </button>
       </div>
     </div>
   </div>
 
+  <!-- SCRIPTS (Lógica intacta, solo actualizo la parte visual de las celdas generadas) -->
   <script>
     const WORKER_URL = "https://telegram-zonagsm.zonagsm023.workers.dev";
     const SEEN_ORDERS_KEY = "zg_admin_seen_orders";
@@ -310,11 +326,9 @@
     let colaNuevasOrdenes = [];
     let ordenActualModal = null;
     let adminPollingTimer = null;
-
     let esimAEntregar = null;
     let deliverQrBase64 = null;
 
-    // Audio y voz en automático
     let sharedAudioCtx = null;
     let audioUnlocked = false;
     let pendingVoicePayload = null;
@@ -366,11 +380,9 @@
         utterance.lang = "es-CO";
         utterance.rate = 1;
         utterance.pitch = 1;
-
         const voces = window.speechSynthesis.getVoices() || [];
         const vozEs = voces.find(v => /es(-|_|$)/i.test(v.lang));
         if (vozEs) utterance.voice = vozEs;
-
         window.speechSynthesis.speak(utterance);
       } catch (_) {}
     }
@@ -389,17 +401,13 @@
           audioUnlocked = true;
           tocarCampanaYHablar(ctx, textoVoz);
         }).catch(() => {
-          if (!desdeDesbloqueo) {
-            pendingVoicePayload = { orden, tipo };
-          }
+          if (!desdeDesbloqueo) pendingVoicePayload = { orden, tipo };
           hablarAnuncio(textoVoz);
         });
         return;
       }
 
-      if (!audioUnlocked && !desdeDesbloqueo) {
-        pendingVoicePayload = { orden, tipo };
-      }
+      if (!audioUnlocked && !desdeDesbloqueo) pendingVoicePayload = { orden, tipo };
       tocarCampanaYHablar(ctx, textoVoz);
     }
 
@@ -424,7 +432,6 @@
           osc.start(ahora + idx * 0.14);
           osc.stop(ahora + idx * 0.14 + 0.19);
         });
-
         setTimeout(() => hablarAnuncio(textoVoz), 360);
       } catch (_) {
         hablarAnuncio(textoVoz);
@@ -432,11 +439,7 @@
     }
 
     function getEstadosPagoLocales() {
-      try {
-        return JSON.parse(localStorage.getItem(PAYMENT_STATE_KEY) || "{}");
-      } catch (e) {
-        return {};
-      }
+      try { return JSON.parse(localStorage.getItem(PAYMENT_STATE_KEY) || "{}"); } catch (e) { return {}; }
     }
 
     function guardarEstadoPagoLocal(numeroOrden, estadoPago) {
@@ -447,22 +450,14 @@
     }
 
     function resolverEstadoPago(orden) {
-      if (orden.pago === 'Pagado' || orden.pago === 'No Pagado') {
-        return orden.pago;
-      }
+      if (orden.pago === 'Pagado' || orden.pago === 'No Pagado') return orden.pago;
       const mapa = getEstadosPagoLocales();
-      if (orden.numero_orden && mapa[orden.numero_orden]) {
-        return mapa[orden.numero_orden];
-      }
+      if (orden.numero_orden && mapa[orden.numero_orden]) return mapa[orden.numero_orden];
       return orden.comprobante_url ? 'Pagado' : 'No Pagado';
     }
 
     function getOrdenesVistas() {
-      try {
-        return JSON.parse(localStorage.getItem(SEEN_ORDERS_KEY) || "[]");
-      } catch (e) {
-        return [];
-      }
+      try { return JSON.parse(localStorage.getItem(SEEN_ORDERS_KEY) || "[]"); } catch (e) { return []; }
     }
 
     function marcarOrdenComoVista(key) {
@@ -486,7 +481,6 @@
       desbloquearAudioYVoz();
       const u = document.getElementById('userInput').value;
       const p = document.getElementById('passwordInput').value;
-
       if (u === 'admin' && p === 'admin') {
         document.getElementById('loginBox').style.display = 'none';
         document.getElementById('adminPanel').style.display = 'block';
@@ -523,30 +517,22 @@
       const select = document.getElementById('filtroCliente');
       const valorActual = select.value;
       select.innerHTML = '<option value="">Todos los clientes</option>';
-
       clientesCache.forEach(c => {
         const opt = document.createElement('option');
         opt.value = `${c.pin || ''}||${c.celular || ''}`;
-        opt.textContent = `${c.nombre || 'Sin nombre'} — ${c.celular || ''} (PIN: ${c.pin || ''})`;
+        opt.textContent = `${c.nombre || 'Sin nombre'} — ${c.celular || ''}`;
         select.appendChild(opt);
       });
-
-      if (valorActual) {
-        select.value = valorActual;
-      }
+      if (valorActual) select.value = valorActual;
     }
 
-    function aplicarFiltroCliente() {
-      renderOrdenes(ordenesCache);
-    }
-
+    function aplicarFiltroCliente() { renderOrdenes(ordenesCache); }
     function limpiarFiltroCliente() {
       document.getElementById('filtroCliente').value = '';
       document.getElementById('filtroPago').value = '';
       document.getElementById('buscadorOrdenes').value = '';
       renderOrdenes(ordenesCache);
     }
-
     function limpiarFiltrosEsim() {
       document.getElementById('filtroPagoEsim').value = '';
       document.getElementById('buscadorEsim').value = '';
@@ -559,7 +545,6 @@
         items.forEach(o => marcarOrdenComoVista(`${tipo}:${o.numero_orden}`));
         return;
       }
-
       let huboNueva = false;
       items.forEach(o => {
         const key = `${tipo}:${o.numero_orden}`;
@@ -572,12 +557,9 @@
           marcarOrdenComoVista(key);
         }
       });
-
       if (huboNueva) {
         const ultimaNueva = colaNuevasOrdenes[colaNuevasOrdenes.length - 1];
-        if (ultimaNueva) {
-          anunciarOrdenConCampanaYVoz(ultimaNueva, ultimaNueva._tipo);
-        }
+        if (ultimaNueva) anunciarOrdenConCampanaYVoz(ultimaNueva, ultimaNueva._tipo);
         mostrarSiguienteOrdenModal();
       }
     }
@@ -589,71 +571,33 @@
         overlay.classList.remove('open');
         return;
       }
-
       ordenActualModal = colaNuevasOrdenes[0];
       const o = ordenActualModal;
       const esEsim = o._tipo === 'esim';
       const estadoPagoActual = resolverEstadoPago(o);
       const fecha = new Date(o.fecha + "Z").toLocaleString('es-CO', { timeZone: 'America/Bogota' });
 
-      document.getElementById('newOrderModalTitle').textContent = esEsim
-        ? '📱 ¡Nueva Orden E-SIM Recibida!'
-        : '🔔 ¡Nueva Orden Recibida!';
-      document.getElementById('newOrderQueueBadge').textContent =
-        colaNuevasOrdenes.length > 1 ? `${colaNuevasOrdenes.length} nuevas` : '1 nueva';
-
+      document.getElementById('newOrderModalTitle').textContent = esEsim ? '📱 ¡Nueva Orden E-SIM Recibida!' : '🔔 ¡Nueva Orden Recibida!';
+      document.getElementById('newOrderQueueBadge').textContent = colaNuevasOrdenes.length > 1 ? `${colaNuevasOrdenes.length} nuevas` : '1 nueva';
       document.getElementById('modalPagoSelect').value = estadoPagoActual;
 
       document.getElementById('newOrderDetails').innerHTML = `
-        <div class="order-detail-row">
-          <span class="order-detail-label">Orden</span>
-          <span class="order-detail-value" style="color:#c81d4e; font-size:16px;">${o.numero_orden}</span>
-        </div>
-        <div class="order-detail-row">
-          <span class="order-detail-label">Cliente</span>
-          <span class="order-detail-value">${o.nombre || 'Sin nombre'}</span>
-        </div>
-        <div class="order-detail-row">
-          <span class="order-detail-label">WhatsApp</span>
-          <span class="order-detail-value">${o.celular}</span>
-        </div>
-        <div class="order-detail-row">
-          <span class="order-detail-label">Servicio</span>
-          <span class="order-detail-value">${esEsim ? `${o.operador} (${o.cantidad || 1} und)` : `No Registro ${o.operador}`}</span>
-        </div>
-        ${!esEsim && o.imei ? `
-        <div class="order-detail-row">
-          <span class="order-detail-label">IMEI</span>
-          <span class="order-detail-value mono">${o.imei}</span>
-        </div>` : ''}
-        <div class="order-detail-row">
-          <span class="order-detail-label">Valor</span>
-          <span class="order-detail-value" style="color:#059669;">${o.precio}</span>
-        </div>
-        <div class="order-detail-row">
-          <span class="order-detail-label">Comprobante</span>
-          <span class="order-detail-value">
-            ${o.comprobante_url
-              ? `<a href="${o.comprobante_url}" target="_blank" style="color:#2563eb; text-decoration:underline;">📷 Ver Comprobante</a>`
-              : '<span style="color:#94a3b8;">Sin foto adjunta</span>'}
-          </span>
-        </div>
-        <div class="order-detail-row">
-          <span class="order-detail-label">Hora</span>
-          <span class="order-detail-value" style="font-size:12px; color:#64748b;">${fecha}</span>
-        </div>
+        <div class="order-detail-row"><span class="order-detail-label">Orden</span><span class="order-detail-value" style="color:#c81d4e; font-size:16px;">${o.numero_orden}</span></div>
+        <div class="order-detail-row"><span class="order-detail-label">Cliente</span><span class="order-detail-value">${o.nombre || 'Sin nombre'}</span></div>
+        <div class="order-detail-row"><span class="order-detail-label">WhatsApp</span><span class="order-detail-value">${o.celular}</span></div>
+        <div class="order-detail-row"><span class="order-detail-label">Servicio</span><span class="order-detail-value">${esEsim ? `${o.operador} (${o.cantidad || 1} und)` : `No Registro ${o.operador}`}</span></div>
+        ${!esEsim && o.imei ? `<div class="order-detail-row"><span class="order-detail-label">IMEI</span><span class="order-detail-value mono">${o.imei}</span></div>` : ''}
+        <div class="order-detail-row"><span class="order-detail-label">Valor</span><span class="order-detail-value" style="color:#059669;">${o.precio}</span></div>
+        <div class="order-detail-row"><span class="order-detail-label">Comprobante</span><span class="order-detail-value">${o.comprobante_url ? `<a href="${o.comprobante_url}" target="_blank" style="color:#2563eb; text-decoration:underline;">📷 Ver Comprobante</a>` : '<span style="color:#94a3b8;">Sin foto adjunta</span>'}</span></div>
+        <div class="order-detail-row"><span class="order-detail-label">Hora</span><span class="order-detail-value" style="font-size:12px; color:#64748b;">${fecha}</span></div>
       `;
-
       overlay.classList.add('open');
     }
 
     function cambiarPagoModal(nuevoPago) {
       if (!ordenActualModal) return;
-      if (ordenActualModal._tipo === 'esim') {
-        cambiarPagoEsim(ordenActualModal.numero_orden, nuevoPago);
-      } else {
-        cambiarPago(ordenActualModal.numero_orden, nuevoPago);
-      }
+      if (ordenActualModal._tipo === 'esim') cambiarPagoEsim(ordenActualModal.numero_orden, nuevoPago);
+      else cambiarPago(ordenActualModal.numero_orden, nuevoPago);
     }
 
     function cerrarAvisoNuevaOrden() {
@@ -668,24 +612,18 @@
       if (!ordenActualModal) return;
       const btnAccept = document.getElementById('btnModalAccept');
       const btnReject = document.getElementById('btnModalReject');
-      btnAccept.disabled = true;
-      btnReject.disabled = true;
-
+      btnAccept.disabled = true; btnReject.disabled = true;
       try {
         const o = ordenActualModal;
         const pagoSeleccionado = document.getElementById('modalPagoSelect').value;
         guardarEstadoPagoLocal(o.numero_orden, pagoSeleccionado);
-        if (o._tipo === 'esim') {
-          await cambiarEstadoEsim(o.numero_orden, nuevoEstado);
-        } else {
-          await cambiarEstado(o.numero_orden, nuevoEstado);
-        }
+        if (o._tipo === 'esim') await cambiarEstadoEsim(o.numero_orden, nuevoEstado);
+        else await cambiarEstado(o.numero_orden, nuevoEstado);
         marcarOrdenComoVista(o._key);
         colaNuevasOrdenes.shift();
         mostrarSiguienteOrdenModal();
       } finally {
-        btnAccept.disabled = false;
-        btnReject.disabled = false;
+        btnAccept.disabled = false; btnReject.disabled = false;
       }
     }
 
@@ -699,16 +637,9 @@
 
       if (filtroVal) {
         const [pinSel, celSel] = filtroVal.split('||');
-        filtradas = filtradas.filter(o =>
-          (pinSel && String(o.pin || '') === pinSel) ||
-          (celSel && String(o.celular || '') === celSel)
-        );
+        filtradas = filtradas.filter(o => (pinSel && String(o.pin || '') === pinSel) || (celSel && String(o.celular || '') === celSel));
       }
-
-      if (filtroPagoVal) {
-        filtradas = filtradas.filter(o => o._pago === filtroPagoVal);
-      }
-
+      if (filtroPagoVal) filtradas = filtradas.filter(o => o._pago === filtroPagoVal);
       if (textoBusqueda) {
         filtradas = filtradas.filter(o =>
           String(o.numero_orden || '').toLowerCase().includes(textoBusqueda) ||
@@ -741,7 +672,6 @@
           <option value="Exitoso" ${o.estado === 'Exitoso' ? 'selected' : ''}>Exitoso</option>
           <option value="Rechazado" ${o.estado === 'Rechazado' ? 'selected' : ''}>Rechazado</option>
         `;
-
         const pagoOptions = `
           <option value="Pagado" ${pagoActual === 'Pagado' ? 'selected' : ''}>Pagado</option>
           <option value="No Pagado" ${pagoActual === 'No Pagado' ? 'selected' : ''}>No Pagado</option>
@@ -750,30 +680,22 @@
         tr.innerHTML = `
           <td><strong>${o.numero_orden}</strong></td>
           <td style="font-size: 12px; color:#64748b;">${fecha}</td>
-          <td>${o.nombre || 'Sin nombre'}</td>
-          <td><strong>${o.celular}</strong></td>
+          <td><strong>${o.nombre || 'Sin nombre'}</strong></td>
+          <td>${o.celular}</td>
           <td>${o.operador}</td>
-          <td style="font-family: monospace;">${o.imei}</td>
+          <td style="font-family: monospace; font-size:12px;">${o.imei}</td>
           <td><strong>${o.precio}</strong></td>
+          <td>${o.comprobante_url ? `<a href="${o.comprobante_url}" target="_blank" style="color: #2563eb; font-weight: 700; text-decoration: none;">Ver foto</a>` : '<span style="color:#94a3b8;">Sin foto</span>'}</td>
           <td>
-            ${o.comprobante_url
-              ? `<a href="${o.comprobante_url}" target="_blank" style="color: #2563eb; font-weight: bold; text-decoration: underline;">Ver Foto</a>`
-              : 'Sin foto'}
-          </td>
-          <td>
-            <div style="display:flex; flex-direction:column; gap:5px; align-items:flex-start;">
+            <div style="display:flex; flex-direction:column; gap:6px; align-items:flex-start;">
               <span class="badge ${pagoBadgeClass}">${pagoActual}</span>
-              <select class="pago-select" onchange="cambiarPago('${o.numero_orden}', this.value)">
-                ${pagoOptions}
-              </select>
+              <select class="pago-select" onchange="cambiarPago('${o.numero_orden}', this.value)">${pagoOptions}</select>
             </div>
           </td>
           <td><span class="badge badge-${estadoClass}">${o.estado}</span></td>
           <td>
-            <div style="display:flex; flex-direction:column; gap:6px; align-items:flex-start;">
-              <select class="estado-select" onchange="cambiarEstado('${o.numero_orden}', this.value)">
-                ${selectOptions}
-              </select>
+            <div class="action-buttons">
+              <select class="estado-select" onchange="cambiarEstado('${o.numero_orden}', this.value)">${selectOptions}</select>
               <button type="button" class="btn-delete-row" onclick="eliminarOrden('${o.numero_orden}')">🗑️ Eliminar</button>
             </div>
           </td>
@@ -789,10 +711,7 @@
 
       let filtradas = lista.map(o => ({ ...o, _pago: resolverEstadoPago(o) }));
 
-      if (filtroPagoVal) {
-        filtradas = filtradas.filter(o => o._pago === filtroPagoVal);
-      }
-
+      if (filtroPagoVal) filtradas = filtradas.filter(o => o._pago === filtroPagoVal);
       if (textoBusqueda) {
         filtradas = filtradas.filter(o =>
           String(o.numero_orden || '').toLowerCase().includes(textoBusqueda) ||
@@ -823,21 +742,21 @@
         const qrInfo = `
           <div style="display:flex; flex-direction:column; gap:4px; font-size:12px;">
             <div><strong>N°:</strong> <span style="font-family:monospace;">${o.numero_esim || '—'}</span></div>
-            <div>${o.qr_url ? `<a href="${o.qr_url}" target="_blank" style="color:#059669; font-weight:800;">Ver QR / Link</a>` : '<span style="color:#94a3b8;">Sin QR</span>'}</div>
+            <div>${o.qr_url ? `<a href="${o.qr_url}" target="_blank" style="color:#059669; font-weight:800; text-decoration:none;">Ver QR / Link</a>` : '<span style="color:#94a3b8;">Sin QR</span>'}</div>
           </div>
         `;
 
         tr.innerHTML = `
           <td><strong>${o.numero_orden}</strong></td>
           <td style="font-size: 12px; color:#64748b;">${fecha}</td>
-          <td>${o.nombre || 'Sin nombre'}</td>
-          <td><strong>${o.celular}</strong></td>
+          <td><strong>${o.nombre || 'Sin nombre'}</strong></td>
+          <td>${o.celular}</td>
           <td><strong>${o.operador}</strong></td>
           <td>${o.cantidad || 1}</td>
           <td><strong>${o.precio}</strong></td>
-          <td>${o.comprobante_url ? `<a href="${o.comprobante_url}" target="_blank" style="color: #2563eb; font-weight: bold; text-decoration: underline;">Ver Foto</a>` : 'Sin foto'}</td>
+          <td>${o.comprobante_url ? `<a href="${o.comprobante_url}" target="_blank" style="color: #2563eb; font-weight: 700; text-decoration: none;">Ver foto</a>` : '<span style="color:#94a3b8;">Sin foto</span>'}</td>
           <td>
-            <div style="display:flex; flex-direction:column; gap:5px; align-items:flex-start;">
+            <div style="display:flex; flex-direction:column; gap:6px; align-items:flex-start;">
               <span class="badge ${pagoBadgeClass}">${pagoActual}</span>
               <select class="pago-select" onchange="cambiarPagoEsim('${o.numero_orden}', this.value)">
                 <option value="Pagado" ${pagoActual === 'Pagado' ? 'selected' : ''}>Pagado</option>
@@ -848,7 +767,7 @@
           <td><span class="badge badge-${estadoClass}">${o.estado || 'Pendiente'}</span></td>
           <td>${qrInfo}</td>
           <td>
-            <div style="display:flex; flex-direction:column; gap:6px; align-items:flex-start;">
+            <div class="action-buttons">
               <button type="button" class="btn-deliver-esim" onclick="openDeliverEsimModal('${o.numero_orden}')">📲 Entregar QR</button>
               <select class="estado-select" onchange="cambiarEstadoEsim('${o.numero_orden}', this.value)">
                 <option value="Pendiente" ${o.estado === 'Pendiente' ? 'selected' : ''}>Pendiente</option>
@@ -948,62 +867,40 @@
 
     async function cambiarPago(numeroOrden, nuevoPago) {
       guardarEstadoPagoLocal(numeroOrden, nuevoPago);
-      ordenesCache = ordenesCache.map(o =>
-        o.numero_orden === numeroOrden ? { ...o, pago: nuevoPago } : o
-      );
+      ordenesCache = ordenesCache.map(o => o.numero_orden === numeroOrden ? { ...o, pago: nuevoPago } : o);
       renderOrdenes(ordenesCache);
-
       try {
         await fetch(WORKER_URL, {
           method: 'POST',
           headers: { 'Content-Type': 'application/json' },
-          body: JSON.stringify({
-            action: 'update_payment',
-            numero_orden: numeroOrden,
-            pago: nuevoPago,
-            admin_token: 'admin'
-          })
+          body: JSON.stringify({ action: 'update_payment', numero_orden: numeroOrden, pago: nuevoPago, admin_token: 'admin' })
         });
       } catch (err) {}
     }
 
     async function cambiarPagoEsim(numeroOrden, nuevoPago) {
       guardarEstadoPagoLocal(numeroOrden, nuevoPago);
-      esimCache = esimCache.map(o =>
-        o.numero_orden === numeroOrden ? { ...o, pago: nuevoPago } : o
-      );
+      esimCache = esimCache.map(o => o.numero_orden === numeroOrden ? { ...o, pago: nuevoPago } : o);
       renderEsimOrdenes(esimCache);
-
       try {
         await fetch(WORKER_URL, {
           method: 'POST',
           headers: { 'Content-Type': 'application/json' },
-          body: JSON.stringify({
-            action: 'update_esim_payment',
-            numero_orden: numeroOrden,
-            pago: nuevoPago,
-            admin_token: 'admin'
-          })
+          body: JSON.stringify({ action: 'update_esim_payment', numero_orden: numeroOrden, pago: nuevoPago, admin_token: 'admin' })
         });
       } catch (err) {}
     }
 
-    // --- ELIMINAR REGISTROS ---
     async function eliminarOrden(numeroOrden) {
       if (!confirm(`¿Seguro que deseas eliminar la orden ${numeroOrden}?`)) return;
       ordenesCache = ordenesCache.filter(o => o.numero_orden !== numeroOrden);
       colaNuevasOrdenes = colaNuevasOrdenes.filter(o => !(o._tipo === 'imei' && o.numero_orden === numeroOrden));
       renderOrdenes(ordenesCache);
-
       try {
         const res = await fetch(WORKER_URL, {
           method: 'POST',
           headers: { 'Content-Type': 'application/json' },
-          body: JSON.stringify({
-            action: 'delete_order',
-            numero_orden: numeroOrden,
-            admin_token: 'admin'
-          })
+          body: JSON.stringify({ action: 'delete_order', numero_orden: numeroOrden, admin_token: 'admin' })
         });
         const data = await res.json();
         if (!data.success) {
@@ -1021,16 +918,11 @@
       esimCache = esimCache.filter(o => o.numero_orden !== numeroOrden);
       colaNuevasOrdenes = colaNuevasOrdenes.filter(o => !(o._tipo === 'esim' && o.numero_orden === numeroOrden));
       renderEsimOrdenes(esimCache);
-
       try {
         const res = await fetch(WORKER_URL, {
           method: 'POST',
           headers: { 'Content-Type': 'application/json' },
-          body: JSON.stringify({
-            action: 'delete_esim_order',
-            numero_orden: numeroOrden,
-            admin_token: 'admin'
-          })
+          body: JSON.stringify({ action: 'delete_esim_order', numero_orden: numeroOrden, admin_token: 'admin' })
         });
         const data = await res.json();
         if (!data.success) {
@@ -1048,16 +940,11 @@
       clientesCache = clientesCache.filter(c => String(c.id) !== String(id));
       poblarFiltroClientes();
       renderClientes(clientesCache);
-
       try {
         const res = await fetch(WORKER_URL, {
           method: 'POST',
           headers: { 'Content-Type': 'application/json' },
-          body: JSON.stringify({
-            action: 'delete_client',
-            id: id,
-            admin_token: 'admin'
-          })
+          body: JSON.stringify({ action: 'delete_client', id: id, admin_token: 'admin' })
         });
         const data = await res.json();
         if (!data.success) {
@@ -1070,42 +957,32 @@
       }
     }
 
-    // --- CARGAR ÓRDENES ---
     async function cargarOrdenes(silencioso = false) {
       const tbody = document.getElementById('tablaOrdenes');
       if (!silencioso && ordenesCache.length === 0) {
         tbody.innerHTML = '<tr><td colspan="11" style="text-align: center; padding: 30px;">Cargando...</td></tr>';
       }
-
       try {
         const res = await fetch(WORKER_URL + "?action=get_orders");
         const data = await res.json();
-
         if (data.success) {
           ordenesCache = data.ordenes || [];
           renderOrdenes(ordenesCache);
           evaluarNuevasEnCola(ordenesCache, 'imei');
-        } else {
-          throw new Error(data.error);
-        }
+        } else throw new Error(data.error);
       } catch (err) {
-        if (!silencioso) {
-          tbody.innerHTML = `<tr><td colspan="11" style="text-align: center; color: red; padding: 30px;">Error: ${err.message}</td></tr>`;
-        }
+        if (!silencioso) tbody.innerHTML = `<tr><td colspan="11" style="text-align: center; color: red; padding: 30px;">Error: ${err.message}</td></tr>`;
       }
     }
 
-    // --- CARGAR ÓRDENES E-SIM ---
     async function cargarEsimOrdenes(silencioso = false) {
       const tbody = document.getElementById('tablaEsimOrdenes');
       if (!silencioso && esimCache.length === 0) {
         tbody.innerHTML = '<tr><td colspan="12" style="text-align: center; padding: 30px;">Cargando...</td></tr>';
       }
-
       try {
         const res = await fetch(WORKER_URL + "?action=get_esim_orders");
         const data = await res.json();
-
         if (data.success) {
           esimCache = data.ordenes || [];
           renderEsimOrdenes(esimCache);
@@ -1114,7 +991,6 @@
       } catch (err) {}
     }
 
-    // --- RENDER Y CARGAR CLIENTES ---
     function renderClientes(lista) {
       const tbody = document.getElementById('tablaClientes');
       tbody.innerHTML = '';
@@ -1122,7 +998,6 @@
         tbody.innerHTML = '<tr><td colspan="5" style="text-align: center; padding: 30px;">No hay clientes registrados aún.</td></tr>';
         return;
       }
-
       lista.forEach(c => {
         const tr = document.createElement('tr');
         const nombreEscapado = String(c.nombre || '').replace(/'/g, "\\'");
@@ -1131,9 +1006,7 @@
           <td><strong>${c.nombre || 'Sin nombre'}</strong></td>
           <td>${c.celular}</td>
           <td style="font-family: monospace; font-size: 16px; font-weight: bold;">${c.pin}</td>
-          <td>
-            <button type="button" class="btn-delete-row" onclick="eliminarCliente('${c.id}', '${nombreEscapado}')">🗑️ Eliminar</button>
-          </td>
+          <td><button type="button" class="btn-delete-row" onclick="eliminarCliente('${c.id}', '${nombreEscapado}')">🗑️ Eliminar</button></td>
         `;
         tbody.appendChild(tr);
       });
@@ -1142,47 +1015,32 @@
     async function cargarClientes() {
       const tbody = document.getElementById('tablaClientes');
       tbody.innerHTML = '<tr><td colspan="5" style="text-align: center; padding: 30px;">Cargando...</td></tr>';
-
       try {
         const res = await fetch(WORKER_URL + "?action=get_clients");
         const data = await res.json();
-
         if (data.success) {
           clientesCache = data.clientes || [];
           poblarFiltroClientes();
           renderClientes(clientesCache);
-        } else {
-          throw new Error(data.error);
-        }
+        } else throw new Error(data.error);
       } catch (err) {
         tbody.innerHTML = `<tr><td colspan="5" style="text-align: center; color: red; padding: 30px;">Error: ${err.message}</td></tr>`;
       }
     }
 
-    // --- ACTUALIZAR ESTADO ---
     async function cambiarEstado(numeroOrden, nuevoEstado) {
       try {
         const res = await fetch(WORKER_URL, {
           method: 'POST',
           headers: { 'Content-Type': 'application/json' },
-          body: JSON.stringify({
-            action: 'update_status',
-            numero_orden: numeroOrden,
-            estado: nuevoEstado,
-            admin_token: 'admin'
-          })
+          body: JSON.stringify({ action: 'update_status', numero_orden: numeroOrden, estado: nuevoEstado, admin_token: 'admin' })
         });
         const data = await res.json();
-
         if (data.success) {
           marcarOrdenComoVista(`imei:${numeroOrden}`);
           await cargarOrdenes(true);
-        } else {
-          alert("Error al actualizar: " + data.error);
-        }
-      } catch (err) {
-        alert("Error de conexión al actualizar.");
-      }
+        } else alert("Error al actualizar: " + data.error);
+      } catch (err) { alert("Error de conexión al actualizar."); }
     }
 
     async function cambiarEstadoEsim(numeroOrden, nuevoEstado) {
@@ -1190,24 +1048,14 @@
         const res = await fetch(WORKER_URL, {
           method: 'POST',
           headers: { 'Content-Type': 'application/json' },
-          body: JSON.stringify({
-            action: 'update_esim_status',
-            numero_orden: numeroOrden,
-            estado: nuevoEstado,
-            admin_token: 'admin'
-          })
+          body: JSON.stringify({ action: 'update_esim_status', numero_orden: numeroOrden, estado: nuevoEstado, admin_token: 'admin' })
         });
         const data = await res.json();
-
         if (data.success) {
           marcarOrdenComoVista(`esim:${numeroOrden}`);
           await cargarEsimOrdenes(true);
-        } else {
-          alert("Error al actualizar: " + data.error);
-        }
-      } catch (err) {
-        alert("Error de conexión al actualizar.");
-      }
+        } else alert("Error al actualizar: " + data.error);
+      } catch (err) { alert("Error de conexión al actualizar."); }
     }
   </script>
 </body>
