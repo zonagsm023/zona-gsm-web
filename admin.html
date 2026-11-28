@@ -471,7 +471,7 @@
           gain.gain.setValueAtTime(0.24, ahora + idx * 0.14);
           gain.gain.exponentialRampToValueAtTime(0.001, ahora + idx * 0.14 + 0.18);
           osc.connect(gain);
-          osc.connect(ctx.destination);
+          gain.connect(ctx.destination);
           osc.start(ahora + idx * 0.14);
           osc.stop(ahora + idx * 0.14 + 0.19);
         });
